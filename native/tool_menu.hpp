@@ -105,6 +105,7 @@ class ToolMenuOverlay{public:
  void UpdateBoss(const std::array<uint32_t,3>& remaining,bool enabled){if(!initialized)return;
   for(size_t i=0;i<3;++i){bool show=enabled&&remaining[i]>0;if(show){auto text="|cffffcc00"+std::to_string(remaining[i])+"|r";if(text!=bossText[i]){api.setText(bossFonts[i],text.c_str());bossText[i]=text;}}
    if(show!=bossShown[i]){if(show)NativeFrameShow(bossFrames[i]);else NativeFrameHide(bossFrames[i]);bossShown[i]=show;}}}
+
  void* independentHost=nullptr;
  ExtendedFrameApi api{};void (__thiscall* tint)(void*,const uint32_t*)=nullptr;uintptr_t parent=0;void *button=nullptr,*menuIcon=nullptr,*panel=nullptr,*close=nullptr;
  std::array<void*,8> tabs{},tabLabels{};std::array<void*,8> tabGlows{};void* popupHost=nullptr;void* popupTexture=nullptr;std::array<void*,3> grids{};std::array<ControlUI,kToolMenuControls.size()> controls{};
@@ -175,8 +176,8 @@ class ToolMenuOverlay{public:
  // level 10, outside the engine's ten frame buckets, and fails initialization.
  initStage="dropdown rows";for(size_t i=0;i<choices.size();++i){choices[i]=Frame(game,panel,ChoiceRect(i),9);if(!choices[i])return false;Style(choices[i],true);choiceLabels[i]=TextIn(choices[i],ChoiceRect(i),"",true,.010f);if(!choiceLabels[i])return false;}initStage="tooltip";helpFrame=Frame(game,reinterpret_cast<void*>(owner),{.25f,.20f,.24f,.09f},9);if(!helpFrame)return false;
  NativeSetFrameBackdropEx(api,helpFrame,"UI\\Widgets\\ToolTips\\Human\\human-tooltip-background.blp","UI\\Widgets\\ToolTips\\Human\\human-tooltip-border.blp",.008f,.002f);helpText=TextIn(helpFrame,{.242f,.208f,.224f,.074f},"",false,.0135f);if(!helpText)return false;
- initStage="boss timers";const std::array<ToolMenuRect,3> bossRects{{{.17f,.08f,.07f,.022f},{.05f,.017f,.05f,.022f},{.17f,.13f,.07f,.022f}}};
- for(size_t i=0;i<3;++i){bossFrames[i]=Frame(game,reinterpret_cast<void*>(owner),bossRects[i]);if(!bossFrames[i])return false;bossFonts[i]=TextIn(bossFrames[i],bossRects[i],"",true,.016f);if(!bossFonts[i])return false;}
+ initStage="boss timers";const std::array<ToolMenuRect,3> bossRects{{{.220f,.061f,.036f,.022f},{.136f,.009f,.036f,.022f},{.220f,.127f,.036f,.022f}}};
+ for(size_t i=0;i<3;++i){bossFrames[i]=Frame(game,reinterpret_cast<void*>(owner),bossRects[i],9);if(!bossFrames[i])return false;bossFonts[i]=TextIn(bossFrames[i],bossRects[i],"",true,.012f);if(!bossFonts[i])return false;}
  initStage="ready";return true;}
  static std::wstring ReadValue(const Config& c,size_t i){const auto& d=kToolMenuControls[i];return MenuRead(c,d.section,d.key,d.fallback);}
  static bool Enabled(const Config& c,size_t i){const auto& d=kToolMenuControls[i];if(!d.supported)return false;

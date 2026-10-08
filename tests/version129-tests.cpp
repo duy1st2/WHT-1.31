@@ -1,3 +1,12 @@
+#include "network_ping.hpp"
+#include "unit_scale129.hpp"
+#include "ability_button129.hpp"
+#include "inventory_info129.hpp"
+#include "mouse_position129.hpp"
+#include "pan_camera129.hpp"
+#include "unit_info129.hpp"
+#include "repeat_chat129.hpp"
+#include "mute129.hpp"
 #include "../native/version129.cpp"
 #include <iostream>
 #include <stdexcept>
@@ -92,9 +101,113 @@ void __fastcall HideFrame(void*,DWORD){++frameHides;}
 static uintptr_t regenProperty129=0;
 void __fastcall CurrentStateMock129(uintptr_t property,DWORD,float* output){regenProperty129=property;*output=42.f;}
 void __fastcall MaximumStateMock129(uintptr_t property,DWORD,float* output){if(property!=regenProperty129)*output=0;else *output=100.f;}
+uintptr_t invulAgentMock129=0,invulUnitMock129=0;
+unsigned heroSkillModifyCalls129=0;bool heroSkillAbi129=true,heroSkillReject129=false;
+int heroAttributeValues129[3]={10,20,30};unsigned heroAttributeWrites129[3]{};bool heroAttributeAbi129=true,heroAttributeReject129=false;
+int __fastcall HeroStrGetMock129(uintptr_t unit,DWORD,int bonus){heroAttributeAbi129&=unit==invulUnitMock129&&bonus==1;return heroAttributeValues129[0];}
+int __fastcall HeroAgiGetMock129(uintptr_t unit,DWORD,int bonus){heroAttributeAbi129&=unit==invulUnitMock129&&bonus==1;return heroAttributeValues129[1];}
+int __fastcall HeroIntGetMock129(uintptr_t unit,DWORD,int bonus){heroAttributeAbi129&=unit==invulUnitMock129&&bonus==1;return heroAttributeValues129[2];}
+void __fastcall HeroStrSetMock129(uintptr_t unit,DWORD,int value,int permanent){heroAttributeAbi129&=unit==invulUnitMock129&&permanent==1;++heroAttributeWrites129[0];if(!heroAttributeReject129)heroAttributeValues129[0]=value;}
+void __fastcall HeroAgiSetMock129(uintptr_t unit,DWORD,int value,int permanent){heroAttributeAbi129&=unit==invulUnitMock129&&permanent==1;++heroAttributeWrites129[1];if(!heroAttributeReject129)heroAttributeValues129[1]=value;}
+void __fastcall HeroIntSetMock129(uintptr_t unit,DWORD,int value,int permanent){heroAttributeAbi129&=unit==invulUnitMock129&&permanent==1;++heroAttributeWrites129[2];if(!heroAttributeReject129)heroAttributeValues129[2]=value;}
+int __fastcall HeroSkillGetMock129(uintptr_t unit,DWORD){
+ heroSkillAbi129&=unit==invulUnitMock129;
+ const auto data=*reinterpret_cast<uintptr_t*>(unit+0x3fc);
+ return *reinterpret_cast<int*>(data+0x94);
+}
+int __fastcall HeroSkillModifyMock129(uintptr_t unit,DWORD,int delta){
+ ++heroSkillModifyCalls129;heroSkillAbi129&=unit==invulUnitMock129&&delta>0;
+ if(heroSkillReject129)return 0;
+ const auto data=*reinterpret_cast<uintptr_t*>(unit+0x3fc);
+ *reinterpret_cast<int*>(data+0x94)+=delta;return 1;
+}
+bool invulPresentMock129=false,invulRejectMock129=false,invulMapMock129=false,invulAbiMock129=true;
+unsigned invulWritesMock129=0;
+uintptr_t __cdecl InvulAgentMock129(uint32_t first,uint32_t second){
+ return first==11&&second==22?invulAgentMock129:0;
+}
+uintptr_t __fastcall InvulFindMock129(uintptr_t unit,DWORD,uint32_t code,int a,int b,int c,int d){
+ invulAbiMock129&=unit==invulUnitMock129&&code==0x4176756c&&a==0&&b==0&&c==1&&d==1;
+ return invulPresentMock129?123:0;
+}
+void __fastcall InvulSetMock129(uintptr_t unit,DWORD,int enabled){
+ invulAbiMock129&=unit==invulUnitMock129&&(enabled==0||enabled==1);++invulWritesMock129;
+ if(invulRejectMock129)return;
+ invulPresentMock129=enabled!=0;
+ auto& flags=*reinterpret_cast<uint32_t*>(unit+0x20);
+ if(invulPresentMock129||invulMapMock129)flags|=8;else flags&=~8u;
+}
+unsigned teleportStops129=0,teleportMoves129=0;bool teleportAbi129=true,teleportReplace129=false;
+float teleportActual129[3]{};
+void __fastcall TeleportStopMock129(uintptr_t unit,DWORD,int flag){
+ ++teleportStops129;teleportAbi129&=unit==invulUnitMock129&&flag==1;
+ if(teleportReplace129)*reinterpret_cast<uint32_t*>(unit+0x10)=23;
+}
+void __fastcall TeleportMoveMock129(uintptr_t unit,DWORD,const float* x,const float* y,int a,int b,int c,int d,int e,int f,int g,int h){
+ ++teleportMoves129;teleportAbi129&=unit==invulUnitMock129&&a==1&&b==1&&c==-1&&d==0&&e==0&&f==0&&g==-1&&h==0;
+ // Model engine pathing adjustments; feedback must report this actual position.
+ teleportActual129[0]=*x+16;teleportActual129[1]=*y-16;teleportActual129[2]=128;
+}
+uintptr_t __fastcall TeleportReadMock129(uintptr_t position,DWORD,float* out){
+ teleportAbi129&=position==invulUnitMock129+0x26c;
+ memcpy(out,teleportActual129,sizeof(teleportActual129));return reinterpret_cast<uintptr_t>(out);
+}
+bool removalPresent129=true,removalReject129=false,removalReplace129=false,removalReadd129=false,removalAbi129=true;
+unsigned removalCalls129=0,removalRefreshes129=0;
+uintptr_t __fastcall RemovalFindMock129(uintptr_t unit,DWORD,uint32_t code,int a,int b,int c,int d){
+ removalAbi129&=unit==invulUnitMock129&&a==0&&b==1&&c==1&&d==1;
+ return code==0x41486862&&removalPresent129?123:0;
+}
+void __fastcall RemovalMock129(uintptr_t unit,DWORD,uintptr_t ability){
+ ++removalCalls129;removalAbi129&=unit==invulUnitMock129&&ability==123;
+ if(!removalReject129)removalPresent129=false;
+ if(removalReplace129)*reinterpret_cast<uint32_t*>(unit+0x10)=23;
+}
+void __cdecl RemovalRefreshMock129(uintptr_t unit){
+ ++removalRefreshes129;removalAbi129&=unit==invulUnitMock129;
+ if(removalReadd129)removalPresent129=true;
+}
+uintptr_t addedAbilityMock129=0;bool addPresentMock129=false,addRejectMock129=false,addStepRejectMock129=false,addAbiMock129=true;
+unsigned addCallsMock129=0,addBeforeMock129=0,addAfterMock129=0,addRefreshMock129=0,addStepsMock129=0;
+uintptr_t __fastcall AddFindMock129(uintptr_t unit,DWORD,uint32_t code,int a,int b,int c,int d){
+ addAbiMock129&=unit==invulUnitMock129&&code==0x41486862&&a==0&&b==1&&c==1&&d==1;
+ return addPresentMock129?addedAbilityMock129:0;
+}
+void __cdecl AddBeforeMock129(uintptr_t unit){++addBeforeMock129;addAbiMock129&=unit==invulUnitMock129;}
+void __cdecl AddAfterMock129(uintptr_t unit){++addAfterMock129;addAbiMock129&=unit==invulUnitMock129;}
+void __cdecl AddRefreshMock129(uintptr_t unit){++addRefreshMock129;addAbiMock129&=unit==invulUnitMock129;}
+uintptr_t __cdecl AddCreateMock129(uintptr_t unit,uint32_t code,int a,int b,int c){
+ ++addCallsMock129;addAbiMock129&=unit==invulUnitMock129&&code==0x41486862&&a==0&&b==0&&c==0;
+ if(addRejectMock129)return 0;
+ addPresentMock129=true;*reinterpret_cast<int*>(addedAbilityMock129+0x50)=0;return addedAbilityMock129;
+}
+int __fastcall AddMaximumMock129(uintptr_t ability,DWORD){addAbiMock129&=ability==addedAbilityMock129;return 3;}
+bool AddStepMock129(uintptr_t base,uintptr_t ability,bool up){
+ ++addStepsMock129;addAbiMock129&=base==executableBase&&ability==addedAbilityMock129;
+ if(addStepRejectMock129)return true; // Engine accepted the call but made no progress.
+ *reinterpret_cast<int*>(ability+0x50)+=up?1:-1;return true;
+}
+unsigned killCallsMock129=0;bool killAbiMock129=true,killReassignMock129=false;
+void __fastcall KillUnitMock129(uintptr_t unit,DWORD,const float* life){
+ ++killCallsMock129;killAbiMock129&=unit==invulUnitMock129&&life==reinterpret_cast<const float*>(executableBase+0xd2d88c)&&*life==0.f;
+ if(killReassignMock129)*reinterpret_cast<uint32_t*>(unit+0x10)=23;
+}
 int wmain(int argc,wchar_t** argv){try{
+
  auto checkAt=[](bool ok,int line){if(!ok)throw std::runtime_error("version129 contract failed at line "+std::to_string(line));};
 #define check(...) checkAt((__VA_ARGS__),__LINE__)
+ {
+  using namespace wht::network_ping;
+  Reset();const unsigned char request[]={0xf7,1,8,0,42,0,0,0};
+  const unsigned char response[]={0xf7,0x46,8,0,42,0,0,0};
+  ObserveBytes(123,reinterpret_cast<const char*>(request),3,true,100);
+  ObserveBytes(123,reinterpret_cast<const char*>(request+3),5,true,100);
+  check(connections.size()==1&&connections[0].pending.size()==1&&!connections[0].sampled);
+  ObserveBytes(123,reinterpret_cast<const char*>(response),8,false,137);
+  check(connections[0].sampled&&connections[0].rtt==37&&connections[0].pending.empty());
+  Closed(123);check(connections.empty());Reset();
+ }
+
  window=CreateWindowExW(0,L"STATIC",L"test",WS_POPUP,0,0,800,600,nullptr,nullptr,GetModuleHandleW(nullptr),nullptr);
  check(window!=nullptr);original=reinterpret_cast<TextFn>(Capture);
  unsigned char object[1024]{};auto ptr=reinterpret_cast<uintptr_t>(object);
@@ -846,7 +959,35 @@ int wmain(int argc,wchar_t** argv){try{
  localFilesWriter129=+[](bool){return false;};
  check(!ToolCommand(L"#alf 0")&&runtimeConfig.allowLocalFiles&&wht::LoadConfig(runtimeIni).allowLocalFiles);
  localFilesWriter129=wht::WriteLocalFiles129;
- const auto castModeIndex129=wht::kToolMenuControls.size()-4;
+ for(size_t index=wht::kToolMenuControls.size()-5;index<wht::kToolMenuControls.size()-2;++index){
+  const auto& control=wht::kToolMenuControls[index];check(ControlAvailable129(control));
+  check(ToolCommand(L"#toolui "+std::to_wstring(index)+L" toggle"));
+  check(wht::ToolMenuOverlay::ReadValue(runtimeConfig,index)==L"1");
+  check(ToolCommand(L"#toolui "+std::to_wstring(index)+L" toggle"));
+  check(wht::ToolMenuOverlay::ReadValue(runtimeConfig,index)==L"0");
+ }
+ wht::TimeBoss129 bossTracker129;
+ bossTracker129.units[100]=42;
+ bossTracker129.Observe(20,[](uintptr_t unit,wht::BossUnit129& out){out={unit,42,0x4870616c,100};return true;});
+ check(bossTracker129.state.Remaining(20)[2]==0);
+ bossTracker129.Observe(25,[](uintptr_t unit,wht::BossUnit129& out){out={unit,42,0x4870616c,0};return true;});
+ check(bossTracker129.state.Remaining(25)[2]==31);
+ bossTracker129.Observe(26,[](uintptr_t unit,wht::BossUnit129& out){out={unit,42,0x4870616c,0};return true;});
+ check(bossTracker129.state.Remaining(26)[2]==30);
+ bossTracker129.Observe(27,[](uintptr_t unit,wht::BossUnit129& out){out={unit,43,0x4870616c,100};return true;});
+ check(bossTracker129.units.empty());
+ bossTracker129.Reset();check(bossTracker129.state.Remaining(0)[0]==493);
+ check(bossTracker129.state.Remaining(493)[0]==1007);
+ for(size_t index=0;index<wht::kToolMenuControls.size();++index){
+  const auto& control=wht::kToolMenuControls[index];
+  if(!wcscmp(control.section,L"MTHKEY")&&!wcscmp(control.key,L"TimeBoss")){
+   levelHooksReady129=false;check(!ControlAvailable129(control));
+   levelHooksReady129=true;check(ControlAvailable129(control));
+   check(ToolCommand(L"#toolui "+std::to_wstring(index)+L" toggle")&&runtimeConfig.timeBoss);
+   check(ToolCommand(L"#toolui "+std::to_wstring(index)+L" toggle")&&!runtimeConfig.timeBoss);
+  }
+ }
+ const auto castModeIndex129=wht::kToolMenuControls.size()-9;
  const auto& castModeControl129=wht::kToolMenuControls[castModeIndex129];
  check(!ControlAvailable129(castModeControl129));
  clickButton=reinterpret_cast<wht::ClickFn129>(CaptureClick);
@@ -857,7 +998,7 @@ int wmain(int argc,wchar_t** argv){try{
  check(ToolCommand(L"#toolui "+std::to_wstring(castModeIndex129)+L" set 1")&&runtimeConfig.modeCast==1);
  check(!ToolCommand(L"#toolui "+std::to_wstring(castModeIndex129)+L" set 3"));
  levelHooksReady129=true;
- const auto fontSizeIndex129=wht::kToolMenuControls.size()-3;
+ const auto fontSizeIndex129=wht::kToolMenuControls.size()-8;
  check(ToolCommand(L"#toolui "+std::to_wstring(fontSizeIndex129)+L" set 8")&&runtimeConfig.stateTagFontSize==8);
  check(!ToolCommand(L"#toolui "+std::to_wstring(fontSizeIndex129)+L" set 21"));
  check(ToolCommand(L"#toolui "+std::to_wstring(fontSizeIndex129)+L" set 4")&&runtimeConfig.stateTagFontSize==4);
@@ -889,8 +1030,260 @@ int wmain(int argc,wchar_t** argv){try{
  check(ToolCommand(L"#hpvalue")&&runtimeConfig.stateTagHpValue);
  check(!ToolCommand(L"#manavalue 2")&&!ToolCommand(L"#hpvalue 0 extra"));
  levelHooksReady129=false;check(!ToolCommand(L"#hpvalue 1"));
- std::array<unsigned char,0x50> menuRenderer{};
- auto& animationSpeed=*reinterpret_cast<float*>(menuRenderer.data()+0x48);
+ check(wht::NotificationText("Fast Menu: ON").find("|cff00ff00ON")!=std::string::npos);
+ check(wht::NotificationText("Fast Menu: OFF").find("|cffff0000OFF")!=std::string::npos);
+ check(wht::NotificationText("Set FPS Limit: 120").find("|cff00ff00120")!=std::string::npos);
+ check(!wht::ShowNotification129(0,"test",nullptr));
+ std::array<uint32_t,14> presentationMock129{};presentationMock129[0]=1920;presentationMock129[1]=1080;
+ check(!wht::UnlockPresentation129(presentationMock129.data(),false)&&presentationMock129[13]==0);
+ check(wht::UnlockPresentation129(presentationMock129.data(),true)&&presentationMock129[13]==0x80000000u);
+ check(presentationMock129[0]==1920&&presentationMock129[1]==1080);
+ check(!wht::UnlockPresentation129(nullptr,true));
+ check(wht::UnlockFps129::Owns(0xfb,false)&&wht::UnlockFps129::Owns(0xff,true));
+ check(!wht::UnlockFps129::Owns(0xff,false)&&!wht::UnlockFps129::Owns(0x90,true));
+ struct FpsMock129 {
+  uintptr_t id=100;unsigned value=16,calls=0;
+  uintptr_t context(unsigned){return id;}unsigned get(uintptr_t){return value;}
+  void set(unsigned ms,uintptr_t){value=ms;++calls;}
+ } fpsMock129;
+ const unsigned char hookedScale129[]={0xe9,0,0,0,0,0x90,0x8b,0x4d,0x0c,0x56};
+ auto originalScale129=+[](uintptr_t,int,float){};
+ check(wht::ResolveScaleSetter129(hookedScale129,nullptr)==nullptr);
+ check(wht::ResolveScaleSetter129(hookedScale129,originalScale129)==originalScale129);
+ check(wht::ResolveScaleSetter129(nullptr,nullptr)==nullptr);
+ {
+  std::vector<unsigned char> invulUnit(0x410),invulAgent(0x24),invulPortrait(0x250),heroSkillData(0xa0);
+  auto& portraitAddress=*reinterpret_cast<uintptr_t*>(ui.data()+0x434);const auto oldPortrait=portraitAddress;
+  portraitAddress=reinterpret_cast<uintptr_t>(invulPortrait.data());
+  invulUnitMock129=reinterpret_cast<uintptr_t>(invulUnit.data());invulAgentMock129=reinterpret_cast<uintptr_t>(invulAgent.data());
+  *reinterpret_cast<uintptr_t*>(invulPortrait.data())=executableBase+0xa981d4;
+  *reinterpret_cast<uintptr_t*>(invulPortrait.data()+0x248)=invulUnitMock129;
+  *reinterpret_cast<uintptr_t*>(invulUnit.data())=executableBase+0xa9c504;
+  *reinterpret_cast<uint32_t*>(invulUnit.data()+0xc)=11;*reinterpret_cast<uint32_t*>(invulUnit.data()+0x10)=22;
+  *reinterpret_cast<uint32_t*>(invulAgent.data()+0xc)=0x2b61676c;
+  *reinterpret_cast<unsigned char*>(invulUnit.data()+0x37)='H';
+  *reinterpret_cast<uintptr_t*>(invulUnit.data()+0x3fc)=reinterpret_cast<uintptr_t>(heroSkillData.data());
+  *reinterpret_cast<int*>(heroSkillData.data()+0x94)=3;
+  wht::HeroSkillPointsApi129 heroSkillApi{InvulAgentMock129,
+   reinterpret_cast<decltype(wht::HeroSkillPointsApi129::get)>(HeroSkillGetMock129),
+   reinterpret_cast<decltype(wht::HeroSkillPointsApi129::modify)>(HeroSkillModifyMock129)};
+  int parsedPoints=0,actualAdded=0,totalPoints=0;const char* skillReason=nullptr;
+  check(wht::ParseHeroSkillPoints129(L"",parsedPoints)&&parsedPoints==500);
+  check(wht::ParseHeroSkillPoints129(L" 12 ",parsedPoints)&&parsedPoints==12);
+  check(!wht::ParseHeroSkillPoints129(L"0",parsedPoints)&&!wht::ParseHeroSkillPoints129(L"10001",parsedPoints));
+  check(!wht::ParseHeroSkillPoints129(L"12 extra",parsedPoints)&&!wht::ParseHeroSkillPoints129(L"abc",parsedPoints));
+  const auto heroSelection=wht::SelectedSkill129(executableBase);
+  check(wht::AddHeroSkillPoints129(executableBase,heroSelection,heroSkillApi,12,actualAdded,totalPoints,&skillReason));
+  check(actualAdded==12&&totalPoints==15&&heroSkillModifyCalls129==1&&heroSkillAbi129&&!skillReason);
+  heroSkillReject129=true;
+  check(!wht::AddHeroSkillPoints129(executableBase,heroSelection,heroSkillApi,1,actualAdded,totalPoints,&skillReason)&&skillReason);
+  heroSkillReject129=false;
+  *reinterpret_cast<unsigned char*>(invulUnit.data()+0x37)='h';
+  check(!wht::AddHeroSkillPoints129(executableBase,heroSelection,heroSkillApi,1,actualAdded,totalPoints,&skillReason));
+  *reinterpret_cast<unsigned char*>(invulUnit.data()+0x37)='H';
+  *reinterpret_cast<uint32_t*>(invulAgent.data()+0x20)=1;
+  check(!wht::AddHeroSkillPoints129(executableBase,heroSelection,heroSkillApi,1,actualAdded,totalPoints,&skillReason));
+  *reinterpret_cast<uint32_t*>(invulAgent.data()+0x20)=0;
+  check(!wht::ResolveHeroSkillPointsApi129(executableBase));
+  wht::HeroAttributesApi129 attributesApi;
+  attributesApi.agent=InvulAgentMock129;
+  attributesApi.get[0]=reinterpret_cast<wht::HeroAttributesApi129::GetFn>(HeroStrGetMock129);
+  attributesApi.get[1]=reinterpret_cast<wht::HeroAttributesApi129::GetFn>(HeroAgiGetMock129);
+  attributesApi.get[2]=reinterpret_cast<wht::HeroAttributesApi129::GetFn>(HeroIntGetMock129);
+  attributesApi.set[0]=reinterpret_cast<wht::HeroAttributesApi129::SetFn>(HeroStrSetMock129);
+  attributesApi.set[1]=reinterpret_cast<wht::HeroAttributesApi129::SetFn>(HeroAgiSetMock129);
+  attributesApi.set[2]=reinterpret_cast<wht::HeroAttributesApi129::SetFn>(HeroIntSetMock129);
+  int attributeValue=0,attributeActual[3]{};const char* attributeReason=nullptr;
+  check(wht::ParseHeroAttributeValue129(L"",attributeValue)&&attributeValue==500);
+  check(wht::ParseHeroAttributeValue129(L" 99 ",attributeValue)&&attributeValue==99);
+  check(!wht::ParseHeroAttributeValue129(L"0",attributeValue)&&!wht::ParseHeroAttributeValue129(L"10001",attributeValue));
+  check(!wht::ParseHeroAttributeValue129(L"99 extra",attributeValue));
+  check(wht::SetHeroAttributes129(executableBase,heroSelection,attributesApi,wht::HeroAttribute129::Strength,99,attributeActual,&attributeReason));
+  check(heroAttributeValues129[0]==99&&heroAttributeValues129[1]==20&&heroAttributeWrites129[0]==1&&heroAttributeAbi129&&!attributeReason);
+  check(wht::SetHeroAttributes129(executableBase,heroSelection,attributesApi,wht::HeroAttribute129::Agility,88,attributeActual,&attributeReason));
+  check(wht::SetHeroAttributes129(executableBase,heroSelection,attributesApi,wht::HeroAttribute129::Intelligence,77,attributeActual,&attributeReason));
+  check(wht::SetHeroAttributes129(executableBase,heroSelection,attributesApi,wht::HeroAttribute129::All,123,attributeActual,&attributeReason));
+  check(heroAttributeValues129[0]==123&&heroAttributeValues129[1]==123&&heroAttributeValues129[2]==123&&heroAttributeWrites129[0]==2&&heroAttributeWrites129[1]==2&&heroAttributeWrites129[2]==2&&heroAttributeAbi129);
+  heroAttributeReject129=true;
+  check(!wht::SetHeroAttributes129(executableBase,heroSelection,attributesApi,wht::HeroAttribute129::Strength,456,attributeActual,&attributeReason)&&attributeReason);
+  heroAttributeReject129=false;
+  *reinterpret_cast<unsigned char*>(invulUnit.data()+0x37)='h';
+  check(!wht::SetHeroAttributes129(executableBase,heroSelection,attributesApi,wht::HeroAttribute129::Strength,456,attributeActual,&attributeReason));
+  *reinterpret_cast<unsigned char*>(invulUnit.data()+0x37)='H';
+  check(!wht::ResolveHeroAttributesApi129(executableBase));
+  wht::InvulnerabilityApi129 invulApi{InvulAgentMock129,reinterpret_cast<decltype(wht::InvulnerabilityApi129::find)>(InvulFindMock129),reinterpret_cast<decltype(wht::InvulnerabilityApi129::set)>(InvulSetMock129)};
+  const auto selection=wht::SelectedSkill129(executableBase);wht::InvulnerabilityResult129 result;const char* reason=nullptr;
+  check(wht::ChangeInvulnerability129(executableBase,selection,invulApi,true,result,&reason)&&result.ability&&result.effective&&!reason);
+  check(wht::ChangeInvulnerability129(executableBase,selection,invulApi,true,result,&reason)&&invulWritesMock129==1);
+  check(wht::ChangeInvulnerability129(executableBase,selection,invulApi,false,result,&reason)&&!result.ability&&!result.effective&&invulWritesMock129==2);
+  check(wht::ChangeInvulnerability129(executableBase,selection,invulApi,false,result,&reason)&&invulWritesMock129==2);
+  invulRejectMock129=true;
+  check(!wht::ChangeInvulnerability129(executableBase,selection,invulApi,true,result,&reason)&&reason&&invulWritesMock129==3);
+  invulRejectMock129=false;invulMapMock129=true;
+  check(wht::ChangeInvulnerability129(executableBase,selection,invulApi,true,result,&reason));
+  check(wht::ChangeInvulnerability129(executableBase,selection,invulApi,false,result,&reason)&&!result.ability&&result.effective);
+  std::vector<unsigned char> addedAbilityStorage(0x60);addedAbilityMock129=reinterpret_cast<uintptr_t>(addedAbilityStorage.data());
+  wht::AddAbilityApi129 addApi;
+  addApi.common={InvulAgentMock129,reinterpret_cast<decltype(wht::RemoveAbilityApi129::find)>(AddFindMock129),reinterpret_cast<decltype(wht::RemoveAbilityApi129::remove)>(RemovalMock129),AddRefreshMock129};
+  addApi.before=AddBeforeMock129;addApi.add=AddCreateMock129;addApi.after=AddAfterMock129;
+  addApi.maximum=reinterpret_cast<decltype(wht::AddAbilityApi129::maximum)>(AddMaximumMock129);addApi.step=AddStepMock129;
+  wht::AddAbilityResult129 addResult;
+  check(wht::AddAbilityToUnit129(executableBase,selection,addApi,0x41486862,9,addResult,&reason));
+  check(addResult.added&&addResult.level==3&&addCallsMock129==1&&addBeforeMock129==1&&addAfterMock129==1&&addStepsMock129==2);
+  check(wht::AddAbilityToUnit129(executableBase,selection,addApi,0x41486862,1,addResult,&reason)&&!addResult.added&&addResult.level==3&&addStepsMock129==2);
+  check(wht::AddAbilityToUnit129(executableBase,selection,addApi,0x41486862,2,addResult,&reason)&&!addResult.added&&addResult.level==2&&addStepsMock129==3);
+  addStepRejectMock129=true;
+  check(!wht::AddAbilityToUnit129(executableBase,selection,addApi,0x41486862,3,addResult,&reason)&&reason&&addStepsMock129==4);
+  addStepRejectMock129=false;addPresentMock129=false;addRejectMock129=true;
+  check(!wht::AddAbilityToUnit129(executableBase,selection,addApi,0x41486862,1,addResult,&reason)&&reason&&!addResult.added);
+  check(addCallsMock129==2&&addBeforeMock129==2&&addAfterMock129==2&&addAbiMock129);
+  addRejectMock129=false;const auto creations=addCallsMock129;
+  check(!wht::AddAbilityToUnit129(executableBase,{},addApi,0x41486862,1,addResult,&reason)&&addCallsMock129==creations);
+  check(!wht::ResolveAddAbilityApi129(executableBase));
+  check(!wht::AddSelectedAbility129(0,0x41486862,1,addResult,&reason)&&reason);
+  wht::KillUnitApi129 killApi{InvulAgentMock129,reinterpret_cast<decltype(wht::KillUnitApi129::kill)>(KillUnitMock129)};
+  check(wht::KillUnit129(executableBase,selection,killApi,&reason)&&killCallsMock129==1&&killAbiMock129);
+  *reinterpret_cast<float*>(globals.data()+0xd2d88c)=1.f;
+  check(!wht::KillUnit129(executableBase,selection,killApi,&reason)&&reason&&killCallsMock129==1);
+  *reinterpret_cast<float*>(globals.data()+0xd2d88c)=0.f;
+  killReassignMock129=true;
+  check(wht::KillUnit129(executableBase,selection,killApi,&reason)&&killCallsMock129==2);
+  // The death callback can invalidate the selected pointer; avoid reading it again.
+  check(!wht::KillUnit129(executableBase,selection,killApi,&reason)&&killCallsMock129==2);
+  killReassignMock129=false;*reinterpret_cast<uint32_t*>(invulUnit.data()+0x10)=22;
+  *reinterpret_cast<uint32_t*>(invulAgent.data()+0x20)=1;
+  check(!wht::KillUnit129(executableBase,selection,killApi,&reason)&&killCallsMock129==2);
+  *reinterpret_cast<uint32_t*>(invulAgent.data()+0x20)=0;
+  check(!wht::ResolveKillUnitApi129(executableBase));
+  check(!wht::KillSelectedUnit129(0,&reason)&&reason);
+  wht::RemoveAbilityApi129 removalApi{InvulAgentMock129,reinterpret_cast<decltype(wht::RemoveAbilityApi129::find)>(RemovalFindMock129),reinterpret_cast<decltype(wht::RemoveAbilityApi129::remove)>(RemovalMock129),RemovalRefreshMock129};
+  bool removedAbility=false;
+  check(wht::RemoveAbilityFromUnit129(executableBase,selection,removalApi,0x41486862,removedAbility,&reason)&&removedAbility);
+  check(removalCalls129==1&&removalRefreshes129==1&&!removalPresent129&&removalAbi129);
+  check(wht::RemoveAbilityFromUnit129(executableBase,selection,removalApi,0x41486862,removedAbility,&reason)&&!removedAbility&&removalCalls129==1);
+  check(wht::RemoveAbilityFromUnit129(executableBase,selection,removalApi,0xdeadbeef,removedAbility,&reason)&&!removedAbility&&removalCalls129==1);
+  removalPresent129=true;removalReject129=true;
+  check(!wht::RemoveAbilityFromUnit129(executableBase,selection,removalApi,0x41486862,removedAbility,&reason)&&reason&&!removedAbility);
+  removalReject129=false;removalReadd129=true;
+  check(!wht::RemoveAbilityFromUnit129(executableBase,selection,removalApi,0x41486862,removedAbility,&reason)&&reason&&!removedAbility);
+  removalReadd129=false;removalReplace129=true;const auto refreshBeforeReplacement=removalRefreshes129;
+  check(!wht::RemoveAbilityFromUnit129(executableBase,selection,removalApi,0x41486862,removedAbility,&reason)&&reason);
+  check(removalRefreshes129==refreshBeforeReplacement);
+  removalReplace129=false;*reinterpret_cast<uint32_t*>(invulUnit.data()+0x10)=22;
+  const auto removeCalls=removalCalls129;
+  check(!wht::RemoveAbilityFromUnit129(executableBase,{},removalApi,0x41486862,removedAbility,&reason));
+  check(removalCalls129==removeCalls&&removalAbi129);
+  check(!wht::ResolveRemoveAbilityApi129(executableBase));
+  check(!wht::RemoveSelectedAbility129(0,0x41486862,removedAbility,&reason)&&reason);
+  wht::TeleportApi129 teleportApi{InvulAgentMock129,reinterpret_cast<decltype(wht::TeleportApi129::stop)>(TeleportStopMock129),reinterpret_cast<decltype(wht::TeleportApi129::move)>(TeleportMoveMock129),reinterpret_cast<decltype(wht::TeleportApi129::position)>(TeleportReadMock129)};
+  wht::TeleportPosition129 destination;
+  check(wht::TeleportUnit129(executableBase,selection,teleportApi,100,-200,destination,&reason));
+  check(destination.x==116&&destination.y==-216&&teleportStops129==1&&teleportMoves129==1&&teleportAbi129);
+  check(!wht::TeleportUnit129(executableBase,selection,teleportApi,NAN,0,destination,&reason));
+  check(!wht::TeleportUnit129(executableBase,selection,teleportApi,100001,0,destination,&reason));
+  check(!wht::TeleportUnit129(executableBase,{},teleportApi,0,0,destination,&reason));
+  check(teleportStops129==1&&teleportMoves129==1);
+  teleportReplace129=true;
+  check(!wht::TeleportUnit129(executableBase,selection,teleportApi,0,0,destination,&reason));
+  check(teleportStops129==2&&teleportMoves129==1&&reason);
+  teleportReplace129=false;*reinterpret_cast<uint32_t*>(invulUnit.data()+0x10)=22;
+  check(!wht::ResolveTeleportApi129(executableBase));
+  check(!wht::TeleportSelected129(0,0,0,destination,&reason)&&reason);
+  const auto writes=invulWritesMock129;
+  *reinterpret_cast<uint32_t*>(invulAgent.data()+0x20)=1;
+  check(!wht::ChangeInvulnerability129(executableBase,selection,invulApi,true,result,&reason)&&invulWritesMock129==writes);
+  *reinterpret_cast<uint32_t*>(invulAgent.data()+0x20)=0;
+  *reinterpret_cast<uint32_t*>(invulUnit.data()+0x10)=23;
+  check(!wht::ChangeInvulnerability129(executableBase,selection,invulApi,true,result,&reason)&&invulWritesMock129==writes);
+  *reinterpret_cast<uint32_t*>(invulUnit.data()+0x10)=22;
+  *reinterpret_cast<uintptr_t*>(invulUnit.data())=0;
+  check(!wht::ChangeInvulnerability129(executableBase,selection,invulApi,true,result,&reason)&&invulWritesMock129==writes);
+  check(!wht::ResolveInvulnerabilityApi129(executableBase));
+  check(!wht::SetUnitInvulnerability129(0,true,result,&reason)&&reason);
+  check(invulAbiMock129);portraitAddress=oldPortrait;
+ }
+ float unitScale129=0;
+ check(wht::ParseUnitScale129(L"",unitScale129)&&unitScale129==1);
+ check(wht::ParseUnitScale129(L"200",unitScale129)&&unitScale129==2);
+ check(wht::ParseUnitScale129(L"0.5",unitScale129)&&unitScale129==.5f);
+ check(wht::ParseUnitScale129(L"0",unitScale129)&&unitScale129==.05f);
+ check(wht::ParseUnitScale129(L"99999",unitScale129)&&unitScale129==20);
+ check(!wht::ParseUnitScale129(L"2 extra",unitScale129)&&!wht::ParseUnitScale129(L"abc",unitScale129));
+ check(!wht::SetUnitScale129(0,1));
+ uint32_t addCode129=0;int addLevel129=0;
+ check(wht::ParseAddAbility129(L"AHhb",addCode129,addLevel129)&&addCode129==0x41486862&&addLevel129==1);
+ check(wht::ParseAddAbility129(L"0x41486862 3",addCode129,addLevel129)&&addCode129==0x41486862&&addLevel129==3);
+ for(auto invalid:{L"",L"AHhb 0",L"AHhb -1",L"AHhb 10001",L"AHhb abc",L"AHhb 2.5",L"AHhb 3 extra"})check(!wht::ParseAddAbility129(invalid,addCode129,addLevel129));
+ uint32_t removeCode129=0;
+ check(wht::ParseRemoveAbility129(L"AHhb",removeCode129)&&removeCode129==0x41486862);
+ check(wht::ParseRemoveAbility129(L" 0x41486862 ",removeCode129)&&removeCode129==0x41486862);
+ check(wht::ParseRemoveAbility129(L"0X41486a62",removeCode129)&&removeCode129==0x41486a62);
+ for(auto invalid:{L"",L"AHh",L"AHhbb",L"AHhb extra",L"0x00000000",L"0x123",L"0x4148686z"})check(!wht::ParseRemoveAbility129(invalid,removeCode129));
+ uint32_t abilityCode129=0;
+ check(wht::AbilityCode129(L"AHhb",abilityCode129)&&abilityCode129==0x41486862);
+ check(!wht::AbilityCode129(L"AHh",abilityCode129)&&!wht::AbilityCode129(L"AHhbb",abilityCode129));
+ check(!wht::AbilityCode129(L"A Hh",abilityCode129));check(!wht::SetAbilityButton129(0,0,false));
+ wht::InventoryInfo129 inventory129;
+ check(wht::InventoryInfoText129(inventory129)=="Item Slots: [Empty]");
+ inventory129.capacity=6;inventory129.codes[0]=0x49747331;inventory129.codes[5]=0x49747332;
+ check(wht::InventoryInfoText129(inventory129)=="Item Slots: [0: Its1] [5: Its2] ");
+ check(!wht::ReadInventoryInfo129(0,inventory129));
+ wht::MousePosition129 mousePos129{12.5f,-24.f,128.f};
+ check(wht::MousePositionText129(mousePos129,1600,900)=="X: 12.50000, Y: -24.00000, Z: 128.00000 | Res: 1600, 900");
+ check(!wht::ReadMousePosition129(0,mousePos129));
+ float panX129=0,panY129=0;
+ check(wht::ParsePan129(L"2928 304",panX129,panY129)&&panX129==2928&&panY129==304);
+ check(wht::ParsePan129(L"-3008 -5312",panX129,panY129)&&panX129==-3008&&panY129==-5312);
+ check(!wht::ParsePan129(L"",panX129,panY129)&&!wht::ParsePan129(L"1",panX129,panY129));
+ check(!wht::ParsePan129(L"1 2 extra",panX129,panY129)&&!wht::ParsePan129(L"70000 0",panX129,panY129));
+ check(!wht::PanCamera129(0,0,0,0));
+ check(wht::CursorFlagsText129(POINT{100,200},POINT{10,20},false,0)=="MouseXY: [100, 200], ClientXY: [10, 20]");
+ check(wht::CursorFlagsText129(POINT{-100,200},POINT{10,20},true,0x800)=="MouseXY: [-100, 200], ClientXY: [10, 20] | Unit Flags: 0x00000800");
+ uint32_t flags129=0;check(!wht::ReadUnitFlags129(0,flags129));
+ check(wht::UnitCodeText129(0x4870616c)=="Unit ID: [Hpal] (0x4870616C)");
+ check(wht::UnitPositionText129(12.5f,-24.f)=="X: 12.50000, Y: -24.00000");
+ wht::UnitInfo129 missingUnit129;check(!wht::ReadUnitInfo129(0,true,missingUnit129));
+ wht::RepeatChat129 repeat129;
+ check(!repeat129.Set(1,0)&&!repeat129.Set(25,0));check(repeat129.Set(24,0));
+ repeat129.Observe(0,0,"self");repeat129.Observe(23,0,"#cam 3000");check(repeat129.pending.empty());
+ repeat129.Observe(23,0,"hello");check(repeat129.pending.size()==1);
+ unsigned repeated129=0;auto sendRepeat129=[&](const std::string& text){check(text=="hello");++repeated129;return true;};
+ repeat129.Tick(false,100,sendRepeat129);check(repeated129==0);
+ repeat129.Tick(true,100,sendRepeat129);check(repeated129==1&&repeat129.pending.empty());
+ repeat129.Observe(23,0,"hello");repeat129.Tick(true,349,sendRepeat129);check(repeated129==1);
+ repeat129.Tick(true,350,sendRepeat129);check(repeated129==2);
+ repeat129.ToggleAll();repeat129.Observe(2,0,"hello");check(repeat129.pending.size()==1);
+ repeat129.Reset();check(repeat129.pending.empty()&&!repeat129.all&&repeat129.slot==-1);
+ wht::Mute129 mute129;
+ check(!mute129.Set(0,0,true)&&!mute129.Set(25,0,true)&&!mute129.Set(1,0,true));
+ check(mute129.Set(24,0,true)&&mute129.Hidden(23,0)&&mute129.Hidden(23,2));
+ check(!mute129.Hidden(24,0)&&!mute129.Hidden(23,3)&&!mute129.Hidden(23,-1));
+ check(mute129.Set(24,0,false)&&!mute129.Hidden(23,0));
+ check(mute129.Set(2,0,true));mute129.Reset();check(!mute129.Hidden(1,0));
+ wht::FpsLimit129 limiter129;
+ check(limiter129.Apply(0,true,fpsMock129)&&fpsMock129.calls==0);
+ check(!limiter129.Apply(59,true,fpsMock129));
+ check(limiter129.Apply(100,true,fpsMock129)&&fpsMock129.value==10);
+ check(limiter129.Apply(100,true,fpsMock129)&&fpsMock129.calls==1);
+ check(limiter129.Apply(0,true,fpsMock129)&&fpsMock129.value==16);
+ limiter129.Apply(120,true,fpsMock129);fpsMock129.value=12;
+ check(limiter129.Apply(0,true,fpsMock129)&&fpsMock129.value==12);
+ fpsMock129.id=200;fpsMock129.value=20;
+ limiter129.Apply(200,true,fpsMock129);
+ check(limiter129.Apply(0,false,fpsMock129)&&fpsMock129.value==20);
+ check(limiter129.Apply(0,true,fpsMock129,true)&&fpsMock129.value==0);
+ check(limiter129.Apply(0,false,fpsMock129,true)&&fpsMock129.value==20);
+ check(limiter129.Apply(144,true,fpsMock129,true)&&fpsMock129.value==7);
+ check(limiter129.Apply(0,true,fpsMock129,true)&&fpsMock129.value==0);
+ wht::FpsTimerState timerMock129;unsigned beginCount129=0,endCount129=0;
+ auto timerBegin129=[&](unsigned ms){check(ms==1);++beginCount129;return 0u;};
+ auto timerEnd129=[&](unsigned ms){check(ms==1);++endCount129;return 0u;};
+ check(timerMock129.Apply(true,timerBegin129,timerEnd129));
+ check(timerMock129.Apply(true,timerBegin129,timerEnd129)&&beginCount129==1);
+ check(timerMock129.Apply(false,timerBegin129,timerEnd129)&&endCount129==1);
+
+ std::array<unsigned char,0x190> menuRenderer{};
+ auto& animationSpeed=*reinterpret_cast<float*>(menuRenderer.data()+0x188);
  animationSpeed=1.5f;wht::MenuSpeedLease129 menuSpeed;
  menuSpeed.Apply(reinterpret_cast<uintptr_t>(menuRenderer.data()),true);check(animationSpeed==100.f);
  menuSpeed.Apply(reinterpret_cast<uintptr_t>(menuRenderer.data()),true);
@@ -904,6 +1297,7 @@ int wmain(int argc,wchar_t** argv){try{
  auto transitionMock129=[&](unsigned kind,unsigned sequence,unsigned a,unsigned b,uintptr_t callback,uintptr_t context){
   check(kind==4&&sequence==2&&a==3&&b==7&&callback==11&&context==12);++transitionCalls129;return 2.f;
  };
+ check(wht::FastMenuAnimation129{}.speeds.size()==3);
  check(wht::RunMenuTransition129(true,transitionMock129,4,2,3,7,11,12)==.001f&&transitionCalls129==1);
  check(wht::RunMenuTransition129(false,transitionMock129,4,2,3,7,11,12)==2.f&&transitionCalls129==2);
  originalMenuTransition129=+[](unsigned,unsigned,unsigned,unsigned,uintptr_t,uintptr_t)->float{return 2.f;};

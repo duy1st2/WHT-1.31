@@ -6,6 +6,11 @@ inline std::string ToolTabName(size_t page){
 }
 inline std::string EnglishControlLabel(const ToolMenuControl& d){
  std::wstring key=d.key,section=d.section;
+ if(key==L"Keyboard Scroll Speed")return "Keyboard camera scroll (%)";
+ if(key==L"Mouse Scroll Speed")return "Mouse camera scroll (%)";
+ if(key==L"Borderless")return "Borderless window";
+ if(key==L"Lock Cursor")return "Lock cursor in game";
+ if(key==L"Sound Start Game")return "Play match-start sound";
  if(key==L"ModeCast")return "Casting mode";
  if(key==L"Fast Menu")return "Faster game menu transitions";
  if(section==L"StateTag"&&key==L"ShowHpValue")return "Show overhead HP value";
@@ -45,6 +50,11 @@ inline std::string EnglishControlLabel(const ToolMenuControl& d){
  return d.label;
 }
 inline std::string EnglishControlHelp(const ToolMenuControl& d){
+ if(!wcscmp(d.key,L"Keyboard Scroll Speed")||!wcscmp(d.key,L"Mouse Scroll Speed"))return "Camera scroll speed\n0..700%; default 100%. Enter a value and press Enter to save.";
+ if(!wcscmp(d.key,L"Borderless"))return "Borderless window\nFill the screen without a window border. Disable to restore the previous window.";
+ if(!wcscmp(d.key,L"Lock Cursor"))return "Lock cursor in game\nKeep the cursor inside the active game window. Release it when the game loses focus.";
+ if(!wcscmp(d.key,L"Sound Start Game"))return "Match-start sound\nPlay once at the start of a new match. Enabling during a match does not play a sound.";
+
  if(!wcscmp(d.key,L"Fast Menu"))return "Fast Menu\nShorten the game menu transition wait. Original game actions and callbacks are retained.";
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"ShowHpValue"))return "Overhead HP value\nShow or hide HP numbers independently of mana. Enable HP/Mana values in General first.";
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"FontSize"))return "Overhead HP/Mana font size\nRange 1 to 20; default 4. Changes existing labels and line spacing immediately.";

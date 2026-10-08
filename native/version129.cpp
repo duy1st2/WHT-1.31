@@ -1,11 +1,29 @@
+#include "network_hooks129.hpp"
 #include "common.hpp"
 #include "native_ui129.hpp"
 #include "macro_recorder.hpp"
 #include "memory_overlay.hpp"
 #include "services129.hpp"
+#include "mute129.hpp"
+#include "repeat_chat129.hpp"
+wht::RepeatChat129 repeatChat129;
+wht::Mute129 mutedChat129;
 #include "resource129.hpp"
 #include "resource_board129.hpp"
 #include "skills129.hpp"
+#include "unit_info129.hpp"
+#include "inventory_info129.hpp"
+#include "ability_button129.hpp"
+#include "unit_scale129.hpp"
+#include "unit_invulnerability129.hpp"
+#include "teleport129.hpp"
+#include "remove_ability129.hpp"
+#include "add_ability129.hpp"
+#include "kill_unit129.hpp"
+#include "hero_skill_points129.hpp"
+#include "hero_attributes129.hpp"
+#include "pan_camera129.hpp"
+#include "mouse_position129.hpp"
 #include "life_mana129.hpp"
 #include "stats129.hpp"
 #include "hotkey_labels129.hpp"
@@ -24,6 +42,12 @@
 #include "vertex_color129.hpp"
 #include "local_files129.hpp"
 #include "fast_menu129.hpp"
+#include "fps_limit129.hpp"
+#include "fps_timer.hpp"
+#include "unlock_fps129.hpp"
+#include "presentation129.hpp"
+#include "notification129.hpp"
+#include "time_boss129.hpp"
 #include <intrin.h>
 #include "match_timer.hpp"
 #include <MinHook.h>
@@ -80,6 +104,14 @@ decltype(&PlaySoundW) startSoundPlayer129=PlaySoundW;
 wht::LocalFilesWriter129 localFilesWriter129=wht::WriteLocalFiles129;
 wht::MenuTransition129 originalMenuTransition129=nullptr;
 wht::FastMenuAnimation129 fastMenuAnimation129;
+wht::FpsLimit129 fpsLimit129;
+wht::FpsTimerState fpsTimer129;
+unsigned loggedFpsInterval129=~0u;
+wht::UnlockFps129 unlockFps129;
+wht::FpsApi129 fpsApi129{};
+wht::LocalMessage129 localMessage129=nullptr;
+using PresentParameters129=void(__thiscall*)(uintptr_t,uint32_t*);
+PresentParameters129 originalPresentParameters129=nullptr;
 
 std::set<std::wstring> loadedLibraries129,mountedArchives129;
 std::vector<HANDLE> extraArchives129;
@@ -88,9 +120,15 @@ std::vector<HMODULE> extraLibraries129;
 
 std::wstring runtimeIni,runtimeFolder;
 wht::Config runtimeConfig;
+void __fastcall PresentParametersHook129(uintptr_t renderer,DWORD,uint32_t* parameters){
+ originalPresentParameters129(renderer,parameters);
+ const bool enabled=runtimeConfig.mode==wht::RunMode::Local&&!runtimeConfig.vsync;
+ if(wht::UnlockPresentation129(parameters,enabled))
+  wht::Log(runtimeFolder,"WHT 1.29 Direct3D9: PresentationInterval=IMMEDIATE (VSync disabled; runtime unlock ready).");
+}
 float __cdecl MenuTransitionHook129(unsigned kind,unsigned sequence,unsigned a,unsigned b,uintptr_t callback,uintptr_t context){
  const bool enabled=runtimeConfig.mode==wht::RunMode::Local&&runtimeConfig.fastMenu;
- if(!enabled)fastMenuAnimation129.Apply(executableBase,false);
+ fastMenuAnimation129.Apply(executableBase,enabled);
  const float duration=wht::RunMenuTransition129(enabled,originalMenuTransition129,kind,sequence,a,b,callback,context);
  fastMenuAnimation129.Apply(executableBase,enabled);
  return duration;
@@ -121,6 +159,7 @@ wht::ClearFrame129 showFdf=nullptr,hideFdf=nullptr;
 wht::ClickFn129 clickButton=nullptr;
 wht::ClearFrame129 minimizeBoard=nullptr,maximizeBoard=nullptr;
 wht::AllSkills129 allSkills;
+wht::TimeBoss129 timeBoss129;
 wht::SmartCast129 smartCast129;
 void* skillsIconFrame=nullptr;void* skillsIcon=nullptr;bool skillsIconShown=false,skillsIconPressed=false;
 wht::ToolMenuRect skillsIconRect{.563f,.012f,.016f,.016f};
@@ -247,19 +286,17 @@ void __fastcall ChatDisplay(uintptr_t object,DWORD,uint32_t sender,const char* t
   if(field==0)runtimeConfig.camera=value;else runtimeConfig.fogZ=value;
   wht::SaveSetting(runtimeIni,L"Event",field==0?L"Camera":L"FogZ",std::to_wstring(value));
   ApplyCamera();
+  wht::ShowNotification129(executableBase,wht::Utf8(wht::SettingFeedback(field==0?L"Camera":L"FogZ",std::to_wstring(value))),localMessage129);
   wht::Log(runtimeFolder,"WHT 1.29: applied local camera command: "+std::string(text));
  }
  if(channel>=0&&channel<=2&&CameraContext(camera,local)&&sender==local){
   chatTyping=false;
-  if(text&&ToolCommand(wht::Wide(text))&&!_strnicmp(text,"#nfe",4)){
-   originalChat(object,sender,runtimeConfig.removeFogEffect?
-    "|cffffff00[WHT] Scene fog removal: ON (#nfe 0 to restore)|r":
-    "|cffffff00[WHT] Scene fog removal: OFF (#nfe 1 to enable)|r",channel,8.f);
-  }
+  if(text)ToolCommand(wht::Wide(text));
  }
+ if(runtimeConfig.mode==wht::RunMode::Local&&channel>=0&&channel<=2&&CameraContext(camera,local))repeatChat129.Observe(sender,local,text);
  EnsureInput();
  if(!timer)timer=SetTimer(nullptr,0,16,Refresh);
- originalChat(object,sender,text,channel,duration);
+ if(runtimeConfig.mode!=wht::RunMode::Local||!mutedChat129.Hidden(sender,channel))originalChat(object,sender,text,channel,duration);
 }
 void CALLBACK Refresh(HWND,UINT,UINT_PTR,DWORD){
  ApplyCamera();
@@ -290,6 +327,8 @@ void __fastcall LifeText129(uintptr_t font,DWORD,const char* text){
  if(!lifeMana129.Handle(executableBase,font,text,caller-executableBase,LifeFlags129(),originalLifeText129))originalLifeText129(font,text);
 }
 bool ControlAvailable129(const wht::ToolMenuControl& d){
+ if(!wcscmp(d.section,L"MTHKEY")&&(!wcscmp(d.key,L"TimeBoss")||!wcscmp(d.key,L"MTH49Enable")||!wcscmp(d.key,L"G17Enable")))return levelHooksReady129;
+ if(!wcscmp(d.section,L"Event")&&(!wcscmp(d.key,L"Borderless")||!wcscmp(d.key,L"Lock Cursor")||!wcscmp(d.key,L"Sound Start Game")))return true;
  if(!wcscmp(d.section,L"Event")&&!wcscmp(d.key,L"Fast Menu"))return originalMenuTransition129!=nullptr;
  if(!wcscmp(d.section,L"Event")&&!wcscmp(d.key,L"ModeCast"))return clickButton!=nullptr;
  if(!wcscmp(d.section,L"StateTag")||!wcscmp(d.section,L"ManaBar"))return levelHooksReady129;
@@ -297,6 +336,7 @@ bool ControlAvailable129(const wht::ToolMenuControl& d){
  if(!wcscmp(d.section,L"Quick Chat"))return true;
  if(!wcscmp(d.section,L"HotKeyOther"))return !wcscmp(d.key,L"hko_menu")||!wcscmp(d.key,L"hko_command")||!wcscmp(d.key,L"hko_MinimizeMultiboard");
  if(!wcscmp(d.section,L"SlotHotkey")||!wcscmp(d.section,L"SlotHotkeyInv")||!wcscmp(d.section,L"SlotHotkeyShop"))return wcsncmp(d.key,L"AutoTarget",10);
+ if(!wcscmp(d.section,L"Graphics")&&!wcscmp(d.key,L"Unlock Limit FPS"))return unlockFps129.ready&&!unlockFps129.conflict;
  if(!wcscmp(d.section,L"Graphics"))return !wcscmp(d.key,L"timeOfDayUI")||!wcscmp(d.key,L"ConsoleUI")||!wcscmp(d.key,L"Text Life/Mana Commas")||!wcscmp(d.key,L"Text Life/Mana No Hide")||!wcscmp(d.key,L"Text Stats Commas")||!wcscmp(d.key,L"MouseTooltipUI")||!wcscmp(d.key,L"BlackBarUI")||!wcscmp(d.key,L"Color Player")||(!wcscmp(d.key,L"BarInvul")&&invulnerableHookReady129)||(!wcscmp(d.key,L"VertexColor")&&originalVertexColor129);
  if(!wcscmp(d.section,L"HotKeyHero"))return !wcsncmp(d.key,L"HeroF",5)||!wcscmp(d.key,L"AutoClickLeft")||!wcscmp(d.key,L"AutoClickRight");
  return !wcscmp(d.section,L"Event")&&(!wcscmp(d.key,L"Show Resource")||!wcscmp(d.key,L"Show Mem")||!wcscmp(d.key,L"Show Timer")||!wcscmp(d.key,L"Show FPS")||!wcscmp(d.key,L"Show Ins All Skills")||!wcscmp(d.key,L"Hide Option Menu")||!wcscmp(d.key,L"Show Hotkey In Panel")||!wcscmp(d.key,L"ShowCooldown")||!wcscmp(d.key,L"ShowRegenHP")||!wcscmp(d.key,L"ShowRegenMana")||(!wcscmp(d.key,L"Keyboard Scroll Speed")&&setKeyboardScroll129)||(!wcscmp(d.key,L"Mouse Scroll Speed")&&setMouseScroll129));
@@ -346,9 +386,160 @@ void StartPlugins129(){
  for(bool archive:{false,true}){std::wistringstream list(archive?runtimeConfig.loadMpq:runtimeConfig.loadDll);std::wstring path;while(std::getline(list,path,L','))if(!path.empty())LoadPlugin129(path,archive);}
  pluginsLoading129=false;
 }
-bool ToolCommand(const std::wstring& command){
+bool ToolCommandImpl129(const std::wstring& command){
  if(runtimeConfig.mode!=wht::RunMode::Local)return false;
  std::wistringstream in(command);std::wstring name,action,extra;in>>name;
+ if(name==L"#str"||name==L"#agi"||name==L"#int"||name==L"#fullatt"){
+  std::wstring argument;std::getline(in,argument);int value=0;
+  if(!wht::ParseHeroAttributeValue129(argument,value)){
+   wht::ShowNotification129(executableBase,"Usage: select a hero, then #str/#agi/#int/#fullatt [1..10000]",localMessage129);return false;
+  }
+  const auto attribute=name==L"#str"?wht::HeroAttribute129::Strength:name==L"#agi"?wht::HeroAttribute129::Agility:
+   name==L"#int"?wht::HeroAttribute129::Intelligence:wht::HeroAttribute129::All;
+  int actual[3]{};const char* error=nullptr;
+  if(!wht::SetSelectedHeroAttributes129(executableBase,attribute,value,actual,&error)){
+   const std::string reason=std::string("Hero Attributes: ")+(error?error:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,name==L"#fullatt"?
+   "Hero STR/AGI/INT: "+std::to_string(value):
+   "Hero "+std::string(name==L"#str"?"STR":name==L"#agi"?"AGI":"INT")+": "+std::to_string(value),localMessage129);return true;
+ }
+ if(name==L"#sp"){
+  std::wstring argument;std::getline(in,argument);int amount=0;
+  if(!wht::ParseHeroSkillPoints129(argument,amount)){
+   wht::ShowNotification129(executableBase,"Usage: select a hero, then #sp [1..10000]",localMessage129);return false;
+  }
+  int added=0,total=0;const char* error=nullptr;
+  if(!wht::AddSelectedHeroSkillPoints129(executableBase,amount,added,total,&error)){
+   const std::string reason=std::string("Hero Skill Points: ")+(error?error:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"Hero Skill Points: +"+std::to_string(added)+" | Total: "+std::to_string(total),localMessage129);return true;
+ }
+ if(name==L"#kill"){
+  if(in>>extra){wht::ShowNotification129(executableBase,"Usage: select a unit, then #kill",localMessage129);return false;}
+  const char* error=nullptr;
+  if(!wht::KillSelectedUnit129(executableBase,&error)){
+   const std::string reason=std::string("KillUnit: ")+(error?error:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"KillUnit invoked for selected unit",localMessage129);return true;
+ }
+ if(name==L"#sabi"){
+  std::wstring args;std::getline(in,args);uint32_t code=0;int level=1;
+  if(!wht::ParseAddAbility129(args,code,level)){
+   wht::ShowNotification129(executableBase,"Usage: #sabi AHhb [level 1..10000] (hex rawcode also accepted)",localMessage129);return false;
+  }
+  wht::AddAbilityResult129 state;const char* error=nullptr;
+  if(!wht::AddSelectedAbility129(executableBase,code,level,state,&error)){
+   const std::string reason=std::string(state.added?"Ability added, but level update failed: ":"Add Ability: ")+(error?error:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  char raw[5]{};for(unsigned i=0;i<4;++i){const auto ch=(code>>(24-8*i))&255;raw[i]=ch>=32&&ch<=126?char(ch):'?';}
+  wht::ShowNotification129(executableBase,std::string(state.added?"Added Ability: ":"Existing Ability: ")+raw+" | Level: "+std::to_string(state.level),localMessage129);return true;
+ }
+ if(name==L"#rabi"){
+  std::wstring args;std::getline(in,args);uint32_t code=0;
+  if(!wht::ParseRemoveAbility129(args,code)){
+   wht::ShowNotification129(executableBase,"Usage: select a unit, then #rabi AHhb (or #rabi 0x41486862)",localMessage129);return false;
+  }
+  bool removed=false;const char* error=nullptr;
+  if(!wht::RemoveSelectedAbility129(executableBase,code,removed,&error)){
+   const std::string reason=std::string("Remove Ability: ")+(error?error:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  char raw[5]{};for(unsigned i=0;i<4;++i){const auto ch=(code>>(24-8*i))&255;raw[i]=ch>=32&&ch<=126?char(ch):'?';}
+  wht::ShowNotification129(executableBase,std::string(removed?"Removed Ability: ":"Ability already absent: ")+raw,localMessage129);return true;
+ }
+ if(name==L"#tele"){
+  if(in>>extra){wht::ShowNotification129(executableBase,"Usage: select a unit, point at the map, then #tele",localMessage129);return false;}
+  wht::MousePosition129 cursor;wht::TeleportPosition129 position;const char* error=nullptr;
+  const bool projected=wht::ReadMousePosition129(executableBase,cursor);
+  if(!projected||!wht::TeleportSelected129(executableBase,cursor.x,cursor.y,position,&error)){
+   const std::string reason=std::string("Teleport: ")+(!projected?"Point the cursor at the map":error?error:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"Unit Position: "+wht::UnitPositionText129(position.x,position.y),localMessage129);return true;
+ }
+ if(name==L"#invul"||name==L"#vul"){
+  if(in>>extra){wht::ShowNotification129(executableBase,"Usage: select a unit, then #invul or #vul",localMessage129);return false;}
+  const char* failure=nullptr;wht::InvulnerabilityResult129 state;
+  const bool enabled=name==L"#invul";
+  if(!wht::SetUnitInvulnerability129(executableBase,enabled,state,&failure)){
+   const std::string reason=std::string("Unit Invulnerability: ")+(failure?failure:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  const std::string status=enabled?"Unit Invulnerability: ON":state.effective?"Avul: OFF; another map effect keeps this unit invulnerable":"Unit Invulnerability: OFF";
+  wht::ShowNotification129(executableBase,status,localMessage129);return true;
+ }
+ if(name==L"#size"){
+  std::wstring args;std::getline(in,args);float scale=1;
+  if(!wht::ParseUnitScale129(args,scale)){
+   wht::ShowNotification129(executableBase,"Usage: #size 200 (2x) or #size 100 (1x)",localMessage129);return false;
+  }
+  const char* failure=nullptr;const bool applied=wht::SetUnitScale129(executableBase,scale,&failure,setFogReal);
+  if(!applied){
+   const std::string reason=std::string("Unit Scale: ")+(failure?failure:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);
+  }
+  return applied;
+ }
+ if(name==L"#hideb"||name==L"#showb"){
+  uint32_t code=0;if(!(in>>action)||in>>extra||!wht::AbilityCode129(action,code))return false;
+  return wht::SetAbilityButton129(executableBase,code,name==L"#hideb");
+ }
+ if(name==L"#ping"){return !(in>>extra);}
+ if(name==L"#wsize"){
+  int width=0,height=0;
+  if(!(in>>width>>height)||in>>extra||width<320||height<240||width>16384||height>16384)return false;
+  if(!window||!IsWindow(window)||IsIconic(window))return false;
+  return SetWindowPos(window,nullptr,0,0,width,height,SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE|SWP_FRAMECHANGED)!=0;
+ }
+ if(name==L"#uflag"){
+  if(in>>extra)return false;POINT point{};return window&&IsWindow(window)&&GetCursorPos(&point)&&ScreenToClient(window,&point);
+ }
+ if(name==L"#islot"){
+  if(in>>extra)return false;wht::InventoryInfo129 info;return wht::ReadInventoryInfo129(executableBase,info);
+ }
+ if(name==L"#mpos"){
+  if(in>>extra)return false;wht::MousePosition129 position;return wht::ReadMousePosition129(executableBase,position);
+ }
+ if(name==L"#ppos"){
+  std::wstring args;std::getline(in,args);float x=0,y=0;uintptr_t camera=0;uint16_t local=0;
+  if(args.find_first_not_of(L" \t")==std::wstring::npos){wht::MousePosition129 position;return wht::ReadMousePosition129(executableBase,position);}
+  return wht::ParsePan129(args,x,y)&&CameraContext(camera,local)&&wht::PanCamera129(executableBase,camera,x,y);
+ }
+ if(name==L"#upos"||name==L"#cname"){
+  if(in>>extra)return false;wht::UnitInfo129 info;
+  return wht::ReadUnitInfo129(executableBase,name==L"#upos",info);
+ }
+ if(name==L"#nhailai"){
+  uintptr_t camera=0;uint16_t local=0;if(!CameraContext(camera,local))return false;
+  if(!(in>>action)){repeatChat129.Reset();return true;}
+  if(in>>extra)return false;
+  if(action==L"all"){repeatChat129.ToggleAll();return true;}
+  std::wistringstream number(action);unsigned slot=0;wchar_t tail=0;
+  if(!(number>>slot)||number>>tail)return false;
+  return repeatChat129.Set(slot,local);
+ }
+ if(name==L"#mute"||name==L"#unmute"){
+  unsigned slot=0;uintptr_t camera=0;uint16_t local=0;
+  if(!(in>>slot)||in>>extra||!CameraContext(camera,local))return false;
+  return mutedChat129.Set(slot,local,name==L"#mute");
+ }
+ if(name==L"#autol"||name==L"#autoclickl"||name==L"#autor"||name==L"#autoclickr"){
+  const bool left=name==L"#autol"||name==L"#autoclickl";
+  bool& enabled=left?autoClick.left:autoClick.right;
+  bool next=!enabled;
+  if(in>>action){if((action!=L"0"&&action!=L"1")||in>>extra)return false;next=action==L"1";}
+  enabled=next;autoClick.due=0;return true;
+ }
+ if(name==L"#clickdelay"){
+  unsigned delay=0;if(!(in>>delay)||in>>extra||delay<5||delay>1000)return false;
+  if(!wht::SaveSetting(runtimeIni,L"HotKeyHero",L"AutoClickInterval",std::to_wstring(delay)))return false;
+  runtimeConfig=wht::LoadConfig(runtimeIni);autoClick.due=0;return true;
+ }
  if(name==L"#loaddll"||name==L"#loadmpq"){
   std::wstring path;std::getline(in,path);const bool archive=name==L"#loadmpq";
   if(!LoadPlugin129(path,archive))return false;
@@ -410,6 +601,13 @@ bool ToolCommand(const std::wstring& command){
   if(in>>action){if((action!=L"0"&&action!=L"1")||in>>extra)return false;value=action;}
   if(!wht::SaveSetting(runtimeIni,L"Graphics",commas?L"Text Life/Mana Commas":L"Text Life/Mana No Hide",value))return false;
   runtimeConfig=wht::LoadConfig(runtimeIni);toolMenu.nextRefresh=0;return true;
+ }
+ if(name==L"#unlockfps"){
+  if(!unlockFps129.ready||unlockFps129.conflict)return false;
+  std::wstring value;in>>value;if(value.empty())value=runtimeConfig.unlockFps?L"0":L"1";
+  if((value!=L"0"&&value!=L"1")||in>>extra)return false;
+  if(!wht::SaveSetting(runtimeIni,L"Graphics",L"Unlock Limit FPS",value))return false;
+  runtimeConfig=wht::LoadConfig(runtimeIni);return unlockFps129.Apply(executableBase,runtimeConfig.unlockFps);
  }
  if(name==L"#fastmenu"){
   if(!originalMenuTransition129)return false;
@@ -542,7 +740,91 @@ bool ToolCommand(const std::wstring& command){
  if(language)value=L"1";
  if(!wht::SaveSetting(runtimeIni,control.section,control.key,value))return false;
  if(language&&!wht::SaveSetting(runtimeIni,L"Language",std::wstring(control.key)==L"English"?L"Vietnamese":L"English",L"0"))return false;
- runtimeConfig=wht::LoadConfig(runtimeIni);wht::toolEnglish.store(runtimeConfig.english);toolMenu.nextRefresh=0;return true;
+ if(value==L"1"&&!wcscmp(control.section,L"MTHKEY")&&(!wcscmp(control.key,L"MTH49Enable")||!wcscmp(control.key,L"G17Enable")))if(!wht::SaveSetting(runtimeIni,L"MTHKEY",!wcscmp(control.key,L"MTH49Enable")?L"G17Enable":L"MTH49Enable",L"0"))return false;
+ runtimeConfig=wht::LoadConfig(runtimeIni);if(!wcscmp(control.key,L"Keyboard Scroll Speed")||!wcscmp(control.key,L"Mouse Scroll Speed"))ApplyScroll129();wht::toolEnglish.store(runtimeConfig.english);toolMenu.nextRefresh=0;return true;
+}
+bool ToolCommand(const std::wstring& command){
+ const bool result=ToolCommandImpl129(command);if(!result)return false;
+ std::wistringstream input(command);std::wstring name,argument;input>>name>>argument;
+ std::string feedback;
+ if(name==L"#str"||name==L"#agi"||name==L"#int"||name==L"#fullatt"||name==L"#sp"||name==L"#kill"||name==L"#sabi"||name==L"#rabi"||name==L"#tele"||name==L"#invul"||name==L"#vul")return true; // Native result/error is reported by the handler.
+ if(name==L"#ping"){wht::ShowNotification129(executableBase,wht::Utf8(wht::network_ping::Status()),localMessage129);return true;}
+ if(name==L"#toolui"){
+  const auto index=wcstoul(argument.c_str(),nullptr,10);
+  if(index<wht::kToolMenuControls.size()){
+   const auto& control=wht::kToolMenuControls[index];
+   auto title=runtimeConfig.english?wht::EnglishControlLabel(control):std::string(control.label);
+   if(title.empty())title=wht::Utf8(control.key);
+   auto value=wht::ToolMenuOverlay::ReadValue(runtimeConfig,index);
+   if(control.kind==wht::MenuControlKind::Check)feedback=title+": "+(value==L"1"?"ON":"OFF");
+   else if(control.kind==wht::MenuControlKind::Key)feedback=wht::Utf8(wht::SettingFeedback(wht::Wide(title),wht::Wide(wht::MenuKeyName(value))));
+   else if(control.kind==wht::MenuControlKind::Clear)feedback=title;
+   else feedback=wht::Utf8(wht::SettingFeedback(wht::Wide(title),value));
+  }
+ }
+ else if(name==L"#size"){
+  float scale=1;if(wht::ParseUnitScale129(argument,scale)){
+   char text[96]{};std::snprintf(text,sizeof(text),"Unit Scale: %.2fx",scale);feedback=text;
+  }
+ }
+ else if(name==L"#hideb"||name==L"#showb")feedback=std::string(name==L"#hideb"?"Hide Ability: ":"Show Ability: ")+wht::Utf8(argument);
+ else if(name==L"#wsize"){
+  RECT outer{},client{};if(GetWindowRect(window,&outer)&&GetClientRect(window,&client))
+   feedback="Window Size: "+std::to_string(outer.right-outer.left)+"x"+std::to_string(outer.bottom-outer.top)+" | Game: "+std::to_string(client.right)+"x"+std::to_string(client.bottom);
+ }
+ else if(name==L"#uflag"){
+  POINT screen{},client{};if(GetCursorPos(&screen)){client=screen;if(ScreenToClient(window,&client)){
+   uint32_t flags=0;const bool hasUnit=wht::ReadUnitFlags129(executableBase,flags);
+   feedback=wht::CursorFlagsText129(screen,client,hasUnit,flags);
+  }}
+ }
+ else if(name==L"#islot"){
+  wht::InventoryInfo129 info;if(wht::ReadInventoryInfo129(executableBase,info))feedback=wht::InventoryInfoText129(info);
+ }
+ else if(name==L"#mpos"||(name==L"#ppos"&&argument.find_first_not_of(L" \t")==std::wstring::npos)){
+  wht::MousePosition129 position;if(wht::ReadMousePosition129(executableBase,position)){
+   RECT client{};GetClientRect(window,&client);feedback=wht::MousePositionText129(position,client.right,client.bottom);
+  }
+ }
+ else if(name==L"#ppos")feedback="Camera Position: "+wht::Utf8(argument);
+ else if(name==L"#upos"||name==L"#cname"){
+  wht::UnitInfo129 info;if(wht::ReadUnitInfo129(executableBase,name==L"#upos",info))
+   feedback=name==L"#upos"?wht::UnitPositionText129(info.x,info.y):wht::UnitCodeText129(info.code);
+ }
+ else if(name==L"#nhailai")feedback=std::string("Repeat Chat: ")+(repeatChat129.all?"ALL":repeatChat129.slot>=0?std::to_string(repeatChat129.slot+1):"OFF");
+ else if(name==L"#mute"||name==L"#unmute")feedback=std::string("Mute Player ")+wht::Utf8(argument)+(name==L"#mute"?": ON":": OFF");
+ else if(name==L"#clickdelay")feedback="Auto Click Interval: "+std::to_string(runtimeConfig.autoClickInterval)+" ms";
+ else if(name==L"#fastmenu")feedback=std::string("Fast Menu: ")+(runtimeConfig.fastMenu?"ON":"OFF");
+ else if(name==L"#macro")feedback="Macro: "+wht::Utf8(argument);
+ else if(name==L"#allskills"||name==L"#skills")feedback="All Skills";
+ else {
+  struct ToggleFeedback129 {const wchar_t* command;const char* title;bool value;};
+  const ToggleFeedback129 toggles[]={
+   {L"#autol","Auto Click Left",autoClick.left},{L"#autoclickl","Auto Click Left",autoClick.left},
+   {L"#autor","Auto Click Right",autoClick.right},{L"#autoclickr","Auto Click Right",autoClick.right},
+   {L"#unlockfps","Unlock Limit FPS",runtimeConfig.unlockFps},
+   {L"#full","Borderless",runtimeConfig.borderless},{L"#lock","Lock Cursor",runtimeConfig.lockCursor},
+   {L"#timer","Show Timer",runtimeConfig.showTimer},{L"#showtimer","Show Timer",runtimeConfig.showTimer},
+   {L"#res","Show Resource",runtimeConfig.showResource},{L"#resource","Show Resource",runtimeConfig.showResource},
+   {L"#showhotkey","Show Hotkey",runtimeConfig.showHotkeyInPanel},{L"#cooldown","Show Cooldown",runtimeConfig.showCooldown},
+   {L"#showlevel","Show Level",runtimeConfig.stateTagShowLevel},{L"#blackbar","Hide Black Bar",runtimeConfig.hideBlackBar},
+   {L"#mousetooltip","Mouse Tooltip",runtimeConfig.mouseTooltip},{L"#nfe","Remove Fog Effect",runtimeConfig.removeFogEffect},
+   {L"#colorplayer","Color Player",runtimeConfig.colorPlayer},{L"#colorp","Color Player",runtimeConfig.colorPlayer},
+   {L"#barinvul","Hide Invulnerable Bars",runtimeConfig.hideInvulnerableBars},{L"#vertexcolor","Vertex Color",runtimeConfig.vertexColor},
+   {L"#hpvalue","HP Value",runtimeConfig.stateTagHpValue},{L"#manavalue","Mana Value",runtimeConfig.stateTagManaValue},
+   {L"#regenhp","HP Regen",runtimeConfig.showRegenHP},{L"#showregen","HP Regen",runtimeConfig.showRegenHP},
+   {L"#regen","HP Regen",runtimeConfig.showRegenHP},{L"#regenmp","Mana Regen",runtimeConfig.showRegenMana},
+   {L"#statscommas","Stats Commas",runtimeConfig.statsCommas},{L"#hpmpcommas","HP/Mana Commas",runtimeConfig.lifeManaCommas},
+   {L"#hpmpnohide","HP/Mana No Hide",runtimeConfig.lifeManaNoHide},
+   {L"#commandsettings","Command Settings",commandSettingsActive},{L"#tools","Tools Menu",toolMenu.open}};
+  for(const auto& item:toggles)if(name==item.command){feedback=std::string(item.title)+": "+(item.value?"ON":"OFF");break;}
+  if(feedback.empty()){
+   std::string commandLabel=wht::Utf8(name);if(!commandLabel.empty()&&commandLabel.front()=='#')commandLabel.erase(0,1);
+   feedback=commandLabel+": "+(argument.empty()?"OK":wht::Utf8(argument));
+  }
+ }
+ if(!feedback.empty())wht::ShowNotification129(executableBase,feedback,localMessage129);
+ return result;
 }
 bool SlotKey129(unsigned key){
  if(!clickButton)return false;
@@ -604,7 +886,10 @@ LRESULT CALLBACK InputMessages(int code,WPARAM removed,LPARAM data){
       if(action>=0)handled=ToolCommand(wht::ToolMenuOverlay::MacroCommand(size_t(action)));
       else if(runtimeConfig.commandKey&&key==runtimeConfig.commandKey&&!ctrl&&!shift&&!alt){ToggleCommandSettings();handled=true;}
       else if(key==VK_TAB&&runtimeConfig.showResource&&!toolMenu.open&&!ctrl&&!shift&&!alt){resourceExpanded=!resourceExpanded;resourceNext=0;handled=true;}
-      else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&autoClick.Key(key,runtimeConfig))handled=true;
+      else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&autoClick.Key(key,runtimeConfig)){
+       handled=true;const bool left=key==runtimeConfig.autoClickLeftKey;
+       wht::ShowNotification129(executableBase,std::string(left?"Auto Click Left: ":"Auto Click Right: ")+((left?autoClick.left:autoClick.right)?"ON":"OFF"),localMessage129);
+      }
       else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&SlotKey129(key))handled=true;
       else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&HeroKey129(key))handled=true;
       else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&runtimeConfig.multiboardKey&&key==runtimeConfig.multiboardKey)handled=wht::ToggleMultiboard129(executableBase,minimizeBoard,maximizeBoard);
@@ -700,6 +985,7 @@ void __fastcall ShowBar129(uintptr_t bar,DWORD){
 }
 void __fastcall BindBar129(uintptr_t bar,DWORD,uintptr_t unit){
  originalBarBind129(bar,unit);
+ timeBoss129.Remember(executableBase,unit);
  __try {auto api=LevelFrameApi129();hpDimensions129.Update(executableBase,bar,api);showLevel129.Write(bar,wht::OverheadHeroLevel129(executableBase,bar),api);stateValues129.Write(executableBase,bar,runtimeConfig,stateValues129.active,api);manaBar129.Update(executableBase,bar,runtimeConfig,api);hpColor129.Update(executableBase,bar);if(invulnerableHookReady129)invulnerableBar129.Update(executableBase,bar,originalBarShow129,reinterpret_cast<wht::BarVisibility129>(executableBase+0x488960));}
  __except(EXCEPTION_EXECUTE_HANDLER){}
 }
@@ -726,6 +1012,17 @@ void UpdateTooltip129(uintptr_t owner,bool allowed){
 }
 void UpdateTools(){
  const bool localMode=runtimeConfig.mode==wht::RunMode::Local;
+ if(unlockFps129.ready)unlockFps129.Apply(executableBase,localMode&&runtimeConfig.unlockFps);
+ const bool unlock=localMode&&runtimeConfig.unlockFps;
+ fpsTimer129.Apply(unlock,timeBeginPeriod,timeEndPeriod);
+ if(fpsApi129.set){
+  const bool confirmed=fpsLimit129.Apply(0,unlock,fpsApi129,true);
+  if(confirmed&&fpsLimit129.active&&loggedFpsInterval129!=fpsLimit129.written){
+   loggedFpsInterval129=fpsLimit129.written;
+   wht::Log(runtimeFolder,"WHT 1.29 FPS scheduler: requested="+std::to_string(runtimeConfig.fpsLimit)+" interval-ms="+std::to_string(fpsLimit129.written)+" patch="+std::to_string(unlockFps129.active)+" timer="+std::to_string(fpsTimer129.active));
+  }
+  if(!unlock)loggedFpsInterval129=~0u;
+ }
  windowServices.Apply(window,localMode&&runtimeConfig.borderless,localMode&&runtimeConfig.lockCursor);
  if(!executableBase||!frameApi.alloc||!window)return;
  uintptr_t camera=0;uint16_t local=0;
@@ -734,7 +1031,7 @@ void UpdateTools(){
   ApplyHpDimensions129(false);
   if(macroRecorder.recording)macroRecorder.FinishRecording();macroRecorder.Stop();
   // Map teardown releases native frames. Forget pointers without dereferencing them.
-  regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();if(toolMenu.parent)toolMenu.Reset();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;chatTyping=false;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();stats129.Reset();lifeMana129.Reset();fpsState={};timeOfDay={};matchStart={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;return;
+  mutedChat129.Reset();repeatChat129.Reset();timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();if(toolMenu.parent)toolMenu.Reset();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;chatTyping=false;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();stats129.Reset();lifeMana129.Reset();fpsState={};timeOfDay={};matchStart={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;return;
  }
  const auto owner=*reinterpret_cast<uintptr_t*>(executableBase+0xd3d7f8);
  float startSeconds=0;
@@ -743,7 +1040,7 @@ void UpdateTools(){
   if(!startSoundPlayer129(MAKEINTRESOURCEW(101),runtimeModule,SND_RESOURCE|SND_ASYNC|SND_NODEFAULT|SND_NOSTOP))wht::Log(runtimeFolder,"WHT 1.29: start sound unavailable; skipped.");
  if(resourceFailed)return;
  if(!resourceArchive&&!wht::MountResources129(executableBase,mixPath,resourceArchive)){resourceFailed=true;toolMenu.failed=true;wht::Log(runtimeFolder,"WHT 1.29: embedded MPQ mount failed.");return;}
- if(toolMenu.parent&&toolMenu.parent!=owner){regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;}
+ if(toolMenu.parent&&toolMenu.parent!=owner){timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;}
  RECT r{};GetClientRect(window,&r);wht::SetViewport129(r.right,r.bottom);auto canvas=wht::Canvas129(r.right,r.bottom);wht::ToolMenuOverlay::SetViewport(canvas.width,canvas.height);
  const bool allowed=runtimeConfig.mode==wht::RunMode::Local;
  ApplyFogEffect129(allowed);ApplyLevels129(allowed&&runtimeConfig.stateTagShowLevel);ApplyStateValues129(allowed);
@@ -760,8 +1057,10 @@ void UpdateTools(){
  messageTimers.Tick(executableBase,runtimeConfig,allowed&&!chatTyping,GetTickCount64(),clearFrame);
  const bool clickAllowed=allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.recording&&!macroRecorder.playing&&GetForegroundWindow()==window&&!IsIconic(window);
  POINT cursor{};const bool inside=GetCursorPos(&cursor)&&ScreenToClient(window,&cursor)&&cursor.x>=0&&cursor.y>=0&&cursor.x<r.right&&cursor.y<r.bottom;
+ repeatChat129.Tick(clickAllowed,GetTickCount64(),[&](const std::string& text){return wht::SendQuickChat129(executableBase,text,quickChatApi);});
  autoClick.Tick(runtimeConfig,clickAllowed&&inside,GetTickCount64(),[&](UINT message,WPARAM key){PostMessageW(window,message,key,MAKELPARAM(cursor.x,cursor.y));});
  if(!toolMenu.failed&&!SafeUpdateMenu(owner,allowed)){toolMenu.failed=true;wht::Log(runtimeFolder,"WHT 1.29: native menu exception at "+std::string(toolMenu.initStage));}
+ timeBoss129.Update(executableBase,owner,allowed&&runtimeConfig.timeBoss&&(runtimeConfig.mth49Enable||runtimeConfig.g17Enable),toolMenu);
  macroRecorder.Configure(window,runtimeFolder);
  macroRecorder.Tick(allowed&&runtimeConfig.macroEnabled&&!toolMenu.open);
 }
@@ -781,9 +1080,16 @@ DWORD WINAPI Install(void* module){
  auto address=reinterpret_cast<unsigned char*>(executableBase)+0x47e380;
  const unsigned char signature[]={0x55,0x8b,0xec,0x53,0x56,0x57,0x8b,0x7d,0x08,0x8b,0xf1};
  if(memcmp(address,signature,sizeof(signature))||MH_Initialize()!=MH_OK||MH_CreateHook(address,SetText,reinterpret_cast<void**>(&original))!=MH_OK||MH_EnableHook(address)!=MH_OK){wht::Log(folder,"WHT 1.29: version hook installation failed.");return 2;}
+ // Native D3D9 parameter builder, called for creation and reset.
+ const unsigned char presentSig129[]={0x55,0x8b,0xec,0x83,0xec,0x14,0xa1};
+ const auto presentBuilder129=reinterpret_cast<void*>(executableBase+0x3dba60);
+ if(!memcmp(presentBuilder129,presentSig129,sizeof(presentSig129))&&
+    MH_CreateHook(presentBuilder129,PresentParametersHook129,reinterpret_cast<void**>(&originalPresentParameters129))==MH_OK){
+  if(MH_EnableHook(presentBuilder129)!=MH_OK)originalPresentParameters129=nullptr;
+ }
  // 1893F0 takes six stack arguments, returns duration in x87 and uses
  // plain RET: cdecl, unlike the legacy fastcall entry. Root +1A0/+1A4
- // select its two model frames; native callbacks are always forwarded.
+ // select its model frames; native callbacks are always forwarded.
  const unsigned char menuTransitionSignature129[]={0x55,0x8b,0xec,0x83,0xec,0x10,0x53,0x56,0x57,0xe8};
  const auto menuTransition129=reinterpret_cast<void*>(executableBase+0x1893f0);
  if(!memcmp(menuTransition129,menuTransitionSignature129,sizeof(menuTransitionSignature129))&&
@@ -842,9 +1148,22 @@ DWORD WINAPI Install(void* module){
   wht::Log(folder,"WHT 1.29: camera/chat signatures or hook failed; version label only.");return 3;
  }
  if(MH_CreateHook(camera,CameraNative,reinterpret_cast<void**>(&setCamera))!=MH_OK||MH_EnableHook(camera)!=MH_OK){wht::Log(folder,"WHT 1.29: native camera capture hook failed.");return 4;}
+ wht::Log(folder,wht::InstallPing129()?"WHT 1.29: Warcraft echo ping observation installed.":"WHT 1.29: ping observation unavailable.");
  const unsigned char clearSignature[]={0x55,0x8b,0xec,0x51,0x53,0x56,0x8b,0xf1};
  auto clear=reinterpret_cast<unsigned char*>(executableBase)+0x48b7b0;
  if(!memcmp(clear,clearSignature,sizeof(clearSignature)))clearFrame=reinterpret_cast<wht::ClearFrame129>(clear);
+ // Exact cdecl scheduler APIs; independent of the FPS display function.
+ unlockFps129.Probe(executableBase);
+ const unsigned char fpsSetterSig129[]={0x55,0x8b,0xec,0x8b,0x45,0x0c,0x85,0xc0};
+ const unsigned char fpsGetterSig129[]={0x55,0x8b,0xec,0x8b,0x45,0x08,0x85,0xc0};
+ const unsigned char fpsContextSig129[]={0x55,0x8b,0xec,0xff,0x35};
+ if(!memcmp(reinterpret_cast<void*>(executableBase+0x440230),fpsSetterSig129,sizeof(fpsSetterSig129))&&
+    !memcmp(reinterpret_cast<void*>(executableBase+0x43faa0),fpsGetterSig129,sizeof(fpsGetterSig129))&&
+    !memcmp(reinterpret_cast<void*>(executableBase+0x5df90),fpsContextSig129,sizeof(fpsContextSig129)))
+  fpsApi129={reinterpret_cast<decltype(fpsApi129.context)>(executableBase+0x5df90),reinterpret_cast<decltype(fpsApi129.get)>(executableBase+0x43faa0),reinterpret_cast<decltype(fpsApi129.set)>(executableBase+0x440230)};
+ const unsigned char messageSig129[]={0x55,0x8b,0xec,0x83,0xec,0x10,0x56,0x8b,0xf1};
+ if(!memcmp(reinterpret_cast<void*>(executableBase+0x1f4860),messageSig129,sizeof(messageSig129)))
+  localMessage129=reinterpret_cast<wht::LocalMessage129>(executableBase+0x1f4860);
  const unsigned char fpsSignature[]={0x55,0x8b,0xec,0x56,0x57,0x8b,0x7d,0x08};
  if(!memcmp(reinterpret_cast<void*>(executableBase+0x24e810),fpsSignature,sizeof(fpsSignature)))fpsMode=reinterpret_cast<wht::FpsMode129>(executableBase+0x24e810);
  showFdf=reinterpret_cast<wht::ClearFrame129>(executableBase+0x470020);

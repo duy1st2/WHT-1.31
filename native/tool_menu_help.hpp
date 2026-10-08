@@ -7,6 +7,11 @@ inline std::string MthActionHelp(int action){
  return Utf8(std::wstring(names[action])+L"\n"+(action<5?L"Thực hiện chuỗi mua và ghép đồ tương ứng trong MTH.":action==5?L"Thực hiện thao tác nhặt Goku trong MTH.":L"Điều khiển đơn vị chạy tuyến tương ứng; số lệnh xếp hàng theo mức đã chọn."));
 }
 inline std::string MenuControlHelp(const ToolMenuControl& d){
+ if(!wcscmp(d.key,L"Keyboard Scroll Speed")||!wcscmp(d.key,L"Mouse Scroll Speed"))return Utf8(L"T\u1ed1c \u0111\u1ed9 cu\u1ed9n camera\n0..700%; 100% m\u1eb7c \u0111\u1ecbnh. Nh\u1eadp gi\u00e1 tr\u1ecb r\u1ed3i Enter \u0111\u1ec3 l\u01b0u.");
+ if(!wcscmp(d.key,L"Borderless"))return Utf8(L"C\u1eeda s\u1ed5 kh\u00f4ng vi\u1ec1n\nT\u1eaft \u0111\u1ec3 kh\u00f4i ph\u1ee5c c\u1eeda s\u1ed5 g\u1ed1c.");
+ if(!wcscmp(d.key,L"Lock Cursor"))return Utf8(L"Kh\u00f3a chu\u1ed9t\nTh\u1ea3 kh\u00f3a khi game m\u1ea5t focus.");
+ if(!wcscmp(d.key,L"Sound Start Game"))return Utf8(L"\u00c2m b\u00e1o b\u1eaft \u0111\u1ea7u tr\u1eadn\nB\u1eadt gi\u1eefa tr\u1eadn kh\u00f4ng ph\u00e1t \u00e2m thanh.");
+
  if(!wcscmp(d.key,L"Fast Menu"))return Utf8(L"Fast Menu\nR\u00fat ng\u1eafn th\u1eddi gian ch\u1edd chuy\u1ec3n menu game. Gi\u1eef c\u00e1c thao t\u00e1c v\u00e0 callback g\u1ed1c.");
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"ShowHpValue"))return Utf8(L"S\u1ed1 HP tr\u00ean unit\nB\u1eadt/t\u1eaft s\u1ed1 HP ri\u00eang v\u1edbi mana. B\u1eadt HP/Mana value trong T\u1ed5ng qu\u00e1t tr\u01b0\u1edbc.");
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"FontSize"))return Utf8(L"C\u1ee1 ch\u1eef HP/Mana\nT\u1eeb 1 \u0111\u1ebfn 20; m\u1eb7c \u0111\u1ecbnh 4. C\u1eadp nh\u1eadt ch\u1eef v\u00e0 kho\u1ea3ng c\u00e1ch d\u00f2ng ngay.");
