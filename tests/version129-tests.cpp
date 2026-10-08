@@ -103,6 +103,19 @@ void __fastcall CurrentStateMock129(uintptr_t property,DWORD,float* output){rege
 void __fastcall MaximumStateMock129(uintptr_t property,DWORD,float* output){if(property!=regenProperty129)*output=0;else *output=100.f;}
 uintptr_t invulAgentMock129=0,invulUnitMock129=0;
 unsigned heroSkillModifyCalls129=0;bool heroSkillAbi129=true,heroSkillReject129=false;
+int heroLevelMock129=2,heroXpMock129=100;unsigned heroLevelWrites129=0;bool heroLevelReject129=false,heroLevelAbi129=true;
+int __fastcall HeroLevelGetMock129(uintptr_t unit,DWORD){heroLevelAbi129&=unit==invulUnitMock129;return heroLevelMock129;}
+int __fastcall HeroLevelRequiredMock129(uintptr_t unit,DWORD,int index){heroLevelAbi129&=unit==invulUnitMock129;return index*100;}
+int __fastcall HeroLevelXpMock129(uintptr_t unit,DWORD){heroLevelAbi129&=unit==invulUnitMock129;return heroXpMock129;}
+uint32_t* __cdecl HeroLevelRealMock129(uint32_t* out,int value){*out=uint32_t(value);return out;}
+void __fastcall HeroLevelAddMock129(uintptr_t unit,DWORD,const uint32_t* real,int show,int a,int b,int c,int d){
+ heroLevelAbi129&=unit==invulUnitMock129&&show==1&&a==0&&b==0&&c==0&&d==0;++heroLevelWrites129;
+ if(!heroLevelReject129){heroXpMock129+=int(*real);heroLevelMock129=heroXpMock129/100+1;}
+}
+int __fastcall HeroLevelStripMock129(uintptr_t unit,DWORD,int amount){
+ heroLevelAbi129&=unit==invulUnitMock129;++heroLevelWrites129;
+ if(!heroLevelReject129){heroLevelMock129-=amount;heroXpMock129=(heroLevelMock129-1)*100;}return !heroLevelReject129;
+}
 int heroAttributeValues129[3]={10,20,30};unsigned heroAttributeWrites129[3]{};bool heroAttributeAbi129=true,heroAttributeReject129=false;
 int __fastcall HeroStrGetMock129(uintptr_t unit,DWORD,int bonus){heroAttributeAbi129&=unit==invulUnitMock129&&bonus==1;return heroAttributeValues129[0];}
 int __fastcall HeroAgiGetMock129(uintptr_t unit,DWORD,int bonus){heroAttributeAbi129&=unit==invulUnitMock129&&bonus==1;return heroAttributeValues129[1];}
@@ -1073,6 +1086,31 @@ int wmain(int argc,wchar_t** argv){try{
   check(!wht::ParseHeroSkillPoints129(L"0",parsedPoints)&&!wht::ParseHeroSkillPoints129(L"10001",parsedPoints));
   check(!wht::ParseHeroSkillPoints129(L"12 extra",parsedPoints)&&!wht::ParseHeroSkillPoints129(L"abc",parsedPoints));
   const auto heroSelection=wht::SelectedSkill129(executableBase);
+  wht::HeroLevelApi129 levelApi{InvulAgentMock129,
+   reinterpret_cast<decltype(wht::HeroLevelApi129::level)>(HeroLevelGetMock129),
+   reinterpret_cast<decltype(wht::HeroLevelApi129::required)>(HeroLevelRequiredMock129),
+   reinterpret_cast<decltype(wht::HeroLevelApi129::experience)>(HeroLevelXpMock129),HeroLevelRealMock129,
+   reinterpret_cast<decltype(wht::HeroLevelApi129::add)>(HeroLevelAddMock129),
+   reinterpret_cast<decltype(wht::HeroLevelApi129::strip)>(HeroLevelStripMock129)};
+  int parsedLevel=0,actualLevel=0;const char* levelReason=nullptr;
+  check(wht::ParseHeroLevel129(L"",parsedLevel)&&parsedLevel==10);
+  check(wht::ParseHeroLevel129(L"100",parsedLevel)&&parsedLevel==100);
+  check(!wht::ParseHeroLevel129(L"0",parsedLevel)&&!wht::ParseHeroLevel129(L"10001",parsedLevel)&&!wht::ParseHeroLevel129(L"5 extra",parsedLevel));
+  check(wht::ParseHeroLevel129(L"10000",parsedLevel)&&parsedLevel==10000);
+  check(wht::SetHeroLevel129(executableBase,heroSelection,levelApi,10,actualLevel,&levelReason)&&actualLevel==10&&heroXpMock129==900&&heroLevelAbi129);
+  check(wht::SetHeroLevel129(executableBase,heroSelection,levelApi,3,actualLevel,&levelReason)&&actualLevel==3&&heroLevelWrites129==2);
+  check(wht::SetHeroLevel129(executableBase,heroSelection,levelApi,3,actualLevel,&levelReason)&&heroLevelWrites129==2);
+  heroLevelReject129=true;
+  check(!wht::SetHeroLevel129(executableBase,heroSelection,levelApi,5,actualLevel,&levelReason)&&levelReason&&actualLevel==3);
+  heroLevelReject129=false;
+  *reinterpret_cast<unsigned char*>(invulUnit.data()+0x37)='h';
+  const auto levelWrites=heroLevelWrites129;
+  check(!wht::SetHeroLevel129(executableBase,heroSelection,levelApi,5,actualLevel,&levelReason)&&heroLevelWrites129==levelWrites);
+  *reinterpret_cast<unsigned char*>(invulUnit.data()+0x37)='H';
+  auto staleHero=heroSelection;++staleHero.identity;
+  check(!wht::SetHeroLevel129(executableBase,staleHero,levelApi,5,actualLevel,&levelReason)&&heroLevelWrites129==levelWrites);
+  check(wht::SetHeroLevel129(executableBase,heroSelection,levelApi,400,actualLevel,&levelReason)&&actualLevel==400);
+  check(!wht::ResolveHeroLevelApi129(executableBase));
   check(wht::AddHeroSkillPoints129(executableBase,heroSelection,heroSkillApi,12,actualAdded,totalPoints,&skillReason));
   check(actualAdded==12&&totalPoints==15&&heroSkillModifyCalls129==1&&heroSkillAbi129&&!skillReason);
   heroSkillReject129=true;

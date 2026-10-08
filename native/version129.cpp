@@ -22,6 +22,7 @@ wht::Mute129 mutedChat129;
 #include "kill_unit129.hpp"
 #include "hero_skill_points129.hpp"
 #include "hero_attributes129.hpp"
+#include "hero_level129.hpp"
 #include "pan_camera129.hpp"
 #include "mouse_position129.hpp"
 #include "life_mana129.hpp"
@@ -389,6 +390,17 @@ void StartPlugins129(){
 bool ToolCommandImpl129(const std::wstring& command){
  if(runtimeConfig.mode!=wht::RunMode::Local)return false;
  std::wistringstream in(command);std::wstring name,action,extra;in>>name;
+ if(name==L"#lvl"){
+  std::wstring argument;std::getline(in,argument);int requested=0,actual=0;const char* error=nullptr;
+  if(!wht::ParseHeroLevel129(argument,requested)){
+   wht::ShowNotification129(executableBase,"Usage: select a hero, then #lvl [1..10000]",localMessage129);return false;
+  }
+  if(!wht::SetSelectedHeroLevel129(executableBase,requested,actual,&error)){
+   const auto reason=std::string("Hero Level: ")+(error?error:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"Hero Level: "+std::to_string(actual),localMessage129);return true;
+ }
  if(name==L"#str"||name==L"#agi"||name==L"#int"||name==L"#fullatt"){
   std::wstring argument;std::getline(in,argument);int value=0;
   if(!wht::ParseHeroAttributeValue129(argument,value)){
@@ -747,7 +759,7 @@ bool ToolCommand(const std::wstring& command){
  const bool result=ToolCommandImpl129(command);if(!result)return false;
  std::wistringstream input(command);std::wstring name,argument;input>>name>>argument;
  std::string feedback;
- if(name==L"#str"||name==L"#agi"||name==L"#int"||name==L"#fullatt"||name==L"#sp"||name==L"#kill"||name==L"#sabi"||name==L"#rabi"||name==L"#tele"||name==L"#invul"||name==L"#vul")return true; // Native result/error is reported by the handler.
+ if(name==L"#lvl"||name==L"#str"||name==L"#agi"||name==L"#int"||name==L"#fullatt"||name==L"#sp"||name==L"#kill"||name==L"#sabi"||name==L"#rabi"||name==L"#tele"||name==L"#invul"||name==L"#vul")return true; // Native result/error is reported by the handler.
  if(name==L"#ping"){wht::ShowNotification129(executableBase,wht::Utf8(wht::network_ping::Status()),localMessage129);return true;}
  if(name==L"#toolui"){
   const auto index=wcstoul(argument.c_str(),nullptr,10);
