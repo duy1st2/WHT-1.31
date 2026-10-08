@@ -23,6 +23,7 @@ wht::Mute129 mutedChat129;
 #include "hero_skill_points129.hpp"
 #include "hero_attributes129.hpp"
 #include "hero_level129.hpp"
+#include "resource_commands129.hpp"
 #include "pan_camera129.hpp"
 #include "mouse_position129.hpp"
 #include "life_mana129.hpp"
@@ -390,6 +391,21 @@ void StartPlugins129(){
 bool ToolCommandImpl129(const std::wstring& command){
  if(runtimeConfig.mode!=wht::RunMode::Local)return false;
  std::wistringstream in(command);std::wstring name,action,extra;in>>name;
+ if(name==L"#gold"||name==L"#lumber"||name==L"#food"||name==L"#fullres"){
+  const auto kind=name==L"#gold"?wht::ResourceCommand129::Gold:name==L"#lumber"?wht::ResourceCommand129::Lumber:
+   name==L"#food"?wht::ResourceCommand129::Food:wht::ResourceCommand129::Full;
+  std::wstring argument;std::getline(in,argument);int amount=0;const char* error=nullptr;
+  if(!wht::ParseResourceCommand129(kind,argument,amount)){
+   wht::ShowNotification129(executableBase,"Usage: #gold/#lumber [positive amount], #food [cap], #fullres",localMessage129);return false;
+  }
+  const auto api=wht::ResolveResourceCommandApi129(executableBase);
+  const auto player=wht::ResourceLocal129(executableBase,resourceApi);wht::ResourceCommandResult129 result;
+  if(!wht::ApplyResourceCommand129(player,api,kind,amount,result,&error)){
+   const auto reason=std::string("Resources: ")+(error?error:"Function signature mismatch");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"Resources: Gold "+std::to_string(result.gold)+", Lumber "+std::to_string(result.lumber)+", Food cap "+std::to_string(result.food),localMessage129);return true;
+ }
  if(name==L"#lvl"){
   std::wstring argument;std::getline(in,argument);int requested=0,actual=0;const char* error=nullptr;
   if(!wht::ParseHeroLevel129(argument,requested)){
@@ -759,7 +775,7 @@ bool ToolCommand(const std::wstring& command){
  const bool result=ToolCommandImpl129(command);if(!result)return false;
  std::wistringstream input(command);std::wstring name,argument;input>>name>>argument;
  std::string feedback;
- if(name==L"#lvl"||name==L"#str"||name==L"#agi"||name==L"#int"||name==L"#fullatt"||name==L"#sp"||name==L"#kill"||name==L"#sabi"||name==L"#rabi"||name==L"#tele"||name==L"#invul"||name==L"#vul")return true; // Native result/error is reported by the handler.
+ if(name==L"#gold"||name==L"#lumber"||name==L"#food"||name==L"#fullres"||name==L"#lvl"||name==L"#str"||name==L"#agi"||name==L"#int"||name==L"#fullatt"||name==L"#sp"||name==L"#kill"||name==L"#sabi"||name==L"#rabi"||name==L"#tele"||name==L"#invul"||name==L"#vul")return true; // Native result/error is reported by the handler.
  if(name==L"#ping"){wht::ShowNotification129(executableBase,wht::Utf8(wht::network_ping::Status()),localMessage129);return true;}
  if(name==L"#toolui"){
   const auto index=wcstoul(argument.c_str(),nullptr,10);

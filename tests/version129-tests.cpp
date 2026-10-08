@@ -63,6 +63,12 @@ void __fastcall ShowConsole(uintptr_t frame,DWORD){if(*reinterpret_cast<unsigned
 void __fastcall HideConsole(uintptr_t frame,DWORD){*reinterpret_cast<unsigned*>(frame+0x98)=0;}
 int clearedFrames=0;
 void __fastcall CaptureClear(uintptr_t,DWORD){++clearedFrames;}
+uint32_t resourceCommandPlayer129=77;
+int resourceCommandValues129[7]={0,500,100,0,50,0,300};unsigned resourceCommandWrites129=0;
+bool resourceCommandReject129=false;
+uint32_t __cdecl ResourceCommandLocalMock129(){return resourceCommandPlayer129;}
+int __cdecl ResourceCommandGetMock129(uint32_t player,int state){if(player!=resourceCommandPlayer129)throw std::runtime_error("Resource player ABI");return resourceCommandValues129[state];}
+void __cdecl ResourceCommandSetMock129(uint32_t player,int state,int value){if(player!=resourceCommandPlayer129)throw std::runtime_error("Resource player ABI");++resourceCommandWrites129;if(!resourceCommandReject129)resourceCommandValues129[state]=value;}
 int fpsCalls=0,buttonCalls=0;uintptr_t clicked=0;
 void __fastcall CaptureFps(uintptr_t bar,DWORD,int mode){++fpsCalls;*reinterpret_cast<int*>(bar+0x148)=mode;}
 void __fastcall CaptureClick(uintptr_t button,DWORD,int mode){if(mode!=1||(*reinterpret_cast<unsigned*>(button+0x13c)&2)==0)throw std::runtime_error("Click ABI");++buttonCalls;clicked=button;}
@@ -209,6 +215,27 @@ int wmain(int argc,wchar_t** argv){try{
 
  auto checkAt=[](bool ok,int line){if(!ok)throw std::runtime_error("version129 contract failed at line "+std::to_string(line));};
 #define check(...) checkAt((__VA_ARGS__),__LINE__)
+ {
+  using namespace wht;
+  ResourceCommandApi129 api{ResourceCommandLocalMock129,ResourceCommandGetMock129,ResourceCommandSetMock129};
+  int amount=0;ResourceCommandResult129 result;const char* error=nullptr;
+  check(ParseResourceCommand129(ResourceCommand129::Gold,L"",amount)&&amount==100000);
+  check(ParseResourceCommand129(ResourceCommand129::Food,L"",amount)&&amount==200);
+  check(!ParseResourceCommand129(ResourceCommand129::Gold,L"0",amount)&&!ParseResourceCommand129(ResourceCommand129::Gold,L"1 extra",amount));
+  check(!ParseResourceCommand129(ResourceCommand129::Full,L"500",amount));
+  check(ApplyResourceCommand129(77,api,ResourceCommand129::Gold,100,result,&error)&&result.gold==600&&result.lumber==100);
+  check(ApplyResourceCommand129(77,api,ResourceCommand129::Gold,100,result,&error)&&result.gold==700);
+  check(ApplyResourceCommand129(77,api,ResourceCommand129::Lumber,50,result,&error)&&result.lumber==150);
+  check(ApplyResourceCommand129(77,api,ResourceCommand129::Food,400,result,&error)&&result.food==400);
+  const auto writes=resourceCommandWrites129;
+  check(!ApplyResourceCommand129(77,api,ResourceCommand129::Gold,INT_MAX,result,&error)&&resourceCommandWrites129==writes);
+  check(!ApplyResourceCommand129(88,api,ResourceCommand129::Gold,1,result,&error)&&resourceCommandWrites129==writes);
+  resourceCommandReject129=true;
+  check(!ApplyResourceCommand129(77,api,ResourceCommand129::Lumber,1,result,&error)&&error);
+  resourceCommandReject129=false;
+  check(ApplyResourceCommand129(77,api,ResourceCommand129::Full,1,result,&error)&&result.gold==1000000&&result.lumber==1000000&&result.food==300);
+  check(!ResolveResourceCommandApi129(0));
+ }
  {
   using namespace wht::network_ping;
   Reset();const unsigned char request[]={0xf7,1,8,0,42,0,0,0};
