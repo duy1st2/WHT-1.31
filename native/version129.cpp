@@ -1,3 +1,4 @@
+#include "auto_skills129.hpp"
 #include "self_cast129.hpp"
 #include "create_item129.hpp"
 #include "quick_drop129.hpp"
@@ -252,7 +253,15 @@ void* clockFrame=nullptr;void* clockFont=nullptr;
 wht::ClearFrame129 clearFrame=nullptr;
 wht::MessageTimers129 messageTimers;
 wht::AutoClick129 autoClick;
+wht::AutoSkills129 autoSkills129;
+wht::SkillSelection129 pinnedTarget129{};
 wht::WindowServices129 windowServices;
+using ClipCursorApi129=BOOL(WINAPI*)(const RECT*);
+ClipCursorApi129 originalClipCursor129=nullptr;
+BOOL WINAPI ClipCursorHook129(const RECT* rect){
+ if(rect&&window&&GetForegroundWindow()==window&&runtimeConfig.mode==wht::RunMode::Local&&!runtimeConfig.lockCursor)rect=nullptr;
+ return originalClipCursor129?originalClipCursor129(rect):FALSE;
+}
 wht::FpsState129 fpsState;
 wht::TimeOfDay129 timeOfDay;
 wht::ConsoleState129 consoleState;
@@ -440,13 +449,13 @@ bool ControlAvailable129(const wht::ToolMenuControl& d){
  if(!wcscmp(d.section,L"Event")&&!wcscmp(d.key,L"ModeCast"))return clickButton!=nullptr;
  if(!wcscmp(d.section,L"StateTag")||!wcscmp(d.section,L"ManaBar"))return levelHooksReady129;
  if(!wcscmp(d.section,L"Language")||!wcscmp(d.section,L"MacroRecorder")||!wcscmp(d.section,L"DelayClear"))return true;
- if(!wcscmp(d.section,L"Quick Chat"))return true;
+ if(!wcscmp(d.section,L"Quick Chat")||!wcscmp(d.section,L"AutoSkills"))return true;
  if(!wcscmp(d.section,L"HotKeyOther"))return !wcscmp(d.key,L"hko_menu")||!wcscmp(d.key,L"hko_command")||!wcscmp(d.key,L"hko_MinimizeMultiboard");
- if(!wcscmp(d.section,L"SlotHotkey")||!wcscmp(d.section,L"SlotHotkeyInv")||!wcscmp(d.section,L"SlotHotkeyShop"))return wcsncmp(d.key,L"AutoTarget",10)||!wcsncmp(d.key,L"AutoTargetCommandMe",19);
+ if(!wcscmp(d.section,L"SlotHotkey")||!wcscmp(d.section,L"SlotHotkeyInv")||!wcscmp(d.section,L"SlotHotkeyShop"))return true;
  if(!wcscmp(d.section,L"Graphics")&&!wcscmp(d.key,L"VSync"))return originalPresentParameters129!=nullptr;
  if(!wcscmp(d.section,L"Graphics")&&!wcscmp(d.key,L"Unlock Limit FPS"))return unlockFps129.ready&&!unlockFps129.conflict;
  if(!wcscmp(d.section,L"Graphics"))return !wcscmp(d.key,L"timeOfDayUI")||!wcscmp(d.key,L"ConsoleUI")||!wcscmp(d.key,L"Text Life/Mana Commas")||!wcscmp(d.key,L"Text Life/Mana No Hide")||!wcscmp(d.key,L"Text Stats Commas")||(!wcscmp(d.key,L"Detailed Stats Tooltip")&&detailedStatsHooksReady129)||!wcscmp(d.key,L"MouseTooltipUI")||!wcscmp(d.key,L"BlackBarUI")||!wcscmp(d.key,L"Color Player")||(!wcscmp(d.key,L"BarInvul")&&invulnerableHookReady129)||(!wcscmp(d.key,L"VertexColor")&&originalVertexColor129);
- if(!wcscmp(d.section,L"HotKeyHero"))return !wcsncmp(d.key,L"HeroF",5)||!wcscmp(d.key,L"AutoClickLeft")||!wcscmp(d.key,L"AutoClickRight");
+ if(!wcscmp(d.section,L"HotKeyHero"))return !wcsncmp(d.key,L"HeroF",5)||!wcscmp(d.key,L"AutoClickLeft")||!wcscmp(d.key,L"AutoClickRight")||!wcscmp(d.key,L"SetIdTarget")||!wcscmp(d.key,L"SellFast");
  return !wcscmp(d.section,L"Event")&&(!wcscmp(d.key,L"Quick Drop Item")||!wcscmp(d.key,L"Show Resource")||!wcscmp(d.key,L"Show Mem")||!wcscmp(d.key,L"Show Timer")||!wcscmp(d.key,L"Show FPS")||!wcscmp(d.key,L"Show Ins All Skills")||!wcscmp(d.key,L"Show Drop All")||!wcscmp(d.key,L"Show Auto Pick")||!wcscmp(d.key,L"Show Sell All")||!wcscmp(d.key,L"Hide Option Menu")||!wcscmp(d.key,L"Show Hotkey In Panel")||!wcscmp(d.key,L"ShowCooldown")||!wcscmp(d.key,L"ShowRegenHP")||!wcscmp(d.key,L"ShowRegenMana")||(!wcscmp(d.key,L"Keyboard Scroll Speed")&&setKeyboardScroll129)||(!wcscmp(d.key,L"Mouse Scroll Speed")&&setMouseScroll129));
 }
 std::wstring PluginPath129(std::wstring path){
@@ -551,6 +560,11 @@ bool ToolCommandImpl129(const std::wstring& command){
   if(enabled&&!wht::ResolveInventoryActions129(executableBase).query){wht::ShowNotification129(executableBase,"Auto Pick: native signature mismatch",localMessage129);return false;}
   inventoryActions129.autoPick=enabled;inventoryActions129.due=0;
   wht::ShowNotification129(executableBase,enabled?"Auto Pick: ON":"Auto Pick: OFF",localMessage129);return true;
+ }
+ if(name==L"#sellslot"){
+  unsigned slot=0;if(!(in>>slot)||slot<1||slot>6||in>>extra)return false;
+  bool ok=inventoryActions129.StartSellSlot(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveDropItems129(executableBase),slot-1);
+  wht::ShowNotification129(executableBase,ok?"Quick Sell: finding a nearby shop":"Quick Sell: select a unit with an item in this slot",localMessage129);return ok;
  }
  if(name==L"#sellall"){
   if(in>>extra)return false;
@@ -1111,7 +1125,7 @@ bool ToolCommand(const std::wstring& command){
  const bool result=ToolCommandImpl129(command);if(!result)return false;
  std::wistringstream input(command);std::wstring name,argument;input>>name>>argument;
  std::string feedback;
- if(name==L"#copyitem"||name==L"#item"||name==L"#quickdrop"||name==L"#dropitem"||name==L"#save"||name==L"#shareall"||name==L"#srand"||name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
+ if(name==L"#sellslot"||name==L"#copyitem"||name==L"#item"||name==L"#quickdrop"||name==L"#dropitem"||name==L"#save"||name==L"#shareall"||name==L"#srand"||name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
  if(name==L"#armor")return true;
  if(name==L"#ms")return true;
  if(name==L"#ggl"||name==L"#gll"||name==L"#gg"||name==L"#gl")return true;
@@ -1122,7 +1136,8 @@ bool ToolCommand(const std::wstring& command){
   const auto index=wcstoul(argument.c_str(),nullptr,10);
   if(index<wht::kToolMenuControls.size()){
    const auto& control=wht::kToolMenuControls[index];
-   auto title=runtimeConfig.english?wht::EnglishControlLabel(control):std::string(control.label);
+   // Native notification font lacks Vietnamese glyphs; use complete English labels here.
+   auto title=wht::EnglishControlLabel(control);
    if(title.empty())title=wht::Utf8(control.key);
    auto value=wht::ToolMenuOverlay::ReadValue(runtimeConfig,index);
    if(control.kind==wht::MenuControlKind::Check)feedback=title+": "+(value==L"1"?"ON":"OFF");
@@ -1201,6 +1216,11 @@ bool SlotKey129(unsigned key){
  if(!clickButton)return false;
  const auto activate=[&](bool inventory,int slot,const wht::Binding& binding){
   smartCast129.Reset();
+  if(binding.autoTarget&&!binding.autoTargetMe&&!macroRecorder.playing&&!macroRecorder.recording){
+   const bool ok=pinnedTarget129.unit&&wht::TargetCast129(executableBase,inventory,slot,&pinnedTarget129);
+   if(!ok)wht::ShowNotification129(executableBase,"Target Cast: select a target and press Set Id Target first",localMessage129);
+   return true;
+  }
   if(binding.autoTargetMe&&!macroRecorder.playing&&!macroRecorder.recording){
    const bool ok=wht::SelfCast129(executableBase,inventory,slot);
    if(!ok)wht::ShowNotification129(executableBase,"Self Cast: unavailable or game rejected target",localMessage129);
@@ -1259,12 +1279,32 @@ LRESULT CALLBACK InputMessages(int code,WPARAM removed,LPARAM data){
        if(!ctrl&&!shift&&!alt)for(size_t n=0;n<4;++n)if(runtimeConfig.macroKeys[n]&&runtimeConfig.macroKeys[n]==key){action=int(n);break;}
        if(ctrl&&shift&&!alt&&key>=VK_F9&&key<=VK_F12){int fallback=key==VK_F9?2:key==VK_F10?0:key==VK_F11?3:1;if(!runtimeConfig.macroKeys[fallback])action=fallback;}
       }
-      if(action>=0)handled=ToolCommand(wht::ToolMenuOverlay::MacroCommand(size_t(action)));
+      if(runtimeConfig.autoSkillsEnabled&&ctrl&&alt&&!shift&&!toolMenu.open&&!macroRecorder.playing&&!macroRecorder.recording&&wht::AutoSkillsState::Number(key)>=0){
+       POINT p{};RECT r{};GetCursorPos(&p);ScreenToClient(window,&p);GetClientRect(window,&r);auto canvas=wht::Canvas129(r.right,r.bottom);
+       bool bound=autoSkills129.Bind(executableBase,key,canvas.Project(p),canvas.width,canvas.height);handled=true;
+       wht::ShowNotification129(executableBase,bound?"Auto Skills: sequence slot assigned":"Auto Skills: select a unit and hover a skill button",localMessage129);
+      }
+      else if(runtimeConfig.autoSkillsEnabled&&!ctrl&&!alt&&!shift&&!toolMenu.open&&!macroRecorder.playing&&!macroRecorder.recording&&runtimeConfig.autoSkillsKey&&key==runtimeConfig.autoSkillsKey){
+       handled=true;auto selected=wht::SelectedSkill129(executableBase);
+       if(!autoSkills129.state.running&&!autoSkills129.state.Current(selected.identity))wht::ShowNotification129(executableBase,"Auto Skills: assign skills with Ctrl+Alt+1..9 first",localMessage129);
+       else{autoSkills129.state.running=!autoSkills129.state.running;autoSkills129.state.next=0;wht::ShowNotification129(executableBase,autoSkills129.state.running?"Auto Skills: ON":"Auto Skills: OFF",localMessage129);}
+      }
+      else if(action>=0)handled=ToolCommand(wht::ToolMenuOverlay::MacroCommand(size_t(action)));
       else if(runtimeConfig.commandKey&&key==runtimeConfig.commandKey&&!ctrl&&!shift&&!alt){ToggleCommandSettings();handled=true;}
       else if(key==VK_TAB&&runtimeConfig.showResource&&!toolMenu.open&&!ctrl&&!shift&&!alt){resourceExpanded=!resourceExpanded;resourceNext=0;handled=true;}
       else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&autoClick.Key(key,runtimeConfig)){
        handled=true;const bool left=key==runtimeConfig.autoClickLeftKey;
        wht::ShowNotification129(executableBase,std::string(left?"Auto Click Left: ":"Auto Click Right: ")+((left?autoClick.left:autoClick.right)?"ON":"OFF"),localMessage129);
+      }
+      else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&runtimeConfig.setIdTargetKey&&key==runtimeConfig.setIdTargetKey){
+       pinnedTarget129=wht::SelectedSkill129(executableBase);handled=true;
+       wht::ShowNotification129(executableBase,pinnedTarget129.unit?"Target: selected unit pinned":"Target: no unit selected",localMessage129);
+      }
+      else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&!macroRecorder.playing&&!macroRecorder.recording&&!consoleState.active&&runtimeConfig.sellFastKey&&key==runtimeConfig.sellFastKey){
+       POINT p{};RECT r{};if(GetCursorPos(&p)&&ScreenToClient(window,&p)&&GetClientRect(window,&r)){
+        auto canvas=wht::Canvas129(r.right,r.bottom);int slot=wht::QuickDropSlot129(executableBase,canvas.Project(p),canvas.width,canvas.height);
+        if(slot>=0){handled=true;ToolCommand(L"#sellslot "+std::to_wstring(slot+1));}
+       }
       }
       else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&SlotKey129(key))handled=true;
       else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&HeroKey129(key))handled=true;
@@ -1449,7 +1489,7 @@ void UpdateTools(){
   ApplyHpDimensions129(false);
   if(macroRecorder.recording)macroRecorder.FinishRecording();macroRecorder.Stop();
   // Map teardown releases native frames. Forget pointers without dereferencing them.
-  mutedChat129.Reset();repeatChat129.Reset();repeatMessage129.Reset();queuedChatDue129=0;noCooldown129.Reset();ApplySpeedMultiplier129(1.f);timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();if(toolMenu.parent)toolMenu.Reset();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;chatTyping=false;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();stats129.Reset();lifeMana129.Reset();fpsState={};timeOfDay={};matchStart={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;dropIconFrame=dropIcon=nullptr;dropIconShown=dropIconPressed=false;inventoryActions129.Reset();ResetInventoryIcons129();return;
+  mutedChat129.Reset();repeatChat129.Reset();repeatMessage129.Reset();queuedChatDue129=0;noCooldown129.Reset();ApplySpeedMultiplier129(1.f);timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();if(toolMenu.parent)toolMenu.Reset();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;chatTyping=false;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();autoSkills129.Reset();pinnedTarget129={};stats129.Reset();lifeMana129.Reset();fpsState={};timeOfDay={};matchStart={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;dropIconFrame=dropIcon=nullptr;dropIconShown=dropIconPressed=false;inventoryActions129.Reset();ResetInventoryIcons129();return;
  }
  const auto owner=*reinterpret_cast<uintptr_t*>(executableBase+0xd3d7f8);
  float startSeconds=0;
@@ -1458,7 +1498,7 @@ void UpdateTools(){
   if(!startSoundPlayer129(MAKEINTRESOURCEW(101),runtimeModule,SND_RESOURCE|SND_ASYNC|SND_NODEFAULT|SND_NOSTOP))wht::Log(runtimeFolder,"WHT 1.29: start sound unavailable; skipped.");
  if(resourceFailed)return;
  if(!resourceArchive&&!wht::MountResources129(executableBase,mixPath,resourceArchive)){resourceFailed=true;toolMenu.failed=true;wht::Log(runtimeFolder,"WHT 1.29: embedded MPQ mount failed.");return;}
- if(toolMenu.parent&&toolMenu.parent!=owner){timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;dropIconFrame=dropIcon=nullptr;dropIconShown=dropIconPressed=false;inventoryActions129.Reset();ResetInventoryIcons129();}
+ if(toolMenu.parent&&toolMenu.parent!=owner){timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();autoSkills129.Reset();pinnedTarget129={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;dropIconFrame=dropIcon=nullptr;dropIconShown=dropIconPressed=false;inventoryActions129.Reset();ResetInventoryIcons129();}
  RECT r{};GetClientRect(window,&r);wht::SetViewport129(r.right,r.bottom);auto canvas=wht::Canvas129(r.right,r.bottom);wht::ToolMenuOverlay::SetViewport(canvas.width,canvas.height);
  const bool allowed=runtimeConfig.mode==wht::RunMode::Local;
  ApplyFogEffect129(allowed);ApplyLevels129(allowed&&runtimeConfig.stateTagShowLevel);ApplyStateValues129(allowed);
@@ -1485,6 +1525,7 @@ void UpdateTools(){
  };
  repeatMessage129.Tick(clickAllowed,chatNow129,sendQueued129);
  repeatChat129.Tick(clickAllowed,chatNow129,sendQueued129);
+ autoSkills129.Tick(executableBase,runtimeConfig,clickAllowed,GetTickCount64());
  autoClick.Tick(runtimeConfig,clickAllowed&&inside,GetTickCount64(),[&](UINT message,WPARAM key){PostMessageW(window,message,key,MAKELPARAM(cursor.x,cursor.y));});
  if(!toolMenu.failed&&!SafeUpdateMenu(owner,allowed)){toolMenu.failed=true;wht::Log(runtimeFolder,"WHT 1.29: native menu exception at "+std::string(toolMenu.initStage));}
  timeBoss129.Update(executableBase,owner,allowed&&runtimeConfig.timeBoss&&(runtimeConfig.mth49Enable||runtimeConfig.g17Enable),toolMenu);
@@ -1508,6 +1549,11 @@ DWORD WINAPI Install(void* module){
  auto address=reinterpret_cast<unsigned char*>(executableBase)+0x47e380;
  const unsigned char signature[]={0x55,0x8b,0xec,0x53,0x56,0x57,0x8b,0x7d,0x08,0x8b,0xf1};
  if(memcmp(address,signature,sizeof(signature))||MH_Initialize()!=MH_OK||MH_CreateHook(address,SetText,reinterpret_cast<void**>(&original))!=MH_OK||MH_EnableHook(address)!=MH_OK){wht::Log(folder,"WHT 1.29: version hook installation failed.");return 2;}
+ auto clipAddress=reinterpret_cast<void*>(GetProcAddress(GetModuleHandleW(L"user32.dll"),"ClipCursor"));
+ if(clipAddress&&MH_CreateHook(clipAddress,ClipCursorHook129,reinterpret_cast<void**>(&originalClipCursor129))==MH_OK){
+  if(MH_EnableHook(clipAddress)!=MH_OK){MH_RemoveHook(clipAddress);originalClipCursor129=nullptr;}
+ }
+
  // Native D3D9 parameter builder, called for creation and reset.
  const unsigned char presentSig129[]={0x55,0x8b,0xec,0x83,0xec,0x14,0xa1};
  const auto presentBuilder129=reinterpret_cast<void*>(executableBase+0x3dba60);

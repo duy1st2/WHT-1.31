@@ -33,14 +33,20 @@ struct NearbyObjects129 {uintptr_t objects[256]{};unsigned count=0;};
 inline int __cdecl CollectNearby129(uintptr_t object,void* context){auto& list=*static_cast<NearbyObjects129*>(context);if(object&&list.count<256)list.objects[list.count++]=object;return 1;}
 inline float InventoryReal129(InventoryActionsApi129::Getter getter,uint32_t handle){const auto bits=getter(handle);float value;memcpy(&value,&bits,4);return value;}
 struct InventoryActions129 {
- bool autoPick=false,selling=false;uint64_t due=0,deadline=0;SkillSelection129 source{};uint32_t pending=0;unsigned sold=0;uint32_t pickupTarget=0;uint64_t pickupSent=0,sellRetry=0;uintptr_t pickupUnit=0;uint64_t pickupIdentity=0;
+ uintptr_t sellOnly=0;bool autoPick=false,selling=false;uint64_t due=0,deadline=0;SkillSelection129 source{};uint32_t pending=0;unsigned sold=0;uint32_t pickupTarget=0;uint64_t pickupSent=0,sellRetry=0;uintptr_t pickupUnit=0;uint64_t pickupIdentity=0;
  void Reset(){*this={};}
  bool StartSell(uintptr_t b,const SkillSelection129& selected,const DropItemsApi129& drop){
   __try {if(!LiveDropUnit129(b,selected,drop))return false;}__except(EXCEPTION_EXECUTE_HANDLER){return false;}
   if(!ResolveInventoryActions129(b).query)return false;
-  selling=true;source=selected;pending=0;sold=0;sellRetry=0;due=0;deadline=GetTickCount64()+30000;return true;
+  sellOnly=0;selling=true;source=selected;pending=0;sold=0;sellRetry=0;due=0;deadline=GetTickCount64()+30000;return true;
  }
  // Returns a completion message; callers display it outside the guarded native body.
+ bool StartSellSlot(uintptr_t b,const SkillSelection129& selected,const DropItemsApi129& drop,unsigned slot){
+  if(slot>=6)return false;
+  __try{if(!LiveDropUnit129(b,selected,drop)||slot>=drop.size(selected.unit))return false;
+   auto item=drop.item(selected.unit,slot);if(!item||!StartSell(b,selected,drop))return false;sellOnly=item;return true;
+  }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
+ }
  const char* TickNative(uintptr_t b,bool allowed,uint64_t now){
   if(!allowed||now<due||(!autoPick&&!selling))return nullptr;
   __try {
@@ -55,9 +61,9 @@ struct InventoryActions129 {
    if(!hero||!local||api.owner(hero)!=local||InventoryReal129(api.life,hero)<=.405f)return nullptr;
    const auto capacity=drop.size(selected.unit);if(!capacity||capacity>6)return nullptr;
    unsigned occupied=0;uint32_t item=0;bool pendingHeld=false;
-   for(unsigned i=0;i<capacity;++i){const auto raw=drop.item(selected.unit,i);if(!raw)continue;++occupied;const auto h=api.handle(context,raw,0);if(h==pending)pendingHeld=true;if(!item&&h&&api.pawnable(h))item=h;}
-   if(selling&&pending){if(pendingHeld&&now<sellRetry){due=now+25;return nullptr;}if(!pendingHeld)++sold;pending=0;}
-   if(selling&&!item){selling=false;return occupied?"Sell All finished: remaining items cannot be sold":"Sell All completed";}
+   for(unsigned i=0;i<capacity;++i){const auto raw=drop.item(selected.unit,i);if(!raw)continue;++occupied;const auto h=api.handle(context,raw,0);if(h==pending)pendingHeld=true;if(!item&&h&&api.pawnable(h)&&(!sellOnly||raw==sellOnly))item=h;}
+   if(selling&&pending){if(pendingHeld&&now<sellRetry){due=now+25;return nullptr;}if(!pendingHeld){++sold;if(sellOnly){selling=false;sellOnly=0;pending=0;return "Quick Sell completed";}}pending=0;}
+   if(selling&&!item){selling=false;return sellOnly?"Quick Sell: item unavailable or cannot be sold":occupied?"Sell All finished: remaining items cannot be sold":"Sell All completed";}
    if(!selling&&occupied>=capacity){due=now+500;return nullptr;}
    NearbyObjects129 nearby;const float radius=selling?1200.f:777.f;const auto rect=NearbyRect129(pos.x,pos.y,radius);
    api.query(rect.data(),0,selling?0x14fdu:0x4f7u,0,0,CollectNearby129,&nearby);

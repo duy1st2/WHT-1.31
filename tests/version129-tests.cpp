@@ -1826,6 +1826,18 @@ int wmain(int argc,wchar_t** argv){try{
   auto before=b();auto forwarded=a();auto after=b();check(forwarded>=before&&forwarded<=after);
   for(unsigned i=1;i<=353;++i)check(GetProcAddress(proxy,MAKEINTRESOURCEA(i))!=nullptr);
  }
+ {
+  wht::AutoSkills129 automatic;
+  check(!automatic.state.Bind(0,0,10));check(!automatic.state.Bind(5,9,10));
+  check(automatic.state.Bind(5,0,100));check(automatic.state.Bind(5,3,200));
+  check(automatic.state.Current(5)==100);automatic.state.Advance(5);check(automatic.state.Current(5)==200);
+  automatic.state.Advance(5);check(automatic.state.Current(5)==100);check(automatic.state.Current(6)==0);
+  automatic.state.running=true;wht::Config settings;settings.autoSkillsEnabled=true;
+  automatic.Tick(0,settings,false,100);check(automatic.state.next==0&&automatic.state.running);
+  settings.autoSkillsEnabled=false;automatic.Tick(0,settings,false,100);check(!automatic.state.running);
+  automatic.Reset();check(automatic.state.sequences.empty());
+  check(!wht::HoverSkillOrder129(0,{},800,600));check(!wht::AutoSkillTarget129(0,100,1024));
+ }
  if(inputHook)UnhookWindowsHookEx(inputHook);
  std::cout<<"PASS version129 label, camera/chat ABI, frame layout, menu settings and macro controls\n";return 0;
 }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}}

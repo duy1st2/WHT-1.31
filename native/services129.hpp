@@ -281,7 +281,7 @@ struct WindowServices129 {
    a={r.left,r.top};b={r.right,r.bottom};ClientToScreen(h,&a);ClientToScreen(h,&b);
    if(!clipped)GetClipCursor(&previousClip);
    r={a.x,a.y,b.x,b.y};if(ClipCursor(&r))clipped=true;
-  }else if(clipped){ClipCursor(&previousClip);clipped=false;}
+  }else if(clipped||GetForegroundWindow()==h){ClipCursor(nullptr);clipped=false;}
  }
 };
 }
