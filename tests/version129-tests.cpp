@@ -1,4 +1,4 @@
-#include "network_ping.hpp"
+﻿#include "network_ping.hpp"
 #include "unit_scale129.hpp"
 #include "ability_button129.hpp"
 #include "inventory_info129.hpp"
@@ -11,8 +11,21 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
+uint32_t saveWorldMock129[0x700/4]{};bool saveRejectMock129=false;unsigned saveCallsMock129=0;std::string saveObservedMock129;
+void __cdecl SaveMock129(void* object){++saveCallsMock129;auto storage=reinterpret_cast<uintptr_t*>(object)[2];saveObservedMock129=reinterpret_cast<const char*>(reinterpret_cast<uintptr_t*>(storage)[7]);if(!saveRejectMock129)saveWorldMock129[0x6d4/4]=1;}
+unsigned itemMade129=0,itemStop129=50;uint32_t itemCode129=0;float itemX129=0;
+uint32_t __cdecl ItemCreateMock129(uint32_t code,const float* x,const float*){itemCode129=code;itemX129=*x;return itemMade129<itemStop129?++itemMade129:0;}
+uint32_t __cdecl ItemTypeMock129(uint32_t){return itemCode129;}
 unsigned vertexCalls129=0;BYTE vertexObservedAlpha129=0;
 unsigned createCalls129=0,createStop129=50;uint32_t createCode129=0;
+bool shareFlags129[24]{};unsigned shareCalls129=0;bool shareReject129=false,shareAbi129=true;
+uint32_t __cdecl ShareLocalMock129(){return 100;}
+uint32_t __cdecl SharePlayerMock129(int slot){return slot>=0&&slot<24?100+slot:0;}
+int __cdecl ShareSlotMock129(uint32_t player){return player==101||player==123?1:0;}
+int __cdecl ShareGetMock129(uint32_t local,uint32_t player,int flag){shareAbi129&=local==100&&flag==6&&player>=100&&player<124;return shareFlags129[player-100];}
+void __cdecl ShareSetMock129(uint32_t local,uint32_t player,int flag,int enabled){shareAbi129&=local==100&&flag==6&&player>=100&&player<124&&(enabled==0||enabled==1);++shareCalls129;if(!shareReject129)shareFlags129[player-100]=enabled!=0;}
+uint32_t randomSeedMock129=0;unsigned randomSeedCalls129=0;bool randomSeedReject129=false;
+void __cdecl RandomSeedMock129(uint32_t seed){++randomSeedCalls129;if(!randomSeedReject129)randomSeedMock129=seed;}
 uintptr_t dropItemsMock129[6]{};unsigned dropCalls129=0,dropSize129=6;bool dropReject129=false,dropRetain129=false;
 uintptr_t __fastcall DropSlotMock129(uintptr_t,DWORD,unsigned slot){return slot<6?dropItemsMock129[slot]:0;}
 unsigned __fastcall DropSizeMock129(uintptr_t,DWORD){return dropSize129;}
@@ -273,6 +286,60 @@ int wmain(int argc,wchar_t** argv){try{
 
  auto checkAt=[](bool ok,int line){if(!ok)throw std::runtime_error("version129 contract failed at line "+std::to_string(line));};
 #define check(...) checkAt((__VA_ARGS__),__LINE__)
+ {
+  check(wht::InventoryBoundsHit129(.49f,.07f,.52f,.10f,.50f,.08f));
+  check(!wht::InventoryBoundsHit129(.49f,.07f,.52f,.10f,.53f,.08f));
+  check(!wht::InventoryBoundsHit129(.52f,.07f,.49f,.10f,.50f,.08f));
+  check(!wht::InventoryBoundsHit129(.49f,.07f,.52f,.10f,.52f,.08f));
+  check(std::abs(wht::QuickDropMouseX129(960,1920,1080)-.4f)<.00001f);
+  check(std::abs(wht::QuickDropMouseX129(1320,1920,1080)-.6f)<.00001f);
+  check(std::abs(wht::QuickDropMouseX129(960,1280,960)-.6f)<.00001f);
+  check(wht::InventoryBoundsHit129(.61f,.07f,.64f,.10f,wht::QuickDropMouseX129(1365,1920,1080),.08f));
+  check(!wht::InventoryBoundsHit129(.57f,.07f,.60f,.10f,wht::QuickDropMouseX129(1365,1920,1080),.08f));
+  check(wht::QuickDropSlot129(0,{0,0},1920,1080)==-1);
+  std::vector<unsigned char> itemBase(0xd3b700);auto ib=reinterpret_cast<uintptr_t>(itemBase.data());*reinterpret_cast<uintptr_t*>(ib+0xd3b6f4)=1;
+  wht::CreateItemApi129 itemApi{ItemCreateMock129,ItemTypeMock129};
+  check(wht::CreateItems129(ib,itemApi,0x70686561,3,100,200)==3&&itemX129==180);
+  itemStop129=itemMade129+1;check(wht::CreateItems129(ib,itemApi,0x70686561,3,100,200)==1);
+  check(!wht::CreateItems129(ib,itemApi,0x70686561,51,100,200));
+  check(!wht::CreateItems129(ib,{},0x70686561,1,100,200));
+  *reinterpret_cast<uintptr_t*>(ib+0xd3b6f4)=0;check(!wht::CreateItems129(ib,itemApi,0x70686561,1,100,200));
+  std::string saveName;
+  check(wht::ParseSaveName129(L"",saveName)&&saveName=="wht-save");
+  check(wht::ParseSaveName129(L"match_1",saveName)&&saveName=="match_1");
+  for(auto bad:{L"../x",L"a b",L"a.w3z",L"C:/save"})check(!wht::ParseSaveName129(bad,saveName));
+  check(!wht::ResolveSaveGame129(0));
+  std::vector<unsigned char> saveBase(0xd3b700);auto sb=reinterpret_cast<uintptr_t>(saveBase.data());
+  *reinterpret_cast<uintptr_t*>(sb+0xd3b6f4)=reinterpret_cast<uintptr_t>(saveWorldMock129);const char* saveError=nullptr;
+  check(wht::RequestSaveGame129(sb,"match_1",SaveMock129,&saveError)&&saveObservedMock129=="match_1"&&saveCallsMock129==1);
+  check(!wht::RequestSaveGame129(sb,"match_1",SaveMock129,&saveError)&&saveCallsMock129==1);
+  saveWorldMock129[0x6d4/4]=0;saveRejectMock129=true;
+  check(!wht::RequestSaveGame129(sb,"match_2",SaveMock129,&saveError)&&saveError);
+  *reinterpret_cast<uintptr_t*>(sb+0xd3b6f4)=0;check(!wht::RequestSaveGame129(sb,"match_2",SaveMock129,&saveError)&&saveCallsMock129==2);
+
+  wht::ShareControlApi129 api{ShareLocalMock129,SharePlayerMock129,ShareSlotMock129,ShareSetMock129,ShareGetMock129};unsigned changed=0;const char* error=nullptr;
+  check(wht::ShareControl129(api,true,changed,&error)&&changed==2&&shareCalls129==2&&shareFlags129[1]&&shareFlags129[23]&&!shareFlags129[0]&&!shareFlags129[2]);
+  check(wht::ShareControl129(api,true,changed,&error)&&changed==0&&shareCalls129==2);
+  check(wht::ShareControl129(api,false,changed,&error)&&changed==2&&!shareFlags129[1]&&!shareFlags129[23]&&shareAbi129);
+  shareReject129=true;check(!wht::ShareControl129(api,true,changed,&error)&&changed==0&&error);shareReject129=false;
+  check(!wht::ShareControl129({},true,changed,&error)&&error);
+  check(!wht::ResolveShareControl129(0));
+ }
+ {
+  uint32_t seed=99;
+  check(wht::ParseRandomSeed129(L"",seed)&&seed==0);
+  check(wht::ParseRandomSeed129(L"4294967295",seed)&&seed==0xffffffffu);
+  for(const auto args:{L"-1",L"1.5",L"4294967296",L"12 extra",L"abc"})check(!wht::ParseRandomSeed129(args,seed));
+  std::vector<unsigned char> rngFixture(0xd61da0);auto base=reinterpret_cast<uintptr_t>(rngFixture.data());const char* error=nullptr;
+  *reinterpret_cast<uintptr_t*>(base+0xd3b6f4)=123;*reinterpret_cast<uintptr_t*>(base+0xd61d90)=reinterpret_cast<uintptr_t>(&randomSeedMock129);
+  check(wht::SetRandomSeed129(base,123,RandomSeedMock129,&error)&&randomSeedMock129==123&&!error);
+  check(wht::SetRandomSeed129(base,0xffffffffu,RandomSeedMock129,&error)&&randomSeedMock129==0xffffffffu&&randomSeedCalls129==2);
+  randomSeedReject129=true;check(!wht::SetRandomSeed129(base,4,RandomSeedMock129,&error)&&error);randomSeedReject129=false;
+  const auto calls=randomSeedCalls129;
+  check(!wht::SetRandomSeed129(base,4,nullptr,&error)&&error&&randomSeedCalls129==calls);
+  *reinterpret_cast<uintptr_t*>(base+0xd3b6f4)=0;check(!wht::SetRandomSeed129(base,4,RandomSeedMock129,&error)&&error&&randomSeedCalls129==calls);
+  check(!wht::ResolveRandomSeed129(base));
+ }
  {
   uint32_t code=0;unsigned count=0;
   check(wht::ParseCreateUnit129(L"hfoo",code,count)&&code==0x68666f6f&&count==1);
@@ -1325,6 +1392,13 @@ int wmain(int argc,wchar_t** argv){try{
    auto stale=selection;++stale.identity;check(!wht::DropItems129(executableBase,stale,dropApi,dropped,&reason)&&reason&&dropCalls129==calls);
    dropSize129=7;check(!wht::DropItems129(executableBase,selection,dropApi,dropped,&reason)&&reason&&dropCalls129==calls);
    dropSize129=6;dropItemsMock129[2]=0;
+   dropItemsMock129[0]=101;dropItemsMock129[5]=106;
+   check(wht::DropItemSlot129(executableBase,selection,dropApi,5,&reason)&&dropItemsMock129[0]==101&&!dropItemsMock129[5]);
+   auto before=dropCalls129;check(!wht::DropItemSlot129(executableBase,selection,dropApi,5,&reason)&&dropCalls129==before);
+   check(!wht::DropItemSlot129(executableBase,selection,dropApi,6,&reason)&&dropCalls129==before);
+   dropRetain129=true;check(!wht::DropItemSlot129(executableBase,selection,dropApi,0,&reason)&&dropItemsMock129[0]==101);dropRetain129=false;
+   check(!wht::DropItemSlot129(executableBase,{},dropApi,0,&reason));
+   dropItemsMock129[0]=0;
    check(!wht::ResolveDropItems129(executableBase));
   }
   check(wht::ChangeInvulnerability129(executableBase,selection,invulApi,true,result,&reason)&&result.ability&&result.effective&&!reason);

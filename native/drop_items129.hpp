@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "reselect129.hpp"
 namespace wht {
 struct DropItemsApi129 {
@@ -26,6 +26,18 @@ inline bool LiveDropUnit129(uintptr_t base,const SkillSelection129& selected,con
  const auto current=SelectedSkill129(base);if(current.unit!=selected.unit||current.identity!=selected.identity)return false;
  const auto agent=api.agent(uint32_t(selected.identity>>32),uint32_t(selected.identity));
  return agent&&*reinterpret_cast<uint32_t*>(agent+0xc)==0x2b61676c&&!*reinterpret_cast<uint32_t*>(agent+0x20);
+}
+inline bool DropItemSlot129(uintptr_t base,const SkillSelection129& selected,const DropItemsApi129& api,unsigned slot,const char** error=nullptr){
+ if(error)*error=nullptr;
+ __try{
+  if(!LiveDropUnit129(base,selected,api))return HeroSkillPointsFailure129(error,"Select a live unit first");
+  const auto count=api.size(selected.unit);if(count>6||slot>=count)return HeroSkillPointsFailure129(error,"Inventory slot unavailable");
+  const auto item=api.item(selected.unit,slot);if(!item)return HeroSkillPointsFailure129(error,"Inventory slot is empty");
+  if(!api.drop(selected.unit,item))return HeroSkillPointsFailure129(error,"Game refused to drop the item");
+  if(!LiveDropUnit129(base,selected,api))return HeroSkillPointsFailure129(error,"Selected unit changed during drop");
+  for(unsigned i=0;i<count;++i)if(api.item(selected.unit,i)==item)return HeroSkillPointsFailure129(error,"Item remains in inventory");
+  return true;
+ }__except(EXCEPTION_EXECUTE_HANDLER){return HeroSkillPointsFailure129(error,"Native item drop failed");}
 }
 inline bool DropItems129(uintptr_t base,const SkillSelection129& selected,const DropItemsApi129& api,unsigned& dropped,const char** error=nullptr){
  dropped=0;if(error)*error=nullptr;

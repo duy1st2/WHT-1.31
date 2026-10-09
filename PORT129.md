@@ -1,4 +1,4 @@
-# Warcraft III 1.29 port status
+﻿# Warcraft III 1.29 port status
 
 Exact supported executable: **1.29.2.9231 (1.29b), x86**. SHA256:
 `A1950F17905B9CD7D5461D45E6723AF36DDA5304E12DBA27A1FEA85593B15F3F`.
@@ -534,3 +534,25 @@ Auto Pick (#autopick [0|1]): selected local-owned live unit, inventory capacity1
 Inventory scan correction: native rectangles are Ymin,Xmin,Ymax,Xmax, confirmed GetRectMinY950A0(+24), MinX95080(+28), MaxY95060(+2C), MaxX95040(+30) and EnumItemsInRect copies these fields directly. Previous X/Y layout searched the transposed map location, affecting both shop and item discovery. NearbyRect129 fixes both paths; asymmetric coordinate regression test added. Icon column now right .558, width .012, keeping bounds .546..558 between inventory edge .544 and skills edge .561 in supplied screenshot; vertical order unchanged. Build/package contracts pass. Live pickup/selling/appearance need verification.
 
 Inventory cadence parity: Auto Pick checks every250ms, remembers target/selected identity and does not resend while target remains available (5sec timeout), proceeds as soon as target disappears instead of a fixed5sec delay after each pickup. Sell All polls inventory every25ms and immediately advances after removal; retries held items after350ms nearby or4000ms beyond600 units, matching legacy retry cadence. Shop scan radius1200 matches legacy. Build/package contracts pass; live throughput pending verification.
+
+Icon spacing: vertical pitch .028 matches legacy toolbar (was .020); positions top-down .096/.068/.040/.012, keeping bottom All Skills and horizontal bounds unchanged. Gap .012 between .016-high icons. Build/package checks pass; live appearance pending.
+
+Random seed command: #srand [unsigned32 seed], default0. Local mode only; invokes native SetRandomSeedA99A0 cdecl(seed), verifies signature/global D61D90 and call5892A0, requires match context and confirms RNG context+0 seed readback. Unlike legacy CRT srand, seeds actual game engine for subsequent draws; does not reverse past random results. Tests cover bounds/default, repeated calls, rejected native updates and missing context/function. Build/package checks pass; live map RNG behavior pending verification.
+
+Shared control: #shareall [0|1], defaultON, Local mode only. Grants/revokes local player's ALLIANCE_SHARED_CONTROL6 toward other active player slots0..23, skipping local/empty/left slots; like legacy applies across players rather than filtering allies. Native PlayerA4240, GetPlayerSlotState94980, SetPlayerAllianceA94A0, GetPlayerAlliance944C0, GetLocalPlayer93790. Signature checks, skips unchanged flags, verifies each write/readback, reports changed count and partial failure. Tests cover player24, inactive/self exclusion, repeat no-op, revoke and rejected writes. Build/package contracts pass; live control behavior pending verification.
+
+## Save game command
+Added Local-only `#save [name]` (default `wht-save`). Names accept ASCII letters, digits, underscore and hyphen. Native SaveGame RVA A5C50 is signature gated; its synchronous String::GetCString reader receives a temporary string wrapper. Match and pending-save checks prevent invalid requests. Reports only queue acceptance via world+6D4, not completed file creation. Parser, ABI and rejected/pending request tests pass; live save/load validation remains pending.
+
+## Single inventory item drop
+Local-only `#dropitem <1..6>` drops one selected inventory slot, numbered left-to-right and top-to-bottom. Uses existing signature-gated raw item drop API; checks live selection, inventory capacity, empty slots, and item disappearance before success. Stops sell automation and pauses pickup for two seconds like drop-all. Tests cover last slot, other items retained, repeated empty slot, out-of-range slot, retained-item refusal, and invalid selection. Live gameplay validation pending.
+
+## Shift-right-click quick drop
+Added default-on Shift + right-click inventory drop using actual 1.29 CSimpleRegion button rectangles (+44..+50, Ymin/Xmin/Ymax/Xmax), without legacy fixed-coordinate fallback. Ctrl/Alt, chat, menus, hidden console, macros and background window disable interception. Matched clicks route through verified #dropitem and consume matching mouse-up even if Shift is released first. #quickdrop [0|1] toggles the session setting. Geometry and existing single-item drop contracts pass; live hit-position validation remains pending.
+
+Quick-drop hit-test correction: inspected native RVA 473350 and replaced the incorrect +3C rectangle with +44 Ymin, +48 Xmin, +4C Ymax, +50 Xmax. The old miss let standard right-click target selection run. Live verification pending.
+
+Quick-drop widescreen correction: convert client mouse X into native centered 4:3 coordinate space instead of overlay normalized 0..0.8. Native inventory rectangles use this space; tests cover 4:3 and 16:9 and distinct adjacent columns. Live verification pending.
+
+## Create items
+Added Local-only #item <rawcode> [1..50] at map cursor, using CreateItem RVA 8E430 and GetItemTypeId 92FC0, signature gated. Verifies returned item type and reports actual count, stops on failure/context change. Tests cover spacing, partial creation, limits and missing match/API. Live gameplay pending.

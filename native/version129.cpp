@@ -1,3 +1,6 @@
+﻿#include "create_item129.hpp"
+#include "quick_drop129.hpp"
+#include "save_game129.hpp"
 #include "network_hooks129.hpp"
 #include "common.hpp"
 #include "native_ui129.hpp"
@@ -39,6 +42,8 @@ wht::Mute129 mutedChat129;
 #include "copy_unit129.hpp"
 #include "drop_items129.hpp"
 #include "inventory_actions129.hpp"
+#include "random_seed129.hpp"
+#include "share_control129.hpp"
 wht::InventoryActions129 inventoryActions129;
 wht::NoCooldown129 noCooldown129;
 #include "remove_unit129.hpp"
@@ -262,9 +267,9 @@ wht::SmartCast129 smartCast129;
 void* skillsIconFrame=nullptr;void* skillsIcon=nullptr;bool skillsIconShown=false,skillsIconPressed=false;
 wht::ToolMenuRect skillsIconRect{.558f,.012f,.012f,.016f};
 void* dropIconFrame=nullptr;void* dropIcon=nullptr;bool dropIconShown=false,dropIconPressed=false;
-wht::ToolMenuRect dropIconRect{.558f,.052f,.012f,.016f};
+wht::ToolMenuRect dropIconRect{.558f,.068f,.012f,.016f};
 void* inventoryIconFrames129[2]{};void* inventoryIconTextures129[2]{};bool inventoryIconsShown129[2]{},inventoryIconsPressed129[2]{};
-wht::ToolMenuRect inventoryIconRects129[2]={{.558f,.072f,.012f,.016f},{.558f,.032f,.012f,.016f}};
+wht::ToolMenuRect inventoryIconRects129[2]={{.558f,.096f,.012f,.016f},{.558f,.040f,.012f,.016f}};
 wht::QuickChatApi129 quickChatApi;
 wht::ResourceApi129 resourceApi;
 wht::ResourceBoard129 resourceBoard;ULONGLONG resourceNext=0;
@@ -488,9 +493,47 @@ void StartPlugins129(){
  for(bool archive:{false,true}){std::wistringstream list(archive?runtimeConfig.loadMpq:runtimeConfig.loadDll);std::wstring path;while(std::getline(list,path,L','))if(!path.empty())LoadPlugin129(path,archive);}
  pluginsLoading129=false;
 }
+bool quickDropEnabled129=true,quickDropConsumed129=false;
 bool ToolCommandImpl129(const std::wstring& command){
  if(runtimeConfig.mode!=wht::RunMode::Local)return false;
  std::wistringstream in(command);std::wstring name,action,extra;in>>name;
+ if(name==L"#item"){
+  std::wstring args;std::getline(in,args);uint32_t code=0;unsigned count=0;
+  if(!wht::ParseCreateUnit129(args,code,count)){wht::ShowNotification129(executableBase,"Usage: #item <rawcode> [1..50]",localMessage129);return false;}
+  wht::MousePosition129 cursor;if(!wht::ReadMousePosition129(executableBase,cursor)){wht::ShowNotification129(executableBase,"Create Item: point the cursor at the map",localMessage129);return false;}
+  auto made=wht::CreateItems129(executableBase,wht::ResolveCreateItem129(executableBase),code,count,cursor.x,cursor.y);
+  wht::ShowNotification129(executableBase,"Create Item: "+std::to_string(made)+"/"+std::to_string(count)+(made?" created":" (invalid rawcode or unavailable native)"),localMessage129);return made==count;
+ }
+ if(name==L"#quickdrop"){
+  bool enabled=!quickDropEnabled129;
+  if(in>>action){if((action!=L"0"&&action!=L"1")||in>>extra){wht::ShowNotification129(executableBase,"Usage: #quickdrop [0|1]",localMessage129);return false;}enabled=action==L"1";}
+  quickDropEnabled129=enabled;wht::ShowNotification129(executableBase,std::string("Quick Drop (Shift + Right Click): ")+(enabled?"ON":"OFF"),localMessage129);return true;
+ }
+ if(name==L"#dropitem"){
+  if(!(in>>action)||action.size()!=1||action[0]<L'1'||action[0]>L'6'||in>>extra){wht::ShowNotification129(executableBase,"Usage: #dropitem <1..6>",localMessage129);return false;}
+  const char* error=nullptr;const auto slot=unsigned(action[0]-L'1');
+  inventoryActions129.selling=false;inventoryActions129.due=GetTickCount64()+2000;
+  const bool ok=wht::DropItemSlot129(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveDropItems129(executableBase),slot,&error);
+  wht::ShowNotification129(executableBase,ok?"Dropped item from slot "+std::to_string(slot+1):std::string("Drop Item: ")+(error?error:"Unavailable"),localMessage129);return ok;
+ }
+ if(name==L"#save"){
+  std::wstring args;std::getline(in,args);std::string filename;const char* error=nullptr;
+  if(!wht::ParseSaveName129(args,filename)){wht::ShowNotification129(executableBase,"Usage: #save [name: letters, numbers, _ or -]",localMessage129);return false;}
+  const bool ok=wht::RequestSaveGame129(executableBase,filename.c_str(),wht::ResolveSaveGame129(executableBase),&error);
+  wht::ShowNotification129(executableBase,ok?"Save requested: "+filename:std::string("Save: ")+(error?error:"Unavailable"),localMessage129);return ok;
+ }
+ if(name==L"#shareall"){
+  bool enabled=true;if(in>>action){if((action!=L"0"&&action!=L"1")||in>>extra){wht::ShowNotification129(executableBase,"Usage: #shareall [0|1]",localMessage129);return false;}enabled=action==L"1";}
+  unsigned changed=0;const char* error=nullptr;
+  const bool ok=wht::ShareControl129(wht::ResolveShareControl129(executableBase),enabled,changed,&error);
+  wht::ShowNotification129(executableBase,std::string("Shared Control: ")+(enabled?"ON":"OFF")+" ("+std::to_string(changed)+" players changed)"+(ok?std::string{}:std::string(": ")+(error?error:"Unavailable")),localMessage129);return ok;
+ }
+ if(name==L"#srand"){
+  std::wstring args;std::getline(in,args);uint32_t seed=0;const char* error=nullptr;
+  if(!wht::ParseRandomSeed129(args,seed)){wht::ShowNotification129(executableBase,"Usage: #srand [0..4294967295] (default 0)",localMessage129);return false;}
+  if(!wht::SetRandomSeed129(executableBase,seed,wht::ResolveRandomSeed129(executableBase),&error)){wht::ShowNotification129(executableBase,std::string("Random Seed: ")+(error?error:"Unavailable"),localMessage129);return false;}
+  wht::ShowNotification129(executableBase,"Random Seed: "+std::to_string(seed),localMessage129);return true;
+ }
  if(name==L"#autopick"){
   bool enabled=!inventoryActions129.autoPick;
   if(in>>action){if((action!=L"0"&&action!=L"1")||in>>extra)return false;enabled=action==L"1";}
@@ -1057,7 +1100,7 @@ bool ToolCommand(const std::wstring& command){
  const bool result=ToolCommandImpl129(command);if(!result)return false;
  std::wistringstream input(command);std::wstring name,argument;input>>name>>argument;
  std::string feedback;
- if(name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
+ if(name==L"#item"||name==L"#quickdrop"||name==L"#dropitem"||name==L"#save"||name==L"#shareall"||name==L"#srand"||name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
  if(name==L"#armor")return true;
  if(name==L"#ms")return true;
  if(name==L"#ggl"||name==L"#gll"||name==L"#gg"||name==L"#gl")return true;
@@ -1215,6 +1258,15 @@ LRESULT CALLBACK InputMessages(int code,WPARAM removed,LPARAM data){
     }
     if(!handled&&allowed&&down&&key==VK_RETURN)chatTyping=!chatTyping;
     if(!handled&&down&&key==VK_ESCAPE)chatTyping=false;
+   }
+   if(msg.message==WM_RBUTTONUP&&quickDropConsumed129){quickDropConsumed129=false;handled=true;}
+   if(msg.message==WM_RBUTTONDOWN||msg.message==WM_RBUTTONDBLCLK){
+    quickDropConsumed129=false;
+    if(allowed&&!chatTyping&&!toolMenu.open&&!consoleState.active&&!macroRecorder.playing&&!macroRecorder.recording&&quickDropEnabled129&&GetForegroundWindow()==window&&(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+     RECT r{};GetClientRect(window,&r);auto canvas=wht::Canvas129(r.right,r.bottom);POINT p{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))};
+     const int slot=wht::QuickDropSlot129(executableBase,canvas.Project(p),canvas.width,canvas.height);
+     if(slot>=0){ToolCommand(L"#dropitem "+std::to_wstring(slot+1));handled=true;quickDropConsumed129=true;}
+    }
    }
    if(allowed&&!chatTyping&&(msg.message==WM_LBUTTONDOWN||msg.message==WM_LBUTTONUP||msg.message==WM_LBUTTONDBLCLK)){
     RECT r{};GetClientRect(window,&r);POINT p{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))};
