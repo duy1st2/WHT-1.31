@@ -282,10 +282,12 @@ void __fastcall KillUnitMock129(uintptr_t unit,DWORD,const float* life){
  ++killCallsMock129;killAbiMock129&=unit==invulUnitMock129&&life==reinterpret_cast<const float*>(executableBase+0xd2d88c)&&*life==0.f;
  if(killReassignMock129)*reinterpret_cast<uint32_t*>(unit+0x10)=23;
 }
+#include "mth-recipe-contracts.hpp"
 int wmain(int argc,wchar_t** argv){try{
 
  auto checkAt=[](bool ok,int line){if(!ok)throw std::runtime_error("version129 contract failed at line "+std::to_string(line));};
 #define check(...) checkAt((__VA_ARGS__),__LINE__)
+
  {
   check(wht::InventoryBoundsHit129(.49f,.07f,.52f,.10f,.50f,.08f));
   check(!wht::InventoryBoundsHit129(.49f,.07f,.52f,.10f,.53f,.08f));
@@ -1841,6 +1843,17 @@ int wmain(int argc,wchar_t** argv){try{
   automatic.Reset();check(automatic.state.sequences.empty());
   check(!wht::HoverSkillOrder129(0,{},800,600));check(!wht::AutoSkillTarget129(0,100,1024));
  }
- if(inputHook)UnhookWindowsHookEx(inputHook);
+ {wht::InventoryActions129 pick;check(pick.AcceptPickup(1));check(!pick.AcceptPickup(0));pick.pickupTarget=123;pick.due=999;pick.ToggleGoku(true);check(pick.autoPickGoku&&pick.AcceptPickup(0x49303136)&&!pick.AcceptPickup(1)&&!pick.pickupTarget&&!pick.due);pick.ToggleGoku(false);check(pick.AcceptPickup(1));pick.Reset();check(!pick.autoPickGoku);wht::Mth129 toolbar;toolbar.shown[5]=true;auto r=wht::Mth129::Rect(5);check(toolbar.Hit({LONG((r.right-r.width/2)*1000),LONG((.6f-r.bottom-r.height/2)*1000)},800,600)==5);} {wht::Mth129 route;
+  check(!route.SetCourier(0)&&!route.ValidCourier(0,{},0));route.courier={123,456};route.courierSession=789;route.Reset();check(!route.courier.unit&&!route.courierSession);
+  check(!route.QueueRoute(0,-1,5)&&!route.QueueRoute(0,6,5));
+  for(int laps:{1,5,20}){route.route=0;route.remaining=laps;route.second=false;
+   for(int leg=0;leg<laps*2;++leg){route.sent=true;check(route.Reached()==(leg==laps*2-1));}
+   check(route.route==-1&&route.remaining==0);
+  }
+  route.route=2;route.remaining=5;check(!route.TickRoute(0,true,false,100)&&route.route==2);
+  check(std::string(route.TickRoute(0,false,false,100))=="MTH Route: OFF"&&route.route==-1);
+  for(unsigned i=6;i<12;++i){route.shown={};route.shown[i]=true;auto r=wht::Mth129::Rect(i);check(route.Hit({LONG((r.right-r.width/2)*1000),LONG((.6f-r.bottom-r.height/2)*1000)},800,600)==int(i));}
+  route.route=3;route.Reset();check(route.route==-1&&route.remaining==0);
+ } TestMthRecipeContracts(); for(int i=0;i<12;++i)check(wht::MthUiSlot129(i)==(i%3)*4+i/3); check(wht::MthUiSlot129(-1)==-1); check(!wht::MthAdapter129(0,nullptr).Available()); if(inputHook)UnhookWindowsHookEx(inputHook);
  std::cout<<"PASS version129 label, camera/chat ABI, frame layout, menu settings and macro controls\n";return 0;
 }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}}

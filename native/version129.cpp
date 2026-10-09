@@ -44,9 +44,11 @@ wht::Mute129 mutedChat129;
 #include "copy_unit129.hpp"
 #include "drop_items129.hpp"
 #include "inventory_actions129.hpp"
+#include "mth129.hpp"
 #include "random_seed129.hpp"
 #include "share_control129.hpp"
 wht::InventoryActions129 inventoryActions129;
+wht::Mth129 mth129;
 wht::NoCooldown129 noCooldown129;
 #include "remove_unit129.hpp"
 #include "unit_damage129.hpp"
@@ -443,6 +445,7 @@ void __fastcall LifeText129(uintptr_t font,DWORD,const char* text){
  if(!lifeMana129.Handle(executableBase,font,text,caller-executableBase,LifeFlags129(),originalLifeText129))originalLifeText129(font,text);
 }
 bool ControlAvailable129(const wht::ToolMenuControl& d){
+ if(!wcscmp(d.section,L"MTHKEY"))for(const auto* key:{L"Noti",L"PickGoku",L"PickGokuDraw",L"ChayGa1",L"ChayGa2",L"ChayGa3",L"ChaySoi1",L"ChaySoi2",L"ChaySoi3",L"ChayGa1_count",L"ChayGa2_count",L"ChayGa3_count",L"ChaySoi1_count",L"ChaySoi2_count",L"ChaySoi3_count",L"AutoGaDraw1",L"AutoGaDraw2",L"AutoGaDraw3",L"AutoSoiDraw1",L"AutoSoiDraw2",L"AutoSoiDraw3",L"Shield",L"Ice",L"Wild",L"Frozen",L"Phoenix",L"ShieldDraw",L"IceDraw",L"WildDraw",L"FrozenDraw",L"PhoenixDraw"})if(!wcscmp(d.key,key))return clickButton!=nullptr;
  if(!wcscmp(d.section,L"MTHKEY")&&(!wcscmp(d.key,L"TimeBoss")||!wcscmp(d.key,L"MTH49Enable")||!wcscmp(d.key,L"G17Enable")))return levelHooksReady129;
  if(!wcscmp(d.section,L"Event")&&(!wcscmp(d.key,L"Borderless")||!wcscmp(d.key,L"Lock Cursor")||!wcscmp(d.key,L"Sound Start Game")))return true;
  if(!wcscmp(d.section,L"Event")&&!wcscmp(d.key,L"Fast Menu"))return originalMenuTransition129!=nullptr;
@@ -507,6 +510,37 @@ bool quickDropConsumed129=false;
 bool ToolCommandImpl129(const std::wstring& command){
  if(runtimeConfig.mode!=wht::RunMode::Local)return false;
  std::wistringstream in(command);std::wstring name,action,extra;in>>name;
+ if(name==L"#setga"){
+  if(in>>extra)return false;
+  const bool ok=mth129.SetCourier(executableBase);
+  wht::ShowNotification129(executableBase,ok?"Set Ga: selected unit assigned":"Set Ga: select a living owned unit",localMessage129);
+  return ok;
+ }
+ const wchar_t* routeCommands[]={L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};
+ for(int i=0;i<6;++i)if(name==routeCommands[i]){
+  if(in>>extra)return false;
+  if(!(runtimeConfig.mth49Enable||runtimeConfig.g17Enable))return false;
+  const int counts[]={runtimeConfig.chayGa1Count,runtimeConfig.chayGa2Count,runtimeConfig.chayGa3Count,runtimeConfig.chaySoi1Count,runtimeConfig.chaySoi2Count,runtimeConfig.chaySoi3Count};
+  const bool ok=mth129.QueueRoute(executableBase,i,counts[i]);
+  if(runtimeConfig.mthNoti)wht::ShowNotification129(executableBase,std::string(wht::MthName129(i+6))+": "+(ok?"ON":"select a Chicken/Wolf unit or assign a living owned unit with #setga; another MTH action may be running"),localMessage129);return ok;
+ }
+ if(name==L"#goku"||name==L"#autopickgoku"){
+  bool enabled=!inventoryActions129.autoPickGoku;
+  if(in>>action){if((action!=L"0"&&action!=L"1")||in>>extra)return false;enabled=action==L"1";}
+  if(enabled&&!(runtimeConfig.mth49Enable||runtimeConfig.g17Enable))return false;
+  inventoryActions129.ToggleGoku(enabled);
+  if(runtimeConfig.mthNoti)wht::ShowNotification129(executableBase,enabled?"Auto Pick Goku: ON":"Auto Pick Goku: OFF",localMessage129);
+  return true;
+ }
+ for(int i=0;i<5;++i){
+  const wchar_t* commands[]={L"#shield",L"#ice",L"#wild",L"#frozen",L"#phoenix"};
+  if(name==commands[i]){
+   if(in>>extra||!(runtimeConfig.mth49Enable||runtimeConfig.g17Enable)||!clickButton)return false;
+   const bool queued=mth129.Queue(executableBase,i);
+   if(runtimeConfig.mthNoti)wht::ShowNotification129(executableBase,std::string(wht::MthName129(i))+": "+(queued?"queued":"select a hero; another recipe may be running"),localMessage129);
+   return queued;
+  }
+ }
  if(name==L"#copyitem"){
   std::wstring args;std::getline(in,args);unsigned slot=0,count=1;
   if(!wht::ParseCopyItem129(args,slot,count)){wht::ShowNotification129(executableBase,"Usage: #copyitem <slot 1..6> [1..50]",localMessage129);return false;}
@@ -1125,7 +1159,7 @@ bool ToolCommand(const std::wstring& command){
  const bool result=ToolCommandImpl129(command);if(!result)return false;
  std::wistringstream input(command);std::wstring name,argument;input>>name>>argument;
  std::string feedback;
- if(name==L"#sellslot"||name==L"#copyitem"||name==L"#item"||name==L"#quickdrop"||name==L"#dropitem"||name==L"#save"||name==L"#shareall"||name==L"#srand"||name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
+ if(name==L"#setga"||name==L"#chicken1"||name==L"#chicken2"||name==L"#chicken3"||name==L"#wolf1"||name==L"#wolf2"||name==L"#wolf3"||name==L"#goku"||name==L"#autopickgoku"||name==L"#shield"||name==L"#ice"||name==L"#wild"||name==L"#frozen"||name==L"#phoenix"||name==L"#sellslot"||name==L"#copyitem"||name==L"#item"||name==L"#quickdrop"||name==L"#dropitem"||name==L"#save"||name==L"#shareall"||name==L"#srand"||name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
  if(name==L"#armor")return true;
  if(name==L"#ms")return true;
  if(name==L"#ggl"||name==L"#gll"||name==L"#gg"||name==L"#gl")return true;
@@ -1289,6 +1323,17 @@ LRESULT CALLBACK InputMessages(int code,WPARAM removed,LPARAM data){
        if(!autoSkills129.state.running&&!autoSkills129.state.Current(selected.identity))wht::ShowNotification129(executableBase,"Auto Skills: assign skills with Ctrl+Alt+1..9 first",localMessage129);
        else{autoSkills129.state.running=!autoSkills129.state.running;autoSkills129.state.next=0;wht::ShowNotification129(executableBase,autoSkills129.state.running?"Auto Skills: ON":"Auto Skills: OFF",localMessage129);}
       }
+      else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&!macroRecorder.playing&&!macroRecorder.recording&&(runtimeConfig.mth49Enable||runtimeConfig.g17Enable)&&(key==runtimeConfig.shieldHotkey||key==runtimeConfig.iceHotkey||key==runtimeConfig.wildHotkey||key==runtimeConfig.frozenHotkey||key==runtimeConfig.phoenixHotkey)){
+       const unsigned keys[]={runtimeConfig.shieldHotkey,runtimeConfig.iceHotkey,runtimeConfig.wildHotkey,runtimeConfig.frozenHotkey,runtimeConfig.phoenixHotkey};
+       const wchar_t* commands[]={L"#shield",L"#ice",L"#wild",L"#frozen",L"#phoenix"};
+       for(unsigned i=0;i<5;++i)if(key&&key==keys[i]){ToolCommand(commands[i]);handled=true;break;}
+      }
+      else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&!macroRecorder.playing&&!macroRecorder.recording&&(runtimeConfig.mth49Enable||runtimeConfig.g17Enable)&&runtimeConfig.pickGokuHotkey&&key==runtimeConfig.pickGokuHotkey){ToolCommand(L"#goku");handled=true;}
+      else if(!ctrl&&!shift&&!alt&&!toolMenu.open&&!macroRecorder.playing&&!macroRecorder.recording&&(runtimeConfig.mth49Enable||runtimeConfig.g17Enable)&&(key==runtimeConfig.chayGa1Hotkey||key==runtimeConfig.chayGa2Hotkey||key==runtimeConfig.chayGa3Hotkey||key==runtimeConfig.chaySoi1Hotkey||key==runtimeConfig.chaySoi2Hotkey||key==runtimeConfig.chaySoi3Hotkey)){
+       const unsigned keys[]={runtimeConfig.chayGa1Hotkey,runtimeConfig.chayGa2Hotkey,runtimeConfig.chayGa3Hotkey,runtimeConfig.chaySoi1Hotkey,runtimeConfig.chaySoi2Hotkey,runtimeConfig.chaySoi3Hotkey};
+       const wchar_t* commands[]={L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};
+       for(unsigned i=0;i<6;++i)if(key&&key==keys[i]){ToolCommand(commands[i]);handled=true;break;}
+      }
       else if(action>=0)handled=ToolCommand(wht::ToolMenuOverlay::MacroCommand(size_t(action)));
       else if(runtimeConfig.commandKey&&key==runtimeConfig.commandKey&&!ctrl&&!shift&&!alt){ToggleCommandSettings();handled=true;}
       else if(key==VK_TAB&&runtimeConfig.showResource&&!toolMenu.open&&!ctrl&&!shift&&!alt){resourceExpanded=!resourceExpanded;resourceNext=0;handled=true;}
@@ -1330,6 +1375,10 @@ LRESULT CALLBACK InputMessages(int code,WPARAM removed,LPARAM data){
     RECT r{};GetClientRect(window,&r);POINT p{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))};
     auto canvas=wht::Canvas129(r.right,r.bottom);
     const auto projected=canvas.Project(p);
+    const int mthHit=mth129.Hit(projected,canvas.width,canvas.height);
+    if(!toolMenu.open&&!macroRecorder.playing&&!macroRecorder.recording&&mthHit>=0){
+     handled=true;if(msg.message==WM_LBUTTONDOWN){const wchar_t* commands[]={L"#shield",L"#ice",L"#wild",L"#frozen",L"#phoenix",L"#goku",L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};ToolCommand(commands[mthHit]);}
+    }
     if(!toolMenu.open&&skillsIconShown&&skillsIconRect.Hit(projected,canvas.width,canvas.height)){
      handled=true;
      if(msg.message==WM_LBUTTONDOWN){skillsIconPressed=true;ToolCommand(L"#allskills");}
@@ -1357,7 +1406,7 @@ void EnsureInput(){
  if(!window||!IsWindow(window))EnumWindows(FindWindow,0);
  if(!inputHook&&window){inputHook=SetWindowsHookExW(WH_GETMESSAGE,InputMessages,nullptr,GetWindowThreadProcessId(window,nullptr));}
 }
-void UpdateHelp(){RECT r{};POINT p{};GetClientRect(window,&r);GetCursorPos(&p);ScreenToClient(window,&p);auto canvas=wht::Canvas129(r.right,r.bottom);p=canvas.Project(p);auto help=toolMenu.HelpAt(p,canvas.width,canvas.height,runtimeConfig);if(skillsIconShown&&skillsIconRect.Hit(p,canvas.width,canvas.height))help=runtimeConfig.english?"All Skills\nSpend available hero skill points without manually opening the learn menu.":wht::Utf8(L"C\u1ed9ng to\u00e0n b\u1ed9 k\u1ef9 n\u0103ng\nD\u00f9ng \u0111i\u1ec3m k\u1ef9 n\u0103ng c\u00f2n l\u1ea1i c\u1ee7a t\u01b0\u1edbng, kh\u00f4ng c\u1ea7n t\u1ef1 m\u1edf d\u1ea5u +.");if(dropIconShown&&dropIconRect.Hit(p,canvas.width,canvas.height))help=runtimeConfig.english?"Drop All (#dropall)\nDrop all carried items on the ground.":wht::Utf8(L"Th\u1ea3 to\u00e0n b\u1ed9 \u0111\u1ed3 (#dropall)\nTh\u1ea3 t\u1ea5t c\u1ea3 v\u1eadt ph\u1ea9m trong t\u00fai xu\u1ed1ng \u0111\u1ea5t.");for(unsigned i=0;i<2;++i)if(inventoryIconsShown129[i]&&inventoryIconRects129[i].Hit(p,canvas.width,canvas.height))help=runtimeConfig.english?(i==0?"Auto Pick\nToggle automatic pickup of nearby items.":"Sell All\nSell carried items at a nearby allied shop."):wht::Utf8(i==0?L"T\u1ef1 nh\u1eb7t \u0111\u1ed3\nB\u1eadt ho\u1eb7c t\u1eaft t\u1ef1 nh\u1eb7t v\u1eadt ph\u1ea9m g\u1ea7n unit.":L"B\u00e1n to\u00e0n b\u1ed9 \u0111\u1ed3\nB\u00e1n v\u1eadt ph\u1ea9m t\u1ea1i shop g\u1ea7n unit.");toolMenu.UpdateHelp(p,canvas.width,canvas.height,GetForegroundWindow()==window,help);}
+void UpdateHelp(){RECT r{};POINT p{};GetClientRect(window,&r);GetCursorPos(&p);ScreenToClient(window,&p);auto canvas=wht::Canvas129(r.right,r.bottom);p=canvas.Project(p);auto help=toolMenu.HelpAt(p,canvas.width,canvas.height,runtimeConfig);if(skillsIconShown&&skillsIconRect.Hit(p,canvas.width,canvas.height))help=runtimeConfig.english?"All Skills\nSpend available hero skill points without manually opening the learn menu.":wht::Utf8(L"C\u1ed9ng to\u00e0n b\u1ed9 k\u1ef9 n\u0103ng\nD\u00f9ng \u0111i\u1ec3m k\u1ef9 n\u0103ng c\u00f2n l\u1ea1i c\u1ee7a t\u01b0\u1edbng, kh\u00f4ng c\u1ea7n t\u1ef1 m\u1edf d\u1ea5u +.");if(dropIconShown&&dropIconRect.Hit(p,canvas.width,canvas.height))help=runtimeConfig.english?"Drop All (#dropall)\nDrop all carried items on the ground.":wht::Utf8(L"Th\u1ea3 to\u00e0n b\u1ed9 \u0111\u1ed3 (#dropall)\nTh\u1ea3 t\u1ea5t c\u1ea3 v\u1eadt ph\u1ea9m trong t\u00fai xu\u1ed1ng \u0111\u1ea5t.");for(unsigned i=0;i<2;++i)if(inventoryIconsShown129[i]&&inventoryIconRects129[i].Hit(p,canvas.width,canvas.height))help=runtimeConfig.english?(i==0?"Auto Pick\nToggle automatic pickup of nearby items.":"Sell All\nSell carried items at a nearby allied shop."):wht::Utf8(i==0?L"T\u1ef1 nh\u1eb7t \u0111\u1ed3\nB\u1eadt ho\u1eb7c t\u1eaft t\u1ef1 nh\u1eb7t v\u1eadt ph\u1ea9m g\u1ea7n unit.":L"B\u00e1n to\u00e0n b\u1ed9 \u0111\u1ed3\nB\u00e1n v\u1eadt ph\u1ea9m t\u1ea1i shop g\u1ea7n unit.");const int mthHover=mth129.Hit(p,canvas.width,canvas.height);if(mthHover>=0)help=std::string(wht::MthName129(mthHover))+"\n"+(runtimeConfig.english?"Buy recipe components and combine at nearby MTH shops. Select your hero first.":wht::Utf8(L"Mua nguy\u00ean li\u1ec7u v\u00e0 \u00e9p t\u1ea1i shop MTH g\u1ea7n hero. Ch\u1ecdn hero tr\u01b0\u1edbc."));if(mthHover==5)help=runtimeConfig.english?"Auto Pick Goku\nPick up nearby Goku items (I016); stop when one is in inventory.":wht::Utf8(L"T\u1ef1 nh\u1eb7t Goku\nNh\u1eb7t item Goku (I016) g\u1ea7n unit; t\u1ef1 t\u1eaft khi \u0111\u00e3 v\u00e0o t\u00fai.");if(mthHover>=6)help=wht::MthName129(mthHover)+std::string("\n")+(runtimeConfig.english?"Move the selected owned Chicken/Wolf unit along this route for the configured number of laps.":wht::Utf8(L"Ch\u1ea1y unit G\u00e0/S\u00f3i \u0111ang ch\u1ecdn theo tuy\u1ebfn v\u00e0 s\u1ed1 l\u01b0\u1ee3t \u0111\u00e3 c\u1ea5u h\u00ecnh. \u0110\u1ed5i unit \u0111ang ch\u1ecdn \u0111\u1ec3 d\u1eebng."));toolMenu.UpdateHelp(p,canvas.width,canvas.height,GetForegroundWindow()==window,help);}
 void UpdateMemory(bool enabled){
  if(!toolMenu.initialized)return;
  if(enabled&&!memoryFrame){memoryFrame=toolMenu.Frame(executableBase,toolMenu.independentHost,{.47f,.535f,.23f,.026f});if(memoryFrame)memoryFont=toolMenu.TextIn(memoryFrame,{.47f,.535f,.23f,.026f},"",true,.015f);}
@@ -1453,7 +1502,7 @@ uintptr_t __fastcall DestroyBar129(uintptr_t bar,DWORD,unsigned flags){
  return originalBarDestroy129(bar,flags);
 }
 bool SafeUpdateMenu(uintptr_t owner,bool allowed){
- __try {toolMenu.Update(executableBase,owner,runtimeConfig,allowed,&frameApi);regen129.Update(executableBase,runtimeConfig,allowed,toolMenu);UpdateMemory(allowed&&runtimeConfig.showMem);UpdateClock(allowed&&runtimeConfig.showTimer);UpdateResources(allowed&&runtimeConfig.showResource);UpdateSkillsIcon(allowed&&runtimeConfig.showInsAllSkills);UpdateDropIcon(allowed&&runtimeConfig.showDropAll);UpdateInventoryIcons129(allowed);UpdateHelp();UpdateTooltip129(owner,allowed);hotkeyLabels129.Update(executableBase,runtimeConfig,allowed,toolMenu);return true;}
+ __try {toolMenu.Update(executableBase,owner,runtimeConfig,allowed,&frameApi);regen129.Update(executableBase,runtimeConfig,allowed,toolMenu);UpdateMemory(allowed&&runtimeConfig.showMem);UpdateClock(allowed&&runtimeConfig.showTimer);UpdateResources(allowed&&runtimeConfig.showResource);UpdateSkillsIcon(allowed&&runtimeConfig.showInsAllSkills);UpdateDropIcon(allowed&&runtimeConfig.showDropAll);UpdateInventoryIcons129(allowed);mth129.Update(executableBase,owner,runtimeConfig,allowed,toolMenu);UpdateHelp();UpdateTooltip129(owner,allowed);hotkeyLabels129.Update(executableBase,runtimeConfig,allowed,toolMenu);return true;}
  __except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
 void UpdateTooltip129(uintptr_t owner,bool allowed){
@@ -1489,7 +1538,7 @@ void UpdateTools(){
   ApplyHpDimensions129(false);
   if(macroRecorder.recording)macroRecorder.FinishRecording();macroRecorder.Stop();
   // Map teardown releases native frames. Forget pointers without dereferencing them.
-  mutedChat129.Reset();repeatChat129.Reset();repeatMessage129.Reset();queuedChatDue129=0;noCooldown129.Reset();ApplySpeedMultiplier129(1.f);timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();if(toolMenu.parent)toolMenu.Reset();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;chatTyping=false;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();autoSkills129.Reset();pinnedTarget129={};stats129.Reset();lifeMana129.Reset();fpsState={};timeOfDay={};matchStart={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;dropIconFrame=dropIcon=nullptr;dropIconShown=dropIconPressed=false;inventoryActions129.Reset();ResetInventoryIcons129();return;
+  mutedChat129.Reset();repeatChat129.Reset();repeatMessage129.Reset();queuedChatDue129=0;noCooldown129.Reset();ApplySpeedMultiplier129(1.f);timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();if(toolMenu.parent)toolMenu.Reset();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;chatTyping=false;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();autoSkills129.Reset();pinnedTarget129={};stats129.Reset();lifeMana129.Reset();fpsState={};timeOfDay={};matchStart={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;dropIconFrame=dropIcon=nullptr;dropIconShown=dropIconPressed=false;inventoryActions129.Reset();mth129.Reset();ResetInventoryIcons129();return;
  }
  const auto owner=*reinterpret_cast<uintptr_t*>(executableBase+0xd3d7f8);
  float startSeconds=0;
@@ -1498,7 +1547,7 @@ void UpdateTools(){
   if(!startSoundPlayer129(MAKEINTRESOURCEW(101),runtimeModule,SND_RESOURCE|SND_ASYNC|SND_NODEFAULT|SND_NOSTOP))wht::Log(runtimeFolder,"WHT 1.29: start sound unavailable; skipped.");
  if(resourceFailed)return;
  if(!resourceArchive&&!wht::MountResources129(executableBase,mixPath,resourceArchive)){resourceFailed=true;toolMenu.failed=true;wht::Log(runtimeFolder,"WHT 1.29: embedded MPQ mount failed.");return;}
- if(toolMenu.parent&&toolMenu.parent!=owner){timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();autoSkills129.Reset();pinnedTarget129={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;dropIconFrame=dropIcon=nullptr;dropIconShown=dropIconPressed=false;inventoryActions129.Reset();ResetInventoryIcons129();}
+ if(toolMenu.parent&&toolMenu.parent!=owner){timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();autoSkills129.Reset();pinnedTarget129={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;dropIconFrame=dropIcon=nullptr;dropIconShown=dropIconPressed=false;inventoryActions129.Reset();mth129.Reset();ResetInventoryIcons129();}
  RECT r{};GetClientRect(window,&r);wht::SetViewport129(r.right,r.bottom);auto canvas=wht::Canvas129(r.right,r.bottom);wht::ToolMenuOverlay::SetViewport(canvas.width,canvas.height);
  const bool allowed=runtimeConfig.mode==wht::RunMode::Local;
  ApplyFogEffect129(allowed);ApplyLevels129(allowed&&runtimeConfig.stateTagShowLevel);ApplyStateValues129(allowed);
@@ -1506,8 +1555,14 @@ void UpdateTools(){
  bool nativeTyping=false;if(wht::ChatOpen129(executableBase,nativeTyping))chatTyping=nativeTyping;
  const auto smartSelection=wht::SelectedSkill129(executableBase);
  if(!smartCast129.Valid(allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window&&runtimeConfig.modeCast==1,wht::TargetMode129(executableBase),smartSelection.unit,smartSelection.identity))smartCast129.Reset();
- const auto inventoryResult=inventoryActions129.TickNative(executableBase,allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window,GetTickCount64());
+ if(inventoryActions129.autoPickGoku&&!(allowed&&(runtimeConfig.mth49Enable||runtimeConfig.g17Enable)))inventoryActions129.ToggleGoku(false);
+ const auto inventoryResult=inventoryActions129.TickNative(executableBase,allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&!mth129.run.Active()&&mth129.pending<0&&mth129.route<0&&GetForegroundWindow()==window,GetTickCount64());
  if(inventoryResult)wht::ShowNotification129(executableBase,inventoryResult,localMessage129);
+ const bool mthEnabled=allowed&&(runtimeConfig.mth49Enable||runtimeConfig.g17Enable);
+ const auto routeResult=mth129.TickRoute(executableBase,mthEnabled,!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window,GetTickCount());
+ if(routeResult&&runtimeConfig.mthNoti)wht::ShowNotification129(executableBase,routeResult,localMessage129);
+ const auto mthResult=mth129.Tick(executableBase,clickButton,mthEnabled,!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window,GetTickCount());
+ if(mthResult&&runtimeConfig.mthNoti)wht::ShowNotification129(executableBase,std::string(wht::MthName129(mth129.kind))+": "+mthResult,localMessage129);
  allSkills.Tick(executableBase,allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window,clickButton,GetTickCount64());
  fpsState.Apply(executableBase,allowed&&runtimeConfig.showFps,fpsMode);
  stats129.Apply(executableBase,allowed&&runtimeConfig.statsCommas,originalLifeText129);

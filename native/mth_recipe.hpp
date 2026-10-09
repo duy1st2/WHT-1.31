@@ -25,6 +25,22 @@ inline MthRecipe MakeMthRecipe(int kind, const std::array<uint32_t, 6>& bag) {
         frozen |= id == 0x49303245; // I02E
     }
     MthRecipe r;
+    if(kind>=0&&kind<=2){
+        r.count=kind==0?2:1;r.gold=10000;
+        r.stages[0].shop=kind==0?0x6e303035:0x68303430;
+        if(kind==0){
+            bool armor=false,rune=false,crystal=false;
+            for(auto id:bag){
+                armor|=id==0x49303244||id==0x61726172;
+                rune|=id==0x49303151||id==0x7266726f||id==0x726f6672||id==0x726e6672||id==0x66727374;
+                crystal|=id==0x49303245||id==0x63727362||id==0x63727973||id==0x70687374;
+            }
+            if(!armor)r.stages[0].Add({0});if(!rune)r.stages[0].Add({3});if(!crystal)r.stages[0].Add({6});
+            r.stages[1].shop=0x6e303138;r.stages[1].Add({1});
+        }else if(kind==1)r.stages[0].Add({0,3,6,9});
+        else r.stages[0].Add({1,4,7,10});
+        return r;
+    }
     if (kind != 3 && kind != 4) return r;
     r.stages[0].shop = 0x68303430; // h040
     r.stages[1].shop = 0x6e303138; // n018

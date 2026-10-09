@@ -33,6 +33,10 @@ struct NearbyObjects129 {uintptr_t objects[256]{};unsigned count=0;};
 inline int __cdecl CollectNearby129(uintptr_t object,void* context){auto& list=*static_cast<NearbyObjects129*>(context);if(object&&list.count<256)list.objects[list.count++]=object;return 1;}
 inline float InventoryReal129(InventoryActionsApi129::Getter getter,uint32_t handle){const auto bits=getter(handle);float value;memcpy(&value,&bits,4);return value;}
 struct InventoryActions129 {
+ static constexpr uint32_t GokuType=0x49303136;
+ bool autoPickGoku=false;
+ bool AcceptPickup(uint32_t type)const{return type&&(!autoPickGoku||type==GokuType);}
+ void ToggleGoku(bool enabled){autoPickGoku=enabled;pickupTarget=0;pickupSent=0;due=0;}
  uintptr_t sellOnly=0;bool autoPick=false,selling=false;uint64_t due=0,deadline=0;SkillSelection129 source{};uint32_t pending=0;unsigned sold=0;uint32_t pickupTarget=0;uint64_t pickupSent=0,sellRetry=0;uintptr_t pickupUnit=0;uint64_t pickupIdentity=0;
  void Reset(){*this={};}
  bool StartSell(uintptr_t b,const SkillSelection129& selected,const DropItemsApi129& drop){
@@ -48,7 +52,7 @@ struct InventoryActions129 {
   }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
  }
  const char* TickNative(uintptr_t b,bool allowed,uint64_t now){
-  if(!allowed||now<due||(!autoPick&&!selling))return nullptr;
+  if(!allowed||now<due||(!autoPick&&!autoPickGoku&&!selling))return nullptr;
   __try {
    const auto api=ResolveInventoryActions129(b);const auto drop=ResolveDropItems129(b);const auto posApi=ResolveTeleportApi129(b);
    const auto selected=SelectedSkill129(b);uint32_t code=0;TeleportPosition129 pos;
@@ -61,7 +65,9 @@ struct InventoryActions129 {
    if(!hero||!local||api.owner(hero)!=local||InventoryReal129(api.life,hero)<=.405f)return nullptr;
    const auto capacity=drop.size(selected.unit);if(!capacity||capacity>6)return nullptr;
    unsigned occupied=0;uint32_t item=0;bool pendingHeld=false;
-   for(unsigned i=0;i<capacity;++i){const auto raw=drop.item(selected.unit,i);if(!raw)continue;++occupied;const auto h=api.handle(context,raw,0);if(h==pending)pendingHeld=true;if(!item&&h&&api.pawnable(h)&&(!sellOnly||raw==sellOnly))item=h;}
+   bool hasGoku=false;
+   for(unsigned i=0;i<capacity;++i){const auto raw=drop.item(selected.unit,i);if(!raw)continue;++occupied;const auto h=api.handle(context,raw,0);if(h&&api.type(h)==GokuType)hasGoku=true;if(h==pending)pendingHeld=true;if(!item&&h&&api.pawnable(h)&&(!sellOnly||raw==sellOnly))item=h;}
+   if(!selling&&autoPickGoku&&hasGoku){ToggleGoku(false);return "Auto Pick Goku: OFF (Goku is in inventory)";}
    if(selling&&pending){if(pendingHeld&&now<sellRetry){due=now+25;return nullptr;}if(!pendingHeld){++sold;if(sellOnly){selling=false;sellOnly=0;pending=0;return "Quick Sell completed";}}pending=0;}
    if(selling&&!item){selling=false;return sellOnly?"Quick Sell: item unavailable or cannot be sold":occupied?"Sell All finished: remaining items cannot be sold":"Sell All completed";}
    if(!selling&&occupied>=capacity){due=now+500;return nullptr;}
@@ -76,7 +82,7 @@ struct InventoryActions129 {
      if(*reinterpret_cast<uintptr_t*>(raw)!=b+0xa9c504||!api.ability(raw,0x41706974,0,1,1,1))continue;
      if(InventoryReal129(api.life,h)<=.405f||(api.playerId(api.owner(h))<24&&!api.ally(api.owner(h),local)))continue;
      float xyz[3]={NAN,NAN,NAN};posApi.position(raw+0x26c,xyz);x=xyz[0];y=xyz[1];
-    }else{if(!api.type(h)||api.owned(h)||!api.visible(h)||InventoryReal129(api.life,h)<=0)continue;x=InventoryReal129(api.x,h);y=InventoryReal129(api.y,h);}
+    }else{if(!AcceptPickup(api.type(h))||api.owned(h)||!api.visible(h)||InventoryReal129(api.life,h)<=0)continue;x=InventoryReal129(api.x,h);y=InventoryReal129(api.y,h);}
     if(!selling&&h==pickupTarget)pickupPresent=true;
     const float distance=(x-pos.x)*(x-pos.x)+(y-pos.y)*(y-pos.y);if(std::isfinite(distance)&&distance<best){best=distance;target=h;}
    }
