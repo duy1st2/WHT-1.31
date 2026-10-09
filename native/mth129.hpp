@@ -72,8 +72,27 @@ struct Mth129 {
  bool SetCourier(uintptr_t base){
   __try{auto s=SelectedSkill129(base);MthAdapter129 a(base,nullptr);auto session=a.World();if(!ValidCourier(base,s,session))return false;courier=s;courierSession=session;return true;}__except(EXCEPTION_EXECUTE_HANDLER){return false;}
  }
+ float baseX=0,baseY=0;uintptr_t baseSession=0;bool returnPending=false;
+ bool SetBase(uintptr_t base){
+  __try{auto selected=SelectedSkill129(base);MthAdapter129 a(base,nullptr);auto xy=ResolveTeleportApi129(base);
+   if(!a.drop||!xy.position||!LiveDropUnit129(base,selected,a.drop))return false;
+   float pos[3]={NAN,NAN,NAN};xy.position(selected.unit+0x26c,pos);
+   if(!std::isfinite(pos[0])||!std::isfinite(pos[1])||!a.World())return false;
+   baseX=pos[0];baseY=pos[1];baseSession=a.World();return true;
+  }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
+ }
+ bool QueueReturn(uintptr_t base){if(!baseSession||baseSession!=courierSession||!ValidCourier(base,courier,courierSession)||pending>=0||run.Active())return false;route=-1;returnPending=true;return true;}
+ const char* TickReturn(uintptr_t base,bool enabled,bool ready){
+  if(!returnPending)return nullptr;if(!enabled){returnPending=false;return "Courier Return: cancelled";}if(!ready)return nullptr;
+  returnPending=false;
+  __try{if(baseSession!=courierSession||!ValidCourier(base,courier,courierSession))return "Courier Return: assigned unit unavailable";
+   if(memcmp((void*)(base+0x9aca0),"\x55\x8b\xec",3))return "Courier Return: movement native unavailable";
+   MthAdapter129 a(base,nullptr);auto h=a.Handle(courier.unit);
+   return reinterpret_cast<int(__cdecl*)(uint32_t,uint32_t,const float*,const float*)>(base+0x9aca0)(h,0xd0012,&baseX,&baseY)?"Courier Return: moving to base":"Courier Return: movement order refused";
+  }__except(EXCEPTION_EXECUTE_HANDLER){return "Courier Return: native action failed";}
+ }
  int route=-1,remaining=0;bool second=false,sent=false;uint32_t routeDue=0,routeDeadline=0;SkillSelection129 routeUnit{};
- bool QueueRoute(uintptr_t base,int index,int count){if(index<0||index>=6||pending>=0||run.Active())return false;auto selected=SelectedSkill129(base);routePinned=false;if(ValidCourier(base,courier,courierSession)){selected=courier;routePinned=true;}if(!selected.unit)return false;MthAdapter129 a(base,nullptr);if(!ValidCourier(base,selected,a.World())||(!routePinned&&a.isType(a.Handle(selected.unit),0)))return false;route=index;remaining=std::clamp(count,1,20);second=sent=false;routeDue=0;routeUnit=selected;return true;}
+ bool QueueRoute(uintptr_t base,int index,int count){if(index<0||index>=6||returnPending||pending>=0||run.Active())return false;auto selected=SelectedSkill129(base);routePinned=false;if(ValidCourier(base,courier,courierSession)){selected=courier;routePinned=true;}if(!selected.unit)return false;MthAdapter129 a(base,nullptr);if(!ValidCourier(base,selected,a.World())||(!routePinned&&a.isType(a.Handle(selected.unit),0)))return false;route=index;remaining=std::clamp(count,1,20);second=sent=false;routeDue=0;routeUnit=selected;return true;}
  bool Reached(){sent=false;if(second&&!--remaining){route=-1;return true;}second=!second;return false;}
  const char* TickRoute(uintptr_t base,bool enabled,bool ready,uint32_t now){
   if(route<0)return nullptr;if(!enabled){route=-1;return "MTH Route: OFF";}if(!ready)return nullptr;
@@ -101,8 +120,8 @@ struct Mth129 {
  void Release(){pressed=-1;}
  static ToolMenuRect Rect(unsigned i){return {.305f+.041f*(i%6),.142f+.028f*(i/6),.038f,.024f};}
  ToolMenuRect ButtonRect(unsigned i)const{unsigned slot=0;for(unsigned j=0;j<i;++j)if(shown[j])++slot;return Rect(slot);}
- void Reset(){courier={};courierSession=0;routePinned=false;run.Reset();route=-1;remaining=0;routeUnit={};pending=kind=-1;requested={};owner=0;frames={};labels={};shown={};down={};pressUntil={};pressed=-1;}
- bool Queue(uintptr_t base,int action){if(action<0||action>4||route>=0||pending>=0||run.Active())return false;requested=SelectedSkill129(base);if(!requested.unit)return false;pending=action;return true;}
+ void Reset(){baseX=baseY=0;baseSession=0;returnPending=false;courier={};courierSession=0;routePinned=false;run.Reset();route=-1;remaining=0;routeUnit={};pending=kind=-1;requested={};owner=0;frames={};labels={};shown={};down={};pressUntil={};pressed=-1;}
+ bool Queue(uintptr_t base,int action){if(action<0||action>4||returnPending||route>=0||pending>=0||run.Active())return false;requested=SelectedSkill129(base);if(!requested.unit)return false;pending=action;return true;}
  const char* Tick(uintptr_t base,ClickFn129 click,bool enabled,bool ready,uint32_t now){
   if(!enabled){pending=-1;if(!run.Active())return nullptr;}
   if(!ready&&enabled)return nullptr;

@@ -45,6 +45,7 @@ wht::Mute129 mutedChat129;
 #include "drop_items129.hpp"
 #include "inventory_actions129.hpp"
 #include "mth129.hpp"
+#include "fog_click129.hpp"
 #include "random_seed129.hpp"
 #include "share_control129.hpp"
 wht::InventoryActions129 inventoryActions129;
@@ -444,7 +445,12 @@ void __fastcall LifeText129(uintptr_t font,DWORD,const char* text){
  if(stats129.Handle(executableBase,font,text,wht::StatsKind129(statCaller),runtimeConfig.mode==wht::RunMode::Local&&runtimeConfig.statsCommas,originalLifeText129))return;
  if(!lifeMana129.Handle(executableBase,font,text,caller-executableBase,LifeFlags129(),originalLifeText129))originalLifeText129(font,text);
 }
+wht::FogClick129 fogClick129;
+using SelectionDispatch129=int(__cdecl*)(void*);
+SelectionDispatch129 originalSelectionDispatch129=nullptr;
+int __cdecl SelectionDispatchHook129(void* packet){if(runtimeConfig.mode==wht::RunMode::Local&&runtimeConfig.fogClick)fogClick129.Capture(executableBase,packet);return originalSelectionDispatch129(packet);}
 bool ControlAvailable129(const wht::ToolMenuControl& d){
+ if(!wcscmp(d.section,L"Event")&&!wcscmp(d.key,L"Fog Click"))return originalSelectionDispatch129!=nullptr;
  if(!wcscmp(d.section,L"MTHKEY"))for(const auto* key:{L"Noti",L"PickGoku",L"PickGokuDraw",L"ChayGa1",L"ChayGa2",L"ChayGa3",L"ChaySoi1",L"ChaySoi2",L"ChaySoi3",L"ChayGa1_count",L"ChayGa2_count",L"ChayGa3_count",L"ChaySoi1_count",L"ChaySoi2_count",L"ChaySoi3_count",L"AutoGaDraw1",L"AutoGaDraw2",L"AutoGaDraw3",L"AutoSoiDraw1",L"AutoSoiDraw2",L"AutoSoiDraw3",L"Shield",L"Ice",L"Wild",L"Frozen",L"Phoenix",L"ShieldDraw",L"IceDraw",L"WildDraw",L"FrozenDraw",L"PhoenixDraw"})if(!wcscmp(d.key,key))return clickButton!=nullptr;
  if(!wcscmp(d.section,L"MTHKEY")&&(!wcscmp(d.key,L"TimeBoss")||!wcscmp(d.key,L"MTH49Enable")||!wcscmp(d.key,L"G17Enable")))return levelHooksReady129;
  if(!wcscmp(d.section,L"Event")&&(!wcscmp(d.key,L"Borderless")||!wcscmp(d.key,L"Lock Cursor")||!wcscmp(d.key,L"Sound Start Game")))return true;
@@ -510,6 +516,19 @@ bool quickDropConsumed129=false;
 bool ToolCommandImpl129(const std::wstring& command){
  if(runtimeConfig.mode!=wht::RunMode::Local)return false;
  std::wistringstream in(command);std::wstring name,action,extra;in>>name;
+ if(name==L"#fc"||name==L"#fogclick"){
+  if(!originalSelectionDispatch129)return false;std::wstring value=runtimeConfig.fogClick?L"0":L"1";
+  if(in>>value){if((value!=L"0"&&value!=L"1")||in>>extra)return false;}
+  if(!wht::SaveSetting(runtimeIni,L"Event",L"Fog Click",value))return false;
+  runtimeConfig=wht::LoadConfig(runtimeIni);toolMenu.nextRefresh=0;
+  wht::ShowNotification129(executableBase,runtimeConfig.fogClick?"Fog Click: ON":"Fog Click: OFF",localMessage129);return true;
+ }
+ if(name==L"#gabase"||name==L"#backga"||name==L"#backsoi"){
+  if(in>>extra)return false;
+  const bool setting=name==L"#gabase";
+  const bool ok=setting?mth129.SetBase(executableBase):mth129.QueueReturn(executableBase);
+  wht::ShowNotification129(executableBase,setting?(ok?"Courier Base: position saved":"Courier Base: select a living unit"):(ok?"Courier Return: queued":"Courier Return: assign a unit with #setga and save a base with #gabase first; a recipe may be running"),localMessage129);return ok;
+ }
  if(name==L"#setga"){
   if(in>>extra)return false;
   const bool ok=mth129.SetCourier(executableBase);
@@ -1159,7 +1178,7 @@ bool ToolCommand(const std::wstring& command){
  const bool result=ToolCommandImpl129(command);if(!result)return false;
  std::wistringstream input(command);std::wstring name,argument;input>>name>>argument;
  std::string feedback;
- if(name==L"#setga"||name==L"#chicken1"||name==L"#chicken2"||name==L"#chicken3"||name==L"#wolf1"||name==L"#wolf2"||name==L"#wolf3"||name==L"#goku"||name==L"#autopickgoku"||name==L"#shield"||name==L"#ice"||name==L"#wild"||name==L"#frozen"||name==L"#phoenix"||name==L"#sellslot"||name==L"#copyitem"||name==L"#item"||name==L"#quickdrop"||name==L"#dropitem"||name==L"#save"||name==L"#shareall"||name==L"#srand"||name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
+ if(name==L"#fc"||name==L"#fogclick"||name==L"#gabase"||name==L"#backga"||name==L"#backsoi"||name==L"#setga"||name==L"#chicken1"||name==L"#chicken2"||name==L"#chicken3"||name==L"#wolf1"||name==L"#wolf2"||name==L"#wolf3"||name==L"#goku"||name==L"#autopickgoku"||name==L"#shield"||name==L"#ice"||name==L"#wild"||name==L"#frozen"||name==L"#phoenix"||name==L"#sellslot"||name==L"#copyitem"||name==L"#item"||name==L"#quickdrop"||name==L"#dropitem"||name==L"#save"||name==L"#shareall"||name==L"#srand"||name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
  if(name==L"#armor")return true;
  if(name==L"#ms")return true;
  if(name==L"#ggl"||name==L"#gll"||name==L"#gg"||name==L"#gl")return true;
@@ -1556,9 +1575,11 @@ void UpdateTools(){
  const auto smartSelection=wht::SelectedSkill129(executableBase);
  if(!smartCast129.Valid(allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window&&runtimeConfig.modeCast==1,wht::TargetMode129(executableBase),smartSelection.unit,smartSelection.identity))smartCast129.Reset();
  if(inventoryActions129.autoPickGoku&&!(allowed&&(runtimeConfig.mth49Enable||runtimeConfig.g17Enable)))inventoryActions129.ToggleGoku(false);
- const auto inventoryResult=inventoryActions129.TickNative(executableBase,allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&!mth129.run.Active()&&mth129.pending<0&&mth129.route<0&&GetForegroundWindow()==window,GetTickCount64());
+ const auto inventoryResult=inventoryActions129.TickNative(executableBase,allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&!mth129.run.Active()&&mth129.pending<0&&mth129.route<0&&!mth129.returnPending&&GetForegroundWindow()==window,GetTickCount64());
  if(inventoryResult)wht::ShowNotification129(executableBase,inventoryResult,localMessage129);
  const bool mthEnabled=allowed&&(runtimeConfig.mth49Enable||runtimeConfig.g17Enable);
+ const auto returnResult=mth129.TickReturn(executableBase,allowed,!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window);
+ if(returnResult)wht::ShowNotification129(executableBase,returnResult,localMessage129);
  const auto routeResult=mth129.TickRoute(executableBase,mthEnabled,!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window,GetTickCount());
  if(routeResult&&runtimeConfig.mthNoti)wht::ShowNotification129(executableBase,routeResult,localMessage129);
  const auto mthResult=mth129.Tick(executableBase,clickButton,mthEnabled,!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window,GetTickCount());
@@ -1569,6 +1590,7 @@ void UpdateTools(){
  lifeMana129.Apply(executableBase,LifeFlags129(),originalLifeText129);
  consoleState.Apply(executableBase,allowed&&runtimeConfig.hideConsoleUI,showConsole,hideConsole);
  timeOfDay.Apply(executableBase,allowed&&runtimeConfig.hideTimeOfDay,showFdf,hideFdf);
+ fogClick129.Tick(executableBase,allowed&&runtimeConfig.fogClick,GetTickCount64(),[](const std::string& text){wht::ShowNotification129(executableBase,text,localMessage129);});
  messageTimers.Tick(executableBase,runtimeConfig,allowed&&!chatTyping,GetTickCount64(),clearFrame);
  const bool clickAllowed=allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.recording&&!macroRecorder.playing&&GetForegroundWindow()==window&&!IsIconic(window);
  POINT cursor{};const bool inside=GetCursorPos(&cursor)&&ScreenToClient(window,&cursor)&&cursor.x>=0&&cursor.y>=0&&cursor.x<r.right&&cursor.y<r.bottom;
@@ -1651,6 +1673,9 @@ DWORD WINAPI Install(void* module){
   if(MH_EnableHook(vertexColor)!=MH_OK)originalVertexColor129=nullptr;
  }
  if(!originalVertexColor129)wht::Log(folder,"WHT 1.29: vertex color hook unavailable.");
+ const auto dispatch=reinterpret_cast<void*>(executableBase+0x2cc540);
+ const unsigned char dispatchSignature[]={0x55,0x8b,0xec,0x6a,0xff,0x68};
+ if(!memcmp(dispatch,dispatchSignature,sizeof(dispatchSignature))&&!memcmp((void*)(executableBase+0x2cc590),"\x8b\x5d\x08\x0f\xb6\x43\x15",7)&&MH_CreateHook(dispatch,SelectionDispatchHook129,reinterpret_cast<void**>(&originalSelectionDispatch129))==MH_OK){if(MH_EnableHook(dispatch)!=MH_OK)originalSelectionDispatch129=nullptr;}
  const auto sceneFog=reinterpret_cast<void*>(executableBase+0x216ed0);
  const unsigned char sceneFogSignature[]={0x55,0x8b,0xec,0x56,0x8b,0xf1,0x8b,0x86,0xe4,3,0,0};
  if(!memcmp(sceneFog,sceneFogSignature,sizeof(sceneFogSignature))&&MH_CreateHook(sceneFog,FogEffectNative129,reinterpret_cast<void**>(&originalFogEffect129))==MH_OK){

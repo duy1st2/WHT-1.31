@@ -1844,6 +1844,7 @@ int wmain(int argc,wchar_t** argv){try{
   check(!wht::HoverSkillOrder129(0,{},800,600));check(!wht::AutoSkillTarget129(0,100,1024));
  }
  {wht::InventoryActions129 pick;check(pick.AcceptPickup(1));check(!pick.AcceptPickup(0));pick.pickupTarget=123;pick.due=999;pick.ToggleGoku(true);check(pick.autoPickGoku&&pick.AcceptPickup(0x49303136)&&!pick.AcceptPickup(1)&&!pick.pickupTarget&&!pick.due);pick.ToggleGoku(false);check(pick.AcceptPickup(1));pick.Reset();check(!pick.autoPickGoku);wht::Mth129 toolbar;toolbar.shown[5]=true;auto r=toolbar.ButtonRect(5);check(toolbar.Hit({LONG((r.right-r.width/2)*1000),LONG((.6f-r.bottom-r.height/2)*1000)},800,600)==5);} {wht::Mth129 route;
+  check(!route.SetBase(0)&&!route.QueueReturn(0));route.returnPending=true;check(!route.TickReturn(0,true,false)&&route.returnPending);check(std::string(route.TickReturn(0,false,false))=="Courier Return: cancelled"&&!route.returnPending);
   check(!route.SetCourier(0)&&!route.ValidCourier(0,{},0));route.courier={123,456};route.courierSession=789;route.Reset();check(!route.courier.unit&&!route.courierSession);
   check(!route.QueueRoute(0,-1,5)&&!route.QueueRoute(0,6,5));
   for(int laps:{1,5,20}){route.route=0;route.remaining=laps;route.second=false;
@@ -1862,6 +1863,8 @@ int wmain(int argc,wchar_t** argv){try{
   unsigned slot=0;for(unsigned i:{2u,8u,9u,10u,11u}){auto r=route.ButtonRect(i);check(r.right==wht::Mth129::Rect(slot++).right&&r.bottom==wht::Mth129::Rect(0).bottom);check(route.Hit({LONG((r.right-r.width/2)*1000),LONG((.6f-r.bottom-r.height/2)*1000)},800,600)==int(i));}
   route.shown[0]=true;route.shown[1]=true;check(route.ButtonRect(11).bottom==wht::Mth129::Rect(6).bottom);
   route.route=3;route.Reset();check(route.route==-1&&route.remaining==0);
+ } {wht::FogClick129 fog;check(wht::FogClick129::Accept(1,23,12)&&wht::FogClick129::Accept(3,0,1));check(!wht::FogClick129::Accept(2,0,1)&&!wht::FogClick129::Accept(1,24,1)&&!wht::FogClick129::Accept(1,0,13)&&!wht::FogClick129::Accept(1,0,0));
+  wht::FogClick129::Event e{1,2,3,4};check(fog.Allow(e,100)&&!fog.Allow(e,2099)&&fog.Allow(e,2100));e.slot=2;check(fog.Allow(e,2100));e.world=5;check(fog.Allow(e,2100));for(int i=0;i<200;++i)fog.Push(e);check(fog.events.size()==96);bool notified=false;fog.Tick(0,false,2200,[&](const std::string&){notified=true;});check(fog.events.empty()&&fog.recent.empty()&&!notified);unsigned owner=0;check(!fog.Hidden(0,e,owner));fog.Capture(0,nullptr);check(fog.events.empty());
  } TestMthRecipeContracts(); for(int i=0;i<12;++i)check(wht::MthUiSlot129(i)==(i%3)*4+i/3); check(wht::MthUiSlot129(-1)==-1); check(!wht::MthAdapter129(0,nullptr).Available()); if(inputHook)UnhookWindowsHookEx(inputHook);
  std::cout<<"PASS version129 label, camera/chat ABI, frame layout, menu settings and macro controls\n";return 0;
 }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}}
