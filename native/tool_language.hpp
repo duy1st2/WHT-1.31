@@ -31,7 +31,7 @@ inline std::string EnglishControlLabel(const ToolMenuControl& d){
  {L"Show Timer","Show match time"},{L"Show FPS","Show FPS"},{L"Show Mem","Show memory usage"},
  {L"Show Auto Pick","Show Auto Pick button"},{L"Show Drop All","Show Drop All button"},{L"Show Sell All","Show Sell All button"},{L"Show Ins All Skills","Show All Skills button"},
  {L"hko_MinimizeMultiboard","Collapse/expand multiboard"},{L"hko_menu","Open/close menu"},{L"hko_command","Pause/restore command settings"},
- {L"Text Life/Mana Commas","HP/Mana thousands separators"},{L"Text Life/Mana No Hide","Keep long HP/Mana values visible"},{L"Text Stats Commas","Stats thousands separators"},
+ {L"Text Life/Mana Commas","HP/Mana thousands separators"},{L"Text Life/Mana No Hide","Keep long HP/Mana values visible"},{L"Text Stats Commas","Stats thousands separators"},{L"Detailed Stats Tooltip","Detailed damage/armor tooltips"},
  {L"Color Player","Player-colored health bars"},{L"VSync","Enable VSync"},{L"BarInvul","Hide bars for invulnerable units"},
  {L"ConsoleUI","Hide Console UI"},{L"BlackBarUI","Hide Black Bar UI"},{L"timeOfDayUI","Hide Time of Day UI"},{L"MouseTooltipUI","Tooltip follows mouse"},{L"VertexColor","Force opaque vertex color"},
  {L"MTH49Enable","MTH 49"},{L"G17Enable","G17"},{L"Noti","Show notifications"},{L"TimeBoss","Boss timers"},

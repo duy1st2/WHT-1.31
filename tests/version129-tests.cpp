@@ -12,6 +12,22 @@
 #include <stdexcept>
 #include <vector>
 unsigned vertexCalls129=0;BYTE vertexObservedAlpha129=0;
+unsigned createCalls129=0,createStop129=50;uint32_t createCode129=0;
+uintptr_t dropItemsMock129[6]{};unsigned dropCalls129=0,dropSize129=6;bool dropReject129=false,dropRetain129=false;
+uintptr_t __fastcall DropSlotMock129(uintptr_t,DWORD,unsigned slot){return slot<6?dropItemsMock129[slot]:0;}
+unsigned __fastcall DropSizeMock129(uintptr_t,DWORD){return dropSize129;}
+int __fastcall DropItemMock129(uintptr_t,DWORD,uintptr_t item){
+ ++dropCalls129;if(dropReject129)return 0;
+ for(auto& value:dropItemsMock129)if(value==item){if(!dropRetain129)value=0;return 1;}
+ return 0;
+}
+float createX129=100.f,createY129=200.f,createSpacing129=40.f;
+uint32_t __cdecl CreateLocalMock129(){return 7;}
+uint32_t __cdecl CreateMock129(uint32_t owner,uint32_t code,const float* x,const float* y,const float* facing){
+ if(owner!=7||*x!=createX129+createSpacing129*createCalls129||*y!=createY129||*facing!=270.f)return 0;
+ createCode129=code;return ++createCalls129<=createStop129?123:0;
+}
+uint32_t __cdecl CreateTypeMock129(uint32_t handle){return handle==123?createCode129:0;}
 uintptr_t __fastcall VertexColorMock129(uintptr_t unit,DWORD){++vertexCalls129;vertexObservedAlpha129=*reinterpret_cast<BYTE*>(unit+0x4e3);return 0xbeef;}
 void __fastcall KeyboardSpeedMock129(uintptr_t camera,DWORD,float value){*reinterpret_cast<float*>(camera+0x4f0)=value;}
 void __fastcall MouseSpeedMock129(uintptr_t camera,DWORD,float value){*reinterpret_cast<float*>(camera+0x4ec)=value;}
@@ -210,9 +226,24 @@ bool AddStepMock129(uintptr_t base,uintptr_t ability,bool up){
  *reinterpret_cast<int*>(ability+0x50)+=up?1:-1;return true;
 }
 unsigned killCallsMock129=0;bool killAbiMock129=true,killReassignMock129=false;
+uintptr_t reselectPlayer129=0,reselectUnit129=0;unsigned reselectClears129=0,reselectUpdates129=0;bool reselectAbi129=true;
+uintptr_t __fastcall ReselectPlayerMock129(uintptr_t,DWORD,unsigned slot){reselectAbi129&=slot==0;return reselectPlayer129;}
+void __cdecl ReselectClearMock129(){++reselectClears129;}
+void __fastcall ReselectSelectMock129(uintptr_t manager,DWORD,uintptr_t unit,unsigned slot,int a,int b,int c){reselectAbi129&=manager==0x1234&&unit==reselectUnit129&&slot==0&&a==0&&b==1&&c==1;}
+void __fastcall ReselectUpdateMock129(uintptr_t manager,DWORD,int flag){reselectAbi129&=manager==0x1234&&flag==0;++reselectUpdates129;}
+bool gameSpeedReject129=false;unsigned gameSpeedWrites129=0;
+void __fastcall GameSpeedSetMock129(uintptr_t context,DWORD,unsigned speed){++gameSpeedWrites129;if(!gameSpeedReject129)*reinterpret_cast<unsigned char*>(context+0x47)=static_cast<unsigned char>(speed);}
+unsigned cooldownResetCalls129=0;
+void __fastcall CooldownResetMock129(uintptr_t,DWORD){++cooldownResetCalls129;}
+bool attackSpeedReject129=false;unsigned attackSpeedRefreshes129=0;
+void __fastcall AttackSpeedSetMock129(uintptr_t property,DWORD,const float* value,int flag){if(!attackSpeedReject129&&flag==1)*reinterpret_cast<float*>(property+4)=*value;}
+void __fastcall AttackSpeedRefreshMock129(uintptr_t,DWORD,uintptr_t){++attackSpeedRefreshes129;}
 int baseDamageValue129=50;uintptr_t baseDamageAttack129=0;unsigned baseDamageWrites129=0;bool baseDamageReject129=false,baseDamageAbi129=true;
 float moveSpeedValue129=270;unsigned moveSpeedWrites129=0;bool moveSpeedCap129=false;
 unsigned armorWrites129=0;bool armorReject129=false;
+float attackCooldownValues129[2]={1,2};bool attackCooldownReject129=false;unsigned attackCooldownWrites129=0;
+float* __fastcall AttackCooldownGet129(uintptr_t,DWORD,float* out,unsigned weapon){*out=attackCooldownValues129[weapon];return out;}
+void __fastcall AttackCooldownSet129(uintptr_t,DWORD,float seconds,unsigned weapon){++attackCooldownWrites129;if(!attackCooldownReject129)attackCooldownValues129[weapon]=seconds;}
 float* __cdecl ArmorSubtractMock129(float* out,const float* requested,const float* before){*out=*requested-*before;return out;}
 void __fastcall ArmorAddMock129(uintptr_t unit,DWORD,const float* delta){++armorWrites129;if(!armorReject129)*reinterpret_cast<float*>(unit+0x1e8)+=*delta;}
 float* __fastcall MoveSpeedGetMock129(uintptr_t,DWORD,float* out){*out=moveSpeedValue129;return out;}
@@ -242,6 +273,23 @@ int wmain(int argc,wchar_t** argv){try{
 
  auto checkAt=[](bool ok,int line){if(!ok)throw std::runtime_error("version129 contract failed at line "+std::to_string(line));};
 #define check(...) checkAt((__VA_ARGS__),__LINE__)
+ {
+  uint32_t code=0;unsigned count=0;
+  check(wht::ParseCreateUnit129(L"hfoo",code,count)&&code==0x68666f6f&&count==1);
+  check(wht::ParseCopyUnit129(L"",count)&&count==1);
+  check(wht::ParseCopyUnit129(L" 50 ",count)&&count==50);
+  for(const auto text:{L"0",L"51",L"-1",L"1.5",L"5 extra",L"hfoo"})check(!wht::ParseCopyUnit129(text,count));
+  check(wht::ParseCreateUnit129(L"0x68666f6f 50",code,count)&&count==50);
+  for(const auto text:{L"",L"foo",L"hfoo 0",L"hfoo 51",L"hfoo -1",L"hfoo 2.5",L"hfoo 2 extra"})check(!wht::ParseCreateUnit129(text,code,count));
+  std::vector<unsigned char> fixture(0xd3b700);const auto base=reinterpret_cast<uintptr_t>(fixture.data());
+  *reinterpret_cast<uintptr_t*>(base+0xd3b6f4)=123;
+  wht::CreateUnitApi129 api{CreateLocalMock129,CreateMock129,CreateTypeMock129};
+  createCalls129=0;createStop129=50;check(wht::CreateUnits129(base,api,0x68666f6f,3,100,200)==3&&createCalls129==3);
+  createCalls129=0;createStop129=1;check(wht::CreateUnits129(base,api,0x68666f6f,3,100,200)==1&&createCalls129==2);
+  createCalls129=0;check(!wht::CreateUnits129(base,{},0x68666f6f,1,100,200)&&!createCalls129);
+  check(!wht::CreateUnits129(base,api,0x68666f6f,51,100,200)&&!createCalls129);
+  *reinterpret_cast<uintptr_t*>(base+0xd3b6f4)=0;check(!wht::CreateUnits129(base,api,0x68666f6f,1,100,200)&&!createCalls129);
+ }
  {
   using namespace wht;
   {
@@ -311,7 +359,7 @@ int wmain(int argc,wchar_t** argv){try{
  check(ParseCameraCommand("#ZOOM 500",field,value)&&field==0);
  check(ParseCameraCommand("#fogz 20000",field,value)&&field==1);
  for(auto bad:{"#cam 499","#cam 10001","#cam 3000 extra","#cam nan","#other 3000"})check(!ParseCameraCommand(bad,field,value));
- std::vector<unsigned char> globals(0xd5ea00),world(64),ui(0x500),scene(0x500),fogParameters(64),fogSlots(24),fogValue(64);
+ std::vector<unsigned char> globals(0xdb4cb0),world(64),ui(0x500),scene(0x500),fogParameters(64),fogSlots(24),fogValue(64);
  executableBase=reinterpret_cast<uintptr_t>(globals.data());
  *reinterpret_cast<uintptr_t*>(globals.data()+0xd3b6f4)=reinterpret_cast<uintptr_t>(world.data());
  *reinterpret_cast<uintptr_t*>(globals.data()+0xd3d7f8)=reinterpret_cast<uintptr_t>(ui.data());
@@ -1048,6 +1096,43 @@ int wmain(int argc,wchar_t** argv){try{
  localFilesWriter129=+[](bool){return false;};
  check(!ToolCommand(L"#alf 0")&&runtimeConfig.allowLocalFiles&&wht::LoadConfig(runtimeIni).allowLocalFiles);
  localFilesWriter129=wht::WriteLocalFiles129;
+ check(dropIconRect.right==skillsIconRect.right&&dropIconRect.width==skillsIconRect.width&&dropIconRect.height==skillsIconRect.height);
+ check(dropIconRect.bottom>skillsIconRect.bottom+skillsIconRect.height);
+ check(ToolCommand(L"#showdropall 0")&&!runtimeConfig.showDropAll);
+ check(ToolCommand(L"#showdropall")&&runtimeConfig.showDropAll&&wht::LoadConfig(runtimeIni).showDropAll);
+ check(!ToolCommand(L"#showdropall 2")&&!ToolCommand(L"#showdropall 1 extra"));
+ bool dropCheckboxFound129=false;
+ for(size_t index=0;index<wht::kToolMenuControls.size();++index){
+  const auto& control=wht::kToolMenuControls[index];
+  if(!wcscmp(control.section,L"Event")&&!wcscmp(control.key,L"Show Drop All")){
+   dropCheckboxFound129=true;check(control.page==0&&ControlAvailable129(control));
+   check(ToolCommand(L"#toolui "+std::to_wstring(index)+L" toggle")&&!runtimeConfig.showDropAll);
+   check(ToolCommand(L"#toolui "+std::to_wstring(index)+L" toggle")&&runtimeConfig.showDropAll);
+  }
+ }
+ check(dropCheckboxFound129);
+ check(skillsIconRect.right==.558f&&dropIconRect.right==.558f);
+ check(inventoryIconRects129[0].right==.558f&&inventoryIconRects129[1].right==.558f);
+ check(inventoryIconRects129[0].bottom>dropIconRect.bottom+dropIconRect.height);
+ check(dropIconRect.bottom>inventoryIconRects129[1].bottom+inventoryIconRects129[1].height);
+ check(inventoryIconRects129[1].bottom>skillsIconRect.bottom+skillsIconRect.height);
+ for(const auto command:{L"#showautopick",L"#showsellall"}){
+  check(ToolCommand(std::wstring(command)+L" 0"));
+  check(ToolCommand(command));check(!ToolCommand(std::wstring(command)+L" 2"));
+ }
+ check(runtimeConfig.showAutoPick&&runtimeConfig.showSellAll&&wht::LoadConfig(runtimeIni).showAutoPick&&wht::LoadConfig(runtimeIni).showSellAll);
+ for(const auto& control:wht::kToolMenuControls)if(!wcscmp(control.key,L"Show Auto Pick")||!wcscmp(control.key,L"Show Sell All"))check(ControlAvailable129(control));
+ const auto scanRect129=wht::NearbyRect129(4562.5f,-128.f,777.f);
+ check(scanRect129[0]==-905.f&&scanRect129[1]==3785.5f&&scanRect129[2]==649.f&&scanRect129[3]==5339.5f);
+ check(skillsIconRect.right-skillsIconRect.width>.544f&&skillsIconRect.right<.561f);
+ wht::NearbyObjects129 nearby129;for(unsigned n=1;n<300;++n)check(wht::CollectNearby129(n,&nearby129)==1);
+ check(nearby129.count==256&&nearby129.objects[0]==1&&nearby129.objects[255]==256);
+ wht::InventoryActions129 inventoryWorker129;inventoryWorker129.autoPick=true;inventoryWorker129.selling=true;inventoryWorker129.pending=123;inventoryWorker129.due=100;
+ check(!inventoryWorker129.TickNative(0,false,200)&&inventoryWorker129.pending==123);
+ check(!inventoryWorker129.TickNative(0,true,50)&&inventoryWorker129.pending==123);
+ inventoryWorker129.Reset();check(!inventoryWorker129.autoPick&&!inventoryWorker129.selling&&!inventoryWorker129.pending);
+ check(!wht::ResolveInventoryActions129(0).query);
+
  for(size_t index=wht::kToolMenuControls.size()-5;index<wht::kToolMenuControls.size()-2;++index){
   const auto& control=wht::kToolMenuControls[index];check(ControlAvailable129(control));
   check(ToolCommand(L"#toolui "+std::to_wstring(index)+L" toggle"));
@@ -1227,6 +1312,21 @@ int wmain(int argc,wchar_t** argv){try{
   check(!wht::ResolveHeroAttributesApi129(executableBase));
   wht::InvulnerabilityApi129 invulApi{InvulAgentMock129,reinterpret_cast<decltype(wht::InvulnerabilityApi129::find)>(InvulFindMock129),reinterpret_cast<decltype(wht::InvulnerabilityApi129::set)>(InvulSetMock129)};
   const auto selection=wht::SelectedSkill129(executableBase);wht::InvulnerabilityResult129 result;const char* reason=nullptr;
+  {
+   wht::DropItemsApi129 dropApi{InvulAgentMock129,reinterpret_cast<decltype(wht::DropItemsApi129::item)>(DropSlotMock129),reinterpret_cast<decltype(wht::DropItemsApi129::size)>(DropSizeMock129),reinterpret_cast<decltype(wht::DropItemsApi129::drop)>(DropItemMock129)};
+   unsigned dropped=0;dropItemsMock129[0]=101;dropItemsMock129[3]=104;dropItemsMock129[5]=106;
+   check(wht::DropItems129(executableBase,selection,dropApi,dropped,&reason)&&dropped==3&&dropCalls129==3&&!reason);
+   check(wht::DropItems129(executableBase,selection,dropApi,dropped,&reason)&&dropped==0&&dropCalls129==3);
+   dropItemsMock129[1]=102;check(wht::DropItems129(executableBase,selection,dropApi,dropped,&reason)&&dropped==1&&dropCalls129==4);
+   dropItemsMock129[2]=103;dropReject129=true;check(!wht::DropItems129(executableBase,selection,dropApi,dropped,&reason)&&reason&&dropped==0&&dropItemsMock129[2]==103);
+   dropReject129=false;dropRetain129=true;check(!wht::DropItems129(executableBase,selection,dropApi,dropped,&reason)&&reason&&dropped==0);
+   dropRetain129=false;const auto calls=dropCalls129;
+   check(!wht::DropItems129(executableBase,{},dropApi,dropped,&reason)&&reason&&dropCalls129==calls);
+   auto stale=selection;++stale.identity;check(!wht::DropItems129(executableBase,stale,dropApi,dropped,&reason)&&reason&&dropCalls129==calls);
+   dropSize129=7;check(!wht::DropItems129(executableBase,selection,dropApi,dropped,&reason)&&reason&&dropCalls129==calls);
+   dropSize129=6;dropItemsMock129[2]=0;
+   check(!wht::ResolveDropItems129(executableBase));
+  }
   check(wht::ChangeInvulnerability129(executableBase,selection,invulApi,true,result,&reason)&&result.ability&&result.effective&&!reason);
   check(wht::ChangeInvulnerability129(executableBase,selection,invulApi,true,result,&reason)&&invulWritesMock129==1);
   check(wht::ChangeInvulnerability129(executableBase,selection,invulApi,false,result,&reason)&&!result.ability&&!result.effective&&invulWritesMock129==2);
@@ -1284,6 +1384,20 @@ int wmain(int argc,wchar_t** argv){try{
   check(!wht::SetBaseDamage129(executableBase,selection,baseApi,800,baseActual,&reason));
   check(!wht::ResolveBaseDamageApi129(0));
   {
+   float seconds=0,actual=0;unsigned weapon=0;
+   check(wht::ParseAttackCooldown129(L"0.5",seconds,weapon)&&seconds==.5f&&weapon==0);
+   check(wht::ParseAttackCooldown129(L"0.25 2",seconds,weapon)&&seconds==.25f&&weapon==1);
+   for(const auto args:{L"",L"0",L"-1",L"3601",L"1 0",L"1 3",L"1 1.5",L"1 2 extra"})check(!wht::ParseAttackCooldown129(args,seconds,weapon));
+   wht::AttackCooldownApi129 cooldown{InvulAgentMock129,reinterpret_cast<decltype(wht::AttackCooldownApi129::get)>(AttackCooldownGet129),reinterpret_cast<decltype(wht::AttackCooldownApi129::set)>(AttackCooldownSet129)};
+   *reinterpret_cast<uintptr_t*>(invulUnit.data()+0x3f4)=baseDamageAttack129;
+   check(wht::SetAttackCooldown129(executableBase,selection,cooldown,.5f,0,actual,&reason)&&actual==.5f&&attackCooldownValues129[1]==2);
+   check(wht::SetAttackCooldown129(executableBase,selection,cooldown,.25f,1,actual,&reason)&&actual==.25f&&attackCooldownValues129[0]==.5f);
+   attackCooldownReject129=true;check(!wht::SetAttackCooldown129(executableBase,selection,cooldown,1,0,actual,&reason));attackCooldownReject129=false;
+   const auto writes=attackCooldownWrites129;*reinterpret_cast<uintptr_t*>(invulUnit.data()+0x3f4)=0;
+   check(!wht::SetAttackCooldown129(executableBase,selection,cooldown,1,0,actual,&reason)&&attackCooldownWrites129==writes);
+   check(!wht::ResolveAttackCooldown129(0));
+  }
+  {
    float requested=0,actual=0;
    check(wht::ParseArmor129(L"",requested)&&requested==50);
    check(wht::ParseArmor129(L"-12.5",requested)&&requested==-12.5f);
@@ -1314,6 +1428,51 @@ int wmain(int argc,wchar_t** argv){try{
    *reinterpret_cast<uintptr_t*>(invulUnit.data()+0x3f8)=0;
    check(!wht::ApplyMoveSpeed129(executableBase,selection,api,400,actual,&reason)&&moveSpeedWrites129==writes);
    check(!wht::ResolveMoveSpeed129(0));
+  }
+  {
+   std::vector<unsigned char> attack(0x300);float requested=0,actual=0,effective=0;
+   *reinterpret_cast<uintptr_t*>(invulUnit.data()+0x3f4)=reinterpret_cast<uintptr_t>(attack.data());
+   *reinterpret_cast<uintptr_t*>(attack.data()+0x1b0)=executableBase+0xa6e2f0;
+   *reinterpret_cast<float*>(globals.data()+0xdb4cac)=.2f;*reinterpret_cast<float*>(globals.data()+0xdb4c6c)=5.f;
+   wht::AttackSpeedApi129 api{InvulAgentMock129,reinterpret_cast<decltype(wht::AttackSpeedApi129::set)>(AttackSpeedSetMock129),reinterpret_cast<decltype(wht::AttackSpeedApi129::refresh)>(AttackSpeedRefreshMock129)};
+   check(wht::ParseAttackSpeed129(L"",requested)&&requested==2);
+   check(wht::ParseAttackSpeed129(L"100",requested)&&requested==50);
+   check(wht::ParseAttackSpeed129(L"-1",requested)&&requested==.1f);
+   check(!wht::ParseAttackSpeed129(L"2 extra",requested));
+   check(wht::SetAttackSpeed129(executableBase,selection,api,2,actual,effective,&reason)&&actual==2&&effective==2&&attackSpeedRefreshes129==1);
+   check(wht::SetAttackSpeed129(executableBase,selection,api,10,actual,effective,&reason)&&actual==10&&effective==5);
+   check(wht::SetAttackSpeed129(executableBase,selection,api,1,actual,effective,&reason)&&actual==1);
+   attackSpeedReject129=true;check(!wht::SetAttackSpeed129(executableBase,selection,api,2,actual,effective,&reason));attackSpeedReject129=false;
+   check(!wht::SetAttackSpeed129(executableBase,staleRemove,api,2,actual,effective,&reason));
+   *reinterpret_cast<uintptr_t*>(attack.data()+0x1b0)=0;check(!wht::SetAttackSpeed129(executableBase,selection,api,2,actual,effective,&reason));
+   check(!wht::ResolveAttackSpeed129(0));
+   *reinterpret_cast<uintptr_t*>(invulUnit.data()+0x3f4)=baseDamageAttack129;
+  }
+  {
+   wht::CooldownResetApi129 api{InvulAgentMock129,reinterpret_cast<decltype(wht::CooldownResetApi129::reset)>(CooldownResetMock129)};
+   check(wht::ResetCooldown129(executableBase,selection,api,&reason)&&cooldownResetCalls129==1);
+   check(wht::ResetCooldown129(executableBase,selection,api,&reason)&&cooldownResetCalls129==2);
+   check(!wht::ResetCooldown129(executableBase,staleRemove,api,&reason)&&cooldownResetCalls129==2);
+   check(!wht::ResolveCooldownReset129(0));
+   wht::NoCooldown129 state;unsigned calls=0;auto apply=[&](){++calls;return true;};
+   check(!state.Tick(true,1000,apply));state.enabled=true;
+   check(!state.Tick(false,1000,apply)&&calls==0);
+   check(state.Tick(true,1000,apply)&&calls==1);
+   check(!state.Tick(true,1099,apply)&&calls==1);
+   check(state.Tick(true,1100,apply)&&calls==2);
+   state.Reset();check(!state.enabled&&state.due==0&&!state.Tick(true,2000,apply));
+  }
+  {
+   std::vector<unsigned char> reselectWorld(64),reselectPlayer(64);
+   auto& slot=*reinterpret_cast<uintptr_t*>(globals.data()+0xd3b6f4);const auto previous=slot;slot=reinterpret_cast<uintptr_t>(reselectWorld.data());
+   reselectPlayer129=reinterpret_cast<uintptr_t>(reselectPlayer.data());reselectUnit129=selection.unit;
+   *reinterpret_cast<uintptr_t*>(reselectPlayer.data()+0x34)=0x1234;
+   auto& flags=*reinterpret_cast<unsigned*>(selection.unit+0x20);const auto oldFlags=flags;flags|=2;
+   wht::ReselectApi129 api{InvulAgentMock129,reinterpret_cast<decltype(wht::ReselectApi129::player)>(ReselectPlayerMock129),ReselectClearMock129,reinterpret_cast<decltype(wht::ReselectApi129::select)>(ReselectSelectMock129),reinterpret_cast<decltype(wht::ReselectApi129::update)>(ReselectUpdateMock129)};
+   check(wht::ReselectUnit129(executableBase,selection,api,&reason)&&reselectClears129==1&&reselectUpdates129==1&&reselectAbi129);
+   check(!wht::ReselectUnit129(executableBase,staleRemove,api,&reason)&&reselectClears129==1);
+   flags&=~2u;check(!wht::ReselectUnit129(executableBase,selection,api,&reason)&&reselectClears129==1);
+   check(!wht::ResolveReselect129(0));flags=oldFlags;slot=previous;
   }
   wht::UnitDamageApi129 damageApi{{InvulAgentMock129,reinterpret_cast<decltype(wht::KillUnitApi129::kill)>(UnitLifeSetMock129)},
    reinterpret_cast<decltype(wht::UnitDamageApi129::get)>(UnitLifeGetMock129)};
@@ -1373,6 +1532,24 @@ int wmain(int argc,wchar_t** argv){try{
   check(!wht::TeleportUnit129(executableBase,selection,teleportApi,0,0,destination,&reason));
   check(teleportStops129==2&&teleportMoves129==1&&reason);
   teleportReplace129=false;*reinterpret_cast<uint32_t*>(invulUnit.data()+0x10)=22;
+  {
+   const auto originalType=*reinterpret_cast<uint32_t*>(invulUnit.data()+0x34);
+   *reinterpret_cast<uint32_t*>(invulUnit.data()+0x34)=0x68666f6f;
+   wht::CreateUnitApi129 createApi{CreateLocalMock129,CreateMock129,CreateTypeMock129};
+   teleportActual129[0]=100;teleportActual129[1]=200;
+   createX129=150;createY129=200;createSpacing129=50;createStop129=50;createCalls129=0;
+   check(wht::CopyUnits129(executableBase,selection,teleportApi,createApi,3,&reason)==3&&!reason&&createCalls129==3&&createCode129==0x68666f6f);
+   createCalls129=0;check(wht::CopyUnits129(executableBase,selection,teleportApi,createApi,1,&reason)==1&&createCalls129==1);
+   createCalls129=0;createStop129=1;check(wht::CopyUnits129(executableBase,selection,teleportApi,createApi,3,&reason)==1&&createCalls129==2);
+   createCalls129=0;check(!wht::CopyUnits129(executableBase,{},teleportApi,createApi,1,&reason)&&reason&&!createCalls129);
+   auto stale=selection;++stale.identity;check(!wht::CopyUnits129(executableBase,stale,teleportApi,createApi,1,&reason)&&reason&&!createCalls129);
+   teleportActual129[0]=NAN;check(!wht::CopyUnits129(executableBase,selection,teleportApi,createApi,1,&reason)&&reason&&!createCalls129);
+   teleportActual129[0]=100;check(!wht::CopyUnits129(executableBase,selection,teleportApi,{},1,&reason)&&reason&&!createCalls129);
+   check(!wht::CopyUnits129(executableBase,selection,teleportApi,createApi,51,&reason)&&reason&&!createCalls129);
+   check(teleportStops129==2&&teleportMoves129==1&&teleportAbi129);
+   *reinterpret_cast<uint32_t*>(invulUnit.data()+0x34)=originalType;
+   createX129=100;createY129=200;createSpacing129=40;createStop129=50;
+  }
   check(!wht::ResolveTeleportApi129(executableBase));
   check(!wht::TeleportSelected129(0,0,0,destination,&reason)&&reason);
   const auto writes=invulWritesMock129;
@@ -1495,6 +1672,57 @@ int wmain(int argc,wchar_t** argv){try{
  check(!ToolCommand(L"#mc 3")&&!ToolCommand(L"#mc 1 extra"));
  check(ToolCommand(L"#modecast")&&runtimeConfig.modeCast==2);
  check(ToolCommand(L"#mc")&&runtimeConfig.modeCast==0);
+ {
+  unsigned count=0;std::wstring text;bool stop=false;
+  check(wht::ParseRepeatMessage129(L"3 hello world",count,text,stop)&&count==3&&text==L"hello world"&&!stop);
+  check(wht::ParseRepeatMessage129(L"stop",count,text,stop)&&stop);
+  check(!wht::ParseRepeatMessage129(L"stop extra",count,text,stop));
+  check(!wht::ParseRepeatMessage129(L"0 hello",count,text,stop)&&!wht::ParseRepeatMessage129(L"10001 hello",count,text,stop));
+  check(!wht::ParseRepeatMessage129(L"3 #kill",count,text,stop)&&!wht::ParseRepeatMessage129(L"2",count,text,stop));
+  wht::RepeatMessage129 repeat;unsigned sends=0;bool succeed=true;
+  auto send=[&](const std::string& value){check(value=="hello");++sends;return succeed;};
+  check(repeat.Set(3,"hello"));check(!repeat.Set(2,std::string(129,'x'))&&repeat.remaining==3);
+  check(!repeat.Tick(false,1000,send)&&sends==0);
+  check(repeat.Tick(true,1000,send)&&repeat.remaining==2);
+  check(!repeat.Tick(true,1249,send)&&sends==1);
+  succeed=false;check(!repeat.Tick(true,1250,send)&&repeat.remaining==2);
+  succeed=true;check(repeat.Tick(true,1500,send)&&repeat.remaining==1);
+  check(repeat.Tick(true,1750,send)&&repeat.remaining==0&&repeat.text.empty());
+  check(!repeat.Tick(true,2000,send));repeat.Reset();check(repeat.due==0);
+ }
+ {
+  unsigned speed=0,actual=0;check(wht::ParseGameSpeed129(L"",speed)&&speed==1);
+  check(wht::ParseGameSpeed129(L"slow",speed)&&speed==0);check(wht::ParseGameSpeed129(L"fast",speed)&&speed==2);
+  check(!wht::ParseGameSpeed129(L"70",speed)&&!wht::ParseGameSpeed129(L"1 extra",speed));
+  std::vector<unsigned char> speedState(0x40),speedContext(0x60);
+  auto& slot=*reinterpret_cast<uintptr_t*>(globals.data()+0xd3b6f4);const auto previous=slot;
+  slot=reinterpret_cast<uintptr_t>(speedState.data());*reinterpret_cast<uintptr_t*>(speedState.data()+0x30)=reinterpret_cast<uintptr_t>(speedContext.data());
+  auto set=reinterpret_cast<wht::GameSpeedSet129>(GameSpeedSetMock129);
+  check(wht::SetGameSpeed129(executableBase,2,set,actual)&&actual==2&&gameSpeedWrites129==1);
+  check(wht::SetGameSpeed129(executableBase,0,set,actual)&&actual==0);
+  *reinterpret_cast<unsigned*>(speedContext.data()+0x38)=0x4000;
+  check(!wht::SetGameSpeed129(executableBase,1,set,actual)&&gameSpeedWrites129==2);
+  *reinterpret_cast<unsigned*>(speedContext.data()+0x38)=0;gameSpeedReject129=true;
+  check(!wht::SetGameSpeed129(executableBase,1,set,actual));gameSpeedReject129=false;
+  check(!wht::SetGameSpeed129(executableBase,3,set,actual)&&!wht::ResolveGameSpeed129(0));slot=previous;
+ }
+ {
+  float multiplier=0;check(wht::ParseSpeedMultiplier129(L"",multiplier)&&multiplier==1);
+  check(wht::ParseSpeedMultiplier129(L"2.5",multiplier)&&multiplier==2.5f);
+  check(wht::ParseSpeedMultiplier129(L"70",multiplier)&&multiplier==70);
+  check(!wht::ParseSpeedMultiplier129(L"0",multiplier)&&!wht::ParseSpeedMultiplier129(L"71",multiplier)&&!wht::ParseSpeedMultiplier129(L"2 extra",multiplier));
+  wht::ScaledClock129 clock;check(clock.Read(1000)==1000);clock.Set(1000,2);check(clock.Read(1100)==1200);
+  clock.Set(1100,3);check(clock.Read(1200)==1500);clock.Set(1200,1);check(clock.Read(1300)==1600);
+  wht::ScaledTick129 tick;tick.Set(0xfffffff0,2);check(tick.Read(0x10)==0x30);tick.Set(0x10,1);check(tick.Read(0x20)==0x40);
+ }
+ char detailBuffer[512]="Native description";
+ check(AppendStatsDescription129(detailBuffer,512,"extra")&&std::string(detailBuffer)=="Native description|nextra");
+ check(!AppendStatsDescription129(detailBuffer,16,"extra"));
+ char fullDetail[512];memset(fullDetail,'x',sizeof(fullDetail));check(!AppendStatsDescription129(fullDetail,512,"extra"));
+ check(wht::AttackSpeedTooltip(2.f,2.f,5.f).find("1.0/sec")!=std::string::npos);
+ check(wht::AttackSpeedTooltip(8.f,2.f,5.f).find("2.5/sec")!=std::string::npos);
+ check(wht::AttackSpeedTooltip(1.f,0.f,5.f).empty());
+ check(wht::MovementSpeedTooltip(522.f)=="Movement speed: |cff00FF00522.0|r");
  runtimeConfig.mode=wht::RunMode::Disabled;check(!ToolCommand(L"#tools"));
  DeleteFileW(ini);setCamera=nullptr;setFogReal=nullptr;executableBase=0;
  if(timer)KillTimer(nullptr,timer);

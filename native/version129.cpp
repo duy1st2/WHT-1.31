@@ -6,6 +6,9 @@
 #include "services129.hpp"
 #include "mute129.hpp"
 #include "repeat_chat129.hpp"
+#include "repeat_message129.hpp"
+wht::RepeatMessage129 repeatMessage129;
+uint64_t queuedChatDue129=0;
 wht::RepeatChat129 repeatChat129;
 wht::Mute129 mutedChat129;
 #include "resource129.hpp"
@@ -26,6 +29,18 @@ wht::Mute129 mutedChat129;
 #include "resource_commands129.hpp"
 #include "move_speed129.hpp"
 #include "armor129.hpp"
+#include "attack_cooldown129.hpp"
+#include "attack_speed129.hpp"
+#include "no_cooldown129.hpp"
+#include "game_speed129.hpp"
+#include "speed_clock129.hpp"
+#include "reselect129.hpp"
+#include "create_unit129.hpp"
+#include "copy_unit129.hpp"
+#include "drop_items129.hpp"
+#include "inventory_actions129.hpp"
+wht::InventoryActions129 inventoryActions129;
+wht::NoCooldown129 noCooldown129;
 #include "remove_unit129.hpp"
 #include "unit_damage129.hpp"
 #include "base_damage129.hpp"
@@ -33,6 +48,7 @@ wht::Mute129 mutedChat129;
 #include "mouse_position129.hpp"
 #include "life_mana129.hpp"
 #include "stats129.hpp"
+#include "stats_tooltip.hpp"
 #include "hotkey_labels129.hpp"
 #include "quickcast129.hpp"
 #include "mouse_tooltip129.hpp"
@@ -126,7 +142,82 @@ bool pluginsStarted129=false,pluginsLoading129=false;
 std::vector<HMODULE> extraLibraries129;
 
 std::wstring runtimeIni,runtimeFolder;
+using SpeedQpc129=BOOL(WINAPI*)(LARGE_INTEGER*);
+using SpeedTick129=DWORD(WINAPI*)();
+SpeedQpc129 originalSpeedQpc129=nullptr;
+SpeedTick129 originalSpeedTime129=nullptr,originalSpeedTick129=nullptr;
+std::mutex speedClockMutex129;
+wht::ScaledClock129 speedQpcClock129;
+wht::ScaledTick129 speedTimeClock129,speedTickClock129;
+bool speedClocksReady129=false;
+bool ApplySpeedMultiplier129(float speed){
+ if(!speedClocksReady129||!std::isfinite(speed)||speed<1||speed>70)return false;
+ std::lock_guard<std::mutex> lock(speedClockMutex129);
+ LARGE_INTEGER now{};if(!originalSpeedQpc129(&now))return false;
+ speedQpcClock129.Set(now.QuadPart,speed);
+ speedTimeClock129.Set(originalSpeedTime129(),speed);speedTickClock129.Set(originalSpeedTick129(),speed);return true;
+}
+BOOL WINAPI SpeedQpcHook129(LARGE_INTEGER* result){
+ if(!originalSpeedQpc129||!originalSpeedQpc129(result))return FALSE;
+ std::lock_guard<std::mutex> lock(speedClockMutex129);
+ result->QuadPart=static_cast<LONGLONG>(speedQpcClock129.Read(result->QuadPart));return TRUE;
+}
+DWORD WINAPI SpeedTimeHook129(){const auto now=originalSpeedTime129();std::lock_guard<std::mutex> lock(speedClockMutex129);return speedTimeClock129.Read(now);}
+DWORD WINAPI SpeedTickHook129(){const auto now=originalSpeedTick129();std::lock_guard<std::mutex> lock(speedClockMutex129);return speedTickClock129.Read(now);}
+void InstallSpeedClocks129(){
+ auto kernel=GetModuleHandleW(L"kernel32.dll");auto multimedia=GetModuleHandleW(L"winmm.dll");
+ if(!kernel||!multimedia)return;
+ void* addresses[]={reinterpret_cast<void*>(GetProcAddress(kernel,"QueryPerformanceCounter")),reinterpret_cast<void*>(GetProcAddress(multimedia,"timeGetTime")),reinterpret_cast<void*>(GetProcAddress(kernel,"GetTickCount"))};
+ void* hooks[]={reinterpret_cast<void*>(SpeedQpcHook129),reinterpret_cast<void*>(SpeedTimeHook129),reinterpret_cast<void*>(SpeedTickHook129)};
+ void** originals[]={reinterpret_cast<void**>(&originalSpeedQpc129),reinterpret_cast<void**>(&originalSpeedTime129),reinterpret_cast<void**>(&originalSpeedTick129)};
+ unsigned created=0,enabled=0;
+ for(;created<3;++created)if(!addresses[created]||MH_CreateHook(addresses[created],hooks[created],originals[created])!=MH_OK)break;
+ if(created==3)for(;enabled<3;++enabled)if(MH_EnableHook(addresses[enabled])!=MH_OK)break;
+ speedClocksReady129=enabled==3;
+ if(!speedClocksReady129){for(unsigned i=0;i<enabled;++i)MH_DisableHook(addresses[i]);for(unsigned i=0;i<created;++i)MH_RemoveHook(addresses[i]);originalSpeedQpc129=nullptr;originalSpeedTime129=originalSpeedTick129=nullptr;}
+}
 wht::Config runtimeConfig;
+using SpeedDescription129=void(__cdecl*)(char*,unsigned,float,float);
+SpeedDescription129 originalAttackDescription129=nullptr,originalMovementDescription129=nullptr;
+bool detailedStatsHooksReady129=false;
+bool AppendStatsDescription129(char* destination,unsigned capacity,const char* detail){
+ __try {
+  if(!destination||!detail||capacity!=512)return false;
+  unsigned length=0;while(length<capacity&&destination[length])++length;
+  const auto extra=strlen(detail);
+  if(length==capacity||length+extra+3>capacity)return false;
+  memcpy(destination+length,"|n",2);memcpy(destination+length+2,detail,extra+1);return true;
+ }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
+}
+bool ReadAttackTooltip129(float& multiplier,float& cooldown,float& maximum){
+ __try {
+  const unsigned char signature[]={0x8b,0x86,0xb4,0x01,0,0};
+  if(!executableBase||memcmp((void*)(executableBase+0x7206eb),signature,sizeof(signature)))return false;
+  const auto selected=wht::SelectedSkill129(executableBase);
+  if(!selected.unit||!selected.identity||*reinterpret_cast<uintptr_t*>(selected.unit)!=executableBase+0xa9c504)return false;
+  const auto attack=*reinterpret_cast<uintptr_t*>(selected.unit+0x3f4);if(!attack)return false;
+  multiplier=*reinterpret_cast<float*>(attack+0x1b4);
+  cooldown=*reinterpret_cast<float*>(attack+0x15c);
+  maximum=*reinterpret_cast<float*>(executableBase+0xdb4c6c);
+  const auto after=wht::SelectedSkill129(executableBase);
+  return after.unit==selected.unit&&after.identity==selected.identity&&*reinterpret_cast<uintptr_t*>(selected.unit+0x3f4)==attack;
+ }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
+}
+void __cdecl AttackDescription129(char* destination,unsigned capacity,float first,float second){
+ originalAttackDescription129(destination,capacity,first,second);
+ if(runtimeConfig.mode!=wht::RunMode::Local||!runtimeConfig.statsTooltip)return;
+ float multiplier=0,cooldown=0,maximum=0;
+ if(ReadAttackTooltip129(multiplier,cooldown,maximum)){
+  const auto detail=wht::AttackSpeedTooltip(multiplier,cooldown,maximum);
+  if(!detail.empty())AppendStatsDescription129(destination,capacity,detail.c_str());
+ }
+}
+void __cdecl MovementDescription129(char* destination,unsigned capacity,float first,float second){
+ originalMovementDescription129(destination,capacity,first,second);
+ if(runtimeConfig.mode!=wht::RunMode::Local||!runtimeConfig.statsTooltip)return;
+ const auto detail=wht::MovementSpeedTooltip(first);
+ if(!detail.empty())AppendStatsDescription129(destination,capacity,detail.c_str());
+}
 void __fastcall PresentParametersHook129(uintptr_t renderer,DWORD,uint32_t* parameters){
  originalPresentParameters129(renderer,parameters);
  const bool enabled=runtimeConfig.mode==wht::RunMode::Local&&!runtimeConfig.vsync;
@@ -169,7 +260,11 @@ wht::AllSkills129 allSkills;
 wht::TimeBoss129 timeBoss129;
 wht::SmartCast129 smartCast129;
 void* skillsIconFrame=nullptr;void* skillsIcon=nullptr;bool skillsIconShown=false,skillsIconPressed=false;
-wht::ToolMenuRect skillsIconRect{.563f,.012f,.016f,.016f};
+wht::ToolMenuRect skillsIconRect{.558f,.012f,.012f,.016f};
+void* dropIconFrame=nullptr;void* dropIcon=nullptr;bool dropIconShown=false,dropIconPressed=false;
+wht::ToolMenuRect dropIconRect{.558f,.052f,.012f,.016f};
+void* inventoryIconFrames129[2]{};void* inventoryIconTextures129[2]{};bool inventoryIconsShown129[2]{},inventoryIconsPressed129[2]{};
+wht::ToolMenuRect inventoryIconRects129[2]={{.558f,.072f,.012f,.016f},{.558f,.032f,.012f,.016f}};
 wht::QuickChatApi129 quickChatApi;
 wht::ResourceApi129 resourceApi;
 wht::ResourceBoard129 resourceBoard;ULONGLONG resourceNext=0;
@@ -344,9 +439,9 @@ bool ControlAvailable129(const wht::ToolMenuControl& d){
  if(!wcscmp(d.section,L"HotKeyOther"))return !wcscmp(d.key,L"hko_menu")||!wcscmp(d.key,L"hko_command")||!wcscmp(d.key,L"hko_MinimizeMultiboard");
  if(!wcscmp(d.section,L"SlotHotkey")||!wcscmp(d.section,L"SlotHotkeyInv")||!wcscmp(d.section,L"SlotHotkeyShop"))return wcsncmp(d.key,L"AutoTarget",10);
  if(!wcscmp(d.section,L"Graphics")&&!wcscmp(d.key,L"Unlock Limit FPS"))return unlockFps129.ready&&!unlockFps129.conflict;
- if(!wcscmp(d.section,L"Graphics"))return !wcscmp(d.key,L"timeOfDayUI")||!wcscmp(d.key,L"ConsoleUI")||!wcscmp(d.key,L"Text Life/Mana Commas")||!wcscmp(d.key,L"Text Life/Mana No Hide")||!wcscmp(d.key,L"Text Stats Commas")||!wcscmp(d.key,L"MouseTooltipUI")||!wcscmp(d.key,L"BlackBarUI")||!wcscmp(d.key,L"Color Player")||(!wcscmp(d.key,L"BarInvul")&&invulnerableHookReady129)||(!wcscmp(d.key,L"VertexColor")&&originalVertexColor129);
+ if(!wcscmp(d.section,L"Graphics"))return !wcscmp(d.key,L"timeOfDayUI")||!wcscmp(d.key,L"ConsoleUI")||!wcscmp(d.key,L"Text Life/Mana Commas")||!wcscmp(d.key,L"Text Life/Mana No Hide")||!wcscmp(d.key,L"Text Stats Commas")||(!wcscmp(d.key,L"Detailed Stats Tooltip")&&detailedStatsHooksReady129)||!wcscmp(d.key,L"MouseTooltipUI")||!wcscmp(d.key,L"BlackBarUI")||!wcscmp(d.key,L"Color Player")||(!wcscmp(d.key,L"BarInvul")&&invulnerableHookReady129)||(!wcscmp(d.key,L"VertexColor")&&originalVertexColor129);
  if(!wcscmp(d.section,L"HotKeyHero"))return !wcsncmp(d.key,L"HeroF",5)||!wcscmp(d.key,L"AutoClickLeft")||!wcscmp(d.key,L"AutoClickRight");
- return !wcscmp(d.section,L"Event")&&(!wcscmp(d.key,L"Show Resource")||!wcscmp(d.key,L"Show Mem")||!wcscmp(d.key,L"Show Timer")||!wcscmp(d.key,L"Show FPS")||!wcscmp(d.key,L"Show Ins All Skills")||!wcscmp(d.key,L"Hide Option Menu")||!wcscmp(d.key,L"Show Hotkey In Panel")||!wcscmp(d.key,L"ShowCooldown")||!wcscmp(d.key,L"ShowRegenHP")||!wcscmp(d.key,L"ShowRegenMana")||(!wcscmp(d.key,L"Keyboard Scroll Speed")&&setKeyboardScroll129)||(!wcscmp(d.key,L"Mouse Scroll Speed")&&setMouseScroll129));
+ return !wcscmp(d.section,L"Event")&&(!wcscmp(d.key,L"Show Resource")||!wcscmp(d.key,L"Show Mem")||!wcscmp(d.key,L"Show Timer")||!wcscmp(d.key,L"Show FPS")||!wcscmp(d.key,L"Show Ins All Skills")||!wcscmp(d.key,L"Show Drop All")||!wcscmp(d.key,L"Show Auto Pick")||!wcscmp(d.key,L"Show Sell All")||!wcscmp(d.key,L"Hide Option Menu")||!wcscmp(d.key,L"Show Hotkey In Panel")||!wcscmp(d.key,L"ShowCooldown")||!wcscmp(d.key,L"ShowRegenHP")||!wcscmp(d.key,L"ShowRegenMana")||(!wcscmp(d.key,L"Keyboard Scroll Speed")&&setKeyboardScroll129)||(!wcscmp(d.key,L"Mouse Scroll Speed")&&setMouseScroll129));
 }
 std::wstring PluginPath129(std::wstring path){
  auto first=path.find_first_not_of(L" \t"),lastCharacter=path.find_last_not_of(L" \t");
@@ -396,6 +491,96 @@ void StartPlugins129(){
 bool ToolCommandImpl129(const std::wstring& command){
  if(runtimeConfig.mode!=wht::RunMode::Local)return false;
  std::wistringstream in(command);std::wstring name,action,extra;in>>name;
+ if(name==L"#autopick"){
+  bool enabled=!inventoryActions129.autoPick;
+  if(in>>action){if((action!=L"0"&&action!=L"1")||in>>extra)return false;enabled=action==L"1";}
+  if(enabled&&!wht::ResolveInventoryActions129(executableBase).query){wht::ShowNotification129(executableBase,"Auto Pick: native signature mismatch",localMessage129);return false;}
+  inventoryActions129.autoPick=enabled;inventoryActions129.due=0;
+  wht::ShowNotification129(executableBase,enabled?"Auto Pick: ON":"Auto Pick: OFF",localMessage129);return true;
+ }
+ if(name==L"#sellall"){
+  if(in>>extra)return false;
+  if(!inventoryActions129.StartSell(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveDropItems129(executableBase))){wht::ShowNotification129(executableBase,"Sell All: select a live unit; native functions must be available",localMessage129);return false;}
+  wht::ShowNotification129(executableBase,"Sell All: finding a nearby shop",localMessage129);return true;
+ }
+ if(name==L"#drop"||name==L"#dropall"){
+  if(in>>extra){wht::ShowNotification129(executableBase,"Usage: #drop or #dropall (select a unit first)",localMessage129);return false;}
+  inventoryActions129.selling=false;inventoryActions129.due=GetTickCount64()+2000;
+  unsigned dropped=0;const char* error=nullptr;const auto api=wht::ResolveDropItems129(executableBase);
+  const bool success=wht::DropItems129(executableBase,wht::SelectedSkill129(executableBase),api,dropped,&error);
+  wht::ShowNotification129(executableBase,"Dropped "+std::to_string(dropped)+" items"+(success?std::string{}:std::string(": ")+(api?(error?error:"Native drop failed"):"Drop function signature mismatch")),localMessage129);
+  return success;
+ }
+ if(name==L"#copy"){
+  std::wstring args;std::getline(in,args);unsigned count=1;const char* error=nullptr;
+  if(!wht::ParseCopyUnit129(args,count)){wht::ShowNotification129(executableBase,"Usage: #copy [1..50] (select a unit first)",localMessage129);return false;}
+  const auto spawned=wht::CopyUnits129(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveTeleportApi129(executableBase),wht::ResolveCreateUnit129(executableBase),count,&error);
+  wht::ShowNotification129(executableBase,spawned?"Copy Unit: "+std::to_string(spawned)+"/"+std::to_string(count)+" created":std::string("Copy Unit: ")+(error?error:"Native function unavailable"),localMessage129);
+  return spawned!=0;
+ }
+ if(name==L"#create"){
+  std::wstring args;std::getline(in,args);uint32_t code=0;unsigned count=1;
+  if(!wht::ParseCreateUnit129(args,code,count)){wht::ShowNotification129(executableBase,"Usage: #create rawcode [1..50]",localMessage129);return false;}
+  wht::MousePosition129 cursor;
+  if(!wht::ReadMousePosition129(executableBase,cursor)){wht::ShowNotification129(executableBase,"Create Unit: point the cursor at the map",localMessage129);return false;}
+  const auto spawned=wht::CreateUnits129(executableBase,wht::ResolveCreateUnit129(executableBase),code,count,cursor.x,cursor.y);
+  wht::ShowNotification129(executableBase,"Create Unit: "+std::to_string(spawned)+"/"+std::to_string(count)+(spawned?" created":" (invalid unit rawcode or native function unavailable)"),localMessage129);
+  return spawned!=0;
+ }
+ if(name==L"#selc"){
+  if(in>>extra){wht::ShowNotification129(executableBase,"Usage: #selc (select a unit first)",localMessage129);return false;}
+  const char* error=nullptr;
+  if(!wht::ReselectUnit129(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveReselect129(executableBase),&error)){
+   wht::ShowNotification129(executableBase,std::string("Reselect: ")+(error?error:"Native function unavailable"),localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"Selected unit reselected",localMessage129);return true;
+ }
+ if(name==L"#speed"){
+  std::wstring args;std::getline(in,args);float requested=1;unsigned actual=0;
+  if(!wht::ParseSpeedMultiplier129(args,requested)){wht::ShowNotification129(executableBase,"Usage: #speed x (1..70, default 1)",localMessage129);return false;}
+  if(!speedClocksReady129||!wht::SetGameSpeed129(executableBase,2,wht::ResolveGameSpeed129(executableBase),actual)||!ApplySpeedMultiplier129(requested)){
+   wht::ShowNotification129(executableBase,"Game Speed: clock hooks unavailable, map speed locked, or native update failed",localMessage129);return false;
+  }
+  char text[80]{};std::snprintf(text,sizeof(text),"Game Speed: %.2fx",requested);wht::ShowNotification129(executableBase,text,localMessage129);return true;
+ }
+ if(name==L"#nocd"||name==L"#yescd"){
+  if(in>>extra)return false;
+  if(name==L"#yescd"){noCooldown129.Reset();wht::ShowNotification129(executableBase,"No Cooldown: OFF",localMessage129);return true;}
+  const char* error=nullptr;
+  if(!wht::ResetCooldown129(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveCooldownReset129(executableBase),&error)){
+   wht::ShowNotification129(executableBase,std::string("No Cooldown: ")+(error?error:"Native function unavailable"),localMessage129);return false;
+  }
+  noCooldown129.enabled=true;noCooldown129.due=GetTickCount64()+100;
+  wht::ShowNotification129(executableBase,"No Cooldown: ON (selected unit)",localMessage129);return true;
+ }
+ if(name==L"#repeat"){
+  std::wstring args,text;std::getline(in,args);unsigned count=0;bool stop=false;
+  if(!wht::ParseRepeatMessage129(args,count,text,stop)){
+   wht::ShowNotification129(executableBase,"Usage: #repeat <1..10000> <text>; #repeat stop",localMessage129);return false;
+  }
+  if(stop){repeatMessage129.Reset();wht::ShowNotification129(executableBase,"Repeat stopped",localMessage129);return true;}
+  if(!repeatMessage129.Set(count,wht::Utf8(text))){wht::ShowNotification129(executableBase,"Repeat text: 1..128 UTF-8 bytes; no hash commands or line breaks",localMessage129);return false;}
+  wht::ShowNotification129(executableBase,"Repeat queued: "+std::to_string(count)+" messages",localMessage129);return true;
+ }
+ if(name==L"#as"){
+  std::wstring args;std::getline(in,args);float requested=2,actual=0,effective=0;const char* error=nullptr;
+  if(!wht::ParseAttackSpeed129(args,requested)){wht::ShowNotification129(executableBase,"Usage: #as [multiplier 0.1..50] (default 2)",localMessage129);return false;}
+  if(!wht::SetAttackSpeed129(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveAttackSpeed129(executableBase),requested,actual,effective,&error)){
+   wht::ShowNotification129(executableBase,std::string("Attack Speed: ")+(error?error:"Native function unavailable"),localMessage129);return false;
+  }
+  char text[128]{};std::snprintf(text,sizeof(text),"Attack Speed: %.2fx (effective map limit: %.2fx)",actual,effective);
+  wht::ShowNotification129(executableBase,text,localMessage129);return true;
+ }
+ if(name==L"#attackcd"){
+  std::wstring args;std::getline(in,args);float seconds=0,actual=0;unsigned weapon=0;const char* error=nullptr;
+  if(!wht::ParseAttackCooldown129(args,seconds,weapon)){
+   wht::ShowNotification129(executableBase,"Usage: #attackcd seconds(0.01..3600) [weapon 1|2]",localMessage129);return false;
+  }
+  if(!wht::SetAttackCooldown129(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveAttackCooldown129(executableBase),seconds,weapon,actual,&error)){
+   wht::ShowNotification129(executableBase,std::string("Attack Cooldown: ")+(error?error:"Native function unavailable"),localMessage129);return false;
+  }
+  char text[96]{};std::snprintf(text,sizeof(text),"Attack %u Cooldown: %.3f seconds",weapon+1,actual);wht::ShowNotification129(executableBase,text,localMessage129);return true;
+ }
  if(name==L"#armor"){
   std::wstring args;std::getline(in,args);float requested=50,actual=0;const char* error=nullptr;
   if(!wht::ParseArmor129(args,requested)){
@@ -699,6 +884,13 @@ bool ToolCommandImpl129(const std::wstring& command){
   runtimeConfig=wht::LoadConfig(runtimeIni);ApplyFogEffect129(runtimeConfig.mode==wht::RunMode::Local);toolMenu.nextRefresh=0;
   wht::Log(runtimeFolder,std::string("WHT 1.29 #nfe: ")+(runtimeConfig.removeFogEffect?"ON":"OFF")+", scene override="+(fogEffect129.active?"ON":"OFF"));return true;
  }
+ if(name==L"#statstooltip"){
+  if(!detailedStatsHooksReady129)return false;
+  std::wstring value=runtimeConfig.statsTooltip?L"0":L"1";
+  in>>std::ws;if(!in.eof()&&(!(in>>value)||(value!=L"0"&&value!=L"1")||in>>extra))return false;
+  if(!wht::SaveSetting(runtimeIni,L"Graphics",L"Detailed Stats Tooltip",value))return false;
+  runtimeConfig=wht::LoadConfig(runtimeIni);toolMenu.nextRefresh=0;return true;
+ }
  if(name==L"#statscommas"){
   std::wstring value=runtimeConfig.statsCommas?L"0":L"1";
   if(in>>action){if((action!=L"0"&&action!=L"1")||in>>extra)return false;value=action;}
@@ -769,6 +961,14 @@ bool ToolCommandImpl129(const std::wstring& command){
  if(name==L"#allskills"||name==L"#skills"){
   if(in>>extra||toolMenu.open||macroRecorder.playing||macroRecorder.recording)return false;
   return allSkills.Start(executableBase,clickButton,GetTickCount64());
+ }
+ if(name==L"#showdropall"||name==L"#showautopick"||name==L"#showsellall"){
+  const auto key=name==L"#showdropall"?L"Show Drop All":name==L"#showautopick"?L"Show Auto Pick":L"Show Sell All";
+  const bool previous=name==L"#showdropall"?runtimeConfig.showDropAll:name==L"#showautopick"?runtimeConfig.showAutoPick:runtimeConfig.showSellAll;
+  std::wstring value=previous?L"0":L"1";
+  if(in>>action){if((action!=L"0"&&action!=L"1")||in>>extra)return false;value=action;}
+  if(!wht::SaveSetting(runtimeIni,L"Event",key,value))return false;
+  runtimeConfig=wht::LoadConfig(runtimeIni);toolMenu.nextRefresh=0;return true;
  }
  if(name==L"#console"||name==L"#consoleui"||name==L"#menu"||name==L"#hidemenu"||name==L"#showskills"){
   const bool console=name==L"#console"||name==L"#consoleui",skills=name==L"#showskills";
@@ -857,6 +1057,7 @@ bool ToolCommand(const std::wstring& command){
  const bool result=ToolCommandImpl129(command);if(!result)return false;
  std::wistringstream input(command);std::wstring name,argument;input>>name>>argument;
  std::string feedback;
+ if(name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
  if(name==L"#armor")return true;
  if(name==L"#ms")return true;
  if(name==L"#ggl"||name==L"#gll"||name==L"#gg"||name==L"#gl")return true;
@@ -928,7 +1129,7 @@ bool ToolCommand(const std::wstring& command){
    {L"#hpvalue","HP Value",runtimeConfig.stateTagHpValue},{L"#manavalue","Mana Value",runtimeConfig.stateTagManaValue},
    {L"#regenhp","HP Regen",runtimeConfig.showRegenHP},{L"#showregen","HP Regen",runtimeConfig.showRegenHP},
    {L"#regen","HP Regen",runtimeConfig.showRegenHP},{L"#regenmp","Mana Regen",runtimeConfig.showRegenMana},
-   {L"#statscommas","Stats Commas",runtimeConfig.statsCommas},{L"#hpmpcommas","HP/Mana Commas",runtimeConfig.lifeManaCommas},
+   {L"#statstooltip","Detailed Damage/Armor",runtimeConfig.statsTooltip},{L"#statscommas","Stats Commas",runtimeConfig.statsCommas},{L"#hpmpcommas","HP/Mana Commas",runtimeConfig.lifeManaCommas},
    {L"#hpmpnohide","HP/Mana No Hide",runtimeConfig.lifeManaNoHide},
    {L"#commandsettings","Command Settings",commandSettingsActive},{L"#tools","Tools Menu",toolMenu.open}};
   for(const auto& item:toggles)if(name==item.command){feedback=std::string(item.title)+": "+(item.value?"ON":"OFF");break;}
@@ -1023,7 +1224,14 @@ LRESULT CALLBACK InputMessages(int code,WPARAM removed,LPARAM data){
      handled=true;
      if(msg.message==WM_LBUTTONDOWN){skillsIconPressed=true;ToolCommand(L"#allskills");}
     }
-    if(msg.message==WM_LBUTTONUP)skillsIconPressed=false;
+    if(!toolMenu.open&&dropIconShown&&dropIconRect.Hit(projected,canvas.width,canvas.height)){
+     handled=true;
+     if(msg.message==WM_LBUTTONDOWN){dropIconPressed=true;ToolCommand(L"#dropall");}
+    }
+    for(unsigned i=0;i<2;++i)if(!toolMenu.open&&inventoryIconsShown129[i]&&inventoryIconRects129[i].Hit(projected,canvas.width,canvas.height)){
+     handled=true;if(msg.message==WM_LBUTTONDOWN){inventoryIconsPressed129[i]=true;ToolCommand(i==0?L"#autopick":L"#sellall");}
+    }
+    if(msg.message==WM_LBUTTONUP){skillsIconPressed=false;dropIconPressed=false;inventoryIconsPressed129[0]=inventoryIconsPressed129[1]=false;}
     const int classic=std::min(r.right,r.bottom*4/3);
     POINT menuPoint{p.x-(r.right-classic)/2,p.y};
     if(runtimeConfig.hideOptionMenu&&wht::ToolMenuRect{.178f,.576f,.09f,.024f}.Hit(menuPoint,classic,r.bottom))handled=true;
@@ -1039,7 +1247,7 @@ void EnsureInput(){
  if(!window||!IsWindow(window))EnumWindows(FindWindow,0);
  if(!inputHook&&window){inputHook=SetWindowsHookExW(WH_GETMESSAGE,InputMessages,nullptr,GetWindowThreadProcessId(window,nullptr));}
 }
-void UpdateHelp(){RECT r{};POINT p{};GetClientRect(window,&r);GetCursorPos(&p);ScreenToClient(window,&p);auto canvas=wht::Canvas129(r.right,r.bottom);p=canvas.Project(p);auto help=toolMenu.HelpAt(p,canvas.width,canvas.height,runtimeConfig);if(skillsIconShown&&skillsIconRect.Hit(p,canvas.width,canvas.height))help=runtimeConfig.english?"All Skills\nSpend available hero skill points without manually opening the learn menu.":wht::Utf8(L"C\u1ed9ng to\u00e0n b\u1ed9 k\u1ef9 n\u0103ng\nD\u00f9ng \u0111i\u1ec3m k\u1ef9 n\u0103ng c\u00f2n l\u1ea1i c\u1ee7a t\u01b0\u1edbng, kh\u00f4ng c\u1ea7n t\u1ef1 m\u1edf d\u1ea5u +.");toolMenu.UpdateHelp(p,canvas.width,canvas.height,GetForegroundWindow()==window,help);}
+void UpdateHelp(){RECT r{};POINT p{};GetClientRect(window,&r);GetCursorPos(&p);ScreenToClient(window,&p);auto canvas=wht::Canvas129(r.right,r.bottom);p=canvas.Project(p);auto help=toolMenu.HelpAt(p,canvas.width,canvas.height,runtimeConfig);if(skillsIconShown&&skillsIconRect.Hit(p,canvas.width,canvas.height))help=runtimeConfig.english?"All Skills\nSpend available hero skill points without manually opening the learn menu.":wht::Utf8(L"C\u1ed9ng to\u00e0n b\u1ed9 k\u1ef9 n\u0103ng\nD\u00f9ng \u0111i\u1ec3m k\u1ef9 n\u0103ng c\u00f2n l\u1ea1i c\u1ee7a t\u01b0\u1edbng, kh\u00f4ng c\u1ea7n t\u1ef1 m\u1edf d\u1ea5u +.");if(dropIconShown&&dropIconRect.Hit(p,canvas.width,canvas.height))help=runtimeConfig.english?"Drop All (#dropall)\nDrop all carried items on the ground.":wht::Utf8(L"Th\u1ea3 to\u00e0n b\u1ed9 \u0111\u1ed3 (#dropall)\nTh\u1ea3 t\u1ea5t c\u1ea3 v\u1eadt ph\u1ea9m trong t\u00fai xu\u1ed1ng \u0111\u1ea5t.");for(unsigned i=0;i<2;++i)if(inventoryIconsShown129[i]&&inventoryIconRects129[i].Hit(p,canvas.width,canvas.height))help=runtimeConfig.english?(i==0?"Auto Pick\nToggle automatic pickup of nearby items.":"Sell All\nSell carried items at a nearby allied shop."):wht::Utf8(i==0?L"T\u1ef1 nh\u1eb7t \u0111\u1ed3\nB\u1eadt ho\u1eb7c t\u1eaft t\u1ef1 nh\u1eb7t v\u1eadt ph\u1ea9m g\u1ea7n unit.":L"B\u00e1n to\u00e0n b\u1ed9 \u0111\u1ed3\nB\u00e1n v\u1eadt ph\u1ea9m t\u1ea1i shop g\u1ea7n unit.");toolMenu.UpdateHelp(p,canvas.width,canvas.height,GetForegroundWindow()==window,help);}
 void UpdateMemory(bool enabled){
  if(!toolMenu.initialized)return;
  if(enabled&&!memoryFrame){memoryFrame=toolMenu.Frame(executableBase,toolMenu.independentHost,{.47f,.535f,.23f,.026f});if(memoryFrame)memoryFont=toolMenu.TextIn(memoryFrame,{.47f,.535f,.23f,.026f},"",true,.015f);}
@@ -1073,6 +1281,32 @@ void UpdateSkillsIcon(bool enabled){
  if(!skillsIconShown){if(skillsIconFrame)wht::NativeFrameHide(skillsIconFrame);skillsIconPressed=false;return;}
  frameApi.setTexture(skillsIcon,skillsIconPressed?"BTNAllSkillsDow.blp":"BTNAllSkills.blp",0);wht::NativeFrameShow(skillsIconFrame);
 }
+void UpdateDropIcon(bool enabled){
+ if(!toolMenu.initialized)return;
+ if(enabled&&!dropIconFrame){
+  dropIconFrame=toolMenu.Frame(executableBase,toolMenu.independentHost,dropIconRect);
+  if(dropIconFrame){dropIcon=toolMenu.Texture(dropIconFrame,"BTNDropItem.blp",dropIconRect.width,dropIconRect.height);if(dropIcon)frameApi.setRelPoint(dropIcon,4,dropIconFrame,4,0,0,1);}
+ }
+ dropIconShown=enabled&&dropIconFrame&&dropIcon;
+ if(!dropIconShown){if(dropIconFrame)wht::NativeFrameHide(dropIconFrame);dropIconPressed=false;return;}
+ frameApi.setTexture(dropIcon,dropIconPressed?"BTNDropItemDow.blp":"BTNDropItem.blp",0);wht::NativeFrameShow(dropIconFrame);
+}
+void UpdateInventoryIcons129(bool allowed){
+ if(!toolMenu.initialized)return;
+ const char* up[]={"BTNAutoPick.blp","BTNSellItem.blp"};const char* down[]={"BTNAutoPickDow.blp","BTNSellItemDow.blp"};
+ for(unsigned i=0;i<2;++i){
+  const bool enabled=allowed&&(i==0?runtimeConfig.showAutoPick:runtimeConfig.showSellAll);
+  if(enabled&&!inventoryIconFrames129[i]){
+   const auto rect=inventoryIconRects129[i];inventoryIconFrames129[i]=toolMenu.Frame(executableBase,toolMenu.independentHost,rect);
+   if(inventoryIconFrames129[i]){inventoryIconTextures129[i]=toolMenu.Texture(inventoryIconFrames129[i],up[i],rect.width,rect.height);if(inventoryIconTextures129[i])frameApi.setRelPoint(inventoryIconTextures129[i],4,inventoryIconFrames129[i],4,0,0,1);}
+  }
+  inventoryIconsShown129[i]=enabled&&inventoryIconFrames129[i]&&inventoryIconTextures129[i];
+  if(!inventoryIconsShown129[i]){if(inventoryIconFrames129[i])wht::NativeFrameHide(inventoryIconFrames129[i]);inventoryIconsPressed129[i]=false;continue;}
+  const bool active=i==0?inventoryActions129.autoPick:inventoryActions129.selling;
+  frameApi.setTexture(inventoryIconTextures129[i],active||inventoryIconsPressed129[i]?down[i]:up[i],0);wht::NativeFrameShow(inventoryIconFrames129[i]);
+ }
+}
+void ResetInventoryIcons129(){for(unsigned i=0;i<2;++i){inventoryIconFrames129[i]=inventoryIconTextures129[i]=nullptr;inventoryIconsShown129[i]=inventoryIconsPressed129[i]=false;}}
 void UpdateTooltip129(uintptr_t owner,bool allowed);
 wht::NativeFrameApi LevelFrameApi129(){
  wht::NativeFrameApi api=frameApi;
@@ -1109,7 +1343,7 @@ uintptr_t __fastcall DestroyBar129(uintptr_t bar,DWORD,unsigned flags){
  return originalBarDestroy129(bar,flags);
 }
 bool SafeUpdateMenu(uintptr_t owner,bool allowed){
- __try {toolMenu.Update(executableBase,owner,runtimeConfig,allowed,&frameApi);regen129.Update(executableBase,runtimeConfig,allowed,toolMenu);UpdateMemory(allowed&&runtimeConfig.showMem);UpdateClock(allowed&&runtimeConfig.showTimer);UpdateResources(allowed&&runtimeConfig.showResource);UpdateSkillsIcon(allowed&&runtimeConfig.showInsAllSkills);UpdateHelp();UpdateTooltip129(owner,allowed);hotkeyLabels129.Update(executableBase,runtimeConfig,allowed,toolMenu);return true;}
+ __try {toolMenu.Update(executableBase,owner,runtimeConfig,allowed,&frameApi);regen129.Update(executableBase,runtimeConfig,allowed,toolMenu);UpdateMemory(allowed&&runtimeConfig.showMem);UpdateClock(allowed&&runtimeConfig.showTimer);UpdateResources(allowed&&runtimeConfig.showResource);UpdateSkillsIcon(allowed&&runtimeConfig.showInsAllSkills);UpdateDropIcon(allowed&&runtimeConfig.showDropAll);UpdateInventoryIcons129(allowed);UpdateHelp();UpdateTooltip129(owner,allowed);hotkeyLabels129.Update(executableBase,runtimeConfig,allowed,toolMenu);return true;}
  __except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
 void UpdateTooltip129(uintptr_t owner,bool allowed){
@@ -1145,7 +1379,7 @@ void UpdateTools(){
   ApplyHpDimensions129(false);
   if(macroRecorder.recording)macroRecorder.FinishRecording();macroRecorder.Stop();
   // Map teardown releases native frames. Forget pointers without dereferencing them.
-  mutedChat129.Reset();repeatChat129.Reset();timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();if(toolMenu.parent)toolMenu.Reset();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;chatTyping=false;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();stats129.Reset();lifeMana129.Reset();fpsState={};timeOfDay={};matchStart={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;return;
+  mutedChat129.Reset();repeatChat129.Reset();repeatMessage129.Reset();queuedChatDue129=0;noCooldown129.Reset();ApplySpeedMultiplier129(1.f);timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();if(toolMenu.parent)toolMenu.Reset();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;chatTyping=false;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();stats129.Reset();lifeMana129.Reset();fpsState={};timeOfDay={};matchStart={};consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;dropIconFrame=dropIcon=nullptr;dropIconShown=dropIconPressed=false;inventoryActions129.Reset();ResetInventoryIcons129();return;
  }
  const auto owner=*reinterpret_cast<uintptr_t*>(executableBase+0xd3d7f8);
  float startSeconds=0;
@@ -1154,7 +1388,7 @@ void UpdateTools(){
   if(!startSoundPlayer129(MAKEINTRESOURCEW(101),runtimeModule,SND_RESOURCE|SND_ASYNC|SND_NODEFAULT|SND_NOSTOP))wht::Log(runtimeFolder,"WHT 1.29: start sound unavailable; skipped.");
  if(resourceFailed)return;
  if(!resourceArchive&&!wht::MountResources129(executableBase,mixPath,resourceArchive)){resourceFailed=true;toolMenu.failed=true;wht::Log(runtimeFolder,"WHT 1.29: embedded MPQ mount failed.");return;}
- if(toolMenu.parent&&toolMenu.parent!=owner){timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;}
+ if(toolMenu.parent&&toolMenu.parent!=owner){timeBoss129.Reset();regen129.Reset();blackBar129.Reset();mouseTooltip129.Reset();hotkeyLabels129.Reset();wht::ClearUiLayout129();memoryFrame=memoryFont=clockFrame=clockFont=nullptr;resourceBoard={};memoryNext=resourceNext=0;resourceExpanded=true;messageTimers={};allSkills.Reset();smartCast129.Reset();autoClick.Reset();consoleState={};skillsIconFrame=skillsIcon=nullptr;skillsIconShown=skillsIconPressed=false;dropIconFrame=dropIcon=nullptr;dropIconShown=dropIconPressed=false;inventoryActions129.Reset();ResetInventoryIcons129();}
  RECT r{};GetClientRect(window,&r);wht::SetViewport129(r.right,r.bottom);auto canvas=wht::Canvas129(r.right,r.bottom);wht::ToolMenuOverlay::SetViewport(canvas.width,canvas.height);
  const bool allowed=runtimeConfig.mode==wht::RunMode::Local;
  ApplyFogEffect129(allowed);ApplyLevels129(allowed&&runtimeConfig.stateTagShowLevel);ApplyStateValues129(allowed);
@@ -1162,6 +1396,8 @@ void UpdateTools(){
  bool nativeTyping=false;if(wht::ChatOpen129(executableBase,nativeTyping))chatTyping=nativeTyping;
  const auto smartSelection=wht::SelectedSkill129(executableBase);
  if(!smartCast129.Valid(allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window&&runtimeConfig.modeCast==1,wht::TargetMode129(executableBase),smartSelection.unit,smartSelection.identity))smartCast129.Reset();
+ const auto inventoryResult=inventoryActions129.TickNative(executableBase,allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window,GetTickCount64());
+ if(inventoryResult)wht::ShowNotification129(executableBase,inventoryResult,localMessage129);
  allSkills.Tick(executableBase,allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.playing&&!macroRecorder.recording&&GetForegroundWindow()==window,clickButton,GetTickCount64());
  fpsState.Apply(executableBase,allowed&&runtimeConfig.showFps,fpsMode);
  stats129.Apply(executableBase,allowed&&runtimeConfig.statsCommas,originalLifeText129);
@@ -1171,7 +1407,14 @@ void UpdateTools(){
  messageTimers.Tick(executableBase,runtimeConfig,allowed&&!chatTyping,GetTickCount64(),clearFrame);
  const bool clickAllowed=allowed&&!toolMenu.open&&!chatTyping&&!macroRecorder.recording&&!macroRecorder.playing&&GetForegroundWindow()==window&&!IsIconic(window);
  POINT cursor{};const bool inside=GetCursorPos(&cursor)&&ScreenToClient(window,&cursor)&&cursor.x>=0&&cursor.y>=0&&cursor.x<r.right&&cursor.y<r.bottom;
- repeatChat129.Tick(clickAllowed,GetTickCount64(),[&](const std::string& text){return wht::SendQuickChat129(executableBase,text,quickChatApi);});
+ noCooldown129.Tick(clickAllowed,GetTickCount64(),[&](){return wht::ResetCooldown129(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveCooldownReset129(executableBase));});
+ const auto chatNow129=GetTickCount64();
+ const auto sendQueued129=[&](const std::string& text){
+  if(chatNow129<queuedChatDue129||!wht::SendQuickChat129(executableBase,text,quickChatApi))return false;
+  queuedChatDue129=chatNow129+250;return true;
+ };
+ repeatMessage129.Tick(clickAllowed,chatNow129,sendQueued129);
+ repeatChat129.Tick(clickAllowed,chatNow129,sendQueued129);
  autoClick.Tick(runtimeConfig,clickAllowed&&inside,GetTickCount64(),[&](UINT message,WPARAM key){PostMessageW(window,message,key,MAKELPARAM(cursor.x,cursor.y));});
  if(!toolMenu.failed&&!SafeUpdateMenu(owner,allowed)){toolMenu.failed=true;wht::Log(runtimeFolder,"WHT 1.29: native menu exception at "+std::string(toolMenu.initStage));}
  timeBoss129.Update(executableBase,owner,allowed&&runtimeConfig.timeBoss&&(runtimeConfig.mth49Enable||runtimeConfig.g17Enable),toolMenu);
@@ -1249,6 +1492,18 @@ DWORD WINAPI Install(void* module){
     MH_CreateHook(barShow,ShowBar129,reinterpret_cast<void**>(&originalBarShow129))==MH_OK){
   invulnerableHookReady129=true;if(MH_EnableHook(barShow)!=MH_OK)invulnerableHookReady129=false;
  }
+ InstallSpeedClocks129();
+ wht::Log(folder,speedClocksReady129?"WHT 1.29 speed clock hooks ready.":"WHT 1.29 speed clock hooks unavailable.");
+ const unsigned char descriptionSignature[]={0x55,0x8b,0xec,0x83,0xec,0x58};
+ auto attackDescription=reinterpret_cast<void*>(executableBase+0x2289b0);
+ auto movementDescription=reinterpret_cast<void*>(executableBase+0x229740);
+ if(!memcmp(attackDescription,descriptionSignature,sizeof(descriptionSignature))&&
+    !memcmp(movementDescription,descriptionSignature,sizeof(descriptionSignature))&&
+    MH_CreateHook(attackDescription,AttackDescription129,reinterpret_cast<void**>(&originalAttackDescription129))==MH_OK&&
+    MH_CreateHook(movementDescription,MovementDescription129,reinterpret_cast<void**>(&originalMovementDescription129))==MH_OK&&
+    MH_EnableHook(attackDescription)==MH_OK&&MH_EnableHook(movementDescription)==MH_OK)detailedStatsHooksReady129=true;
+ if(!detailedStatsHooksReady129){MH_DisableHook(attackDescription);MH_DisableHook(movementDescription);MH_RemoveHook(attackDescription);MH_RemoveHook(movementDescription);originalAttackDescription129=nullptr;originalMovementDescription129=nullptr;}
+ wht::Log(folder,detailedStatsHooksReady129?"WHT 1.29 detailed damage/armor tooltips ready.":"WHT 1.29 detailed damage/armor tooltip hooks unavailable.");
  auto lifeFont=reinterpret_cast<unsigned char*>(executableBase)+0x487a40;
  const unsigned char lifeSignature[]={0x55,0x8b,0xec,0x56,0x8b,0xf1,0x8b,0x86,0xa0,0,0,0};
  if(!memcmp(lifeFont,lifeSignature,sizeof(lifeSignature))&&MH_CreateHook(lifeFont,LifeText129,reinterpret_cast<void**>(&originalLifeText129))==MH_OK)MH_EnableHook(lifeFont);

@@ -39,6 +39,7 @@ struct Config {
     int modeCast=0; // 0 = Quick Cast, 1 = Smart Cast, 2 = Quick Cast Old
     bool lifeManaCommas=false,lifeManaNoHide=false;
     bool statsCommas=false;
+    bool statsTooltip=true;
     bool vertexColor=false;
     bool colorPlayer=false;
     bool hideInvulnerableBars=false;

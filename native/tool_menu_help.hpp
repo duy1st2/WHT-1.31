@@ -7,6 +7,8 @@ inline std::string MthActionHelp(int action){
  return Utf8(std::wstring(names[action])+L"\n"+(action<5?L"Thực hiện chuỗi mua và ghép đồ tương ứng trong MTH.":action==5?L"Thực hiện thao tác nhặt Goku trong MTH.":L"Điều khiển đơn vị chạy tuyến tương ứng; số lệnh xếp hàng theo mức đã chọn."));
 }
 inline std::string MenuControlHelp(const ToolMenuControl& d){
+ if(!wcscmp(d.section,L"Graphics")&&!wcscmp(d.key,L"Detailed Stats Tooltip"))return toolEnglish.load()?"Detailed damage/armor tooltips\nHover over Damage to see attacks per second, attack interval, attack speed bonus and the map maximum. Hover over Armor to see numeric movement speed. Turning this off restores the original tooltip.":Utf8(L"Chi ti\u1ebft damage/armor\nTr\u1ecf chu\u1ed9t v\u00e0o Damage \u0111\u1ec3 xem s\u1ed1 \u0111\u00f2n/gi\u00e2y, th\u1eddi gian gi\u1eefa hai \u0111\u00f2n, bonus t\u1ed1c \u0111\u1ed9 \u0111\u00e1nh v\u00e0 m\u1ee9c t\u1ed1i \u0111a c\u1ee7a map. Tr\u1ecf v\u00e0o Armor \u0111\u1ec3 xem t\u1ed1c \u0111\u1ed9 di chuy\u1ec3n b\u1eb1ng s\u1ed1. T\u1eaft \u0111\u1ec3 hi\u1ec7n tooltip g\u1ed1c.");
+
  if(!wcscmp(d.key,L"Keyboard Scroll Speed")||!wcscmp(d.key,L"Mouse Scroll Speed"))return Utf8(L"T\u1ed1c \u0111\u1ed9 cu\u1ed9n camera\n0..700%; 100% m\u1eb7c \u0111\u1ecbnh. Nh\u1eadp gi\u00e1 tr\u1ecb r\u1ed3i Enter \u0111\u1ec3 l\u01b0u.");
  if(!wcscmp(d.key,L"Borderless"))return Utf8(L"C\u1eeda s\u1ed5 kh\u00f4ng vi\u1ec1n\nT\u1eaft \u0111\u1ec3 kh\u00f4i ph\u1ee5c c\u1eeda s\u1ed5 g\u1ed1c.");
  if(!wcscmp(d.key,L"Lock Cursor"))return Utf8(L"Kh\u00f3a chu\u1ed9t\nTh\u1ea3 kh\u00f3a khi game m\u1ea5t focus.");

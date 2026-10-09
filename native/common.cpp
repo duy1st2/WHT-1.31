@@ -170,6 +170,7 @@ Config LoadConfig(const std::wstring& ini) {
     c.modeCast=std::clamp(static_cast<int>(Number(Read(ini,L"Event",L"ModeCast",L"0"),0,0,2)),0,2);
     c.lifeManaCommas=Read(ini,L"Graphics",L"Text Life/Mana Commas",L"0")==L"1";
     c.lifeManaNoHide=Read(ini,L"Graphics",L"Text Life/Mana No Hide",L"0")==L"1";
+    c.statsTooltip=Read(ini,L"Graphics",L"Detailed Stats Tooltip",L"1")==L"1";
     c.statsCommas=Read(ini,L"Graphics",L"Text Stats Commas",L"0")==L"1";
     c.vertexColor=Read(ini,L"Graphics",L"VertexColor",L"0")==L"1";
     c.colorPlayer=Read(ini,L"Graphics",L"Color Player",L"0")==L"1";
