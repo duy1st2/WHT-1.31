@@ -34,6 +34,7 @@ inline std::string NotificationText(const std::string& text){
             plain="[WHT]"+(next<plain.size()?" "+plain.substr(next):std::string{});
         }
     }
+    if(plain.compare(0,5,"[WHT]")!=0)plain="[WHT] "+plain;
     const auto word=[](unsigned char c){return c>=128||(c>='a'&&c<='z')||(c>='A'&&c<='Z')||(c>='0'&&c<='9')||c=='_';};
     size_t valueAt=std::string::npos;
     const size_t prefix=plain.compare(0,6,"[WHT] ")==0?6:0;

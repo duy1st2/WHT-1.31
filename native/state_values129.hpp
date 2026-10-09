@@ -55,7 +55,7 @@ struct StateValues129 {
   auto& entry=found->second;const float fontSize=StateFontSize129(config.stateTagFontSize);
   for(unsigned n=0;n<2;++n){
    float value=0,maximum=0;std::string text;
-   if(enabled&&(n?config.stateTagManaValue:config.stateTagHpValue)&&ReadStateValues129(base,unit,n!=0,reinterpret_cast<RegenResolve129>(base+0x707f0),reinterpret_cast<StatRead129>(base+0x400d80),reinterpret_cast<StatRead129>(base+0x400e20),value,maximum))text=StateValueText129(value,maximum,config.stateTagShowMax,n!=0,config.lifeManaCommas);
+   if(enabled&&(!n||config.stateTagManaValue)&&ReadStateValues129(base,unit,n!=0,reinterpret_cast<RegenResolve129>(base+0x707f0),reinterpret_cast<StatRead129>(base+0x400d80),reinterpret_cast<StatRead129>(base+0x400e20),value,maximum))text=StateValueText129(value,maximum,config.stateTagShowMax,n!=0,config.lifeManaCommas);
    if(!entry.fonts[n]&&!text.empty()){
     entry.fonts[n]=NativeCreateFontString(api,reinterpret_cast<void*>(bar),fontSize,"",2);
     if(entry.fonts[n])api.setTextAlign(entry.fonts[n],2);

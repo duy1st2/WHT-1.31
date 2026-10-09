@@ -1,4 +1,4 @@
-﻿#include "network_ping.hpp"
+#include "network_ping.hpp"
 #include "unit_scale129.hpp"
 #include "ability_button129.hpp"
 #include "inventory_info129.hpp"
@@ -1257,7 +1257,7 @@ int wmain(int argc,wchar_t** argv){try{
  check(ToolCommand(L"#toolui "+std::to_wstring(castModeIndex129)+L" set 1")&&runtimeConfig.modeCast==1);
  check(!ToolCommand(L"#toolui "+std::to_wstring(castModeIndex129)+L" set 3"));
  levelHooksReady129=true;
- const auto fontSizeIndex129=wht::kToolMenuControls.size()-8;
+ const auto fontSizeIndex129=wht::kToolMenuControls.size()-7;
  check(ToolCommand(L"#toolui "+std::to_wstring(fontSizeIndex129)+L" set 8")&&runtimeConfig.stateTagFontSize==8);
  check(!ToolCommand(L"#toolui "+std::to_wstring(fontSizeIndex129)+L" set 21"));
  check(ToolCommand(L"#toolui "+std::to_wstring(fontSizeIndex129)+L" set 4")&&runtimeConfig.stateTagFontSize==4);
@@ -1289,6 +1289,9 @@ int wmain(int argc,wchar_t** argv){try{
  check(ToolCommand(L"#hpvalue")&&runtimeConfig.stateTagHpValue);
  check(!ToolCommand(L"#manavalue 2")&&!ToolCommand(L"#hpvalue 0 extra"));
  levelHooksReady129=false;check(!ToolCommand(L"#hpvalue 1"));
+ check(wht::NotificationText("Auto Skills: ON").find("[WHT] Auto Skills:")!=std::string::npos);
+ auto tagged=wht::NotificationText("|cffffff00[WHT] [WHT] Auto Skills: ON|r");
+ check(tagged.find("[WHT]")==tagged.rfind("[WHT]"));
  check(wht::NotificationText("Fast Menu: ON").find("|cff00ff00ON")!=std::string::npos);
  check(wht::NotificationText("Fast Menu: OFF").find("|cffff0000OFF")!=std::string::npos);
  check(wht::NotificationText("Set FPS Limit: 120").find("|cff00ff00120")!=std::string::npos);
