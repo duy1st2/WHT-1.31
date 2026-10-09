@@ -67,6 +67,9 @@ uint32_t resourceCommandPlayer129=77;
 int resourceCommandValues129[7]={0,500,100,0,50,0,300};unsigned resourceCommandWrites129=0;
 bool resourceCommandReject129=false;
 uint32_t __cdecl ResourceCommandLocalMock129(){return resourceCommandPlayer129;}
+int transferValues129[2][3]={{0,500,100},{0,10,20}};unsigned transferWrites129=0;
+int __cdecl TransferGet129(uint32_t player,int state){return transferValues129[player==77?0:1][state];}
+void __cdecl TransferSet129(uint32_t player,int state,int value){++transferWrites129;transferValues129[player==77?0:1][state]=value;}
 int __cdecl ResourceCommandGetMock129(uint32_t player,int state){if(player!=resourceCommandPlayer129)throw std::runtime_error("Resource player ABI");return resourceCommandValues129[state];}
 void __cdecl ResourceCommandSetMock129(uint32_t player,int state,int value){if(player!=resourceCommandPlayer129)throw std::runtime_error("Resource player ABI");++resourceCommandWrites129;if(!resourceCommandReject129)resourceCommandValues129[state]=value;}
 int fpsCalls=0,buttonCalls=0;uintptr_t clicked=0;
@@ -207,6 +210,30 @@ bool AddStepMock129(uintptr_t base,uintptr_t ability,bool up){
  *reinterpret_cast<int*>(ability+0x50)+=up?1:-1;return true;
 }
 unsigned killCallsMock129=0;bool killAbiMock129=true,killReassignMock129=false;
+int baseDamageValue129=50;uintptr_t baseDamageAttack129=0;unsigned baseDamageWrites129=0;bool baseDamageReject129=false,baseDamageAbi129=true;
+float moveSpeedValue129=270;unsigned moveSpeedWrites129=0;bool moveSpeedCap129=false;
+unsigned armorWrites129=0;bool armorReject129=false;
+float* __cdecl ArmorSubtractMock129(float* out,const float* requested,const float* before){*out=*requested-*before;return out;}
+void __fastcall ArmorAddMock129(uintptr_t unit,DWORD,const float* delta){++armorWrites129;if(!armorReject129)*reinterpret_cast<float*>(unit+0x1e8)+=*delta;}
+float* __fastcall MoveSpeedGetMock129(uintptr_t,DWORD,float* out){*out=moveSpeedValue129;return out;}
+void __fastcall MoveSpeedSetMock129(uintptr_t,DWORD,const float* value){++moveSpeedWrites129;moveSpeedValue129=moveSpeedCap129?(std::min)(522.f,*value):*value;}
+int __fastcall BaseDamageGetMock129(uintptr_t attack,DWORD,int index){baseDamageAbi129&=attack==baseDamageAttack129&&index==0;return baseDamageValue129;}
+void __fastcall BaseDamageAddMock129(uintptr_t attack,DWORD,int delta,unsigned mask){baseDamageAbi129&=attack==baseDamageAttack129&&mask==1;++baseDamageWrites129;if(!baseDamageReject129)baseDamageValue129+=delta;}
+float unitLifeMock129=1000.f;unsigned unitLifeGetCalls129=0,unitLifeSetCalls129=0;bool unitLifeAbi129=true;
+float* __fastcall UnitLifeGetMock129(uintptr_t unit,DWORD,float* out){++unitLifeGetCalls129;unitLifeAbi129&=unit==invulUnitMock129;*out=unitLifeMock129;return out;}
+void __fastcall UnitLifeSetMock129(uintptr_t unit,DWORD,const float* life){
+ ++unitLifeSetCalls129;unitLifeAbi129&=unit==invulUnitMock129;unitLifeMock129=*life;
+ if(*life==0)*reinterpret_cast<uint32_t*>(invulAgentMock129+0x20)=1;
+}
+unsigned removePrepareCalls129=0,removeCalls129=0;bool removeInvalidate129=false,removeAbi129=true;
+void __fastcall RemovePrepareMock129(uintptr_t unit,DWORD){
+ ++removePrepareCalls129;removeAbi129&=unit==invulUnitMock129;
+ if(removeInvalidate129)*reinterpret_cast<uint32_t*>(invulAgentMock129+0x20)=1;
+}
+void __fastcall RemoveUnitMock129(uintptr_t unit,DWORD,int first,int second){
+ ++removeCalls129;removeAbi129&=unit==invulUnitMock129&&first==1&&second==1;
+ *reinterpret_cast<uint32_t*>(invulAgentMock129+0x20)=1; // Simulate final callback invalidating the unit.
+}
 void __fastcall KillUnitMock129(uintptr_t unit,DWORD,const float* life){
  ++killCallsMock129;killAbiMock129&=unit==invulUnitMock129&&life==reinterpret_cast<const float*>(executableBase+0xd2d88c)&&*life==0.f;
  if(killReassignMock129)*reinterpret_cast<uint32_t*>(unit+0x10)=23;
@@ -217,6 +244,28 @@ int wmain(int argc,wchar_t** argv){try{
 #define check(...) checkAt((__VA_ARGS__),__LINE__)
  {
   using namespace wht;
+  {
+   ResourceCommandApi129 transfer{ResourceCommandLocalMock129,TransferGet129,TransferSet129};bool partial=false;
+   unsigned slot=0;int gold=0,lumber=0;
+   for(bool wood:{false,true}){
+    check(ParseSingleResourceTransfer129(L"1 500",wood,slot,gold,lumber)&&slot==0&&gold==(wood?0:500)&&lumber==(wood?500:0));
+    check(ParseSingleResourceTransfer129(L"2 100",wood,slot,gold,lumber)&&slot==1);
+    check(ParseSingleResourceTransfer129(L"24 100",wood,slot,gold,lumber)&&slot==23);
+    for(const auto args:{L"1",L"1 0",L"1 -1",L"0 100",L"25 100",L"1 1.5",L"1 100 200",L"1 2147483648"})check(!ParseSingleResourceTransfer129(args,wood,slot,gold,lumber));
+   }
+   check(ParseResourceTransfer129(L"3 40 50",false,slot,gold,lumber)&&slot==3&&gold==40&&lumber==50);
+   check(ParseResourceTransfer129(L"23 40 50",true,slot,gold,lumber)&&gold==50&&lumber==40);
+   check(!ParseResourceTransfer129(L"24 1 1",false,slot,gold,lumber));
+   check(!ParseResourceTransfer129(L"3 -1 1",false,slot,gold,lumber));
+   check(!ParseResourceTransfer129(L"3 1 1 extra",false,slot,gold,lumber));
+   check(TransferResources129(77,88,transfer,100,30,partial)&&transferValues129[0][1]==400&&transferValues129[1][1]==110&&transferValues129[0][2]==70&&transferValues129[1][2]==50);
+   const auto writes=transferWrites129;
+   check(!TransferResources129(77,88,transfer,401,0,partial)&&!partial&&transferWrites129==writes);
+   check(!TransferResources129(77,77,transfer,1,0,partial)&&transferWrites129==writes);
+   transferValues129[1][1]=INT_MAX;
+   check(!TransferResources129(77,88,transfer,1,0,partial)&&transferWrites129==writes);
+   check(TransferResources129(77,88,transfer,0,10,partial)&&transferValues129[0][2]==60&&transferValues129[1][2]==60&&transferValues129[1][1]==INT_MAX);
+  }
   ResourceCommandApi129 api{ResourceCommandLocalMock129,ResourceCommandGetMock129,ResourceCommandSetMock129};
   int amount=0;ResourceCommandResult129 result;const char* error=nullptr;
   check(ParseResourceCommand129(ResourceCommand129::Gold,L"",amount)&&amount==100000);
@@ -1206,6 +1255,78 @@ int wmain(int argc,wchar_t** argv){try{
   check(!wht::AddAbilityToUnit129(executableBase,{},addApi,0x41486862,1,addResult,&reason)&&addCallsMock129==creations);
   check(!wht::ResolveAddAbilityApi129(executableBase));
   check(!wht::AddSelectedAbility129(0,0x41486862,1,addResult,&reason)&&reason);
+  wht::RemoveUnitApi129 removeApi{InvulAgentMock129,
+   reinterpret_cast<decltype(wht::RemoveUnitApi129::prepare)>(RemovePrepareMock129),
+   reinterpret_cast<decltype(wht::RemoveUnitApi129::remove)>(RemoveUnitMock129)};
+  check(wht::RemoveUnit129(executableBase,selection,removeApi,&reason)&&removePrepareCalls129==1&&removeCalls129==1&&removeAbi129);
+  check(!wht::RemoveUnit129(executableBase,selection,removeApi,&reason)&&removeCalls129==1);
+  *reinterpret_cast<uint32_t*>(invulAgent.data()+0x20)=0;
+  removeInvalidate129=true;
+  check(!wht::RemoveUnit129(executableBase,selection,removeApi,&reason)&&removeCalls129==1&&removePrepareCalls129==2);
+  removeInvalidate129=false;*reinterpret_cast<uint32_t*>(invulAgent.data()+0x20)=0;
+  auto staleRemove=selection;++staleRemove.identity;
+  check(!wht::RemoveUnit129(executableBase,staleRemove,removeApi,&reason)&&removePrepareCalls129==2);
+  check(!wht::ResolveRemoveUnitApi129(0));
+  baseDamageAttack129=reinterpret_cast<uintptr_t>(&baseDamageValue129);
+  *reinterpret_cast<uintptr_t*>(invulUnit.data()+0x3f4)=baseDamageAttack129;
+  wht::BaseDamageApi129 baseApi{InvulAgentMock129,reinterpret_cast<decltype(wht::BaseDamageApi129::get)>(BaseDamageGetMock129),reinterpret_cast<decltype(wht::BaseDamageApi129::add)>(BaseDamageAddMock129)};
+  int baseValue=0,baseActual=0;
+  check(wht::ParseBaseDamage129(L"",baseValue)&&baseValue==50);
+  check(wht::ParseBaseDamage129(L"0",baseValue)&&baseValue==0);
+  check(!wht::ParseBaseDamage129(L"2.5",baseValue)&&!wht::ParseBaseDamage129(L"-1",baseValue)&&!wht::ParseBaseDamage129(L"5 extra",baseValue));
+  check(wht::SetBaseDamage129(executableBase,selection,baseApi,500,baseActual,&reason)&&baseActual==500&&baseDamageAbi129);
+  check(wht::SetBaseDamage129(executableBase,selection,baseApi,0,baseActual,&reason)&&baseActual==0&&baseDamageWrites129==2);
+  check(wht::SetBaseDamage129(executableBase,selection,baseApi,0,baseActual,&reason)&&baseDamageWrites129==2);
+  baseDamageReject129=true;
+  check(!wht::SetBaseDamage129(executableBase,selection,baseApi,800,baseActual,&reason)&&baseActual==0);
+  baseDamageReject129=false;
+  *reinterpret_cast<uintptr_t*>(invulUnit.data()+0x3f4)=0;
+  check(!wht::SetBaseDamage129(executableBase,selection,baseApi,800,baseActual,&reason));
+  check(!wht::ResolveBaseDamageApi129(0));
+  {
+   float requested=0,actual=0;
+   check(wht::ParseArmor129(L"",requested)&&requested==50);
+   check(wht::ParseArmor129(L"-12.5",requested)&&requested==-12.5f);
+   check(!wht::ParseArmor129(L"1000001",requested)&&!wht::ParseArmor129(L"50 extra",requested));
+   wht::ArmorApi129 armor{InvulAgentMock129,ArmorSubtractMock129,reinterpret_cast<decltype(wht::ArmorApi129::add)>(ArmorAddMock129)};
+   *reinterpret_cast<float*>(invulUnit.data()+0x1e8)=10;
+   check(wht::SetArmor129(executableBase,selection,armor,50,actual,&reason)&&actual==50);
+   check(wht::SetArmor129(executableBase,selection,armor,-12.5f,actual,&reason)&&actual==-12.5f);
+   const auto writes=armorWrites129;
+   check(wht::SetArmor129(executableBase,selection,armor,-12.5f,actual,&reason)&&armorWrites129==writes);
+   armorReject129=true;check(!wht::SetArmor129(executableBase,selection,armor,100,actual,&reason)&&actual==-12.5f);armorReject129=false;
+   check(!wht::SetArmor129(executableBase,staleRemove,armor,50,actual,&reason));
+   check(!wht::ResolveArmor129(0));
+  }
+  {
+   float requested=0,actual=0;
+   check(wht::ParseMoveSpeed129(L"",requested)&&requested==522);
+   check(wht::ParseMoveSpeed129(L"2500",requested)&&requested==2000);
+   check(wht::ParseMoveSpeed129(L"-1",requested)&&requested==0);
+   check(!wht::ParseMoveSpeed129(L"300 extra",requested));
+   wht::MoveSpeedApi129 api{InvulAgentMock129,reinterpret_cast<decltype(wht::MoveSpeedApi129::get)>(MoveSpeedGetMock129),reinterpret_cast<decltype(wht::MoveSpeedApi129::set)>(MoveSpeedSetMock129)};
+   *reinterpret_cast<uintptr_t*>(invulUnit.data()+0x3f8)=baseDamageAttack129;
+   check(wht::ApplyMoveSpeed129(executableBase,selection,api,400,actual,&reason)&&actual==400);
+   check(wht::ApplyMoveSpeed129(executableBase,selection,api,300,actual,&reason)&&actual==300);
+   moveSpeedCap129=true;
+   check(wht::ApplyMoveSpeed129(executableBase,selection,api,1000,actual,&reason)&&actual==522);
+   moveSpeedCap129=false;const auto writes=moveSpeedWrites129;
+   *reinterpret_cast<uintptr_t*>(invulUnit.data()+0x3f8)=0;
+   check(!wht::ApplyMoveSpeed129(executableBase,selection,api,400,actual,&reason)&&moveSpeedWrites129==writes);
+   check(!wht::ResolveMoveSpeed129(0));
+  }
+  wht::UnitDamageApi129 damageApi{{InvulAgentMock129,reinterpret_cast<decltype(wht::KillUnitApi129::kill)>(UnitLifeSetMock129)},
+   reinterpret_cast<decltype(wht::UnitDamageApi129::get)>(UnitLifeGetMock129)};
+  float amount=0,targetLife=0;
+  check(wht::ParseUnitDamage129(L"",amount)&&amount==100.f);
+  check(wht::ParseUnitDamage129(L"12.5",amount)&&amount==12.5f);
+  check(!wht::ParseUnitDamage129(L"0",amount)&&!wht::ParseUnitDamage129(L"-1",amount)&&!wht::ParseUnitDamage129(L"1 extra",amount));
+  check(wht::DamageUnit129(executableBase,selection,damageApi,100.f,targetLife,&reason)&&unitLifeMock129==900.f&&unitLifeAbi129);
+  check(wht::DamageUnit129(executableBase,selection,damageApi,2000.f,targetLife,&reason)&&targetLife==0&&unitLifeGetCalls129==2&&unitLifeSetCalls129==2);
+  check(!wht::DamageUnit129(executableBase,selection,damageApi,100.f,targetLife,&reason)&&unitLifeSetCalls129==2);
+  *reinterpret_cast<uint32_t*>(invulAgent.data()+0x20)=0;unitLifeMock129=1000;
+  check(!wht::DamageUnit129(executableBase,staleRemove,damageApi,100.f,targetLife,&reason)&&unitLifeSetCalls129==2);
+  check(!wht::ResolveUnitDamageApi129(0));
   wht::KillUnitApi129 killApi{InvulAgentMock129,reinterpret_cast<decltype(wht::KillUnitApi129::kill)>(KillUnitMock129)};
   check(wht::KillUnit129(executableBase,selection,killApi,&reason)&&killCallsMock129==1&&killAbiMock129);
   *reinterpret_cast<float*>(globals.data()+0xd2d88c)=1.f;

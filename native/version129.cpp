@@ -24,6 +24,11 @@ wht::Mute129 mutedChat129;
 #include "hero_attributes129.hpp"
 #include "hero_level129.hpp"
 #include "resource_commands129.hpp"
+#include "move_speed129.hpp"
+#include "armor129.hpp"
+#include "remove_unit129.hpp"
+#include "unit_damage129.hpp"
+#include "base_damage129.hpp"
 #include "pan_camera129.hpp"
 #include "mouse_position129.hpp"
 #include "life_mana129.hpp"
@@ -391,6 +396,72 @@ void StartPlugins129(){
 bool ToolCommandImpl129(const std::wstring& command){
  if(runtimeConfig.mode!=wht::RunMode::Local)return false;
  std::wistringstream in(command);std::wstring name,action,extra;in>>name;
+ if(name==L"#armor"){
+  std::wstring args;std::getline(in,args);float requested=50,actual=0;const char* error=nullptr;
+  if(!wht::ParseArmor129(args,requested)){
+   wht::ShowNotification129(executableBase,"Usage: select a unit, then #armor [-1000000..1000000] (default 50)",localMessage129);return false;
+  }
+  if(!wht::SetArmor129(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveArmor129(executableBase),requested,actual,&error)){
+   wht::ShowNotification129(executableBase,std::string("Unit Armor: ")+(error?error:"Native function unavailable"),localMessage129);return false;
+  }
+  char text[80]{};std::snprintf(text,sizeof(text),"Unit Armor: %.2f",actual);wht::ShowNotification129(executableBase,text,localMessage129);return true;
+ }
+ if(name==L"#ms"){
+  std::wstring args;std::getline(in,args);float requested=522,actual=0;const char* error=nullptr;
+  if(!wht::ParseMoveSpeed129(args,requested)){
+   wht::ShowNotification129(executableBase,"Usage: select a unit, then #ms [0..2000] (default 522)",localMessage129);return false;
+  }
+  if(!wht::ApplyMoveSpeed129(executableBase,wht::SelectedSkill129(executableBase),wht::ResolveMoveSpeed129(executableBase),requested,actual,&error)){
+   wht::ShowNotification129(executableBase,std::string("Movement Speed: ")+(error?error:"Native function unavailable"),localMessage129);return false;
+  }
+  char text[128]{};std::snprintf(text,sizeof(text),"Movement Speed: %.1f (requested %.1f)",actual,requested);
+  wht::ShowNotification129(executableBase,text,localMessage129);return true;
+ }
+ if(name==L"#udmgb"){
+  std::wstring argument;std::getline(in,argument);int value=0,actual=0;const char* error=nullptr;
+  if(!wht::ParseBaseDamage129(argument,value)){
+   wht::ShowNotification129(executableBase,"Usage: select a unit, then #udmgb [0..1000000000]",localMessage129);return false;
+  }
+  if(!wht::SetSelectedBaseDamage129(executableBase,value,actual,&error)){
+   const auto reason=std::string("Base Damage: ")+(error?error:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"Unit Base Damage: "+std::to_string(actual),localMessage129);return true;
+ }
+ if(name==L"#udmg"){
+  std::wstring argument;std::getline(in,argument);float amount=0,life=0;const char* error=nullptr;
+  if(!wht::ParseUnitDamage129(argument,amount)){
+   wht::ShowNotification129(executableBase,"Usage: select a unit, then #udmg [positive amount, up to 1000000000]",localMessage129);return false;
+  }
+  if(!wht::DamageSelectedUnit129(executableBase,amount,life,&error)){
+   const auto reason=std::string("Unit Damage: ")+(error?error:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"Unit life update invoked: target HP "+std::to_string(life),localMessage129);return true;
+ }
+ if(name==L"#udel"){
+  if(in>>extra){wht::ShowNotification129(executableBase,"Usage: select a unit, then #udel",localMessage129);return false;}
+  const char* error=nullptr;
+  if(!wht::RemoveSelectedUnit129(executableBase,&error)){
+   const auto reason=std::string("RemoveUnit: ")+(error?error:"Unknown failure");
+   wht::Log(runtimeFolder,reason);wht::ShowNotification129(executableBase,reason,localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"RemoveUnit invoked for selected unit",localMessage129);return true;
+ }
+ if(name==L"#ggl"||name==L"#gll"||name==L"#gg"||name==L"#gl"){
+  std::wstring args;std::getline(in,args);unsigned slot=0;int gold=0,lumber=0;
+  const bool single=name==L"#gg"||name==L"#gl";
+  if(!(single?wht::ParseSingleResourceTransfer129(args,name==L"#gl",slot,gold,lumber):wht::ParseResourceTransfer129(args,name==L"#gll",slot,gold,lumber))){
+   wht::ShowNotification129(executableBase,"Usage: #gg player(1..24) gold; #gl player(1..24) lumber; #ggl slot(0..23) gold lumber; #gll slot(0..23) lumber gold",localMessage129);return false;
+  }
+  const auto api=wht::ResolveResourceCommandApi129(executableBase);
+  const auto source=wht::ResourceLocal129(executableBase,resourceApi);
+  const auto target=api?wht::TransferTarget129(resourceApi,slot):0;bool partial=false;
+  if(!wht::TransferResources129(source,target,api,gold,lumber,partial)){
+   wht::ShowNotification129(executableBase,partial?"Resource transfer interrupted; some resource writes may have applied":"Transfer rejected: check player slot, balance and resource limits",localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"Transferred Gold "+std::to_string(gold)+", Lumber "+std::to_string(lumber)+" to Player "+std::to_string(slot+1),localMessage129);return true;
+ }
  if(name==L"#gold"||name==L"#lumber"||name==L"#food"||name==L"#fullres"){
   const auto kind=name==L"#gold"?wht::ResourceCommand129::Gold:name==L"#lumber"?wht::ResourceCommand129::Lumber:
    name==L"#food"?wht::ResourceCommand129::Food:wht::ResourceCommand129::Full;
@@ -537,6 +608,17 @@ bool ToolCommandImpl129(const std::wstring& command){
   std::wstring args;std::getline(in,args);float x=0,y=0;uintptr_t camera=0;uint16_t local=0;
   if(args.find_first_not_of(L" \t")==std::wstring::npos){wht::MousePosition129 position;return wht::ReadMousePosition129(executableBase,position);}
   return wht::ParsePan129(args,x,y)&&CameraContext(camera,local)&&wht::PanCamera129(executableBase,camera,x,y);
+ }
+ if(name==L"#focus"){
+  if(in>>extra){wht::ShowNotification129(executableBase,"Usage: select a unit, then #focus",localMessage129);return false;}
+  wht::UnitInfo129 info;uintptr_t camera=0;uint16_t local=0;
+  if(!wht::ReadUnitInfo129(executableBase,true,info)||!CameraContext(camera,local)){
+   wht::ShowNotification129(executableBase,"Camera Focus: no valid selected unit or camera",localMessage129);return false;
+  }
+  if(!wht::PanCamera129(executableBase,camera,info.x,info.y)){
+   wht::ShowNotification129(executableBase,"Camera Focus: native camera call unavailable",localMessage129);return false;
+  }
+  wht::ShowNotification129(executableBase,"Camera Focus: "+wht::UnitPositionText129(info.x,info.y),localMessage129);return true;
  }
  if(name==L"#upos"||name==L"#cname"){
   if(in>>extra)return false;wht::UnitInfo129 info;
@@ -775,7 +857,11 @@ bool ToolCommand(const std::wstring& command){
  const bool result=ToolCommandImpl129(command);if(!result)return false;
  std::wistringstream input(command);std::wstring name,argument;input>>name>>argument;
  std::string feedback;
- if(name==L"#gold"||name==L"#lumber"||name==L"#food"||name==L"#fullres"||name==L"#lvl"||name==L"#str"||name==L"#agi"||name==L"#int"||name==L"#fullatt"||name==L"#sp"||name==L"#kill"||name==L"#sabi"||name==L"#rabi"||name==L"#tele"||name==L"#invul"||name==L"#vul")return true; // Native result/error is reported by the handler.
+ if(name==L"#armor")return true;
+ if(name==L"#ms")return true;
+ if(name==L"#ggl"||name==L"#gll"||name==L"#gg"||name==L"#gl")return true;
+ if(name==L"#focus")return true;
+ if(name==L"#udmgb"||name==L"#udmg"||name==L"#udel"||name==L"#gold"||name==L"#lumber"||name==L"#food"||name==L"#fullres"||name==L"#lvl"||name==L"#str"||name==L"#agi"||name==L"#int"||name==L"#fullatt"||name==L"#sp"||name==L"#kill"||name==L"#sabi"||name==L"#rabi"||name==L"#tele"||name==L"#invul"||name==L"#vul")return true; // Native result/error is reported by the handler.
  if(name==L"#ping"){wht::ShowNotification129(executableBase,wht::Utf8(wht::network_ping::Status()),localMessage129);return true;}
  if(name==L"#toolui"){
   const auto index=wcstoul(argument.c_str(),nullptr,10);

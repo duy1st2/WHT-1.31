@@ -4,6 +4,20 @@
 #include <sstream>
 namespace wht {
 enum class ResourceCommand129 { Gold, Lumber, Food, Full };
+inline uint32_t TransferTarget129(const ResourceApi129& api,unsigned slot){
+ __try {if(!api.player||!api.slot||slot>23)return 0;const auto target=api.player(slot);return target&&api.slot(target)==1?target:0;}
+ __except(EXCEPTION_EXECUTE_HANDLER){return 0;}
+}
+inline bool ParseResourceTransfer129(const std::wstring& args,bool lumberFirst,unsigned& slot,int& gold,int& lumber){
+ std::wistringstream in(args);long long s=0,a=0,b=0;std::wstring extra;
+ if(!(in>>s>>a>>b)||in>>extra||s<0||s>23||a<0||b<0||a>INT_MAX||b>INT_MAX||(!a&&!b))return false;
+ slot=unsigned(s);gold=int(lumberFirst?b:a);lumber=int(lumberFirst?a:b);return true;
+}
+inline bool ParseSingleResourceTransfer129(const std::wstring& args,bool wood,unsigned& slot,int& gold,int& lumber){
+ std::wistringstream in(args);long long s=0,amount=0;std::wstring extra;
+ if(!(in>>s>>amount)||in>>extra||s<1||s>24||amount<1||amount>INT_MAX)return false;
+ slot=unsigned(s-1);gold=wood?0:int(amount);lumber=wood?int(amount):0;return true;
+}
 struct ResourceCommandApi129 {
  uint32_t(__cdecl* local)()=nullptr;
  int(__cdecl* get)(uint32_t,int)=nullptr;
@@ -33,6 +47,23 @@ inline bool ParseResourceCommand129(ResourceCommand129 command,const std::wstrin
  amount=int(number);return true;
 }
 struct ResourceCommandResult129 {int gold=0,lumber=0,food=0;};
+inline bool TransferResources129(uint32_t source,uint32_t target,const ResourceCommandApi129& api,int gold,int lumber,bool& partial){
+ partial=false;
+ __try {
+  if(!api||!source||!target||source==target||gold<0||lumber<0||(!gold&&!lumber)||api.local()!=source)return false;
+  const int amounts[]={gold,lumber};int from[2]{},to[2]{};
+  for(unsigned i=0;i<2;++i){from[i]=api.get(source,i+1);to[i]=api.get(target,i+1);
+   if(from[i]<amounts[i]||to[i]<0||to[i]>INT_MAX-amounts[i])return false;}
+  for(unsigned i=0;i<2;++i){if(!amounts[i])continue;
+   if(api.local()!=source||api.get(source,i+1)!=from[i]||api.get(target,i+1)!=to[i])return false;
+   api.set(source,i+1,from[i]-amounts[i]);partial=true;
+   if(api.get(source,i+1)!=from[i]-amounts[i]||api.local()!=source)return false;
+   api.set(target,i+1,to[i]+amounts[i]);
+   if(api.get(target,i+1)!=to[i]+amounts[i]||api.local()!=source)return false;
+  }
+  return true;
+ }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
+}
 inline bool ApplyResourceCommand129(uint32_t player,const ResourceCommandApi129& api,ResourceCommand129 command,
  int amount,ResourceCommandResult129& result,const char** error=nullptr){
  if(error)*error=nullptr;result={};
