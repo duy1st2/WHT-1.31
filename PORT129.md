@@ -556,3 +556,17 @@ Quick-drop widescreen correction: convert client mouse X into native centered 4:
 
 ## Create items
 Added Local-only #item <rawcode> [1..50] at map cursor, using CreateItem RVA 8E430 and GetItemTypeId 92FC0, signature gated. Verifies returned item type and reports actual count, stops on failure/context change. Tests cover spacing, partial creation, limits and missing match/API. Live gameplay pending.
+
+## Copy item type
+Local-only #copyitem <inventory slot 1..6> [count 1..50] reads the selected inventory type using existing validated inventory reader and creates fresh default-charge items at the map cursor. Does not clone charges or map-specific item data. Parser and shared creation contracts tested; live gameplay pending.
+
+## Quick drop menu integration
+Enabled Event/Quick Drop Item menu checkbox and replaced independent session flag with persisted Config.quickDropItem. #quickdrop saves/reloads the same setting and refreshes the menu. Corrected Ctrl to Shift in localized labels/help. Existing INI value is preserved; user enables checkbox when previously off. Menu availability and existing geometry/drop tests pass.
+
+## Cast on self menu
+Enabled AutoTargetCommandMe per-slot checks. Local-owner live selection is targeted using IssueTargetOrderById for command buttons and UnitUseItemTarget RVA AFA20 for inventory items; uses verified button data, item handle and native signature checks. Invalid or refused self targets produce failure feedback without falling through to cursor cast. Macro playback/recording retains prior path. Live ability/item target validation pending.
+
+## VSync menu
+Enabled VSync checkbox when D3D9 presentation builder hook is ready. Uses persisted Graphics/Vsync and forces interval ONE when enabled, IMMEDIATE when disabled in Local mode; applied at device creation/reset, menu feedback requires game restart. Tests cover both intervals and non-Local preservation. Live graphics verification pending.
+
+VSync precedence: effective unlock requires Local && UnlockFPS && !VSync. Applied consistently to scheduler patch, zero-interval scheduler override and multimedia timer, including #unlockfps immediate handler. Unlock checkbox preference is retained and resumes after VSync disabled. D3D interval change still requires restart/device reset. Policy truth table tested.

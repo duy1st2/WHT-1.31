@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 // Tooltip text is kept separate from saved configuration keys and visible labels.
 inline std::string MthActionHelp(int action){
  if(toolEnglish.load()){const char* en[]={"Craft Shield","Craft Ice","Craft Wild","Craft Frozen","Craft Phoenix","Pick up Goku","Chicken route 1","Chicken route 2","Chicken route 3","Wolf route 1","Wolf route 2","Wolf route 3"};if(action<0||action>=12)return {};return std::string(en[action])+"\n"+(action<5?"Run the MTH purchase and crafting sequence.":action==5?"Perform the MTH Goku pickup action.":"Run this movement route with the configured queued order count.");}

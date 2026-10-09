@@ -304,6 +304,23 @@ int wmain(int argc,wchar_t** argv){try{
   check(!wht::CreateItems129(ib,itemApi,0x70686561,51,100,200));
   check(!wht::CreateItems129(ib,{},0x70686561,1,100,200));
   *reinterpret_cast<uintptr_t*>(ib+0xd3b6f4)=0;check(!wht::CreateItems129(ib,itemApi,0x70686561,1,100,200));
+  unsigned copySlot=0,copyCount=0;
+  check(wht::ParseCopyItem129(L"2",copySlot,copyCount)&&copySlot==1&&copyCount==1);
+  check(wht::ParseCopyItem129(L"6 50",copySlot,copyCount)&&copySlot==5&&copyCount==50);
+  for(auto args:{L"",L"0",L"7",L"2 0",L"2 51",L"2 -1",L"2 3 extra"})check(!wht::ParseCopyItem129(args,copySlot,copyCount));
+  bool quickDropMenuFound=false;
+  for(const auto& control:wht::kToolMenuControls)if(!wcscmp(control.section,L"Event")&&!wcscmp(control.key,L"Quick Drop Item")){quickDropMenuFound=true;check(ControlAvailable129(control));}
+  check(quickDropMenuFound);
+  check(!wht::SelfCast129(0,false,0));
+  for(const auto& control:wht::kToolMenuControls)if(!wcsncmp(control.key,L"AutoTargetCommandMe",19))check(ControlAvailable129(control));
+  check(wht::EffectiveUnlock129(true,true,false));
+  check(!wht::EffectiveUnlock129(true,true,true));
+  check(!wht::EffectiveUnlock129(false,true,false));
+  check(!wht::EffectiveUnlock129(true,false,false));
+  uint32_t syncParameters[14]{};
+  check(wht::ConfigureVSync129(syncParameters,true,true)&&syncParameters[13]==1);
+  check(wht::ConfigureVSync129(syncParameters,true,false)&&syncParameters[13]==0x80000000u);
+  check(!wht::ConfigureVSync129(syncParameters,false,true)&&syncParameters[13]==0x80000000u);
   std::string saveName;
   check(wht::ParseSaveName129(L"",saveName)&&saveName=="wht-save");
   check(wht::ParseSaveName129(L"match_1",saveName)&&saveName=="match_1");
@@ -1228,7 +1245,8 @@ int wmain(int argc,wchar_t** argv){try{
    check(ToolCommand(L"#toolui "+std::to_wstring(index)+L" toggle")&&!runtimeConfig.timeBoss);
   }
  }
- const auto castModeIndex129=wht::kToolMenuControls.size()-9;
+ size_t castModeIndex129=0;
+ for(size_t i=0;i<wht::kToolMenuControls.size();++i)if(!wcscmp(wht::kToolMenuControls[i].key,L"ModeCast"))castModeIndex129=i;
  const auto& castModeControl129=wht::kToolMenuControls[castModeIndex129];
  check(!ControlAvailable129(castModeControl129));
  clickButton=reinterpret_cast<wht::ClickFn129>(CaptureClick);

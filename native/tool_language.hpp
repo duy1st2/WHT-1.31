@@ -1,8 +1,21 @@
-#pragma once
+﻿#pragma once
 
 inline std::string ToolTabName(size_t page){
  static const char* en[]={"General","Quick Chat","Hotkeys","Other Hotkeys","Graphics","MTH","Automation","Language"};
  return toolEnglish.load()?en[page]:kToolMenuTabs[page];
+}
+inline std::string EnglishTabHelp(size_t page){
+ static const char* descriptions[]={
+  "Configure in-game displays and utility buttons.",
+  "Assign hotkeys and messages for quick chat.",
+  "Assign skill, inventory and hero-selection hotkeys.",
+  "Configure utility hotkeys, casting mode, overhead text and window settings.",
+  "Configure interface visibility, colors, FPS and camera scroll speeds.",
+  "Select the MTH mode and configure MTH actions and hotkeys.",
+  "Configure automatic skills and macro recording, playback and hotkeys.",
+  "Select Vietnamese or English for the tools menu and tooltips."
+ };
+ return ToolTabName(page)+"\n"+descriptions[page];
 }
 inline std::string EnglishControlLabel(const ToolMenuControl& d){
  std::wstring key=d.key,section=d.section;

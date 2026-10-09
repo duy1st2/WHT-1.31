@@ -1,4 +1,5 @@
-﻿#include "create_item129.hpp"
+#include "self_cast129.hpp"
+#include "create_item129.hpp"
 #include "quick_drop129.hpp"
 #include "save_game129.hpp"
 #include "network_hooks129.hpp"
@@ -225,9 +226,8 @@ void __cdecl MovementDescription129(char* destination,unsigned capacity,float fi
 }
 void __fastcall PresentParametersHook129(uintptr_t renderer,DWORD,uint32_t* parameters){
  originalPresentParameters129(renderer,parameters);
- const bool enabled=runtimeConfig.mode==wht::RunMode::Local&&!runtimeConfig.vsync;
- if(wht::UnlockPresentation129(parameters,enabled))
-  wht::Log(runtimeFolder,"WHT 1.29 Direct3D9: PresentationInterval=IMMEDIATE (VSync disabled; runtime unlock ready).");
+ if(wht::ConfigureVSync129(parameters,runtimeConfig.mode==wht::RunMode::Local,runtimeConfig.vsync))
+  wht::Log(runtimeFolder,runtimeConfig.vsync?"WHT 1.29 Direct3D9: VSync ON":"WHT 1.29 Direct3D9: VSync OFF");
 }
 float __cdecl MenuTransitionHook129(unsigned kind,unsigned sequence,unsigned a,unsigned b,uintptr_t callback,uintptr_t context){
  const bool enabled=runtimeConfig.mode==wht::RunMode::Local&&runtimeConfig.fastMenu;
@@ -442,11 +442,12 @@ bool ControlAvailable129(const wht::ToolMenuControl& d){
  if(!wcscmp(d.section,L"Language")||!wcscmp(d.section,L"MacroRecorder")||!wcscmp(d.section,L"DelayClear"))return true;
  if(!wcscmp(d.section,L"Quick Chat"))return true;
  if(!wcscmp(d.section,L"HotKeyOther"))return !wcscmp(d.key,L"hko_menu")||!wcscmp(d.key,L"hko_command")||!wcscmp(d.key,L"hko_MinimizeMultiboard");
- if(!wcscmp(d.section,L"SlotHotkey")||!wcscmp(d.section,L"SlotHotkeyInv")||!wcscmp(d.section,L"SlotHotkeyShop"))return wcsncmp(d.key,L"AutoTarget",10);
+ if(!wcscmp(d.section,L"SlotHotkey")||!wcscmp(d.section,L"SlotHotkeyInv")||!wcscmp(d.section,L"SlotHotkeyShop"))return wcsncmp(d.key,L"AutoTarget",10)||!wcsncmp(d.key,L"AutoTargetCommandMe",19);
+ if(!wcscmp(d.section,L"Graphics")&&!wcscmp(d.key,L"VSync"))return originalPresentParameters129!=nullptr;
  if(!wcscmp(d.section,L"Graphics")&&!wcscmp(d.key,L"Unlock Limit FPS"))return unlockFps129.ready&&!unlockFps129.conflict;
  if(!wcscmp(d.section,L"Graphics"))return !wcscmp(d.key,L"timeOfDayUI")||!wcscmp(d.key,L"ConsoleUI")||!wcscmp(d.key,L"Text Life/Mana Commas")||!wcscmp(d.key,L"Text Life/Mana No Hide")||!wcscmp(d.key,L"Text Stats Commas")||(!wcscmp(d.key,L"Detailed Stats Tooltip")&&detailedStatsHooksReady129)||!wcscmp(d.key,L"MouseTooltipUI")||!wcscmp(d.key,L"BlackBarUI")||!wcscmp(d.key,L"Color Player")||(!wcscmp(d.key,L"BarInvul")&&invulnerableHookReady129)||(!wcscmp(d.key,L"VertexColor")&&originalVertexColor129);
  if(!wcscmp(d.section,L"HotKeyHero"))return !wcsncmp(d.key,L"HeroF",5)||!wcscmp(d.key,L"AutoClickLeft")||!wcscmp(d.key,L"AutoClickRight");
- return !wcscmp(d.section,L"Event")&&(!wcscmp(d.key,L"Show Resource")||!wcscmp(d.key,L"Show Mem")||!wcscmp(d.key,L"Show Timer")||!wcscmp(d.key,L"Show FPS")||!wcscmp(d.key,L"Show Ins All Skills")||!wcscmp(d.key,L"Show Drop All")||!wcscmp(d.key,L"Show Auto Pick")||!wcscmp(d.key,L"Show Sell All")||!wcscmp(d.key,L"Hide Option Menu")||!wcscmp(d.key,L"Show Hotkey In Panel")||!wcscmp(d.key,L"ShowCooldown")||!wcscmp(d.key,L"ShowRegenHP")||!wcscmp(d.key,L"ShowRegenMana")||(!wcscmp(d.key,L"Keyboard Scroll Speed")&&setKeyboardScroll129)||(!wcscmp(d.key,L"Mouse Scroll Speed")&&setMouseScroll129));
+ return !wcscmp(d.section,L"Event")&&(!wcscmp(d.key,L"Quick Drop Item")||!wcscmp(d.key,L"Show Resource")||!wcscmp(d.key,L"Show Mem")||!wcscmp(d.key,L"Show Timer")||!wcscmp(d.key,L"Show FPS")||!wcscmp(d.key,L"Show Ins All Skills")||!wcscmp(d.key,L"Show Drop All")||!wcscmp(d.key,L"Show Auto Pick")||!wcscmp(d.key,L"Show Sell All")||!wcscmp(d.key,L"Hide Option Menu")||!wcscmp(d.key,L"Show Hotkey In Panel")||!wcscmp(d.key,L"ShowCooldown")||!wcscmp(d.key,L"ShowRegenHP")||!wcscmp(d.key,L"ShowRegenMana")||(!wcscmp(d.key,L"Keyboard Scroll Speed")&&setKeyboardScroll129)||(!wcscmp(d.key,L"Mouse Scroll Speed")&&setMouseScroll129));
 }
 std::wstring PluginPath129(std::wstring path){
  auto first=path.find_first_not_of(L" \t"),lastCharacter=path.find_last_not_of(L" \t");
@@ -493,10 +494,19 @@ void StartPlugins129(){
  for(bool archive:{false,true}){std::wistringstream list(archive?runtimeConfig.loadMpq:runtimeConfig.loadDll);std::wstring path;while(std::getline(list,path,L','))if(!path.empty())LoadPlugin129(path,archive);}
  pluginsLoading129=false;
 }
-bool quickDropEnabled129=true,quickDropConsumed129=false;
+bool quickDropConsumed129=false;
 bool ToolCommandImpl129(const std::wstring& command){
  if(runtimeConfig.mode!=wht::RunMode::Local)return false;
  std::wistringstream in(command);std::wstring name,action,extra;in>>name;
+ if(name==L"#copyitem"){
+  std::wstring args;std::getline(in,args);unsigned slot=0,count=1;
+  if(!wht::ParseCopyItem129(args,slot,count)){wht::ShowNotification129(executableBase,"Usage: #copyitem <slot 1..6> [1..50]",localMessage129);return false;}
+  wht::InventoryInfo129 inventory;
+  if(!wht::ReadInventoryInfo129(executableBase,inventory)||slot>=inventory.capacity||!inventory.codes[slot]){wht::ShowNotification129(executableBase,"Copy Item: select a unit with an item in that slot",localMessage129);return false;}
+  wht::MousePosition129 cursor;if(!wht::ReadMousePosition129(executableBase,cursor)){wht::ShowNotification129(executableBase,"Copy Item: point the cursor at the map",localMessage129);return false;}
+  auto made=wht::CreateItems129(executableBase,wht::ResolveCreateItem129(executableBase),inventory.codes[slot],count,cursor.x,cursor.y);
+  wht::ShowNotification129(executableBase,"Copy Item: "+std::to_string(made)+"/"+std::to_string(count)+" created (default charges)",localMessage129);return made==count;
+ }
  if(name==L"#item"){
   std::wstring args;std::getline(in,args);uint32_t code=0;unsigned count=0;
   if(!wht::ParseCreateUnit129(args,code,count)){wht::ShowNotification129(executableBase,"Usage: #item <rawcode> [1..50]",localMessage129);return false;}
@@ -505,9 +515,10 @@ bool ToolCommandImpl129(const std::wstring& command){
   wht::ShowNotification129(executableBase,"Create Item: "+std::to_string(made)+"/"+std::to_string(count)+(made?" created":" (invalid rawcode or unavailable native)"),localMessage129);return made==count;
  }
  if(name==L"#quickdrop"){
-  bool enabled=!quickDropEnabled129;
+  bool enabled=!runtimeConfig.quickDropItem;
   if(in>>action){if((action!=L"0"&&action!=L"1")||in>>extra){wht::ShowNotification129(executableBase,"Usage: #quickdrop [0|1]",localMessage129);return false;}enabled=action==L"1";}
-  quickDropEnabled129=enabled;wht::ShowNotification129(executableBase,std::string("Quick Drop (Shift + Right Click): ")+(enabled?"ON":"OFF"),localMessage129);return true;
+  if(!wht::SaveSetting(runtimeIni,L"Event",L"Quick Drop Item",enabled?L"1":L"0"))return false;
+  runtimeConfig=wht::LoadConfig(runtimeIni);toolMenu.nextRefresh=0;wht::ShowNotification129(executableBase,std::string("Quick Drop (Shift + Right Click): ")+(enabled?"ON":"OFF"),localMessage129);return true;
  }
  if(name==L"#dropitem"){
   if(!(in>>action)||action.size()!=1||action[0]<L'1'||action[0]>L'6'||in>>extra){wht::ShowNotification129(executableBase,"Usage: #dropitem <1..6>",localMessage129);return false;}
@@ -952,7 +963,7 @@ bool ToolCommandImpl129(const std::wstring& command){
   std::wstring value;in>>value;if(value.empty())value=runtimeConfig.unlockFps?L"0":L"1";
   if((value!=L"0"&&value!=L"1")||in>>extra)return false;
   if(!wht::SaveSetting(runtimeIni,L"Graphics",L"Unlock Limit FPS",value))return false;
-  runtimeConfig=wht::LoadConfig(runtimeIni);return unlockFps129.Apply(executableBase,runtimeConfig.unlockFps);
+  runtimeConfig=wht::LoadConfig(runtimeIni);return unlockFps129.Apply(executableBase,wht::EffectiveUnlock129(runtimeConfig.mode==wht::RunMode::Local,runtimeConfig.unlockFps,runtimeConfig.vsync));
  }
  if(name==L"#fastmenu"){
   if(!originalMenuTransition129)return false;
@@ -1100,7 +1111,7 @@ bool ToolCommand(const std::wstring& command){
  const bool result=ToolCommandImpl129(command);if(!result)return false;
  std::wistringstream input(command);std::wstring name,argument;input>>name>>argument;
  std::string feedback;
- if(name==L"#item"||name==L"#quickdrop"||name==L"#dropitem"||name==L"#save"||name==L"#shareall"||name==L"#srand"||name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
+ if(name==L"#copyitem"||name==L"#item"||name==L"#quickdrop"||name==L"#dropitem"||name==L"#save"||name==L"#shareall"||name==L"#srand"||name==L"#autopick"||name==L"#sellall"||name==L"#drop"||name==L"#dropall"||name==L"#copy"||name==L"#create"||name==L"#attackcd"||name==L"#as"||name==L"#repeat"||name==L"#nocd"||name==L"#yescd"||name==L"#speed"||name==L"#selc")return true;
  if(name==L"#armor")return true;
  if(name==L"#ms")return true;
  if(name==L"#ggl"||name==L"#gll"||name==L"#gg"||name==L"#gl")return true;
@@ -1118,6 +1129,7 @@ bool ToolCommand(const std::wstring& command){
    else if(control.kind==wht::MenuControlKind::Key)feedback=wht::Utf8(wht::SettingFeedback(wht::Wide(title),wht::Wide(wht::MenuKeyName(value))));
    else if(control.kind==wht::MenuControlKind::Clear)feedback=title;
    else feedback=wht::Utf8(wht::SettingFeedback(wht::Wide(title),value));
+   if(!wcscmp(control.key,L"VSync"))feedback+=" (restart game to apply)";
   }
  }
  else if(name==L"#size"){
@@ -1181,6 +1193,7 @@ bool ToolCommand(const std::wstring& command){
    feedback=commandLabel+": "+(argument.empty()?"OK":wht::Utf8(argument));
   }
  }
+ if(name==L"#unlockfps"&&runtimeConfig.unlockFps&&runtimeConfig.vsync)feedback+=" (inactive while VSync is ON)";
  if(!feedback.empty())wht::ShowNotification129(executableBase,feedback,localMessage129);
  return result;
 }
@@ -1188,6 +1201,11 @@ bool SlotKey129(unsigned key){
  if(!clickButton)return false;
  const auto activate=[&](bool inventory,int slot,const wht::Binding& binding){
   smartCast129.Reset();
+  if(binding.autoTargetMe&&!macroRecorder.playing&&!macroRecorder.recording){
+   const bool ok=wht::SelfCast129(executableBase,inventory,slot);
+   if(!ok)wht::ShowNotification129(executableBase,"Self Cast: unavailable or game rejected target",localMessage129);
+   return true;
+  }
   return wht::ActivateSlot129(executableBase,inventory,slot,binding.quickCast&&!macroRecorder.playing&&!macroRecorder.recording,clickButton,[&](uintptr_t target){
    if(runtimeConfig.modeCast==1){const auto selected=wht::SelectedSkill129(executableBase);smartCast129.Arm(key,target,selected.unit,selected.identity);}
    else wht::CastAtCursor129(executableBase,window,target);
@@ -1262,7 +1280,7 @@ LRESULT CALLBACK InputMessages(int code,WPARAM removed,LPARAM data){
    if(msg.message==WM_RBUTTONUP&&quickDropConsumed129){quickDropConsumed129=false;handled=true;}
    if(msg.message==WM_RBUTTONDOWN||msg.message==WM_RBUTTONDBLCLK){
     quickDropConsumed129=false;
-    if(allowed&&!chatTyping&&!toolMenu.open&&!consoleState.active&&!macroRecorder.playing&&!macroRecorder.recording&&quickDropEnabled129&&GetForegroundWindow()==window&&(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+    if(allowed&&!chatTyping&&!toolMenu.open&&!consoleState.active&&!macroRecorder.playing&&!macroRecorder.recording&&runtimeConfig.quickDropItem&&GetForegroundWindow()==window&&(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
      RECT r{};GetClientRect(window,&r);auto canvas=wht::Canvas129(r.right,r.bottom);POINT p{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))};
      const int slot=wht::QuickDropSlot129(executableBase,canvas.Project(p),canvas.width,canvas.height);
      if(slot>=0){ToolCommand(L"#dropitem "+std::to_wstring(slot+1));handled=true;quickDropConsumed129=true;}
@@ -1412,8 +1430,8 @@ void UpdateTooltip129(uintptr_t owner,bool allowed){
 }
 void UpdateTools(){
  const bool localMode=runtimeConfig.mode==wht::RunMode::Local;
- if(unlockFps129.ready)unlockFps129.Apply(executableBase,localMode&&runtimeConfig.unlockFps);
- const bool unlock=localMode&&runtimeConfig.unlockFps;
+ const bool unlock=wht::EffectiveUnlock129(localMode,runtimeConfig.unlockFps,runtimeConfig.vsync);
+ if(unlockFps129.ready)unlockFps129.Apply(executableBase,unlock);
  fpsTimer129.Apply(unlock,timeBeginPeriod,timeEndPeriod);
  if(fpsApi129.set){
   const bool confirmed=fpsLimit129.Apply(0,unlock,fpsApi129,true);
@@ -1483,6 +1501,7 @@ DWORD WINAPI Install(void* module){
  runtimeModule=static_cast<HMODULE>(module);runtimeFolder=folder;runtimeIni=folder+L"\\WHT.ini";runtimeConfig=wht::LoadConfig(runtimeIni);
  wht::toolEnglish.store(runtimeConfig.english);
  frameApi=wht::FrameApi129(executableBase);toolMenu.controlAvailable=ControlAvailable129;
+ toolMenu.helpMeasure=reinterpret_cast<decltype(toolMenu.helpMeasure)>(executableBase+0x486fa0);
  showLevel129.textWidth=reinterpret_cast<decltype(showLevel129.textWidth)>(executableBase+0x486fa0);
  showLevel129.backgroundColor=reinterpret_cast<decltype(showLevel129.backgroundColor)>(executableBase+0x487ba0);
  wchar_t self[32768]{};GetModuleFileNameW(static_cast<HMODULE>(module),self,32768);mixPath=self;

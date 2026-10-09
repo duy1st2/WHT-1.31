@@ -43,21 +43,35 @@ class ToolMenuOverlay{public:
   if(hit<=-6&&hit>=-9){static const wchar_t* keys[]={L"play",L"stop",L"record",L"edit"};ToolMenuControl d{};d.kind=MenuControlKind::Clear;d.section=L"Macro";d.key=keys[-hit-6];d.label="Macro";return ControlHint(d);}
   if(hit==-1)return toolEnglish.load()?"Tools menu\nOpen or close the in-game tools menu.":Utf8(L"Menu công cụ\nMở hoặc đóng menu công cụ trong trận.");
   if(hit==-2)return toolEnglish.load()?"Close menu\nClose the tools menu and return to the match.":Utf8(L"Đóng menu\nĐóng bảng công cụ và quay lại trận.");
-  if(hit>=500&&hit<508){static const wchar_t* tabs[]={L"Tổng quát\nChỉnh hiển thị và các thao tác hỗ trợ trong trận.",L"Chat nhanh\nGán phím và nội dung tin nhắn gửi nhanh.",L"Phím tắt\nGán phím kỹ năng, vật phẩm và chọn tướng.",L"Phím tắt khác\nGán phím mở menu, thu gọn bảng và tạm tắt thiết lập.",L"Đồ họa\nChỉnh hiển thị giao diện, màu sắc và đồng bộ khung hình.",L"MTH\nChọn chế độ và gán thao tác hỗ trợ MTH.",L"Tự động kỹ năng\nChỉnh phím chạy/dừng, độ trễ và phạm vi tìm mục tiêu."};return toolEnglish.load()?ToolTabName(hit-500)+"\nOpen this settings page.":hit==507?Utf8(L"Ngôn ngữ\nChọn ngôn ngữ cho giao diện công cụ."):Utf8(tabs[hit-500]);}
+  if(hit>=500&&hit<508){static const wchar_t* tabs[]={L"T\u1ed5ng qu\u00e1t\nCh\u1ec9nh hi\u1ec3n th\u1ecb v\u00e0 c\u00e1c thao t\u00e1c h\u1ed7 tr\u1ee3 trong tr\u1eadn.",L"Chat nhanh\nG\u00e1n ph\u00edm v\u00e0 n\u1ed9i dung tin nh\u1eafn g\u1eedi nhanh.",L"Ph\u00edm t\u1eaft\nG\u00e1n ph\u00edm k\u1ef9 n\u0103ng, v\u1eadt ph\u1ea9m v\u00e0 ch\u1ecdn t\u01b0\u1edbng.",L"Ph\u00edm t\u1eaft kh\u00e1c\nG\u00e1n ph\u00edm m\u1edf menu, thu g\u1ecdn b\u1ea3ng v\u00e0 t\u1ea1m t\u1eaft thi\u1ebft l\u1eadp.",L"\u0110\u1ed3 h\u1ecda\nCh\u1ec9nh hi\u1ec3n th\u1ecb giao di\u1ec7n, m\u00e0u s\u1eafc v\u00e0 \u0111\u1ed3ng b\u1ed9 khung h\u00ecnh.",L"MTH\nCh\u1ecdn ch\u1ebf \u0111\u1ed9 v\u00e0 g\u00e1n thao t\u00e1c h\u1ed7 tr\u1ee3 MTH.",L"T\u1ef1 \u0111\u1ed9ng k\u1ef9 n\u0103ng\nCh\u1ec9nh ph\u00edm ch\u1ea1y/d\u1eebng, \u0111\u1ed9 tr\u1ec5 v\u00e0 ph\u1ea1m vi t\u00ecm m\u1ee5c ti\u00eau."};return toolEnglish.load()?EnglishTabHelp(size_t(hit-500)):hit==507?Utf8(L"Ng\u00f4n ng\u1eef\nCh\u1ecdn ng\u00f4n ng\u1eef cho giao di\u1ec7n c\u00f4ng c\u1ee5."):Utf8(tabs[hit-500]);}
   if(hit>=0&&hit<int(controls.size()))return ControlHint(kToolMenuControls[hit])+(Enabled(c,size_t(hit))||!kToolMenuControls[hit].supported?"":(toolEnglish.load()?"\nDisabled: enable the parent group first.":Utf8(L"\nĐang bị khóa: bật nhóm tùy chọn cha trước.")));
   if(visible&&open&&dropdown<0)for(size_t i=0;i<controls.size();++i){const auto& d=kToolMenuControls[i];if(d.page==page&&d.kind!=MenuControlKind::Label&&*d.label&&FromPixels(d.labelRect).Hit(p,w,h))return ControlHint(d);}
   return {};
  }
 
  struct HelpLayout{std::string text;float width,height;};
- static HelpLayout LayoutHelp(const std::string& text){
-  auto source=Wide(text);std::wstring wrapped;size_t longest=0,lines=0,start=0;
-  do{auto end=source.find(L'\n',start);auto line=source.substr(start,end==std::wstring::npos?end:end-start);
-   do{size_t count=std::min(size_t(38),line.size());if(line.size()>38){auto space=line.rfind(L' ',count);if(space!=std::wstring::npos&&space>0)count=space;}
-    if(lines++)wrapped+=L'\n';wrapped+=line.substr(0,count);longest=std::max(longest,count);line.erase(0,count);while(!line.empty()&&line.front()==L' ')line.erase(0,1);
-   }while(!line.empty());if(end==std::wstring::npos)break;start=end+1;
+ static float HelpLineWidth(const std::wstring& text){
+  float width=0;for(auto c:text)width+=c==L' '?.0034f:wcschr(L"ilI.,:;!|'",c)?.0032f:wcschr(L"MWmw",c)?.0082f:.0057f;return width*.73f;
+ }
+ float(__thiscall* helpMeasure)(void*)=nullptr;
+ float MeasureHelpLine(const std::wstring& line){
+  api.setWidth(helpText,.8f);auto value=Utf8(line);api.setText(helpText,value.c_str());
+  auto measure=helpMeasure;
+  float scale=viewportHeight>0?float(viewportWidth)/std::min(float(viewportWidth),float(viewportHeight)*4.f/3.f):1.f;float width=measure?measure(helpText)/scale:HelpLineWidth(line);
+  return std::isfinite(width)&&width>=0&&width<2.f?width:HelpLineWidth(line);
+ }
+ HelpLayout LayoutHelp(const std::string& text){
+  auto source=Wide(text);std::wstring wrapped;float longest=0;size_t lines=0,start=0;
+  auto append=[&](const std::wstring& line){if(lines++)wrapped+=L'\n';wrapped+=line;longest=std::max(longest,MeasureHelpLine(line));};
+  do{auto end=source.find(L'\n',start);auto paragraph=source.substr(start,end==std::wstring::npos?end:end-start);std::wstring line;
+   size_t pos=0;while(pos<paragraph.size()){while(pos<paragraph.size()&&paragraph[pos]==L' ')++pos;if(pos==paragraph.size())break;
+    auto next=paragraph.find(L' ',pos);auto word=paragraph.substr(pos,next==std::wstring::npos?next:next-pos);
+    auto candidate=line.empty()?word:line+L" "+word;
+    if(!line.empty()&&MeasureHelpLine(candidate)>.17f){append(line);line=word;}else line=candidate;
+    if(next==std::wstring::npos)break;pos=next+1;
+   }append(line);if(end==std::wstring::npos)break;start=end+1;
   }while(true);
-  return {Utf8(wrapped),std::clamp(float(longest)*.0039f+.016f,.10f,.19f),float(lines)*.016f+.016f};
+  return {Utf8(wrapped),std::max(.05f,longest+.020f),float(lines)*.014f+.020f};
  }
  void* helpFrame=nullptr,*helpText=nullptr;bool helpShown=false;std::string helpCandidate,helpApplied;ULONGLONG helpSince=0;float helpX=-1,helpY=-1,helpWidth=.19f,helpHeight=.05f;
  void UpdateHelp(POINT p,int w,int h,bool foreground,const std::string& text){

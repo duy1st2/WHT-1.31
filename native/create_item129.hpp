@@ -1,6 +1,12 @@
-#pragma once
+﻿#pragma once
 #include "create_unit129.hpp"
 namespace wht {
+inline bool ParseCopyItem129(const std::wstring& args,unsigned& slot,unsigned& count){
+ std::wistringstream in(args);std::wstring token,quantity,extra;count=1;
+ if(!(in>>token)||token.size()!=1||token[0]<L'1'||token[0]>L'6')return false;slot=unsigned(token[0]-L'1');
+ if(in>>quantity){if(quantity.empty()||quantity.size()>2)return false;count=0;for(auto c:quantity){if(c<L'0'||c>L'9')return false;count=count*10+unsigned(c-L'0');}if(count<1||count>50)return false;}
+ return !(in>>extra);
+}
 struct CreateItemApi129 {
  uint32_t(__cdecl* create)(uint32_t,const float*,const float*)=nullptr;
  uint32_t(__cdecl* type)(uint32_t)=nullptr;
