@@ -96,9 +96,12 @@ struct Mth129 {
    sent=true;routeDeadline=now+30000;return nullptr;
   }__except(EXCEPTION_EXECUTE_HANDLER){route=-1;return "MTH Route: native action failed";}
  }
- std::array<void*,12> frames{},labels{};std::array<bool,12> shown{};
+ std::array<void*,12> frames{},labels{};std::array<bool,12> shown{},down{};std::array<uint64_t,12> pressUntil{};int pressed=-1;
+ void Press(int i){if(i>=0&&i<12){pressed=i;pressUntil[i]=GetTickCount64()+140;}}
+ void Release(){pressed=-1;}
  static ToolMenuRect Rect(unsigned i){return {.305f+.041f*(i%6),.142f+.028f*(i/6),.038f,.024f};}
- void Reset(){courier={};courierSession=0;routePinned=false;run.Reset();route=-1;remaining=0;routeUnit={};pending=kind=-1;requested={};owner=0;frames={};labels={};shown={};}
+ ToolMenuRect ButtonRect(unsigned i)const{unsigned slot=0;for(unsigned j=0;j<i;++j)if(shown[j])++slot;return Rect(slot);}
+ void Reset(){courier={};courierSession=0;routePinned=false;run.Reset();route=-1;remaining=0;routeUnit={};pending=kind=-1;requested={};owner=0;frames={};labels={};shown={};down={};pressUntil={};pressed=-1;}
  bool Queue(uintptr_t base,int action){if(action<0||action>4||route>=0||pending>=0||run.Active())return false;requested=SelectedSkill129(base);if(!requested.unit)return false;pending=action;return true;}
  const char* Tick(uintptr_t base,ClickFn129 click,bool enabled,bool ready,uint32_t now){
   if(!enabled){pending=-1;if(!run.Active())return nullptr;}
@@ -112,8 +115,10 @@ struct Mth129 {
  }
  void Update(uintptr_t base,uintptr_t parent,const Config& c,bool allowed,ToolMenuOverlay& menu){
   if(!menu.initialized||!menu.independentHost)return;if(owner&&owner!=parent)Reset();owner=parent;
+  if(!(GetAsyncKeyState(VK_LBUTTON)&0x8000))Release();
   const bool draw[]={c.shieldDraw,c.iceDraw,c.wildDraw,c.frozenDraw,c.phoenixDraw,c.pickGokuDraw,c.autoGaDraw1,c.autoGaDraw2,c.autoGaDraw3,c.autoSoiDraw1,c.autoSoiDraw2,c.autoSoiDraw3};
-  for(unsigned i=0;i<12;++i){shown[i]=allowed&&!menu.open&&(c.mth49Enable||c.g17Enable)&&draw[i];auto r=Rect(i);
+  for(unsigned i=0;i<12;++i)shown[i]=allowed&&!menu.open&&(c.mth49Enable||c.g17Enable)&&draw[i];
+  for(unsigned i=0;i<12;++i){auto r=ButtonRect(i);
    // The game UI owner can occupy the last native frame level. Use the
    // menu's independent level-6 host, which remains visible when it closes.
    if(shown[i]&&!frames[i]){
@@ -126,6 +131,13 @@ struct Mth129 {
     if(labels[i])menu.api.setTextAlign(labels[i],2);
    }
    shown[i]=shown[i]&&frames[i]&&labels[i];
+   const bool push=shown[i]&&(GetTickCount64()<pressUntil[i]);
+   if(frames[i]&&labels[i]){down[i]=push;float dx=push?.0012f:0.f,dy=push?-.0012f:0.f;
+    menu.api.setAbsPoint(frames[i],0,r.right-r.width+dx,r.bottom+r.height+dy,1);
+    menu.api.setAbsPoint(frames[i],8,r.right+dx,r.bottom+dy,1);
+    auto title=std::string(push?"|cffff9900":"|cffffcc00")+MthName129(i)+"|r";menu.api.setText(labels[i],title.c_str());
+   }
+
    if(frames[i]){if(shown[i]){
     NativeFrameShow(frames[i]);
     // Read the button's resolved native rectangle. Fonts must use that
@@ -141,6 +153,7 @@ struct Mth129 {
    }else NativeFrameHide(frames[i]);}
   }
  }
- int Hit(POINT p,int w,int h)const{for(unsigned i=0;i<12;++i)if(shown[i]&&Rect(i).Hit(p,w,h))return int(i);return -1;}
+ void GokuVisual(ToolMenuOverlay& menu,bool enabled){if(labels[5]&&menu.api.setText)menu.api.setText(labels[5],enabled?"|cff00ff00Goku|r":"|cffffcc00Goku|r");}
+ int Hit(POINT p,int w,int h)const{for(unsigned i=0;i<12;++i)if(shown[i]&&ButtonRect(i).Hit(p,w,h))return int(i);return -1;}
 };
 }

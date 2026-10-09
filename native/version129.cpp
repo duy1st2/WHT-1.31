@@ -1377,7 +1377,7 @@ LRESULT CALLBACK InputMessages(int code,WPARAM removed,LPARAM data){
     const auto projected=canvas.Project(p);
     const int mthHit=mth129.Hit(projected,canvas.width,canvas.height);
     if(!toolMenu.open&&!macroRecorder.playing&&!macroRecorder.recording&&mthHit>=0){
-     handled=true;if(msg.message==WM_LBUTTONDOWN){const wchar_t* commands[]={L"#shield",L"#ice",L"#wild",L"#frozen",L"#phoenix",L"#goku",L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};ToolCommand(commands[mthHit]);}
+     handled=true;if(msg.message==WM_LBUTTONDOWN){mth129.Press(mthHit);const wchar_t* commands[]={L"#shield",L"#ice",L"#wild",L"#frozen",L"#phoenix",L"#goku",L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};ToolCommand(commands[mthHit]);}
     }
     if(!toolMenu.open&&skillsIconShown&&skillsIconRect.Hit(projected,canvas.width,canvas.height)){
      handled=true;
@@ -1390,7 +1390,7 @@ LRESULT CALLBACK InputMessages(int code,WPARAM removed,LPARAM data){
     for(unsigned i=0;i<2;++i)if(!toolMenu.open&&inventoryIconsShown129[i]&&inventoryIconRects129[i].Hit(projected,canvas.width,canvas.height)){
      handled=true;if(msg.message==WM_LBUTTONDOWN){inventoryIconsPressed129[i]=true;ToolCommand(i==0?L"#autopick":L"#sellall");}
     }
-    if(msg.message==WM_LBUTTONUP){skillsIconPressed=false;dropIconPressed=false;inventoryIconsPressed129[0]=inventoryIconsPressed129[1]=false;}
+    if(msg.message==WM_LBUTTONUP){mth129.Release();skillsIconPressed=false;dropIconPressed=false;inventoryIconsPressed129[0]=inventoryIconsPressed129[1]=false;}
     const int classic=std::min(r.right,r.bottom*4/3);
     POINT menuPoint{p.x-(r.right-classic)/2,p.y};
     if(runtimeConfig.hideOptionMenu&&wht::ToolMenuRect{.178f,.576f,.09f,.024f}.Hit(menuPoint,classic,r.bottom))handled=true;
@@ -1502,7 +1502,7 @@ uintptr_t __fastcall DestroyBar129(uintptr_t bar,DWORD,unsigned flags){
  return originalBarDestroy129(bar,flags);
 }
 bool SafeUpdateMenu(uintptr_t owner,bool allowed){
- __try {toolMenu.Update(executableBase,owner,runtimeConfig,allowed,&frameApi);regen129.Update(executableBase,runtimeConfig,allowed,toolMenu);UpdateMemory(allowed&&runtimeConfig.showMem);UpdateClock(allowed&&runtimeConfig.showTimer);UpdateResources(allowed&&runtimeConfig.showResource);UpdateSkillsIcon(allowed&&runtimeConfig.showInsAllSkills);UpdateDropIcon(allowed&&runtimeConfig.showDropAll);UpdateInventoryIcons129(allowed);mth129.Update(executableBase,owner,runtimeConfig,allowed,toolMenu);UpdateHelp();UpdateTooltip129(owner,allowed);hotkeyLabels129.Update(executableBase,runtimeConfig,allowed,toolMenu);return true;}
+ __try {toolMenu.Update(executableBase,owner,runtimeConfig,allowed,&frameApi);regen129.Update(executableBase,runtimeConfig,allowed,toolMenu);UpdateMemory(allowed&&runtimeConfig.showMem);UpdateClock(allowed&&runtimeConfig.showTimer);UpdateResources(allowed&&runtimeConfig.showResource);UpdateSkillsIcon(allowed&&runtimeConfig.showInsAllSkills);UpdateDropIcon(allowed&&runtimeConfig.showDropAll);UpdateInventoryIcons129(allowed);mth129.Update(executableBase,owner,runtimeConfig,allowed,toolMenu);toolMenu.PlaybackVisual(macroRecorder.playing);mth129.GokuVisual(toolMenu,inventoryActions129.autoPickGoku);UpdateHelp();UpdateTooltip129(owner,allowed);hotkeyLabels129.Update(executableBase,runtimeConfig,allowed,toolMenu);return true;}
  __except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
 void UpdateTooltip129(uintptr_t owner,bool allowed){
