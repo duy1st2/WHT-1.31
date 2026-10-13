@@ -1,0 +1,152 @@
+{
+  "ui_get": {
+    "12173": 11245840,
+    "12164": 11511904,
+    "signature73": "558bec8b153edad3",
+    "signature64": "558bec8b159e68ce"
+  },
+  "camera_set": {
+    "12173": 11192720,
+    "12164": 11459232,
+    "signature73": "558becf30f104510",
+    "signature64": "558becf30f104510"
+  },
+  "alloc": {
+    "12173": 2579664,
+    "12164": 2670896,
+    "signature73": "558bec56ff7510b9",
+    "signature64": "558bec56ff7510b9"
+  },
+  "frame_ctor": {
+    "12173": 14408832,
+    "12164": 14675584,
+    "signature73": "558bec6aff686c79",
+    "signature64": "558bec6aff68cc5b"
+  },
+  "font_ctor": {
+    "12173": 14400736,
+    "12164": 14667488,
+    "signature73": "558bec5156ff7510",
+    "signature64": "558bec5156ff7510"
+  },
+  "font_set": {
+    "12173": 14405728,
+    "12164": 14672480,
+    "signature73": "558becf30f10450c",
+    "signature64": "558becf30f10450c"
+  },
+  "font_text": {
+    "12173": 14407216,
+    "12164": 14673968,
+    "signature73": "558bec568bf18b86",
+    "signature64": "558bec568bf18b86"
+  },
+  "font_align": {
+    "12173": 14405952,
+    "12164": 14672704,
+    "signature73": "558bec8b91cc0000",
+    "signature64": "558bec8b91cc0000"
+  },
+  "texture_ctor": {
+    "12173": 14400944,
+    "12164": 14667696,
+    "signature73": "558bec6aff682878",
+    "signature64": "558bec6aff68885a"
+  },
+  "texture_set": {
+    "12173": 14407664,
+    "12164": 14674416,
+    "signature73": "558bec6aff68fb78",
+    "signature64": "558bec6aff685b5b"
+  },
+  "backdrop_ctor": {
+    "12173": 14540912,
+    "12164": 14807616,
+    "signature73": "558bec6aff68518d",
+    "signature64": "558bec6aff68b16f"
+  },
+  "backdrop_set": {
+    "12173": 14412416,
+    "12164": 14679168,
+    "signature73": "558bec568b750857",
+    "signature64": "558bec568b750857"
+  },
+  "string_assign": {
+    "12173": 2795216,
+    "12164": 2885792,
+    "signature73": "558bec5153568b75",
+    "signature64": "558bec5153568b75"
+  },
+  "set_width": {
+    "12173": 14393104,
+    "12164": 14659856,
+    "signature73": "558becf30f104508",
+    "signature64": "558becf30f104508"
+  },
+  "set_height": {
+    "12173": 14392480,
+    "12164": 14659232,
+    "signature73": "558becf30f104508",
+    "signature64": "558becf30f104508"
+  },
+  "abs_point": {
+    "12173": 14392688,
+    "12164": 14659440,
+    "signature73": "558bec538b5d0856",
+    "signature64": "558bec538b5d0856"
+  },
+  "rel_point": {
+    "12173": 14392880,
+    "12164": 14659632,
+    "signature73": "558bec56578b7d0c",
+    "signature64": "558bec56578b7d0c"
+  },
+  "text_frame_set": {
+    "12173": 14435344,
+    "12164": null,
+    "signature73": "558bec83ec0c5356",
+    "signature64": null
+  },
+  "read_float": {
+    "12173": 13774880,
+    "12164": 14058640,
+    "signature73": "558bec83ec0c56ff",
+    "signature64": "558bec83ec0c56ff"
+  },
+  "archive_open": {
+    "12173": 2891040,
+    "12164": 2981600,
+    "signature73": "558bec83ec0c837d",
+    "signature64": "558bec83ec0c837d"
+  },
+  "file_info": {
+    "12173": 2889408,
+    "12164": 2979968,
+    "signature73": "558bec837d0c0056",
+    "signature64": "558bec837d0c0056"
+  },
+  "spell_remaining": {
+    "12173": 3670672,
+    "12164": 3808640,
+    "signature73": "558bec8b51208bc2",
+    "signature64": "558bec8b51208bc2"
+  },
+  "timer_remaining": {
+    "12173": 13784816,
+    "12164": 14068816,
+    "signature73": "558bec8b490c85c9",
+    "signature64": "558bec8b490c85c9"
+  },
+  "timer_remaining_alt": {
+    "12173": 13784880,
+    "12164": null,
+    "signature73": "558bec83ec105356",
+    "signature64": null
+  },
+  "button_ability": {
+    "12173": 11718560,
+    "12164": 11981472,
+    "signature73": "8b81742d0000c3b6",
+    "signature64": "8b81742d0000c317"
+  }
+}

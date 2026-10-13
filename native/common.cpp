@@ -161,10 +161,11 @@ Config LoadConfig(const std::wstring& ini) {
     c.soundStartGame=Read(ini,L"Event",L"Sound Start Game",L"0")==L"1";
     c.removeFogEffect=Read(ini,L"Event",L"Remove Fog Effect",L"0")==L"1";
     c.fogClick=Read(ini,L"Event",L"Fog Click",L"0")==L"1";
-    c.revealInvisible=Read(ini,L"Event",L"Reveal Invisibles",L"0")==L"1"||
-                      Read(ini,L"Event",L"RevealInvisible",L"0")==L"1"||
-                      Read(ini,L"Graphics",L"RevealInvisible",L"0")==L"1"||
-                      Read(ini,L"hmaph",L"maph_5",L"0")==L"1";
+    const auto revealSetting=Read(ini,L"Event",L"Reveal Invisibles",L"");
+    c.revealInvisible=revealSetting.empty()?
+                      (Read(ini,L"Event",L"RevealInvisible",L"0")==L"1"||
+                       Read(ini,L"Graphics",L"RevealInvisible",L"0")==L"1"||
+                       Read(ini,L"hmaph",L"maph_5",L"0")==L"1"):revealSetting==L"1";
     c.showNotiKickBan=Read(ini,L"Event",L"Show Noti Kick/Ban",L"1")==L"1";
     c.notiLogSaveGame=Read(ini,L"Event",L"Noti/Log Info Players Save Game",L"0")==L"1";
     c.modeCast=std::clamp(static_cast<int>(Number(Read(ini,L"Event",L"ModeCast",L"0"),0,0,2)),0,2);

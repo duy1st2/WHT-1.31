@@ -10,8 +10,13 @@ struct NativeFrameLayout {
     size_t frameSize=0x124,fontSize=0xc4,textureSize=0xe8;
     unsigned level=0x84,visible=0x90,layers=0xb8,backdrop=0xcc,hide=0x64,show=0x68;
     uintptr_t simpleVtable=0;
+    bool byteFlags=false;
 };
 inline NativeFrameLayout nativeFrameLayout{};
+inline uint32_t NativeVisibleValue(void* frame){auto at=static_cast<unsigned char*>(frame)+nativeFrameLayout.visible;
+ return nativeFrameLayout.byteFlags?*at:*reinterpret_cast<uint32_t*>(at);}
+inline void NativeWriteVisible(void* frame,uint32_t value){auto at=static_cast<unsigned char*>(frame)+nativeFrameLayout.visible;
+ if(nativeFrameLayout.byteFlags)*at=static_cast<unsigned char>(value);else *reinterpret_cast<uint32_t*>(at)=value;}
 struct NativeFrameApi {
     void* (__stdcall *alloc)(size_t, const char*, int, int) = nullptr;
     void* (__thiscall *frameCtor)(void*, void*) = nullptr;
@@ -29,9 +34,26 @@ struct NativeFrameApi {
     void  (__thiscall *setAbsPoint)(void*, int, float, float, int) = nullptr;
     void  (__thiscall *setRelPoint)(void*, int, void*, int, float, float, int) = nullptr;
 };
+struct ExtendedFrameApi : public NativeFrameApi {void (__thiscall *setVisible)(void*,int)=nullptr;};
 
 inline constexpr uint32_t kToolFrameLevel = 8;
+// Reserve the upper three native buckets for the main settings menu.
+inline constexpr uint32_t kToolFeatureFrameLevel = 6;
+inline constexpr uint32_t kToolMenuPanelLevel = 7;
+inline constexpr uint32_t kToolMenuControlLevel = 8;
+inline constexpr uint32_t kToolMenuPopupLevel = 9;
 inline constexpr int kNativeOverlayLayer = 4;
+
+inline bool NativeSetOwnedFrameLevel(void* frame,uintptr_t game,uintptr_t table,uint32_t target){
+ if(!frame||!game||!table||target>9)return false;
+ __try{auto at=reinterpret_cast<uintptr_t>(frame);auto vt=*reinterpret_cast<uintptr_t*>(at);
+  if(vt!=game+table)return false;
+  auto& level=*reinterpret_cast<uint32_t*>(at+nativeFrameLayout.level);if(level>9)return false;if(level==target)return true;
+  auto hide=*reinterpret_cast<void(__thiscall**)(void*)>(vt+nativeFrameLayout.hide);
+  auto show=*reinterpret_cast<void(__thiscall**)(void*)>(vt+nativeFrameLayout.show);if(!hide||!show)return false;
+  auto visible=NativeVisibleValue(frame);NativeWriteVisible(frame,0);hide(frame);level=target;NativeWriteVisible(frame,visible);if(visible)show(frame);return true;
+ }__except(1){return false;}
+}
 
 // Exact 1.24.4.6387 CSimpleFrame/CSimpleButton ABI, not a CLayoutFrame
 // or CSimpleRegion API. +0x84 is the manager's frame bucket (0..9).
@@ -49,20 +71,20 @@ inline bool NativeBringToolFrameToFront(void* frame, uintptr_t game) {
             vtable != game + 0x96dfb4 && vtable != game + 0x96dc8c) return false;
         auto& level = *reinterpret_cast<uint32_t*>(at + nativeFrameLayout.level);
         if (level > 9) return false;
-        auto& overlayEnabled = *reinterpret_cast<uint32_t*>(at + nativeFrameLayout.layers + kNativeOverlayLayer * 4);
+        auto layerAt=at+nativeFrameLayout.layers+kNativeOverlayLayer*(nativeFrameLayout.byteFlags?1:4);
+        const auto overlayEnabled=nativeFrameLayout.byteFlags?*reinterpret_cast<uint8_t*>(layerAt):*reinterpret_cast<uint32_t*>(layerAt);
         if (level >= kToolFrameLevel && overlayEnabled) return true;
         const auto hide = *reinterpret_cast<void(__thiscall**)(void*)>(vtable + nativeFrameLayout.hide);
         const auto show = *reinterpret_cast<void(__thiscall**)(void*)>(vtable + nativeFrameLayout.show);
         if (!hide || !show) return false;
-        auto& visible = *reinterpret_cast<uint32_t*>(at + nativeFrameLayout.visible);
-        const auto wasVisible = visible;
-        visible = 0;
+        const auto wasVisible = NativeVisibleValue(frame);
+        NativeWriteVisible(frame,0);
         hide(frame);
         if (level < kToolFrameLevel) level = kToolFrameLevel;
         // Enable the same per-layer gate used by native EnableDrawLayer (6093D0).
         // Show re-registers/invalidates all five render buckets after this write.
-        overlayEnabled = 1;
-        visible = wasVisible;
+        if(nativeFrameLayout.byteFlags)*reinterpret_cast<uint8_t*>(layerAt)=1;else *reinterpret_cast<uint32_t*>(layerAt)=1;
+        NativeWriteVisible(frame,wasVisible);
         if (wasVisible) show(frame); // Engine still checks the parent's visibility.
         return true;
     } __except (1) { return false; }
@@ -73,7 +95,7 @@ inline void NativeFrameShow(void* frame) {
     __try {
         uintptr_t vtable = *reinterpret_cast<uintptr_t*>(frame);
         if (vtable) {
-            *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(frame) + nativeFrameLayout.visible) = 1;
+            NativeWriteVisible(frame,1);
             auto showFn = *reinterpret_cast<void(__thiscall**)(void*)>(vtable + nativeFrameLayout.show);
             if (showFn) showFn(frame);
         }
@@ -85,11 +107,20 @@ inline void NativeFrameHide(void* frame) {
     __try {
         uintptr_t vtable = *reinterpret_cast<uintptr_t*>(frame);
         if (vtable) {
-            *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(frame) + nativeFrameLayout.visible) = 0;
+            NativeWriteVisible(frame,0);
             auto hideFn = *reinterpret_cast<void(__thiscall**)(void*)>(vtable + nativeFrameLayout.hide);
             if (hideFn) hideFn(frame);
         }
     } __except (1) {}
+}
+inline void NativeBackdropGeometry(void* backdrop,float borderSize,float inset){
+ auto at=static_cast<unsigned char*>(backdrop);
+ if(sizeof(void*)==8){*reinterpret_cast<float*>(at+0x60)=borderSize;for(unsigned n=0;n<4;++n)*reinterpret_cast<float*>(at+0x68+n*4)=inset;return;}
+ // 1.31 moves EdgeSize and the four insets four bytes earlier. +38 is
+ // BgTileSize there; overwriting it produces tiled/bleeding backgrounds.
+ *reinterpret_cast<float*>(at+(nativeFrameLayout.byteFlags?0x34:0x38))=borderSize;
+ const auto start=nativeFrameLayout.byteFlags?0x3c:0x40;
+ for(unsigned n=0;n<4;++n)*reinterpret_cast<float*>(at+start+n*4)=inset;
 }
 
 inline void NativeSetFrameBackdropEx(
@@ -103,28 +134,24 @@ inline void NativeSetFrameBackdropEx(
 {
     if (!api.alloc || !api.backdropCtor || !api.setBackdrop || !api.stringAssign || !frame) return;
     __try {
-        void* backdrop = api.alloc(0x50, "CSimpleBackdrop", 1, 0);
+        void* backdrop = api.alloc(sizeof(void*)==8?0x78:0x50, "CSimpleBackdrop", 1, 0);
         if (!backdrop) return;
         backdrop = api.backdropCtor(backdrop);
         if (!backdrop) return;
         // CBackdropFrame owns and releases its style.
         *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(frame) + nativeFrameLayout.backdrop) = reinterpret_cast<uintptr_t>(backdrop);
 
-        *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(backdrop) + 0x2c) = (borderFlags != 0 ? borderFlags : 0xff);
-        *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(backdrop) + 0x30) = 1;
+        *reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(backdrop) + (sizeof(void*)==8?0x58:0x2c)) = (borderFlags != 0 ? borderFlags : 0xff);
+        *reinterpret_cast<uint8_t*>(reinterpret_cast<uintptr_t>(backdrop) + (sizeof(void*)==8?0x5c:0x30)) = 1;
 
         if (bgPath && *bgPath) {
-            api.stringAssign(reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(backdrop) + 0x14), bgPath);
+            api.stringAssign(reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(backdrop) + (sizeof(void*)==8?0x28:0x14)), bgPath);
         }
         if (borderPath && *borderPath) {
-            api.stringAssign(reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(backdrop) + 0x20), borderPath);
+            api.stringAssign(reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(backdrop) + (sizeof(void*)==8?0x40:0x20)), borderPath);
         }
 
-        *reinterpret_cast<float*>(reinterpret_cast<uintptr_t>(backdrop) + 0x38) = borderSize;
-        *reinterpret_cast<float*>(reinterpret_cast<uintptr_t>(backdrop) + 0x40) = inset;
-        *reinterpret_cast<float*>(reinterpret_cast<uintptr_t>(backdrop) + 0x44) = inset;
-        *reinterpret_cast<float*>(reinterpret_cast<uintptr_t>(backdrop) + 0x48) = inset;
-        *reinterpret_cast<float*>(reinterpret_cast<uintptr_t>(backdrop) + 0x4c) = inset;
+        NativeBackdropGeometry(backdrop,borderSize,inset);
 
         api.setBackdrop(frame, backdrop);
     } __except (1) {}

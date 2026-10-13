@@ -29,10 +29,6 @@ struct MthButtonUI {
     bool labelEnglish = false;
 };
 
-struct ExtendedFrameApi : public NativeFrameApi {
-    void (__thiscall *setVisible)(void*, int) = nullptr;
-};
-
 inline void* SafeAllocAndCtorFrame(const ExtendedFrameApi& api, void* parent, float width, float height, float x, float y, float borderSize = 0.0125f, float inset = 0.0045f) {
     __try {
         if (!api.alloc || !api.frameCtor || !parent) return nullptr;

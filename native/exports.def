@@ -1,3 +1,4 @@
 LIBRARY WHT
 EXPORTS
     WHT_RebuildVersion=_WHT_RebuildVersion@0
+    WHT131_Status=_WHT131_Status@0

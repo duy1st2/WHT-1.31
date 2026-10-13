@@ -1,0 +1,4 @@
+LIBRARY WHT
+EXPORTS
+ WHT_RebuildVersion
+ WHT131_Status

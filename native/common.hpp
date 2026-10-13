@@ -9,6 +9,9 @@
 #include <memory>
 
 namespace wht {
+// Fold command names only; chat text, paths and four-character IDs retain case.
+inline void FoldCommandName(std::wstring& name){for(auto& ch:name)if(ch>=L'A'&&ch<=L'Z')ch+=L'a'-L'A';}
+
 enum Feature : unsigned { Camera=1, Graphics=2, Hotkeys=4, Chat=8, Plugins=16, Mth=32, MapTools=64 };
 enum class RunMode { Disabled, Local, Server };
 struct Binding { unsigned vk=0; bool enabled=false, quickCast=false, autoTarget=false, autoTargetMe=false; };

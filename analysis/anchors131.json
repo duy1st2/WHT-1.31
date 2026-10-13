@@ -1,0 +1,681 @@
+{
+  "14740": {
+    "version_text": [
+      {
+        "rva": "0xf91d60",
+        "votes": 2,
+        "anchors": [
+          "0xf91d91",
+          "0xf91db6"
+        ]
+      },
+      {
+        "rva": "0xf778d0",
+        "votes": 1,
+        "anchors": [
+          "0xf778ee"
+        ]
+      },
+      {
+        "rva": "0xf779a0",
+        "votes": 1,
+        "anchors": [
+          "0xf779be"
+        ]
+      },
+      {
+        "rva": "0xf77a70",
+        "votes": 1,
+        "anchors": [
+          "0xf77a8e"
+        ]
+      },
+      {
+        "rva": "0xf79e20",
+        "votes": 1,
+        "anchors": [
+          "0xf79e3f"
+        ]
+      }
+    ],
+    "chat_display": [],
+    "camera_set": [],
+    "font_text": [],
+    "font_set": [
+      {
+        "rva": "0xc6dd40",
+        "votes": 1,
+        "anchors": [
+          "0xc6df67"
+        ]
+      },
+      {
+        "rva": "0x10bd6b0",
+        "votes": 1,
+        "anchors": [
+          "0x10bd7d8"
+        ]
+      },
+      {
+        "rva": "0xdfe260",
+        "votes": 1,
+        "anchors": [
+          "0xdfe2ce"
+        ]
+      }
+    ],
+    "font_align": [
+      {
+        "rva": "0xdfe220",
+        "votes": 1,
+        "anchors": [
+          "0xdfe24b"
+        ]
+      },
+      {
+        "rva": "0xdfe390",
+        "votes": 1,
+        "anchors": [
+          "0xdfe3bb"
+        ]
+      },
+      {
+        "rva": "0xdfe3d0",
+        "votes": 1,
+        "anchors": [
+          "0xdfe3fb"
+        ]
+      }
+    ],
+    "font_width": [],
+    "texture_set": [
+      {
+        "rva": "0x13b18e0",
+        "votes": 1,
+        "anchors": [
+          "0x13b19f0"
+        ]
+      }
+    ],
+    "texture_ctor": [
+      {
+        "rva": "0xf22570",
+        "votes": 4,
+        "anchors": [
+          "0xf22666",
+          "0xf22684",
+          "0xf226a2",
+          "0xf226c0"
+        ]
+      },
+      {
+        "rva": "0xdfcfb0",
+        "votes": 3,
+        "anchors": [
+          "0xdfcfef",
+          "0xdfd00d",
+          "0xdfd02b"
+        ]
+      },
+      {
+        "rva": "0xb44080",
+        "votes": 3,
+        "anchors": [
+          "0xb441b8",
+          "0xb441d6",
+          "0xb441f4"
+        ]
+      },
+      {
+        "rva": "0xe94570",
+        "votes": 3,
+        "anchors": [
+          "0xe945a1",
+          "0xe945bf",
+          "0xe945dd"
+        ]
+      },
+      {
+        "rva": "0x11f2f90",
+        "votes": 2,
+        "anchors": [
+          "0x11f2ff6",
+          "0x11f3014"
+        ]
+      }
+    ],
+    "backdrop_ctor": [
+      {
+        "rva": "0xe1f240",
+        "votes": 9,
+        "anchors": [
+          "0xe1f25e",
+          "0xe1f269",
+          "0xe1f275",
+          "0xe1f28a",
+          "0xe1f29b",
+          "0xe1f2af",
+          "0xe1f2b7",
+          "0xe1f2c5",
+          "0xe1f2d6"
+        ]
+      },
+      {
+        "rva": "0x9c23d0",
+        "votes": 1,
+        "anchors": [
+          "0x9c247a"
+        ]
+      },
+      {
+        "rva": "0xdd66c0",
+        "votes": 1,
+        "anchors": [
+          "0xdd6714"
+        ]
+      },
+      {
+        "rva": "0x115b890",
+        "votes": 1,
+        "anchors": [
+          "0x115b8ff"
+        ]
+      },
+      {
+        "rva": "0x115bf70",
+        "votes": 1,
+        "anchors": [
+          "0x115c0bf"
+        ]
+      }
+    ],
+    "backdrop_set": [
+      {
+        "rva": "0xa1c5e0",
+        "votes": 1,
+        "anchors": [
+          "0xa1c5fb"
+        ]
+      },
+      {
+        "rva": "0xa2c1a0",
+        "votes": 1,
+        "anchors": [
+          "0xa2c1bb"
+        ]
+      },
+      {
+        "rva": "0xd68b50",
+        "votes": 1,
+        "anchors": [
+          "0xd68b6d"
+        ]
+      },
+      {
+        "rva": "0xd93f60",
+        "votes": 1,
+        "anchors": [
+          "0xd93f7b"
+        ]
+      },
+      {
+        "rva": "0x36a2b0",
+        "votes": 1,
+        "anchors": [
+          "0x36a362"
+        ]
+      }
+    ],
+    "string_assign": [],
+    "rel_point": [
+      {
+        "rva": "0xdfaf70",
+        "votes": 6,
+        "anchors": [
+          "0xdfaf8a",
+          "0xdfafc7",
+          "0xdfafcd",
+          "0xdfb001",
+          "0xdfb011",
+          "0xdfb01c"
+        ]
+      },
+      {
+        "rva": "0xdfa870",
+        "votes": 2,
+        "anchors": [
+          "0xdfa9cf",
+          "0xdfaa03"
+        ]
+      },
+      {
+        "rva": "0xdfb030",
+        "votes": 1,
+        "anchors": [
+          "0xdfb062"
+        ]
+      },
+      {
+        "rva": "0xdf9ed0",
+        "votes": 1,
+        "anchors": [
+          "0xdf9edf"
+        ]
+      },
+      {
+        "rva": "0xdf2440",
+        "votes": 1,
+        "anchors": [
+          "0xdf24de"
+        ]
+      }
+    ],
+    "chat_open": [],
+    "chat_submit": [
+      {
+        "rva": "0xafe110",
+        "votes": 4,
+        "anchors": [
+          "0xafe370",
+          "0xafe37a",
+          "0xafe4af",
+          "0xafe4b8"
+        ]
+      },
+      {
+        "rva": "0xc5b4a0",
+        "votes": 3,
+        "anchors": [
+          "0xc5bc40",
+          "0xc5b4a5",
+          "0xc5b4b1"
+        ]
+      },
+      {
+        "rva": "0xb04460",
+        "votes": 2,
+        "anchors": [
+          "0xb04465",
+          "0xb04471"
+        ]
+      },
+      {
+        "rva": "0xc5bc40",
+        "votes": 2,
+        "anchors": [
+          "0xc5bc45",
+          "0xc5bc51"
+        ]
+      },
+      {
+        "rva": "0xc5c870",
+        "votes": 2,
+        "anchors": [
+          "0xc5c875",
+          "0xc5c881"
+        ]
+      }
+    ],
+    "chat_text": [],
+    "ui_get": [
+      {
+        "rva": "0x299f40",
+        "votes": 1,
+        "anchors": [
+          "0x299f9c"
+        ]
+      }
+    ],
+    "clear": [],
+    "fps_mode": [
+      {
+        "rva": "0xb75fb0",
+        "votes": 1,
+        "anchors": [
+          "0xb76081"
+        ]
+      }
+    ],
+    "fog_set": [],
+    "main_action": []
+  },
+  "23884": {
+    "version_text": [
+      {
+        "rva": "0xf50e50",
+        "votes": 2,
+        "anchors": [
+          "0xf50e81",
+          "0xf50ea6"
+        ]
+      },
+      {
+        "rva": "0xf369b0",
+        "votes": 1,
+        "anchors": [
+          "0xf369ce"
+        ]
+      },
+      {
+        "rva": "0xf36a80",
+        "votes": 1,
+        "anchors": [
+          "0xf36a9e"
+        ]
+      },
+      {
+        "rva": "0xf36b50",
+        "votes": 1,
+        "anchors": [
+          "0xf36b6e"
+        ]
+      },
+      {
+        "rva": "0xf38f00",
+        "votes": 1,
+        "anchors": [
+          "0xf38f1f"
+        ]
+      }
+    ],
+    "chat_display": [],
+    "camera_set": [],
+    "font_text": [],
+    "font_set": [
+      {
+        "rva": "0xc28dd0",
+        "votes": 1,
+        "anchors": [
+          "0xc28ff7"
+        ]
+      },
+      {
+        "rva": "0x107c710",
+        "votes": 1,
+        "anchors": [
+          "0x107c838"
+        ]
+      },
+      {
+        "rva": "0xdbd060",
+        "votes": 1,
+        "anchors": [
+          "0xdbd0ce"
+        ]
+      }
+    ],
+    "font_align": [
+      {
+        "rva": "0xdbd020",
+        "votes": 1,
+        "anchors": [
+          "0xdbd04b"
+        ]
+      },
+      {
+        "rva": "0xdbd190",
+        "votes": 1,
+        "anchors": [
+          "0xdbd1bb"
+        ]
+      },
+      {
+        "rva": "0xdbd1d0",
+        "votes": 1,
+        "anchors": [
+          "0xdbd1fb"
+        ]
+      }
+    ],
+    "font_width": [],
+    "texture_set": [
+      {
+        "rva": "0x1370aa0",
+        "votes": 1,
+        "anchors": [
+          "0x1370bb0"
+        ]
+      }
+    ],
+    "texture_ctor": [
+      {
+        "rva": "0xee1540",
+        "votes": 4,
+        "anchors": [
+          "0xee1636",
+          "0xee1654",
+          "0xee1672",
+          "0xee1690"
+        ]
+      },
+      {
+        "rva": "0xdbbdb0",
+        "votes": 3,
+        "anchors": [
+          "0xdbbdef",
+          "0xdbbe0d",
+          "0xdbbe2b"
+        ]
+      },
+      {
+        "rva": "0xb03d50",
+        "votes": 3,
+        "anchors": [
+          "0xb03e88",
+          "0xb03ea6",
+          "0xb03ec4"
+        ]
+      },
+      {
+        "rva": "0xe533f0",
+        "votes": 3,
+        "anchors": [
+          "0xe53421",
+          "0xe5343f",
+          "0xe5345d"
+        ]
+      },
+      {
+        "rva": "0x11b21a0",
+        "votes": 2,
+        "anchors": [
+          "0x11b2206",
+          "0x11b2224"
+        ]
+      }
+    ],
+    "backdrop_ctor": [
+      {
+        "rva": "0xdde070",
+        "votes": 9,
+        "anchors": [
+          "0xdde08e",
+          "0xdde099",
+          "0xdde0a5",
+          "0xdde0ba",
+          "0xdde0cb",
+          "0xdde0df",
+          "0xdde0e7",
+          "0xdde0f5",
+          "0xdde106"
+        ]
+      },
+      {
+        "rva": "0x983360",
+        "votes": 1,
+        "anchors": [
+          "0x98340a"
+        ]
+      },
+      {
+        "rva": "0xd954a0",
+        "votes": 1,
+        "anchors": [
+          "0xd954f4"
+        ]
+      },
+      {
+        "rva": "0x111aa80",
+        "votes": 1,
+        "anchors": [
+          "0x111aaef"
+        ]
+      },
+      {
+        "rva": "0x111b160",
+        "votes": 1,
+        "anchors": [
+          "0x111b2af"
+        ]
+      }
+    ],
+    "backdrop_set": [
+      {
+        "rva": "0x9dcd90",
+        "votes": 1,
+        "anchors": [
+          "0x9dcdab"
+        ]
+      },
+      {
+        "rva": "0x9ec960",
+        "votes": 1,
+        "anchors": [
+          "0x9ec97b"
+        ]
+      },
+      {
+        "rva": "0xd23700",
+        "votes": 1,
+        "anchors": [
+          "0xd2371d"
+        ]
+      },
+      {
+        "rva": "0xd4e5f0",
+        "votes": 1,
+        "anchors": [
+          "0xd4e60b"
+        ]
+      },
+      {
+        "rva": "0x34a820",
+        "votes": 1,
+        "anchors": [
+          "0x34a8d2"
+        ]
+      }
+    ],
+    "string_assign": [],
+    "rel_point": [
+      {
+        "rva": "0xdb9d70",
+        "votes": 6,
+        "anchors": [
+          "0xdb9d8a",
+          "0xdb9dc7",
+          "0xdb9dcd",
+          "0xdb9e01",
+          "0xdb9e11",
+          "0xdb9e1c"
+        ]
+      },
+      {
+        "rva": "0xdb9670",
+        "votes": 2,
+        "anchors": [
+          "0xdb97cf",
+          "0xdb9803"
+        ]
+      },
+      {
+        "rva": "0xdb9e30",
+        "votes": 1,
+        "anchors": [
+          "0xdb9e62"
+        ]
+      },
+      {
+        "rva": "0xdb8cd0",
+        "votes": 1,
+        "anchors": [
+          "0xdb8cdf"
+        ]
+      },
+      {
+        "rva": "0xdb1240",
+        "votes": 1,
+        "anchors": [
+          "0xdb12de"
+        ]
+      }
+    ],
+    "chat_open": [],
+    "chat_submit": [
+      {
+        "rva": "0xabd040",
+        "votes": 4,
+        "anchors": [
+          "0xabd2a0",
+          "0xabd2aa",
+          "0xabd3c5",
+          "0xabd3ce"
+        ]
+      },
+      {
+        "rva": "0xac3f10",
+        "votes": 2,
+        "anchors": [
+          "0xac3f15",
+          "0xac3f21"
+        ]
+      },
+      {
+        "rva": "0xc169b0",
+        "votes": 2,
+        "anchors": [
+          "0xc169b5",
+          "0xc169c1"
+        ]
+      },
+      {
+        "rva": "0xc17bb0",
+        "votes": 2,
+        "anchors": [
+          "0xc17bb5",
+          "0xc17bc1"
+        ]
+      },
+      {
+        "rva": "0xd56830",
+        "votes": 2,
+        "anchors": [
+          "0xd56835",
+          "0xd56841"
+        ]
+      }
+    ],
+    "chat_text": [],
+    "ui_get": [
+      {
+        "rva": "0x283ae0",
+        "votes": 1,
+        "anchors": [
+          "0x283b3c"
+        ]
+      }
+    ],
+    "clear": [],
+    "fps_mode": [
+      {
+        "rva": "0xb35c30",
+        "votes": 1,
+        "anchors": [
+          "0xb35d01"
+        ]
+      }
+    ],
+    "fog_set": [],
+    "main_action": []
+  }
+}

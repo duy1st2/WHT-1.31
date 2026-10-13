@@ -1,0 +1,455 @@
+[
+  {
+    "pid": 13344,
+    "manager": "0x0",
+    "frames": 0,
+    "bars": []
+  },
+  {
+    "pid": 14520,
+    "manager": "0x21ad7008",
+    "frames": 680,
+    "bars": [
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b2e808",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b2e808",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b2fe08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b2fe08",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b31208",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b31208",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b32608",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b32608",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b33a08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b33a08",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b35608",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b35608",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b36a08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b36a08",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b37e08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b37e08",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b39208",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b39208",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b3ae08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b3ae08",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b3dc08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b3dc08",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b3f608",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b3f608",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b40c08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b40c08",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b42408",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b42408",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b43a08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b43a08",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b45a08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b45a08",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b47008",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b47008",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b48808",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b48808",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b49e08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b49e08",
+        "level": 6
+      },
+      {
+        "kind": 3,
+        "visible": [
+          1,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b4be08",
+        "level": 6
+      },
+      {
+        "kind": 4,
+        "visible": [
+          0,
+          0
+        ],
+        "unit_type": "",
+        "valid_unit": false,
+        "parent": "0x21b4be08",
+        "level": 6
+      }
+    ]
+  }
+]

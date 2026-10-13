@@ -1,10 +1,15 @@
-# WHT 1.29 only
+# WHT 1.31
 
-This is an independent source/build/assets copy for Warcraft 1.29.2.9231 x86.
-Work only here for 1.29 changes. Do not edit or deploy to WHT (1.24/1.26).
-Build: powershell -NoProfile -ExecutionPolicy Bypass -File build.ps1 -WithTests
-Release outputs: build-wht/Release/WHT.mix, mss32.dll, WHT.dll.
-After a successful tested build, install into runtime-test/Warcraft3-129 and
-E:/Warcraft III/Warcraft3-129 using install-runtime.ps1. Preserve INI, logs and
-macro scripts; back up replacements and verify hashes. Do not stop user game
-processes or replace loaded files; report pending installations.
+Independent port for the two supplied 1.31.1 builds. Never modify WHT,
+WHT-1.29, or either original under E:/Warcraft III.
+All game writes and launches must stay inside this project's runtime-test.
+Build and test both profiles, back up replaced artifacts, preserve INI/logs/
+macro scripts and verify SHA256. Do not replace loaded files or stop user
+processes. A test process created by this project may be closed for testing.
+Never enable inherited 1.29 gameplay code without a verified 1.31 profile.
+Keep the F8 settings menu above every feature overlay. Reserve native frame
+levels 7/8/9 for menu background/controls/popups; feature frames must stay at
+level 6 or below. Use ToolMenuOverlay::Frame for feature hosts. When a native
+constructor creates an owned feature frame directly, set its level through
+NativeSetOwnedFrameLevel before adding regions; re-register through Hide/Show.
+Do not change stock game frames to implement this priority rule.

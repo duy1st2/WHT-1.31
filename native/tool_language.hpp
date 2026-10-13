@@ -38,7 +38,7 @@ inline std::string EnglishControlLabel(const ToolMenuControl& d){
  static const Label labels[]={
  {L"ShowCooldown","Cooldown time"},{L"ShowRegenHP","Show HP regeneration/s"},{L"ShowRegenMana","Show mana regeneration/s"},
  {L"ShowMaxValues","Show maximum HP/Mana"},{L"ShowManaValue","Show mana value"},{L"ShowLevelHero","Show hero level"},
- {L"Fog Click","Enable Fog Click"},{L"Show Hotkey In Panel","Show hotkeys on buttons"},
+ {L"Reveal Invisibles","Show invisible units"},{L"Fog Click","Enable Fog Click"},{L"Show Hotkey In Panel","Show hotkeys on buttons"},
  {L"Enable Delay Clear Text Screen","Periodically clear screen text"},{L"Enable Delay Clear Chat Screen","Periodically clear chat"},
  {L"Show Resource","Show resource table"},{L"Quick Drop Item","Quick drop item (Shift + right click)"},
  {L"Show Timer","Show match time"},{L"Show FPS","Show FPS"},{L"Show Mem","Show memory usage"},

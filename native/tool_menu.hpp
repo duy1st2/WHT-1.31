@@ -1,6 +1,11 @@
 #pragma once
+#include "tool_version.hpp"
+#ifdef _WIN64
+#include "overlay_frames.hpp"
+#else
 #include "mth_button_overlay.hpp"
 #include "hud_action_toolbar.hpp"
+#endif
 #include "time_boss.hpp"
 #include <array>
 #include <algorithm>
@@ -19,6 +24,7 @@ struct ToolMenuControl{MenuControlKind kind;int page;const char* label;const wch
 inline std::wstring MenuRead(const std::wstring& ini,const wchar_t* section,const wchar_t* key,const wchar_t* fallback){
  wchar_t value[1024]{};GetPrivateProfileStringW(section,key,fallback,value,1024,ini.c_str());return value;}
 inline std::wstring MenuRead(const Config& c,const wchar_t* section,const wchar_t* key,const wchar_t* fallback){
+ if(!wcscmp(section,L"Event")&&!wcscmp(key,L"Reveal Invisibles"))return c.revealInvisible?L"1":L"0";
  if(!c.profile)return fallback;
  auto lower=[](std::wstring s){for(auto& ch:s)ch=towlower(ch);return s;};
  auto group=c.profile->find(lower(section));if(group==c.profile->end())return fallback;
@@ -139,13 +145,19 @@ class ToolMenuOverlay{public:
  if(!api.setFont(font,"fonts_VN.ttf",height,1))api.setFont(font,"WHTUI_FRIZQT__.ttf",height,1);api.setText(font,text);return font;}
  void* Texture(void* owner,const char* path,float w,float h,int layer=kNativeOverlayLayer){auto memory=api.alloc(nativeFrameLayout.textureSize,"CSimpleTexture",1,0);if(!memory)return nullptr;
  auto texture=api.textureCtor(memory,owner,layer,1);if(!texture)return nullptr;api.setWidth(texture,w);api.setHeight(texture,h);api.setTexture(texture,path,0);return texture;}
- void* Frame(uintptr_t game,void* owner,ToolMenuRect r,uint32_t level=8,bool detached=false){
+private:
+ void* CreateFrame(uintptr_t game,void* owner,ToolMenuRect r,uint32_t level,bool detached=false){
  // Game+60A120 assigns parent level + 1 during construction, before Show.
  // Reject an invalid parent before the ctor can register a level-10 frame.
  if(level>9 || (!owner&&!detached) || (owner&&*reinterpret_cast<uint32_t*>(static_cast<char*>(owner)+nativeFrameLayout.level)>=9))return nullptr;
  auto memory=api.alloc(nativeFrameLayout.frameSize,"CSimpleFrame",1,0);if(!memory)return nullptr;
  auto frame=api.frameCtor(memory,owner);if(!frame)return nullptr;NativeFrameHide(frame);api.setWidth(frame,r.width);api.setHeight(frame,r.height);api.setAbsPoint(frame,0,r.right-r.width,r.bottom+r.height,1);
  if(!NativeBringToolFrameToFront(frame,game))return nullptr;NativeFrameHide(frame);*reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(frame)+nativeFrameLayout.level)=level;return frame;}
+ void* MenuFrame(uintptr_t game,void* owner,ToolMenuRect r,uint32_t level=kToolMenuControlLevel){return CreateFrame(game,owner,r,level);}
+public:
+ // Feature modules cannot consume the menu's reserved buckets, even when
+ // they request a higher level or create their frames after the menu opens.
+ void* Frame(uintptr_t game,void* owner,ToolMenuRect r,uint32_t level=kToolFeatureFrameLevel,bool detached=false){return CreateFrame(game,owner,r,std::min(level,kToolFeatureFrameLevel),detached);}
  void PlaybackVisual(bool playing){if(macroLabels[0]&&api.setText){auto text=std::string(playing?"|cff00ff00":"|cffffcc00")+MacroLabel(0)+"|r";api.setText(macroLabels[0],text.c_str());}}
  void Style(void* frame,bool edit=false){NativeSetFrameBackdropEx(api,frame,"UI\\Widgets\\EscMenu\\Human\\human-options-menu-background.blp",
  edit?"UI\\Widgets\\EscMenu\\Human\\editbox-border.blp":"UI\\Widgets\\EscMenu\\Human\\human-options-button-border-up.blp",edit?.005f:.010f,.002f);}
@@ -158,38 +170,44 @@ class ToolMenuOverlay{public:
  WHT_TOOL_API(textureCtor);WHT_TOOL_API(setTexture);WHT_TOOL_API(setWidth);WHT_TOOL_API(setHeight);WHT_TOOL_API(setAbsPoint);WHT_TOOL_API(setRelPoint);
 #undef WHT_TOOL_API
  tint=reinterpret_cast<decltype(tint)>(game+o.setTextureColor);}
- if(!api.alloc||!HudActionToolbar::SafeIsExecutable(reinterpret_cast<uintptr_t>(api.frameCtor)))return false;
+ if(!api.alloc)return false;
+#ifdef _WIN64
+ MEMORY_BASIC_INFORMATION frameMemory{};if(!VirtualQuery(reinterpret_cast<void*>(api.frameCtor),&frameMemory,sizeof(frameMemory))||!(frameMemory.Protect&(PAGE_EXECUTE|PAGE_EXECUTE_READ|PAGE_EXECUTE_READWRITE|PAGE_EXECUTE_WRITECOPY)))return false;
+#else
+ if(!HudActionToolbar::SafeIsExecutable(reinterpret_cast<uintptr_t>(api.frameCtor)))return false;
+#endif
  // Native SetParent supports null: a root host has no console visibility
  // dependency. All menu children keep the verified 0..9 frame levels.
  initStage="independent menu host";independentHost=Frame(game,nullptr,{.8f,0,.8f,.6f},6,true);if(!independentHost)return false;
  owner=reinterpret_cast<uintptr_t>(independentHost);NativeFrameShow(independentHost);
- initStage="menu button";button=Frame(game,reinterpret_cast<void*>(owner),buttonRect);if(!button)return false;menuIcon=Texture(button,"BTNWHT_Menu.blp",.022f,.022f);if(!menuIcon)return false;api.setRelPoint(menuIcon,4,button,4,0,0,1);
+ initStage="menu button";button=MenuFrame(game,reinterpret_cast<void*>(owner),buttonRect);if(!button)return false;menuIcon=Texture(button,"BTNWHT_Menu.blp",.022f,.022f);if(!menuIcon)return false;api.setRelPoint(menuIcon,4,button,4,0,0,1);
  initStage="macro toolbar";macroButton=Frame(game,reinterpret_cast<void*>(owner),macroRect);if(!macroButton)return false;Style(macroButton);
  macroIcon=Texture(macroButton,"BTNWHT_Rec.blp",macroRect.width,macroRect.height);if(!macroIcon)return false;api.setRelPoint(macroIcon,4,macroButton,4,0,0,1);
  for(size_t i=0;i<macroActions.size();++i){auto r=MacroActionRect(i);macroActions[i]=Frame(game,reinterpret_cast<void*>(owner),r);if(!macroActions[i])return false;Style(macroActions[i]);macroLabels[i]=TextIn(macroActions[i],r,"",true,.0105f);if(!macroLabels[i])return false;}
- initStage="panel";panel=Frame(game,reinterpret_cast<void*>(owner),panelRect,7);if(!panel)return false;
+ initStage="panel";panel=MenuFrame(game,reinterpret_cast<void*>(owner),panelRect,kToolMenuPanelLevel);if(!panel)return false;
  NativeSetFrameBackdropEx(api,panel,nullptr,"UI\\Widgets\\EscMenu\\NightElf\\nightelf-options-menu-border.blp",.027f,.008f);
  auto background=Texture(panel,"WHTUI_GreyBackground.tga",panelRect.width-.018f,panelRect.height-.018f,0);if(!background)return false;api.setRelPoint(background,0,panel,0,.009f,-.009f,1);
+ if(!TextIn(panel,FromPixels({70,15,400,25}),"|cffffcc00WHT v" WHT_VERSION_STRING "|r",false,.010f))return false;
  // Original WHT assets include transparent canvas margins around the grids.
  // Fit their non-transparent content to the reference, not the entire canvas.
  for(size_t i=0;i<grids.size();++i){const bool inventory=i==2;
  auto r=FromPixels(inventory?MenuPixelRect{468,387,187,194}:MenuPixelRect{i==0?375.f:905.f,95,440,234});
- grids[i]=Frame(game,panel,r);if(!grids[i])return false;
+ grids[i]=MenuFrame(game,panel,r);if(!grids[i])return false;
  const float canvas=inventory?256.f:512.f,cropW=inventory?158.f:366.f,cropH=inventory?233.f:278.f;
  auto texture=Texture(grids[i],inventory?"InventoryHuman.tga":"CommandCardHuman.tga",r.width*canvas/cropW,r.height*canvas/cropH,0);
  if(!texture)return false;api.setRelPoint(texture,0,grids[i],0,-r.width*(inventory?49.f:72.f)/cropW,r.height*(inventory?11.f:117.f)/cropH,1);}
- close=Frame(game,panel,closeRect);if(!close||!TextIn(close,closeRect,"|cffffcc00X|r",true,.010f))return false;
- initStage="tabs";for(size_t i=0;i<tabs.size();++i){tabs[i]=Frame(game,panel,TabRect(i));if(!tabs[i])return false;Style(tabs[i]);tabGlows[i]=Texture(tabs[i],"UI\\Widgets\\EscMenu\\Human\\human-options-menu-background.blp",TabRect(i).width-.008f,TabRect(i).height-.004f,0);if(!tabGlows[i])return false;api.setRelPoint(tabGlows[i],4,tabs[i],4,0,0,1);auto title=std::string("|cffffcc00")+ToolTabName(i)+"|r";
+ close=MenuFrame(game,panel,closeRect);if(!close||!TextIn(close,closeRect,"|cffffcc00X|r",true,.010f))return false;
+ initStage="tabs";for(size_t i=0;i<tabs.size();++i){tabs[i]=MenuFrame(game,panel,TabRect(i));if(!tabs[i])return false;Style(tabs[i]);tabGlows[i]=Texture(tabs[i],"UI\\Widgets\\EscMenu\\Human\\human-options-menu-background.blp",TabRect(i).width-.008f,TabRect(i).height-.004f,0);if(!tabGlows[i])return false;api.setRelPoint(tabGlows[i],4,tabs[i],4,0,0,1);auto title=std::string("|cffffcc00")+ToolTabName(i)+"|r";
  tabLabels[i]=TextIn(tabs[i],TabRect(i),title.c_str(),true);if(!tabLabels[i])return false;}
- initStage="controls";for(size_t i=0;i<controls.size();++i){auto& ui=controls[i];const auto& d=kToolMenuControls[i];auto r=RowRect(i);ui.frame=Frame(game,panel,r);if(!ui.frame)return false;
+ initStage="controls";for(size_t i=0;i<controls.size();++i){auto& ui=controls[i];const auto& d=kToolMenuControls[i];auto r=RowRect(i);ui.frame=MenuFrame(game,panel,r);if(!ui.frame)return false;
  if(d.kind==MenuControlKind::Check){auto base=Texture(ui.frame,"UI\\Widgets\\EscMenu\\Human\\checkbox-background.blp",r.width,r.height);ui.tick=Texture(ui.frame,"Transparent.tga",r.width,r.height);if(!base||!ui.tick)return false;ui.base=base;api.setRelPoint(base,4,ui.frame,4,0,0,1);api.setRelPoint(ui.tick,4,ui.frame,4,0,0,1);}
  else if(d.kind!=MenuControlKind::Label){const bool slot=d.kind==MenuControlKind::Key&&std::wstring(d.section).rfind(L"SlotHotkey",0)==0;
  if(!slot)Style(ui.frame,d.kind==MenuControlKind::Text||d.kind==MenuControlKind::Number||d.kind==MenuControlKind::Choice);ui.value=TextIn(ui.frame,ValueRect(i),"",d.kind!=MenuControlKind::Text,.0105f);if(!ui.value)return false;}
  if(*d.label){ui.label=TextIn(ui.frame,FromPixels(d.labelRect),"",d.kind==MenuControlKind::Clear);if(!ui.label)return false;}}
- initStage="dropdown background";popupHost=Frame(game,panel,ChoiceRect(0),9);if(!popupHost)return false;popupTexture=Texture(popupHost,"UI\\Widgets\\EscMenu\\Human\\human-options-menu-background.blp",.04f,.04f,0);if(!popupTexture)return false;api.setRelPoint(popupTexture,0,popupHost,0,0,0,1);
+ initStage="dropdown background";popupHost=MenuFrame(game,panel,ChoiceRect(0),kToolMenuPopupLevel);if(!popupHost)return false;popupTexture=Texture(popupHost,"UI\\Widgets\\EscMenu\\Human\\human-options-menu-background.blp",.04f,.04f,0);if(!popupTexture)return false;api.setRelPoint(popupTexture,0,popupHost,0,0,0,1);
  // Popup and rows are siblings. A native child of a level-9 host inherits
  // level 10, outside the engine's ten frame buckets, and fails initialization.
- initStage="dropdown rows";for(size_t i=0;i<choices.size();++i){choices[i]=Frame(game,panel,ChoiceRect(i),9);if(!choices[i])return false;Style(choices[i],true);choiceLabels[i]=TextIn(choices[i],ChoiceRect(i),"",true,.010f);if(!choiceLabels[i])return false;}initStage="tooltip";helpFrame=Frame(game,reinterpret_cast<void*>(owner),{.25f,.20f,.24f,.09f},9);if(!helpFrame)return false;
+ initStage="dropdown rows";for(size_t i=0;i<choices.size();++i){choices[i]=MenuFrame(game,panel,ChoiceRect(i),kToolMenuPopupLevel);if(!choices[i])return false;Style(choices[i],true);choiceLabels[i]=TextIn(choices[i],ChoiceRect(i),"",true,.010f);if(!choiceLabels[i])return false;}initStage="tooltip";helpFrame=MenuFrame(game,reinterpret_cast<void*>(owner),{.25f,.20f,.24f,.09f},kToolMenuPopupLevel);if(!helpFrame)return false;
  NativeSetFrameBackdropEx(api,helpFrame,"UI\\Widgets\\ToolTips\\Human\\human-tooltip-background.blp","UI\\Widgets\\ToolTips\\Human\\human-tooltip-border.blp",.008f,.002f);helpText=TextIn(helpFrame,{.242f,.208f,.224f,.074f},"",false,.0135f);if(!helpText)return false;
  initStage="boss timers";const std::array<ToolMenuRect,3> bossRects{{{.220f,.061f,.036f,.022f},{.136f,.009f,.036f,.022f},{.220f,.127f,.036f,.022f}}};
  for(size_t i=0;i<3;++i){bossFrames[i]=Frame(game,reinterpret_cast<void*>(owner),bossRects[i],9);if(!bossFrames[i])return false;bossFonts[i]=TextIn(bossFrames[i],bossRects[i],"",true,.012f);if(!bossFonts[i])return false;}

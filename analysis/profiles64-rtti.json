@@ -1,0 +1,1290 @@
+{
+  "12164": {
+    "CGameUI": [
+      {
+        "vt": "0x1c00ec0",
+        "functions": [
+          "0x315150",
+          "0xc3f1e0",
+          "0xf70cb0",
+          "0xc48eb0",
+          "0xfabb60",
+          "0xf70570",
+          "0xfafb90",
+          "0xfb0410",
+          "0xfb0310",
+          "0xfabb70",
+          "0xaf6750",
+          "0xfccd40",
+          "0xc4d9e0",
+          "0xfccc30",
+          "0xfae8b0",
+          "0xc4d9b0"
+        ],
+        "refs": [
+          {
+            "site": "0xc3b35f",
+            "function": "0xc3b2f0"
+          },
+          {
+            "site": "0xc3e235",
+            "function": "0xc3e210"
+          }
+        ]
+      },
+      {
+        "vt": "0x1c010c8",
+        "functions": [
+          "0xfcc860",
+          "0xfb67b0",
+          "0xc3ef04",
+          "0xfcd2e0",
+          "0xfb4a40",
+          "0xfcd240",
+          "0xfb4a60",
+          "0xfb4a20",
+          "0xc52d90",
+          "0xaf3f70",
+          "0x1e0b5a8",
+          "0x315150",
+          "0xc3f220",
+          "0xf70cb0",
+          "0xcbbbf0",
+          "0xf70560"
+        ],
+        "refs": [
+          {
+            "site": "0xc3b370",
+            "function": "0xc3b2f0"
+          },
+          {
+            "site": "0xc3e23f",
+            "function": "0xc3e210"
+          }
+        ]
+      }
+    ],
+    "CCameraWar3": [
+      {
+        "vt": "0x1bff998",
+        "functions": [
+          "0x2bb400",
+          "0xc2ef20",
+          "0xf70cb0",
+          "0xc33a70",
+          "0xf70560",
+          "0xf70570",
+          "0xf12ad0",
+          "0xc32cd0",
+          "0xc31960",
+          "0xc30850",
+          "0xf11cd0",
+          "0xf12650",
+          "0xf12640",
+          "0xc32210",
+          "0xc35560",
+          "0xc330c0"
+        ],
+        "refs": [
+          {
+            "site": "0xc2dc7a",
+            "function": "0xc2dc20"
+          }
+        ]
+      }
+    ],
+    "CSimpleFrame": [
+      {
+        "vt": "0x1c583e8",
+        "functions": [
+          "0xfbaa80",
+          "0xfb4de0",
+          "0xfba3e0",
+          "0xfb5bc0",
+          "0xfb4a40",
+          "0xfbaf50",
+          "0xfb4a60",
+          "0xfb4a20",
+          "0xfb5270",
+          "0xc81000",
+          "0xc80730",
+          "0xfbb310",
+          "0xc81320",
+          "0xc81280",
+          "0xc813b0",
+          "0xfbab70"
+        ],
+        "refs": [
+          {
+            "site": "0xfb9d2e",
+            "function": "0xfb9d00"
+          },
+          {
+            "site": "0xfba141",
+            "function": "0xfba120"
+          }
+        ]
+      }
+    ],
+    "CSimpleFontString": [
+      {
+        "vt": "0x1c58298",
+        "functions": [
+          "0xfb8ae0",
+          "0xfb4de0",
+          "0xfb8060",
+          "0xfb5bc0",
+          "0xfb4a40",
+          "0xfb9280",
+          "0xfb8a30",
+          "0xfb8840",
+          "0xfb5270",
+          "0xc81000",
+          "0xfb8cd0",
+          "0xfb79a0",
+          "0xfb7870",
+          "0xfb83c0",
+          "0xfb8320",
+          "0x1e2f018"
+        ],
+        "refs": [
+          {
+            "site": "0xfb7bae",
+            "function": "0xfb7ba0"
+          },
+          {
+            "site": "0xfb7e67",
+            "function": "0xfb7e50"
+          }
+        ]
+      }
+    ],
+    "CSimpleTexture": [
+      {
+        "vt": "0x1c58218",
+        "functions": [
+          "0xfb8b70",
+          "0xfb4de0",
+          "0xfb80a0",
+          "0xfb5bc0",
+          "0xfb4a40",
+          "0xfb58b0",
+          "0xfb4a60",
+          "0xfb4a20",
+          "0xfb5270",
+          "0xc81000",
+          "0xfb78f0",
+          "0xfb79a0",
+          "0xfb7870",
+          "0xfb8480",
+          "0xfb8370",
+          "0x1e2f118"
+        ],
+        "refs": [
+          {
+            "site": "0xfb7c41",
+            "function": "0xfb7c20"
+          },
+          {
+            "site": "0xfb7f42",
+            "function": "0xfb7f30"
+          },
+          {
+            "site": "0xfb80b9",
+            "function": "0xfb80a0"
+          }
+        ]
+      }
+    ],
+    "CSimpleBackdrop": [],
+    "CArchiveMpq": [
+      {
+        "vt": "0x19d8dd0",
+        "functions": [
+          "0x337dd0",
+          "0x338350",
+          "0x3382f0",
+          "0x338270",
+          "0x338300",
+          "0x338410",
+          "0x338290",
+          "0x337ed0",
+          "0x1d873b0",
+          "0x337ea0",
+          "0x172d68c",
+          "0x1d87428",
+          "0x337d40",
+          "0x338480",
+          "-0x7fef6962fade",
+          "-0x7ff7810f24e8"
+        ],
+        "refs": [
+          {
+            "site": "0x33791a",
+            "function": "0x3378e0"
+          },
+          {
+            "site": "0x337cf6",
+            "function": "0x337cf0"
+          },
+          {
+            "site": "0x337dda",
+            "function": "0x337dd0"
+          },
+          {
+            "site": "0x3381db",
+            "function": "0x337f30"
+          }
+        ]
+      }
+    ],
+    "CCommandButton": [
+      {
+        "vt": "0x1c0df60",
+        "functions": [
+          "0xcfa460",
+          "0xfb4de0",
+          "0xcd3ef0",
+          "0xfb5bc0",
+          "0xfb4a40",
+          "0xfbaf50",
+          "0xfb4a60",
+          "0xfb4a20",
+          "0xfb5270",
+          "0xc81000",
+          "0xc80730",
+          "0xfbb310",
+          "0xc81320",
+          "0xcd4820",
+          "0xc813b0",
+          "0xfbab70"
+        ],
+        "refs": [
+          {
+            "site": "0xcd3dc7",
+            "function": "0xcd3d80"
+          },
+          {
+            "site": "0xcd3e92",
+            "function": "0xcd3e80"
+          },
+          {
+            "site": "0xcd3f09",
+            "function": "0xcd3ef0"
+          }
+        ]
+      }
+    ],
+    "CCommandBar": [
+      {
+        "vt": "0x1c08180",
+        "functions": [
+          "0xfd9260",
+          "0xfb4de0",
+          "0xcabfe0",
+          "0xfb5bc0",
+          "0xfb4a40",
+          "0xfbaf50",
+          "0xfb4a60",
+          "0xfb4a20",
+          "0xfb5270",
+          "0xc81000",
+          "0xc80730",
+          "0xfbb310",
+          "0xc81320",
+          "0xc81280",
+          "0xc813b0",
+          "0xfbab70"
+        ],
+        "refs": [
+          {
+            "site": "0xcab660",
+            "function": "0xcab630"
+          },
+          {
+            "site": "0xcabdb6",
+            "function": "0xcabd90"
+          }
+        ]
+      }
+    ],
+    "CInfoBar": [
+      {
+        "vt": "0x1c084e8",
+        "functions": [
+          "0xfbaa80",
+          "0xfb4de0",
+          "0xcb1420",
+          "0xfb5bc0",
+          "0xfb4a40",
+          "0xfbaf50",
+          "0xfb4a60",
+          "0xfb4a20",
+          "0xfb5270",
+          "0xc81000",
+          "0xc80730",
+          "0xfbb310",
+          "0xc81320",
+          "0xc81280",
+          "0xc813b0",
+          "0xfbab70"
+        ],
+        "refs": [
+          {
+            "site": "0xcb0f7f",
+            "function": "0xcb0f40"
+          }
+        ]
+      }
+    ],
+    "CInventoryBar": [
+      {
+        "vt": "0x1c08858",
+        "functions": [
+          "0xfbaa80",
+          "0xfb4de0",
+          "0xcb3aa0",
+          "0xfb5bc0",
+          "0xfb4a40",
+          "0xfbaf50",
+          "0xfb4a60",
+          "0xfb4a20",
+          "0xfb5270",
+          "0xc81000",
+          "0xc80730",
+          "0xfbb310",
+          "0xc81320",
+          "0xc81280",
+          "0xc813b0",
+          "0xfbab70"
+        ],
+        "refs": [
+          {
+            "site": "0xcb37d0",
+            "function": "0xcb3780"
+          }
+        ]
+      }
+    ],
+    "CPortraitButton": [
+      {
+        "vt": "0x1c10810",
+        "functions": [
+          "0x315150",
+          "0xcdf5a0",
+          "0xf70cb0",
+          "0xcdf750",
+          "0xfabb60",
+          "0xf70570",
+          "0xfafb90",
+          "0xfb0410",
+          "0xfb0310",
+          "0xfabb70",
+          "0xcdfb30",
+          "0xfbd4a0",
+          "0xcdfb80",
+          "0xfccc30",
+          "0xfbd160",
+          "0xfbcec0"
+        ],
+        "refs": [
+          {
+            "site": "0xcdf307",
+            "function": "0xcdf2d0"
+          }
+        ]
+      },
+      {
+        "vt": "0x1c10a98",
+        "functions": [
+          "0xfbcc00",
+          "0xfb4de0",
+          "0xcdf588",
+          "0xfcd2e0",
+          "0xfb4a40",
+          "0xfbbf30",
+          "0xfbb800",
+          "0xfbb760",
+          "0xcdfec0",
+          "0xaf3f70",
+          "0x7468e17af17c6f50",
+          "-0x7f840e948bad",
+          "0x3c60c7b6b94c8f5c",
+          "0x3cfa6150b9f1d567",
+          "0x3daecf16baaa0000",
+          "0x3e5b0527bb5e7ae1"
+        ],
+        "refs": [
+          {
+            "site": "0xcdf311",
+            "function": "0xcdf2d0"
+          }
+        ]
+      }
+    ],
+    "CUnit": [
+      {
+        "vt": "0x1c16140",
+        "functions": [
+          "0x2bb400",
+          "0xcff2e0",
+          "0xf70cb0",
+          "0xd943e0",
+          "0xf70560",
+          "0xf70570",
+          "0xf12ad0",
+          "0xd00670",
+          "0xde2670",
+          "0xde2210",
+          "0x2bb9d0",
+          "0xf12650",
+          "0xf12640",
+          "0xd928f0",
+          "0xde4300",
+          "0xde2980"
+        ],
+        "refs": [
+          {
+            "site": "0xd00aac",
+            "function": "0xd00a00"
+          }
+        ]
+      }
+    ],
+    "CStatBar": [
+      {
+        "vt": "0x1c14f08",
+        "functions": [
+          "0xfbaa80",
+          "0xfb4de0",
+          "0xcf8e30",
+          "0xfb5bc0",
+          "0xfb4a40",
+          "0xfbaf50",
+          "0xfb4a60",
+          "0xfb4a20",
+          "0xfb5270",
+          "0xc81000",
+          "0xc80730",
+          "0xfbb310",
+          "0xc81320",
+          "0xc81280",
+          "0xcf8e90",
+          "0xfbab70"
+        ],
+        "refs": [
+          {
+            "site": "0xcf8a3d",
+            "function": "0xcf8a10"
+          }
+        ]
+      }
+    ],
+    "CAbilityHero": [
+      {
+        "vt": "0x1a47c90",
+        "functions": [
+          "0x2bb400",
+          "0x465fd0",
+          "0xf70cb0",
+          "0x4655e0",
+          "0xf70560",
+          "0xf70570",
+          "0xf12ad0",
+          "0x464b80",
+          "0x465630",
+          "0x4656b0",
+          "0x34db60",
+          "0xf12650",
+          "0xf12640",
+          "0x34a500",
+          "0x4659d0",
+          "0x465710"
+        ],
+        "refs": [
+          {
+            "site": "0x467d7e",
+            "function": "0x467d40"
+          }
+        ]
+      }
+    ],
+    "Float": [
+      {
+        "vt": "0x19dd698",
+        "functions": [
+          "0x315150",
+          "0x3565a0",
+          "0xf19e40",
+          "0xf19da0",
+          "0xf19e70",
+          "0xf19e90",
+          "0xf113d0",
+          "0x7963d329d52f6641",
+          "0x2415c78dc26c8391",
+          "0x4660d2a0867f5142",
+          "0x4851c36fdf828643",
+          "0x174096b193131549",
+          "0x134e929f8ef91093",
+          "0x1a16995995b11807",
+          "0x1d949d0199351b59",
+          "0x11ed590ffd09ffff"
+        ],
+        "refs": [
+          {
+            "site": "0x356731",
+            "function": "0x3565d0"
+          },
+          {
+            "site": "0x35d7ce",
+            "function": "0x35d760"
+          },
+          {
+            "site": "0x366bff",
+            "function": "0x366b90"
+          },
+          {
+            "site": "0x41ea53",
+            "function": "0x41e9f0"
+          },
+          {
+            "site": "0x421395",
+            "function": "0x421290"
+          },
+          {
+            "site": "0x4591c0",
+            "function": "0x4591c0"
+          },
+          {
+            "site": "0x46696c",
+            "function": "0x4668a0"
+          },
+          {
+            "site": "0x52fba6",
+            "function": "0x52fb00"
+          },
+          {
+            "site": "0x52fe53",
+            "function": "0x52fda0"
+          },
+          {
+            "site": "0x536b23",
+            "function": "0x536af0"
+          },
+          {
+            "site": "0x5a4df3",
+            "function": "0x5a4d20"
+          },
+          {
+            "site": "0x5acdd1",
+            "function": "0x5acd70"
+          },
+          {
+            "site": "0x5b10b6",
+            "function": "0x5b1000"
+          },
+          {
+            "site": "0x5d36b2",
+            "function": "0x5d35d0"
+          },
+          {
+            "site": "0x5d6ff3",
+            "function": "0x5d6f20"
+          },
+          {
+            "site": "0x5eea47",
+            "function": "0x5eea00"
+          },
+          {
+            "site": "0x6099a5",
+            "function": "0x609830"
+          },
+          {
+            "site": "0x641865",
+            "function": "0x641760"
+          },
+          {
+            "site": "0x666867",
+            "function": "0x666760"
+          },
+          {
+            "site": "0x683985",
+            "function": "0x683950"
+          },
+          {
+            "site": "0x6d0d4f",
+            "function": "0x6d0c40"
+          },
+          {
+            "site": "0x778605",
+            "function": "0x778500"
+          },
+          {
+            "site": "0xa540f2",
+            "function": "0xa54020"
+          },
+          {
+            "site": "0xabf7e9",
+            "function": "0xabf790"
+          },
+          {
+            "site": "0xc2dd91",
+            "function": "0xc2dc20"
+          },
+          {
+            "site": "0xd00b2c",
+            "function": "0xd00a00"
+          },
+          {
+            "site": "0xd975d6",
+            "function": "0xd97500"
+          }
+        ]
+      }
+    ]
+  },
+  "12173": {
+    "CGameUI": [
+      {
+        "vt": "0x1c2fd78",
+        "functions": [
+          "0x382bd0",
+          "0xc85740",
+          "0xfad820",
+          "0xc8ebd0",
+          "0xfe86d0",
+          "0xfad0e0",
+          "0xfec700",
+          "0xfecf80",
+          "0xfece80",
+          "0xfe86e0",
+          "0xb3f130",
+          "0x1009760",
+          "0xc90f00",
+          "0x1009650",
+          "0xfeb420",
+          "0xc90ed0"
+        ],
+        "refs": [
+          {
+            "site": "0xc81c0f",
+            "function": "0xc81ba0"
+          },
+          {
+            "site": "0xc84795",
+            "function": "0xc84770"
+          }
+        ]
+      },
+      {
+        "vt": "0x1c2ff80",
+        "functions": [
+          "0x1009280",
+          "0xff3320",
+          "0xc85464",
+          "0x1009d00",
+          "0xff15b0",
+          "0x1009c60",
+          "0xff15d0",
+          "0xff1590",
+          "0xc961f0",
+          "0xb3c950",
+          "0x1e393c8",
+          "0x382bd0",
+          "0xc85780",
+          "0xfad820",
+          "0xcfbc00",
+          "0xfad0d0"
+        ],
+        "refs": [
+          {
+            "site": "0xc81c20",
+            "function": "0xc81ba0"
+          },
+          {
+            "site": "0xc8479f",
+            "function": "0xc84770"
+          }
+        ]
+      }
+    ],
+    "CCameraWar3": [
+      {
+        "vt": "0x1c2e828",
+        "functions": [
+          "0x330ba0",
+          "0xc75870",
+          "0xfad820",
+          "0xc7a370",
+          "0xfad0d0",
+          "0xfad0e0",
+          "0xf4e900",
+          "0xc795c0",
+          "0xc782d0",
+          "0xc771a0",
+          "0xf4dab0",
+          "0xf4e390",
+          "0xf4e380",
+          "0xc78b80",
+          "0xc7bde0",
+          "0xc799a0"
+        ],
+        "refs": [
+          {
+            "site": "0xc745ca",
+            "function": "0xc74570"
+          }
+        ]
+      }
+    ],
+    "CSimpleFrame": [
+      {
+        "vt": "0x1c872f8",
+        "functions": [
+          "0xff75f0",
+          "0xff1950",
+          "0xff6f50",
+          "0xff2730",
+          "0xff15b0",
+          "0xff7ac0",
+          "0xff15d0",
+          "0xff1590",
+          "0xff1de0",
+          "0xcc3e10",
+          "0xcc35d0",
+          "0xff7e80",
+          "0xcc4130",
+          "0xcc4090",
+          "0xcc41c0",
+          "0xff76e0"
+        ],
+        "refs": [
+          {
+            "site": "0xff689e",
+            "function": "0xff6870"
+          },
+          {
+            "site": "0xff6cb1",
+            "function": "0xff6c90"
+          }
+        ]
+      }
+    ],
+    "CSimpleFontString": [
+      {
+        "vt": "0x1c871a8",
+        "functions": [
+          "0xff5650",
+          "0xff1950",
+          "0xff4bd0",
+          "0xff2730",
+          "0xff15b0",
+          "0xff5df0",
+          "0xff55a0",
+          "0xff53b0",
+          "0xff1de0",
+          "0xcc3e10",
+          "0xff5840",
+          "0xff4510",
+          "0xff43e0",
+          "0xff4f30",
+          "0xff4e90",
+          "0x1e5ce38"
+        ],
+        "refs": [
+          {
+            "site": "0xff471e",
+            "function": "0xff4710"
+          },
+          {
+            "site": "0xff49d7",
+            "function": "0xff49c0"
+          }
+        ]
+      }
+    ],
+    "CSimpleTexture": [
+      {
+        "vt": "0x1c87128",
+        "functions": [
+          "0xff56e0",
+          "0xff1950",
+          "0xff4c10",
+          "0xff2730",
+          "0xff15b0",
+          "0xff2420",
+          "0xff15d0",
+          "0xff1590",
+          "0xff1de0",
+          "0xcc3e10",
+          "0xff4460",
+          "0xff4510",
+          "0xff43e0",
+          "0xff4ff0",
+          "0xff4ee0",
+          "0x1e5cf38"
+        ],
+        "refs": [
+          {
+            "site": "0xff47b1",
+            "function": "0xff4790"
+          },
+          {
+            "site": "0xff4ab2",
+            "function": "0xff4aa0"
+          },
+          {
+            "site": "0xff4c29",
+            "function": "0xff4c10"
+          }
+        ]
+      }
+    ],
+    "CSimpleBackdrop": [],
+    "CArchiveMpq": [
+      {
+        "vt": "0x1a07de0",
+        "functions": [
+          "0x3a5850",
+          "0x3a5dd0",
+          "0x3a5d70",
+          "0x3a5cf0",
+          "0x3a5d80",
+          "0x3a5e90",
+          "0x3a5d10",
+          "0x3a5950",
+          "0x1db51d0",
+          "0x3a5920",
+          "0x176926c",
+          "0x1db5248",
+          "0x3a57c0",
+          "0x3a5f00",
+          "-0x7fee0cb3fade",
+          "-0x7ff6245d4728"
+        ],
+        "refs": [
+          {
+            "site": "0x3a539a",
+            "function": "0x3a5360"
+          },
+          {
+            "site": "0x3a5776",
+            "function": "0x3a5770"
+          },
+          {
+            "site": "0x3a585a",
+            "function": "0x3a5850"
+          },
+          {
+            "site": "0x3a5c5b",
+            "function": "0x3a59b0"
+          }
+        ]
+      }
+    ],
+    "CCommandButton": [
+      {
+        "vt": "0x1c3ce20",
+        "functions": [
+          "0xd39070",
+          "0xff1950",
+          "0xd13a60",
+          "0xff2730",
+          "0xff15b0",
+          "0xff7ac0",
+          "0xff15d0",
+          "0xff1590",
+          "0xff1de0",
+          "0xcc3e10",
+          "0xcc35d0",
+          "0xff7e80",
+          "0xcc4130",
+          "0xd143b0",
+          "0xcc41c0",
+          "0xff76e0"
+        ],
+        "refs": [
+          {
+            "site": "0xd13937",
+            "function": "0xd138f0"
+          },
+          {
+            "site": "0xd13a02",
+            "function": "0xd139f0"
+          },
+          {
+            "site": "0xd13a79",
+            "function": "0xd13a60"
+          }
+        ]
+      }
+    ],
+    "CCommandBar": [
+      {
+        "vt": "0x1c37040",
+        "functions": [
+          "0x1015c80",
+          "0xff1950",
+          "0xcec390",
+          "0xff2730",
+          "0xff15b0",
+          "0xff7ac0",
+          "0xff15d0",
+          "0xff1590",
+          "0xff1de0",
+          "0xcc3e10",
+          "0xcc35d0",
+          "0xff7e80",
+          "0xcc4130",
+          "0xcc4090",
+          "0xcc41c0",
+          "0xff76e0"
+        ],
+        "refs": [
+          {
+            "site": "0xceba10",
+            "function": "0xceb9e0"
+          },
+          {
+            "site": "0xcec166",
+            "function": "0xcec140"
+          }
+        ]
+      }
+    ],
+    "CInfoBar": [
+      {
+        "vt": "0x1c373a8",
+        "functions": [
+          "0xff75f0",
+          "0xff1950",
+          "0xcf1680",
+          "0xff2730",
+          "0xff15b0",
+          "0xff7ac0",
+          "0xff15d0",
+          "0xff1590",
+          "0xff1de0",
+          "0xcc3e10",
+          "0xcc35d0",
+          "0xff7e80",
+          "0xcc4130",
+          "0xcc4090",
+          "0xcc41c0",
+          "0xff76e0"
+        ],
+        "refs": [
+          {
+            "site": "0xcf11df",
+            "function": "0xcf11a0"
+          }
+        ]
+      }
+    ],
+    "CInventoryBar": [
+      {
+        "vt": "0x1c37718",
+        "functions": [
+          "0xff75f0",
+          "0xff1950",
+          "0xcf3c40",
+          "0xff2730",
+          "0xff15b0",
+          "0xff7ac0",
+          "0xff15d0",
+          "0xff1590",
+          "0xff1de0",
+          "0xcc3e10",
+          "0xcc35d0",
+          "0xff7e80",
+          "0xcc4130",
+          "0xcc4090",
+          "0xcc41c0",
+          "0xff76e0"
+        ],
+        "refs": [
+          {
+            "site": "0xcf3970",
+            "function": "0xcf3920"
+          }
+        ]
+      }
+    ],
+    "CPortraitButton": [
+      {
+        "vt": "0x1c3f6d0",
+        "functions": [
+          "0x382bd0",
+          "0xd1f090",
+          "0xfad820",
+          "0xd1f240",
+          "0xfe86d0",
+          "0xfad0e0",
+          "0xfec700",
+          "0xfecf80",
+          "0xfece80",
+          "0xfe86e0",
+          "0xd1f610",
+          "0xffa010",
+          "0xd1f660",
+          "0x1009650",
+          "0xff9cd0",
+          "0xff9a30"
+        ],
+        "refs": [
+          {
+            "site": "0xd1edf7",
+            "function": "0xd1edc0"
+          }
+        ]
+      },
+      {
+        "vt": "0x1c3f958",
+        "functions": [
+          "0xff9770",
+          "0xff1950",
+          "0xd1f078",
+          "0x1009d00",
+          "0xff15b0",
+          "0xff8aa0",
+          "0xff8370",
+          "0xff82d0",
+          "0xd1f9b0",
+          "0xb3c950",
+          "0x7468e17c4e2b6f50",
+          "-0x7f82b1e58bad",
+          "0x3c60c7b815fb8f5c",
+          "0x3cfa615216a0d567",
+          "0x3daecf1817590000",
+          "0x3e5b0529180d7ae1"
+        ],
+        "refs": [
+          {
+            "site": "0xd1ee01",
+            "function": "0xd1edc0"
+          }
+        ]
+      }
+    ],
+    "CUnit": [
+      {
+        "vt": "0x1c45000",
+        "functions": [
+          "0x330ba0",
+          "0xd3de90",
+          "0xfad820",
+          "0xdd19b0",
+          "0xfad0d0",
+          "0xfad0e0",
+          "0xf4e900",
+          "0xd3f2a0",
+          "0xe1e550",
+          "0xe1e0f0",
+          "0x331180",
+          "0xf4e390",
+          "0xf4e380",
+          "0xdcfed0",
+          "0xe20150",
+          "0xe1e860"
+        ],
+        "refs": [
+          {
+            "site": "0xd3f6ec",
+            "function": "0xd3f640"
+          }
+        ]
+      }
+    ],
+    "CStatBar": [
+      {
+        "vt": "0x1c43dc8",
+        "functions": [
+          "0xff75f0",
+          "0xff1950",
+          "0xd37a30",
+          "0xff2730",
+          "0xff15b0",
+          "0xff7ac0",
+          "0xff15d0",
+          "0xff1590",
+          "0xff1de0",
+          "0xcc3e10",
+          "0xcc35d0",
+          "0xff7e80",
+          "0xcc4130",
+          "0xcc4090",
+          "0xd37a90",
+          "0xff76e0"
+        ],
+        "refs": [
+          {
+            "site": "0xd3763d",
+            "function": "0xd37610"
+          }
+        ]
+      }
+    ],
+    "CAbilityHero": [
+      {
+        "vt": "0x1a76ca0",
+        "functions": [
+          "0x330ba0",
+          "0x4ccd00",
+          "0xfad820",
+          "0x4cc310",
+          "0xfad0d0",
+          "0xfad0e0",
+          "0xf4e900",
+          "0x4cb8b0",
+          "0x4cc360",
+          "0x4cc3e0",
+          "0x3b8dd0",
+          "0xf4e390",
+          "0xf4e380",
+          "0x3b57b0",
+          "0x4cc700",
+          "0x4cc440"
+        ],
+        "refs": [
+          {
+            "site": "0x4ceabe",
+            "function": "0x4cea80"
+          }
+        ]
+      }
+    ],
+    "Float": [
+      {
+        "vt": "0x1a0c6b0",
+        "functions": [
+          "0x382bd0",
+          "0x3c16e0",
+          "0xf55cb0",
+          "0xf55c10",
+          "0xf55ce0",
+          "0xf55d00",
+          "0xf4d1a0",
+          "0x7963d32b31de6641",
+          "0x2415c78f1f1b8391",
+          "0x4660d2a1e32e5142",
+          "0x4851c3713c318643",
+          "0x174096b2efc21549",
+          "0x134e92a0eba81093",
+          "0x1a16995af2601807",
+          "0x1d949d02f5e41b59",
+          "0x11ed591159b8ffff"
+        ],
+        "refs": [
+          {
+            "site": "0x3c185d",
+            "function": "0x3c1710"
+          },
+          {
+            "site": "0x3c857e",
+            "function": "0x3c8510"
+          },
+          {
+            "site": "0x3d157f",
+            "function": "0x3d1510"
+          },
+          {
+            "site": "0x486543",
+            "function": "0x4864e0"
+          },
+          {
+            "site": "0x488d95",
+            "function": "0x488c90"
+          },
+          {
+            "site": "0x4c02a0",
+            "function": "0x4c02a0"
+          },
+          {
+            "site": "0x4cd698",
+            "function": "0x4cd5e0"
+          },
+          {
+            "site": "0x594242",
+            "function": "0x5941b0"
+          },
+          {
+            "site": "0x5944ef",
+            "function": "0x594450"
+          },
+          {
+            "site": "0x59b1c3",
+            "function": "0x59b190"
+          },
+          {
+            "site": "0x607f7f",
+            "function": "0x607ec0"
+          },
+          {
+            "site": "0x60fd61",
+            "function": "0x60fd00"
+          },
+          {
+            "site": "0x613e22",
+            "function": "0x613d80"
+          },
+          {
+            "site": "0x635a52",
+            "function": "0x635970"
+          },
+          {
+            "site": "0x63908f",
+            "function": "0x638fd0"
+          },
+          {
+            "site": "0x6504d7",
+            "function": "0x650490"
+          },
+          {
+            "site": "0x66ac21",
+            "function": "0x66aac0"
+          },
+          {
+            "site": "0x6a1a75",
+            "function": "0x6a1970"
+          },
+          {
+            "site": "0x6c5f13",
+            "function": "0x6c5e20"
+          },
+          {
+            "site": "0x6e2815",
+            "function": "0x6e27e0"
+          },
+          {
+            "site": "0x72deaf",
+            "function": "0x72dda0"
+          },
+          {
+            "site": "0x7d2885",
+            "function": "0x7d2780"
+          },
+          {
+            "site": "0xa9f012",
+            "function": "0xa9ef40"
+          },
+          {
+            "site": "0xb08fc9",
+            "function": "0xb08f70"
+          },
+          {
+            "site": "0xc746e1",
+            "function": "0xc74570"
+          },
+          {
+            "site": "0xd3f76c",
+            "function": "0xd3f640"
+          },
+          {
+            "site": "0xdd4b02",
+            "function": "0xdd4a40"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -70,7 +70,67 @@ struct Mth129 {
   }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
  }
  bool SetCourier(uintptr_t base){
+  if(delivering||returnPending||route>=0||pending>=0||run.Active())return false;
   __try{auto s=SelectedSkill129(base);MthAdapter129 a(base,nullptr);auto session=a.World();if(!ValidCourier(base,s,session))return false;courier=s;courierSession=session;return true;}__except(EXCEPTION_EXECUTE_HANDLER){return false;}
+ }
+ bool delivering=false;SkillSelection129 deliveryHero{};uint64_t deliveryDue=0,deliveryDeadline=0;uintptr_t deliveryItem=0;unsigned delivered=0;
+ static bool HasRoom(unsigned capacity,unsigned occupied){return capacity>0&&capacity<=6&&occupied<capacity;}
+ struct HeroSearch {
+  Mth129* self;MthAdapter129* api;float x,y;SkillSelection129 result{};double distance=INFINITY;
+ };
+ static bool PreferHero(double distance,uint64_t identity,double best,uint64_t bestIdentity){return std::isfinite(distance)&&distance>=0&&(distance<best||(distance==best&&identity<bestIdentity));}
+ bool DeliveryHeroValid(MthAdapter129& a,const SkillSelection129& h)const{
+  if(h.unit==courier.unit||!ValidCourier(a.base,h,courierSession)||!a.isType(a.Handle(h.unit),0))return false;
+  const auto capacity=a.drop.size(h.unit);return capacity>0&&capacity<=6;
+ }
+ static int __cdecl CollectHero(uintptr_t raw,void* context){
+  auto& search=*static_cast<HeroSearch*>(context);auto& a=*search.api;
+  __try{
+   if(!raw||*reinterpret_cast<uintptr_t*>(raw)!=a.base+0xa9c504)return 1;
+   SkillSelection129 candidate{};candidate.unit=raw;candidate.identity=(uint64_t(*reinterpret_cast<uint32_t*>(raw+0xc))<<32)|*reinterpret_cast<uint32_t*>(raw+0x10);
+   if(!search.self->DeliveryHeroValid(a,candidate))return 1;
+   auto xy=ResolveTeleportApi129(a.base);if(!xy.position)return 1;float pos[3]={NAN,NAN,NAN};xy.position(raw+0x26c,pos);
+   double dx=double(pos[0])-search.x,dy=double(pos[1])-search.y,distance=dx*dx+dy*dy;
+   if(PreferHero(distance,candidate.identity,search.distance,search.result.identity)){search.result=candidate;search.distance=distance;}
+  }__except(EXCEPTION_EXECUTE_HANDLER){}return 1;
+ }
+ SkillSelection129 FindDeliveryHero(MthAdapter129& a){
+  auto selected=SelectedSkill129(a.base);if(DeliveryHeroValid(a,selected))return selected;
+  auto xy=ResolveTeleportApi129(a.base);if(!a.inv.query||!xy.position)return {};
+  float pos[3]={NAN,NAN,NAN};xy.position(courier.unit+0x26c,pos);if(!std::isfinite(pos[0])||!std::isfinite(pos[1]))return {};
+  HeroSearch search{this,&a,pos[0],pos[1]};
+  // Stream the whole supported map extent: no 256-object collector truncation.
+  const std::array<float,4> rect={-1048576.f,-1048576.f,1048576.f,1048576.f};
+  a.inv.query(rect.data(),0,0x14fd,0,0,CollectHero,&search);return search.result;
+ }
+ bool QueueDelivery(uintptr_t base){
+  if(delivering||returnPending||route>=0||pending>=0||run.Active()||!ValidCourier(base,courier,courierSession))return false;
+  __try{MthAdapter129 a(base,nullptr);auto h=FindDeliveryHero(a);
+   if(!h.unit)return false;
+   auto count=a.drop.size(courier.unit);if(!count||count>6)return false;bool items=false;for(unsigned i=0;i<count;++i)items|=a.drop.item(courier.unit,i)!=0;if(!items)return false;
+   auto xy=ResolveTeleportApi129(base);if(!xy.position)return false;
+   if(baseSession!=courierSession){float pos[3]={NAN,NAN,NAN};xy.position(courier.unit+0x26c,pos);if(!std::isfinite(pos[0])||!std::isfinite(pos[1]))return false;baseX=pos[0];baseY=pos[1];baseSession=courierSession;}
+   deliveryHero=h;deliveryItem=0;delivered=0;deliveryDue=0;deliveryDeadline=GetTickCount64()+60000;delivering=true;return true;
+  }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
+ }
+ const char* TickDelivery(uintptr_t base,bool enabled,bool ready,uint64_t now){
+  if(!delivering)return nullptr;if(!enabled){delivering=false;return "Courier Delivery: cancelled";}if(!ready)return nullptr;
+  __try{
+   if(now>=deliveryDeadline||!ValidCourier(base,courier,courierSession)||!ValidCourier(base,deliveryHero,courierSession)){delivering=false;return "Courier Delivery: stopped (unit unavailable or timed out)";}
+   if(now<deliveryDue)return nullptr;deliveryDue=now+100;
+   MthAdapter129 a(base,nullptr);auto xy=ResolveTeleportApi129(base);if(!a.inv.sell||!a.inv.order||!xy.position){delivering=false;return "Courier Delivery: native unavailable";}
+   unsigned n=a.drop.size(courier.unit),hn=a.drop.size(deliveryHero.unit);if(!n||n>6||!hn||hn>6){delivering=false;return "Courier Delivery: inventory unavailable";}
+   bool held=false,received=false;uintptr_t first=0;unsigned occupied=0;
+   for(unsigned i=0;i<n;++i){auto item=a.drop.item(courier.unit,i);if(item==deliveryItem&&item)held=true;if(item&&!first)first=item;}
+   for(unsigned i=0;i<hn;++i){auto item=a.drop.item(deliveryHero.unit,i);if(item)++occupied;if(item&&item==deliveryItem)received=true;}
+   if(deliveryItem){if(!held){if(!received){delivering=false;return "Courier Delivery: item receipt could not be confirmed";}++delivered;deliveryItem=0;}else return nullptr;}
+   if(!first||!HasRoom(hn,occupied)){delivering=false;returnPending=true;return first?"Courier Delivery: hero inventory full; remaining items kept; returning":"Courier Delivery: completed; returning to base";}
+   auto ch=a.Handle(courier.unit),hh=a.Handle(deliveryHero.unit);float cp[3]={NAN,NAN,NAN},hp[3]={NAN,NAN,NAN};xy.position(courier.unit+0x26c,cp);xy.position(deliveryHero.unit+0x26c,hp);
+   if(!std::isfinite(cp[0])||!std::isfinite(cp[1])||!std::isfinite(hp[0])||!std::isfinite(hp[1])){delivering=false;return "Courier Delivery: coordinates unavailable";}
+   float dx=cp[0]-hp[0],dy=cp[1]-hp[1];
+   if(dx*dx+dy*dy>300.f*300.f){deliveryDue=now+1000;if(!a.inv.order(ch,0xd0003,hh)){delivering=false;return "Courier Delivery: movement order refused";}return nullptr;}
+   auto item=a.Handle(first);if(!item||!a.inv.sell(ch,item,hh)){delivering=false;return "Courier Delivery: item transfer refused";}deliveryItem=first;return nullptr;
+  }__except(EXCEPTION_EXECUTE_HANDLER){delivering=false;return "Courier Delivery: native action failed";}
  }
  float baseX=0,baseY=0;uintptr_t baseSession=0;bool returnPending=false;
  bool SetBase(uintptr_t base){
@@ -81,7 +141,7 @@ struct Mth129 {
    baseX=pos[0];baseY=pos[1];baseSession=a.World();return true;
   }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
  }
- bool QueueReturn(uintptr_t base){if(!baseSession||baseSession!=courierSession||!ValidCourier(base,courier,courierSession)||pending>=0||run.Active())return false;route=-1;returnPending=true;return true;}
+ bool QueueReturn(uintptr_t base){if(!baseSession||baseSession!=courierSession||!ValidCourier(base,courier,courierSession)||pending>=0||run.Active())return false;delivering=false;deliveryItem=0;route=-1;returnPending=true;return true;}
  const char* TickReturn(uintptr_t base,bool enabled,bool ready){
   if(!returnPending)return nullptr;if(!enabled){returnPending=false;return "Courier Return: cancelled";}if(!ready)return nullptr;
   returnPending=false;
@@ -92,7 +152,7 @@ struct Mth129 {
   }__except(EXCEPTION_EXECUTE_HANDLER){return "Courier Return: native action failed";}
  }
  int route=-1,remaining=0;bool second=false,sent=false;uint32_t routeDue=0,routeDeadline=0;SkillSelection129 routeUnit{};
- bool QueueRoute(uintptr_t base,int index,int count){if(index<0||index>=6||returnPending||pending>=0||run.Active())return false;auto selected=SelectedSkill129(base);routePinned=false;if(ValidCourier(base,courier,courierSession)){selected=courier;routePinned=true;}if(!selected.unit)return false;MthAdapter129 a(base,nullptr);if(!ValidCourier(base,selected,a.World())||(!routePinned&&a.isType(a.Handle(selected.unit),0)))return false;route=index;remaining=std::clamp(count,1,20);second=sent=false;routeDue=0;routeUnit=selected;return true;}
+ bool QueueRoute(uintptr_t base,int index,int count){if(index<0||index>=6||delivering||returnPending||pending>=0||run.Active())return false;auto selected=SelectedSkill129(base);routePinned=false;if(ValidCourier(base,courier,courierSession)){selected=courier;routePinned=true;}if(!selected.unit)return false;MthAdapter129 a(base,nullptr);if(!ValidCourier(base,selected,a.World())||(!routePinned&&a.isType(a.Handle(selected.unit),0)))return false;route=index;remaining=std::clamp(count,1,20);second=sent=false;routeDue=0;routeUnit=selected;return true;}
  bool Reached(){sent=false;if(second&&!--remaining){route=-1;return true;}second=!second;return false;}
  const char* TickRoute(uintptr_t base,bool enabled,bool ready,uint32_t now){
   if(route<0)return nullptr;if(!enabled){route=-1;return "MTH Route: OFF";}if(!ready)return nullptr;
@@ -120,8 +180,9 @@ struct Mth129 {
  void Release(){pressed=-1;}
  static ToolMenuRect Rect(unsigned i){return {.305f+.041f*(i%6),.142f+.028f*(i/6),.038f,.024f};}
  ToolMenuRect ButtonRect(unsigned i)const{unsigned slot=0;for(unsigned j=0;j<i;++j)if(shown[j])++slot;return Rect(slot);}
- void Reset(){baseX=baseY=0;baseSession=0;returnPending=false;courier={};courierSession=0;routePinned=false;run.Reset();route=-1;remaining=0;routeUnit={};pending=kind=-1;requested={};owner=0;frames={};labels={};shown={};down={};pressUntil={};pressed=-1;}
- bool Queue(uintptr_t base,int action){if(action<0||action>4||returnPending||route>=0||pending>=0||run.Active())return false;requested=SelectedSkill129(base);if(!requested.unit)return false;pending=action;return true;}
+ void CancelActions(){delivering=false;deliveryHero={};deliveryItem=0;delivered=0;deliveryDue=deliveryDeadline=0;returnPending=false;routePinned=false;run.Reset();route=-1;remaining=0;routeUnit={};pending=kind=-1;requested={};}
+ void Reset(){CancelActions();baseX=baseY=0;baseSession=0;courier={};courierSession=0;owner=0;frames={};labels={};shown={};down={};pressUntil={};pressed=-1;}
+ bool Queue(uintptr_t base,int action){if(action<0||action>4||delivering||returnPending||route>=0||pending>=0||run.Active())return false;requested=SelectedSkill129(base);if(!requested.unit)return false;pending=action;return true;}
  const char* Tick(uintptr_t base,ClickFn129 click,bool enabled,bool ready,uint32_t now){
   if(!enabled){pending=-1;if(!run.Active())return nullptr;}
   if(!ready&&enabled)return nullptr;

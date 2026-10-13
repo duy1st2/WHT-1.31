@@ -1,1 +1,41 @@
 101 WAVE "assets/game_started.wav"
+#include "session-auth.generated.rc"
+#include <winver.h>
+#include "tool_version.hpp"
+1 VERSIONINFO
+ FILEVERSION WHT_VERSION_FILE
+ PRODUCTVERSION WHT_VERSION_FILE
+ FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+ FILEFLAGS 0
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_DLL
+ FILESUBTYPE 0
+BEGIN
+ BLOCK "StringFileInfo"
+ BEGIN
+  BLOCK "040904B0"
+  BEGIN
+   VALUE "FileDescription", "Warcraft III Hooking Tool\0"
+   VALUE "FileType", "Mix File Extension\0"
+   VALUE "LegalCopyright", "SorryLove\0"
+   VALUE "Language", "English and Vietnamese\0"
+   VALUE "FileVersion", WHT_VERSION_FILE_STRING "\0"
+   VALUE "ProductName", "WHT 1.31\0"
+   VALUE "ProductVersion", WHT_VERSION_STRING "\0"
+  END
+  BLOCK "042A04B0"
+  BEGIN
+   VALUE "FileDescription", "Warcraft III Hooking Tool\0"
+   VALUE "FileType", "Mix File Extension\0"
+   VALUE "LegalCopyright", "SorryLove\0"
+   VALUE "Language", "English and Vietnamese\0"
+   VALUE "FileVersion", WHT_VERSION_FILE_STRING "\0"
+   VALUE "ProductName", "WHT 1.31\0"
+   VALUE "ProductVersion", WHT_VERSION_STRING "\0"
+  END
+ END
+ BLOCK "VarFileInfo"
+ BEGIN
+  VALUE "Translation", 0x0409, 1200, 0x042A, 1200
+ END
+END

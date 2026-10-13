@@ -1,0 +1,22 @@
+[
+  {
+    "arch": "x86",
+    "artifact": "WHT.mix",
+    "machine": "0x14c"
+  },
+  {
+    "arch": "x86",
+    "artifact": "WHT131Launcher.exe",
+    "machine": "0x14c"
+  },
+  {
+    "arch": "x64",
+    "artifact": "WHT.mix",
+    "machine": "0x8664"
+  },
+  {
+    "arch": "x64",
+    "artifact": "WHT131Launcher.exe",
+    "machine": "0x8664"
+  }
+]

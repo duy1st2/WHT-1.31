@@ -1,0 +1,34 @@
+[
+  {
+    "profile": "12164x86",
+    "clear": "0xe0cfe0",
+    "table": "0x1854b88",
+    "textOffset": "0x42c",
+    "chatOffset": "0x434",
+    "prefixVerified": true
+  },
+  {
+    "profile": "12173x86",
+    "clear": "0xdcbe10",
+    "table": "0x1809aa8",
+    "textOffset": "0x450",
+    "chatOffset": "0x458",
+    "prefixVerified": true
+  },
+  {
+    "profile": "12164x64",
+    "clear": "0xfc9690",
+    "table": "0x1c5a610",
+    "textOffset": "0x6f8",
+    "chatOffset": "0x708",
+    "prefixVerified": true
+  },
+  {
+    "profile": "12173x64",
+    "clear": "0x10060b0",
+    "table": "0x1c89520",
+    "textOffset": "0x708",
+    "chatOffset": "0x718",
+    "prefixVerified": true
+  }
+]
