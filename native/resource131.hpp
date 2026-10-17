@@ -4,16 +4,16 @@
 namespace wht {
 struct ResourceProfile131 {
  unsigned build;uintptr_t worldTable,playerTable,allianceTable,encodedWorld,decodeKey,localOffset;
- uintptr_t playerFn,integerFn,stringFn,stateBase,stateStride,nameOffset,idOffset,allianceOffset,allianceMask,colorOffset,statusOffset;
+ uintptr_t playerFn,integerFn,stringFn,stateBase,stateStride,nameOffset,idOffset,allianceOffset,allianceMask,colorOffset,statusOffset,idGetter;
 };
 #ifdef _WIN64
 inline constexpr ResourceProfile131 resourceProfiles131[]={
- {12164,0x1bb3d30,0x1bb2f48,0x1bcd568,0x20b9d98,0x6b208c73c00571eeULL,0xdc,0x7975e0,0xf11010,0x316560,0xa0,0x18,0x58,0x50,0x88,0x60,0x400,0x40c},
- {12173,0x1be2d08,0x1be1f20,0x1bfc548,0x20e6d98,0xc943ab4704e7c9d0ULL,0xc4,0x7ef900,0xf4cde0,0x383fe0,0x90,0x18,0x48,0x44,0x78,0x60,0x3e8,0x3f4}};
+ {12164,0x1bb3d30,0x1bb2f48,0x1bcd568,0x20b9d98,0x6b208c73c00571eeULL,0xdc,0x7975e0,0xf11010,0x316560,0xa0,0x18,0x58,0x51,0x88,0x60,0x400,0x40c,0x782560},
+ {12173,0x1be2d08,0x1be1f20,0x1bfc548,0x20e6d98,0xc943ab4704e7c9d0ULL,0xc4,0x7ef900,0xf4cde0,0x383fe0,0x90,0x18,0x48,0x45,0x78,0x60,0x3e8,0x3f4,0x7dd220}};
 #else
 inline constexpr ResourceProfile131 resourceProfiles131[]={
- {12164,0x1806c24,0x1806950,0x180a2d4,0x1aafa78,0x3393cddb,0x94,0x6e4c30,0xd68150,0x2c0b90,0x50,0x10,0x2c,0x28,0x44,0x38,0x2d8,0x2e4},
- {12173,0x17bbc54,0x17bb980,0x17bf304,0x1a67a78,0x51325ca2,0xd4,0x6a84b0,0xd22ce0,0x2aa9c0,0x58,0x10,0x34,0x30,0x4c,0x38,0x2dc,0x2e8}};
+ {12164,0x1806c24,0x1806950,0x180a2d4,0x1aafa78,0x3393cddb,0x94,0x6e4c30,0xd68150,0x2c0b90,0x50,0x10,0x2c,0x2a,0x44,0x38,0x2d8,0x2e4,0x6c5dd0},
+ {12173,0x17bbc54,0x17bb980,0x17bf304,0x1a67a78,0x51325ca2,0xd4,0x6a84b0,0xd22ce0,0x2aa9c0,0x58,0x10,0x34,0x31,0x4c,0x38,0x2dc,0x2e8,0x6889a0}};
 #endif
 inline const ResourceProfile131* ResourceProfileFor131(unsigned build){for(const auto& p:resourceProfiles131)if(p.build==build)return &p;return nullptr;}
 struct ResourceNative131 {
@@ -32,6 +32,8 @@ inline bool ResourceCode131(uintptr_t base,const ResourceProfile131& p){
   const unsigned char integer[]={0xff,0x71,0x0c,0xff,0x71,0x08,0xe8};
   const unsigned char string[]={0x8b,0x41,0x08,0x85,0xc0,0x74,0x04,0x8b};
 #endif
+  const unsigned char physicalId[]={0x0f,0xb6,0x41,static_cast<unsigned char>(p.idOffset),0xc3};
+  if(memcmp(reinterpret_cast<void*>(base+p.idGetter),physicalId,sizeof(physicalId))||*reinterpret_cast<uintptr_t*>(base+p.playerTable+(sizeof(uintptr_t)==8?0xc8:0x64))!=base+p.idGetter)return false;
   return !memcmp(reinterpret_cast<void*>(base+p.playerFn),player,sizeof(player))&&!memcmp(reinterpret_cast<void*>(base+p.integerFn),integer,sizeof(integer))&&!memcmp(reinterpret_cast<void*>(base+p.stringFn),string,sizeof(string));
  }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
@@ -62,7 +64,7 @@ inline ResourceTable ReadResources131(uintptr_t base,unsigned build){
  unsigned local=24;auto world=ResourceWorld131(base,*p,local);if(!world)return table;
  ResourceNative131 api{reinterpret_cast<decltype(api.player)>(base+p->playerFn),reinterpret_cast<decltype(api.integer)>(base+p->integerFn),reinterpret_cast<decltype(api.string)>(base+p->stringFn)};
  table.ready=true;for(unsigned slot=0;slot<24;++slot){ResourceRow row;char name[257]{};if(!ResourceRaw131(base,world,*p,api,slot,local,row,name))continue;
-  row.name=ResourceName(Wide(name));if(row.name.empty())row.name=L"Player "+std::to_wstring(slot+1);table.rows.push_back(std::move(row));}
+  row.name=ResourceName(Wide(name));if(row.name.find_first_not_of(L" \t\r\n")==std::wstring::npos)continue;table.rows.push_back(std::move(row));}
  return table;
 }
 }

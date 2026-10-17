@@ -39,7 +39,7 @@ DWORD ExistingClient131(const fs::path& exe){
 }
 bool Inject131(HANDLE process,DWORD pid,const fs::path& dll){
  if(RemoteModule131(pid,L"WHT.mix")){
-  std::wcout<<L"WHT is already loaded. F8 opens its menu in a match.\n";return true;
+  std::wcout<<L"WHT is already loaded. Use the configured menu shortcut or menu icon in a match.\n";return true;
  }
  auto local=reinterpret_cast<uintptr_t>(GetProcAddress(GetModuleHandleW(L"kernel32.dll"),"LoadLibraryW"));
  HMODULE owner=nullptr;if(!local||!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,reinterpret_cast<LPCWSTR>(local),&owner))return false;
@@ -100,6 +100,6 @@ int wmain(int argc,wchar_t** argv){try{
   CloseHandle(info.hThread);process=info.hProcess;pid=info.dwProcessId;
  }
  const bool loaded=Inject131(process,pid,dll);CloseHandle(process);
- std::wcout<<L"WHT 1.31.1."<<profile->build<<L" "<<ClientArch131<<L" | PID "<<pid<<L" | "<<(loaded?L"DLL loaded; F8 opens the menu in a match. Inspect WHT.log for native/session state":L"DLL load failed")<<L"\n";
+ std::wcout<<L"WHT 1.31.1."<<profile->build<<L" "<<ClientArch131<<L" | PID "<<pid<<L" | "<<(loaded?L"DLL loaded; Use the configured menu shortcut or menu icon in a match. Inspect WHT.log for native/session state":L"DLL load failed")<<L"\n";
  return loaded?0:7;
 }catch(const std::exception& error){std::cerr<<error.what()<<"\n";return 8;}}

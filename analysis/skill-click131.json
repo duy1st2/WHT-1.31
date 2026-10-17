@@ -1,0 +1,50 @@
+{
+  "12164x86": {
+    "eventVtables": [
+      "0x1853a04"
+    ],
+    "refs": [
+      "0xdfc209"
+    ],
+    "click": "0xdfc1d0",
+    "entryEventVerified": true,
+    "heroPoints": "0x94",
+    "heroPointsGetter": "0xbac140"
+  },
+  "12173x86": {
+    "eventVtables": [
+      "0x1808924"
+    ],
+    "refs": [
+      "0xdbb009"
+    ],
+    "click": "0xdbafd0",
+    "entryEventVerified": true,
+    "heroPoints": "0x94",
+    "heroPointsGetter": "0xb6b5b0"
+  },
+  "12164x64": {
+    "eventVtables": [
+      "0x1c57ef8"
+    ],
+    "refs": [
+      "0xfb6dc1"
+    ],
+    "click": "0xfb6da0",
+    "entryEventVerified": true,
+    "heroPoints": "0xe4",
+    "heroPointsGetter": "0xd09900"
+  },
+  "12173x64": {
+    "eventVtables": [
+      "0x1c86e08"
+    ],
+    "refs": [
+      "0xff3931"
+    ],
+    "click": "0xff3910",
+    "entryEventVerified": true,
+    "heroPoints": "0xe4",
+    "heroPointsGetter": "0xd483c0"
+  }
+}

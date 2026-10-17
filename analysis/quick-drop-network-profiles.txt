@@ -1,0 +1,16 @@
+image 14740, 32bit: sender=a99280, context=2bf7d0, datastore=172f55c, reader=2c20e0, owner=ba33a0, position=d6b990; verified call and vtable bindings
+position property getter ba1e50: lea eax, [ecx + 0x284]; ret ; or dword ptr [ebx], ecx
+owner: mov eax, dword ptr [ecx + 0x164]; ret 
+reader: push ebp; mov ebp, esp; mov edx, dword ptr [ebp + 8]; test edx, edx; je 0x2c20ef; mov eax, dword ptr [ecx + 4]; mov dword ptr [edx], eax; mov edx, dword ptr [ebp + 0xc]; test edx, edx; je 0x2c20fb; mov eax, dword ptr [ecx + 0x10]; mov dword ptr [edx], eax; mov edx, dword ptr [ebp + 0x10]; test edx, edx; je 0x2c2107; mov eax, dword ptr [ecx + 0xc]; mov dword ptr [edx], eax; pop ebp; ret 0xc; int3 
+image 23884, 32bit: sender=a582c0, context=2a9600, datastore=16e45ac, reader=2abf10, owner=b62a50, position=d263d0; verified call and vtable bindings
+position property getter b616c0: lea eax, [ecx + 0x284]; ret 
+owner: mov eax, dword ptr [ecx + 0x164]; ret 
+reader: push ebp; mov ebp, esp; mov edx, dword ptr [ebp + 8]; test edx, edx; je 0x2abf1f; mov eax, dword ptr [ecx + 4]; mov dword ptr [edx], eax; mov edx, dword ptr [ebp + 0xc]; test edx, edx; je 0x2abf2b; mov eax, dword ptr [ecx + 0x10]; mov dword ptr [edx], eax; mov edx, dword ptr [ebp + 0x10]; test edx, edx; je 0x2abf37; mov eax, dword ptr [ecx + 0xc]; mov dword ptr [edx], eax; pop ebp; ret 0xc; int3 
+image 6688, 64bit: sender=bd0100, context=314c60, datastore=19d85d0, reader=318070, owner=d006a0, position=f14e90; verified call and vtable bindings
+position property getter cff110: lea rax, [rcx + 0x358]; ret 
+owner: mov eax, dword ptr [rcx + 0x198]; ret 
+reader: test rdx, rdx; je 0x31807c; mov rax, qword ptr [rcx + 8]; mov qword ptr [rdx], rax; test r8, r8; je 0x318087; mov eax, dword ptr [rcx + 0x18]; mov dword ptr [r8], eax; test r9, r9; je 0x318092; mov eax, dword ptr [rcx + 0x14]; mov dword ptr [r9], eax; ret 
+image 29928, 64bit: sender=c16b80, context=382750, datastore=1a075e0, reader=385af0, owner=d3f2d0, position=f50d00; verified call and vtable bindings
+position property getter d3dcc0: lea rax, [rcx + 0x358]; ret 
+owner: mov eax, dword ptr [rcx + 0x198]; ret 
+reader: test rdx, rdx; je 0x385afc; mov rax, qword ptr [rcx + 8]; mov qword ptr [rdx], rax; test r8, r8; je 0x385b07; mov eax, dword ptr [rcx + 0x18]; mov dword ptr [r8], eax; test r9, r9; je 0x385b12; mov eax, dword ptr [rcx + 0x14]; mov dword ptr [r9], eax; ret 

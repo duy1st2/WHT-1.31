@@ -1,0 +1,58 @@
+{
+  "12164x86": {
+    "CAbilityInventory": [
+      "0x1765fb4"
+    ],
+    "CItem": [
+      "0x182f8f4"
+    ],
+    "inventoryMember": "0x44c",
+    "itemGetter": "0xbb27f0",
+    "sizeGetter": "0xbb2830",
+    "drop": "0xbb29a0",
+    "entryAndMemberVerified": true,
+    "nativeBounds": "0x44"
+  },
+  "12173x86": {
+    "CAbilityInventory": [
+      "0x171afe4"
+    ],
+    "CItem": [
+      "0x17e47d4"
+    ],
+    "inventoryMember": "0x444",
+    "itemGetter": "0xb71db0",
+    "sizeGetter": "0xb71df0",
+    "drop": "0xb71f60",
+    "entryAndMemberVerified": true,
+    "nativeBounds": "0x44"
+  },
+  "12164x64": {
+    "CAbilityInventory": [
+      "0x1a4fb18"
+    ],
+    "CItem": [
+      "0x1c18060"
+    ],
+    "inventoryMember": "0x550",
+    "itemGetter": "0xd12090",
+    "sizeGetter": "0xd120d0",
+    "drop": "0xd122a0",
+    "entryAndMemberVerified": true,
+    "nativeBounds": "0x88"
+  },
+  "12173x64": {
+    "CAbilityInventory": [
+      "0x1a7eb28"
+    ],
+    "CItem": [
+      "0x1c46f20"
+    ],
+    "inventoryMember": "0x550",
+    "itemGetter": "0xd50b50",
+    "sizeGetter": "0xd50b90",
+    "drop": "0xd50d60",
+    "entryAndMemberVerified": true,
+    "nativeBounds": "0x88"
+  }
+}

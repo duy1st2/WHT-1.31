@@ -8,10 +8,10 @@ struct ResourceBoard129 {
  struct Row {void* frame=nullptr;std::array<void*,4> text{};};
  std::array<Row,24> rows{};
  // Reserve the left hero portrait strip, including its selection border.
- static constexpr float Left=.034f,Top=.578f,Width=.225f,HeaderHeight=.01885f,RowHeight=.018f,Step=.0165f;
+ static constexpr float Left=.034f,Top=.578f,Width=.225f,HeaderHeight=.01885f,RowHeight=.018f,Step=.018f;
  static ToolMenuRect HeaderRect(){return {Left+Width,Top-HeaderHeight,Width,HeaderHeight};}
  static ToolMenuRect RowRect(size_t i){return {Left+Width,Top-HeaderHeight-float(i)*Step-RowHeight,Width,RowHeight};}
- void Hide(){if(header)NativeFrameHide(header);}
+ void Hide(){for(auto& row:rows)if(row.frame)NativeFrameHide(row.frame);if(header)NativeFrameHide(header);}
  bool Present(ToolMenuOverlay& menu,uintptr_t base,const ResourceTable& table,bool expanded){
   if(!menu.initialized||!table.ready){Hide();return false;}
   auto& api=menu.api;
@@ -28,10 +28,10 @@ struct ResourceBoard129 {
    if(!row.frame){
     row.frame=menu.Frame(base,header,rect);if(!row.frame)return false;
     NativeSetFrameBackdropEx(api,row.frame,"WHTUI_GreyBackground.tga","UI\\Widgets\\ToolTips\\Human\\human-tooltip-border.blp",.0075f,.003f);
-    constexpr float offsets[]={.0075f,.09f,.135f,.18f};
-    constexpr float widths[]={.08f,.042f,.042f,.042f};
+    constexpr float offsets[]={.004f,.116f,.153f,.19f};
+    constexpr float widths[]={.11f,.035f,.035f,.032f};
     for(size_t c=0;c<4;++c){
-     row.text[c]=menu.Font(row.frame,.012f,"");if(!row.text[c])return false;
+     row.text[c]=menu.Font(row.frame,.0105f,"");if(!row.text[c])return false;
      api.setWidth(row.text[c],widths[c]);api.setHeight(row.text[c],RowHeight);
      api.setTextAlign(row.text[c],1);
      api.setRelPoint(row.text[c],3,row.frame,3,offsets[c],0,1);
@@ -39,7 +39,8 @@ struct ResourceBoard129 {
    }
    const auto& value=table.rows[i];
    const std::string gray=value.left?"|cff7d7d7d":"";
-   auto name=Utf8(value.name);std::replace(name.begin(),name.end(),'|',' ');
+   auto label=value.name;if(label.size()>18)label=label.substr(0,17)+L"?";
+   auto name=Utf8(label);std::replace(name.begin(),name.end(),'|',' ');
    const std::array<std::string,4> text={
     "|cffffff00"+gray+std::to_string(value.slot+1)+"  "+PlayerColorTag129(value.color,value.left)+name+"|r",
     "|cffffff00"+gray+Utf8(ResourceNumber(value.gold))+"|r",

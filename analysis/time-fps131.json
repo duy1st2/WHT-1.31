@@ -1,0 +1,22 @@
+﻿{
+    "x86":  {
+                "schedulerOffset":  "0x14",
+                "vtable12164":  "0x1857788",
+                "vtable12173":  "0x180c6a8"
+            },
+    "live12164x64":  {
+                         "schedulerVtable":  "0x1c60ca8",
+                         "source":  "ReadProcessMemory, runtime-test only",
+                         "pid":  30164,
+                         "header":  "0xaa2b9d08 (mutable)",
+                         "period":  300,
+                         "cycles":  0,
+                         "current":  90.73834228515625
+                     },
+    "x64":  {
+                "schedulerOffset":  "0x18",
+                "vtable12164":  "0x1c60ca8",
+                "vtable12173":  "0x1c8fbb8"
+            },
+    "identity":  "CSiDispatch\u003cCPrRelation,int\u003e, NIpse"
+}

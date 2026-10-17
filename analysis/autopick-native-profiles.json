@@ -1,0 +1,50 @@
+[
+  {
+    "image": 14740,
+    "bits": 32,
+    "world": "0x1825828",
+    "list": "0xb20960",
+    "listOffset": "0x6c8",
+    "positionGetter": "0xbb4710",
+    "order": "0xc5fce0",
+    "orderClass": "0x18206bc",
+    "classRef": "0xc5fd85",
+    "entry": "558bec6aff6828997e"
+  },
+  {
+    "image": 23884,
+    "bits": 32,
+    "world": "0x17da708",
+    "list": "0xae0170",
+    "listOffset": "0x6c4",
+    "positionGetter": "0xb73c70",
+    "order": "0xc1ae40",
+    "orderClass": "0x17d559c",
+    "classRef": "0xc1aeb8",
+    "entry": "558bec6aff68c8b684"
+  },
+  {
+    "image": 6688,
+    "bits": 64,
+    "world": "0x1c03a08",
+    "list": "0xc6ec30",
+    "listOffset": "0xb28",
+    "positionGetter": "0xd14260",
+    "order": "0xdd8190",
+    "orderClass": "0x1bfa168",
+    "classRef": "0xdd8260",
+    "entry": "488bc441574881ec80"
+  },
+  {
+    "image": 29928,
+    "bits": 64,
+    "world": "0x1c328c0",
+    "list": "0xcb1ba0",
+    "listOffset": "0xb10",
+    "positionGetter": "0xd52cd0",
+    "order": "0xe14280",
+    "orderClass": "0x1c28ff8",
+    "classRef": "0xe142f8",
+    "entry": "488bc441574881ec80"
+  }
+]

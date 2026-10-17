@@ -1,0 +1,42 @@
+[
+  {
+    "image": 14740,
+    "bits": 32,
+    "unitList": "0xb20a10",
+    "vectorMember": "0x6b8",
+    "abilityLookup": "0xbaf150",
+    "purchaseTable": "0x17337ec",
+    "pawnPredicate": "0x8e7916",
+    "abilityPrefix": "558bec568b750881fe75624e"
+  },
+  {
+    "image": 23884,
+    "bits": 32,
+    "unitList": "0xae0220",
+    "vectorMember": "0x6b4",
+    "abilityLookup": "0xb6e5f0",
+    "purchaseTable": "0x16e8844",
+    "pawnPredicate": "0x8b5e96",
+    "abilityPrefix": "558bec568b750881fe75624e"
+  },
+  {
+    "image": 6688,
+    "bits": 64,
+    "unitList": "0xc6ecd0",
+    "vectorMember": "0xb08",
+    "abilityLookup": "0xd0d6d0",
+    "purchaseTable": "0x19e17c0",
+    "pawnPredicate": "0x9fdbd3",
+    "abilityPrefix": "4053415441554883ec30450f"
+  },
+  {
+    "image": 29928,
+    "bits": 64,
+    "unitList": "0xcb1c40",
+    "vectorMember": "0xaf0",
+    "abilityLookup": "0xd4c170",
+    "purchaseTable": "0x1a107d8",
+    "pawnPredicate": "0xa48e33",
+    "abilityPrefix": "4053415441554883ec30450f"
+  }
+]

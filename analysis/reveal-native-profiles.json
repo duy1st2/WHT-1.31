@@ -1,0 +1,44 @@
+[
+  {
+    "image": 14740,
+    "bits": 32,
+    "worldFrame": "0x1825828",
+    "nativeByteFlag": "0x3f3",
+    "visibilityInstruction": "0xb2c1a4",
+    "signature": "80bff303000000",
+    "constructorStores": [
+      "b1b3da: mov dword ptr [edi + 0x3f0], 0x1010000"
+    ]
+  },
+  {
+    "image": 23884,
+    "bits": 32,
+    "worldFrame": "0x17da708",
+    "nativeByteFlag": "0x3df",
+    "visibilityInstruction": "0xaeb9d4",
+    "signature": "80bfdf03000000",
+    "constructorStores": []
+  },
+  {
+    "image": 6688,
+    "bits": 64,
+    "worldFrame": "0x1c03a08",
+    "nativeByteFlag": "0x5f3",
+    "visibilityInstruction": "0xc7ba9c",
+    "signature": "80bff305000000",
+    "constructorStores": [
+      "c69393: mov qword ptr [r14 + 0x5f0], 0x1010000"
+    ]
+  },
+  {
+    "image": 29928,
+    "bits": 64,
+    "worldFrame": "0x1c328c0",
+    "nativeByteFlag": "0x5e3",
+    "visibilityInstruction": "0xcbea9c",
+    "signature": "80bfe305000000",
+    "constructorStores": [
+      "cac435: mov dword ptr [r14 + 0x5e0], 0x1010000"
+    ]
+  }
+]

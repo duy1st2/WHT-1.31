@@ -1,3 +1,10 @@
+#include "learn_slot131.hpp"
+#include "target_cast131.hpp"
+#include "self_cast131.hpp"
+#include "quickcast131.hpp"
+#include "slot_remap131.hpp"
+#include <windows.h>
+#include "speed_clock129.hpp"
 #include "resource131.hpp"
 #include "message_clear131.hpp"
 #include "hotkey_labels131.hpp"
@@ -10,6 +17,12 @@ void check(bool value,const char* why){if(!value)throw std::runtime_error(why);}
 #else
 #define RESOURCE_TEST_EDX ,void*
 #endif
+alignas(uintptr_t) unsigned char selfAbiMode[0x40]{};
+unsigned selfAbiCancelCount=0,selfAbiSubmitCount=0;bool selfAbiOk=true;
+void __fastcall SelfAbiCancel131(uintptr_t ui RESOURCE_TEST_EDX){selfAbiOk&=ui==11&&selfAbiCancelCount==selfAbiSubmitCount;++selfAbiCancelCount;*reinterpret_cast<unsigned*>(selfAbiMode+(sizeof(void*)==8?0x1c:0x10))=0;}
+void __fastcall SelfAbiSubmit131(uintptr_t mode RESOURCE_TEST_EDX,unsigned order,uintptr_t auxiliary,float x,float y,uintptr_t unit,unsigned flags,unsigned extra){
+ selfAbiOk&=selfAbiCancelCount==selfAbiSubmitCount+1&&mode==reinterpret_cast<uintptr_t>(selfAbiMode)&&order==0xd0012&&auxiliary==0&&x==100&&y==200&&unit==22&&flags==1&&extra==0;++selfAbiSubmitCount;
+}
 uintptr_t __fastcall ResourceTestPlayer(uintptr_t world RESOURCE_TEST_EDX,unsigned slot){return slot<24?reinterpret_cast<uintptr_t*>(world)[slot]:0;}
 int __fastcall ResourceTestInteger(uintptr_t field RESOURCE_TEST_EDX){return *reinterpret_cast<int*>(field);}
 const char* __fastcall ResourceTestString(uintptr_t RESOURCE_TEST_EDX){return "Test Player";}
@@ -21,7 +34,20 @@ void* __stdcall PriorityTestAlloc(size_t,const char*,int,int){memset(priorityAll
 void* __fastcall PriorityTestCtor(void* frame RESOURCE_TEST_EDX,void* parent){*reinterpret_cast<uintptr_t*>(frame)=reinterpret_cast<uintptr_t>(priorityVtable);*reinterpret_cast<unsigned*>(static_cast<unsigned char*>(frame)+wht::nativeFrameLayout.level)=parent?*reinterpret_cast<unsigned*>(static_cast<unsigned char*>(parent)+wht::nativeFrameLayout.level)+1:0;wht::NativeWriteVisible(frame,1);return frame;}
 void __fastcall PriorityTestSize(void* RESOURCE_TEST_EDX,float){}
 void __fastcall PriorityTestPoint(void* RESOURCE_TEST_EDX,int,float,float,int){}
+#include "clock-fps131-contracts.hpp"
+#include "quick-drop131-contracts.hpp"
+#include "all-skills131-contracts.hpp"
+#include "auto-pick131-contracts.hpp"
+#include "sell-all131-contracts.hpp"
+#include "reveal131-contracts.hpp"
 int main(){try{
+
+ CheckReveal131();
+ CheckSellAll131();
+ CheckAutoPick131();
+ CheckAllSkills131();
+ CheckQuickDrop131();
+ CheckClockFps131();
  {
   auto savedLayout=wht::nativeFrameLayout;wht::nativeFrameLayout.level=sizeof(void*)==8?0xe4:0x90;wht::nativeFrameLayout.visible=sizeof(void*)==8?0xf0:0x9c;wht::nativeFrameLayout.layers=sizeof(void*)==8?0x114:0xc0;wht::nativeFrameLayout.hide=sizeof(void*)==8?0xd0:0x68;wht::nativeFrameLayout.show=sizeof(void*)==8?0xd8:0x6c;wht::nativeFrameLayout.byteFlags=true;
   const uintptr_t priorityBase=0x10000000;wht::nativeFrameLayout.simpleVtable=reinterpret_cast<uintptr_t>(priorityVtable)-priorityBase;
@@ -38,7 +64,7 @@ int main(){try{
  }
 
  check(wht::ResourceEligible131(0,0,0,1,false,false),"resource board includes local player");
- check(wht::ResourceEligible131(1,1,0,2,false,true)&&wht::ResourceEligible131(2,2,0,1,true,false),"allied leavers and observers eligible");
+ check(wht::ResourceEligible131(1,1,0,2,false,true)&&wht::ResourceEligible131(2,2,0,1,true,false),"reference allied leavers and observers eligible");
  check(!wht::ResourceEligible131(1,1,0,1,false,false)&&!wht::ResourceEligible131(1,24,0,1,true,true)&&!wht::ResourceEligible131(1,1,0,0,true,true),"enemy neutral and empty slots excluded");
  for(const auto& resourceProfile:wht::resourceProfiles131){
   alignas(uintptr_t) unsigned char resourcePlayer[0x700]{};uintptr_t resourceWorld[24]{};const uintptr_t resourceBase=0x10000000;
@@ -51,10 +77,20 @@ int main(){try{
   const size_t nativeRace=nativeStatus-8;
   *reinterpret_cast<unsigned*>(resourcePlayer+nativeRace)=4;
   *reinterpret_cast<unsigned*>(resourcePlayer+nativeStatus)=1;*reinterpret_cast<unsigned*>(resourcePlayer+nativeColor)=9;
+  // Native CPlayer vtable slot25 reads the effective physical ID.
+  const size_t nativePhysical=native64?(release131?0x51:0x45):(release131?0x2a:0x31);
+  const size_t oldLogical=native64?(release131?0x50:0x44):(release131?0x28:0x30);
+  resourcePlayer[oldLogical]=27;resourcePlayer[nativePhysical]=0;
+  check(resourceProfile.idOffset==nativePhysical,"physical slot follows verified CPlayer getter");
   auto state=[&](unsigned index,int value){*reinterpret_cast<int*>(resourcePlayer+resourceProfile.stateBase+index*resourceProfile.stateStride)=value;};
   state(1,123450);state(2,120);state(4,10);state(5,7);state(6,25);
   wht::ResourceNative131 resourceApi{reinterpret_cast<decltype(resourceApi.player)>(ResourceTestPlayer),reinterpret_cast<decltype(resourceApi.integer)>(ResourceTestInteger),reinterpret_cast<decltype(resourceApi.string)>(ResourceTestString)};wht::ResourceRow resourceRow;char resourceName[257]{};
   check(wht::ResourceRaw131(resourceBase,reinterpret_cast<uintptr_t>(resourceWorld),resourceProfile,resourceApi,0,0,resourceRow,resourceName)&&resourceRow.gold==12345&&resourceRow.lumber==12&&resourceRow.food==7&&resourceRow.cap==10&&resourceRow.color==9&&std::string(resourceName)=="Test Player","each build decodes resource units and food cap independently");
+  resourceWorld[11]=reinterpret_cast<uintptr_t>(resourcePlayer);resourcePlayer[oldLogical]=11;resourcePlayer[nativePhysical]=11;
+  check(wht::ResourceRaw131(resourceBase,reinterpret_cast<uintptr_t>(resourceWorld),resourceProfile,resourceApi,11,11,resourceRow,resourceName),"real participant slot12 remains eligible");
+  resourcePlayer[nativePhysical]=27;
+  check(!wht::ResourceRaw131(resourceBase,reinterpret_cast<uintptr_t>(resourceWorld),resourceProfile,resourceApi,11,11,resourceRow,resourceName),"legacy slot12 remapped to neutral27 is excluded even when self");
+
  }
 
  wht::MessageTimers131 clearTimers;wht::Config clearConfig;clearConfig.clearTextEnabled=true;clearConfig.clearChatEnabled=true;clearConfig.clearTextSeconds=1;clearConfig.clearChatSeconds=3;
@@ -74,10 +110,24 @@ int main(){try{
 
  alignas(uintptr_t) unsigned char keyButton[0x290]{},keyData[0x2d80]{};
  *reinterpret_cast<uintptr_t*>(keyButton+(sizeof(void*)==8?0x270:0x190))=reinterpret_cast<uintptr_t>(keyData);
- *reinterpret_cast<unsigned*>(keyData+8)=1;keyButton[sizeof(void*)==8?0xf1:0x9d]=1;
+ *reinterpret_cast<unsigned*>(keyData+(sizeof(void*)==8?12:8))=1;keyButton[sizeof(void*)==8?0xf1:0x9d]=1;
  *reinterpret_cast<int*>(keyData+(sizeof(void*)==8?0x2c50:0x2c4c))='Q';
  check(wht::PanelButtonKey131(reinterpret_cast<uintptr_t>(keyButton),0)=='Q',"native panel key uses architecture-specific data layout");
- check(wht::PanelKeyName131(wht::PanelButtonKey131(reinterpret_cast<uintptr_t>(keyButton),12))=="N7", "inventory panel label uses native numpad binding");
+ check(wht::PanelKeyName131(wht::PanelButtonKey131(reinterpret_cast<uintptr_t>(keyButton),12,true))=="N7", "inventory panel label uses native numpad binding");
+ *reinterpret_cast<unsigned*>(keyData+(sizeof(void*)==8?8:4))=0;
+ for(const auto key:{'M','S','H','A','P'}){
+  *reinterpret_cast<unsigned*>(keyData+(sizeof(void*)==8?12:8))=0xd0012;
+  *reinterpret_cast<int*>(keyData+(sizeof(void*)==8?0x2c50:0x2c4c))=key;
+  check(wht::PanelButtonKey131(reinterpret_cast<uintptr_t>(keyButton),0)==unsigned(key),"built-in command without ability ID retains native key");
+ }
+ *reinterpret_cast<unsigned*>(keyData+(sizeof(void*)==8?12:8))=0;
+ check(!wht::PanelButtonKey131(reinterpret_cast<uintptr_t>(keyButton),0),"empty command order has no label");
+ *reinterpret_cast<unsigned*>(keyData+(sizeof(void*)==8?12:8))=1;
+ for(unsigned slot=12;slot<18;++slot){
+  check(!wht::PanelButtonKey131(reinterpret_cast<uintptr_t>(keyButton),slot,false),"empty inventory hides hotkey despite stale visible button data");
+  check(wht::PanelButtonKey131(reinterpret_cast<uintptr_t>(keyButton),slot,true)!=0,"occupied inventory retains hotkey");
+  check(!wht::PanelButtonKey131(reinterpret_cast<uintptr_t>(keyButton),slot,false),"drop or sale clears previous inventory label");
+ }
  keyButton[sizeof(void*)==8?0xf1:0x9d]=0;check(!wht::PanelButtonKey131(reinterpret_cast<uintptr_t>(keyButton),0),"hidden command button has no label");
  check(!wht::PanelButtonKey131(0,0)&&!wht::PanelButtonKey131(reinterpret_cast<uintptr_t>(keyButton),18),"missing and invalid button slots rejected");
 static_assert(sizeof(void*)==8);
@@ -98,5 +148,99 @@ static_assert(sizeof(void*)==8);
  *reinterpret_cast<unsigned*>(bar+0x1e8)=0;check(!wht::Hp64(reinterpret_cast<uintptr_t>(bar),base,p,sampled,visible),"mana child excluded from HP enumeration");
  ptr(node,8)=reinterpret_cast<uintptr_t>(node);frames.clear();check(!wht::Frames64(host,frames),"cyclic frame list rejected");
  alignas(float) unsigned char style[0x78]{};*reinterpret_cast<float*>(style+0x64)=.125f;wht::NativeBackdropGeometry(style,.01f,.002f);check(*reinterpret_cast<float*>(style+0x60)==.01f&&*reinterpret_cast<float*>(style+0x64)==.125f,"64-bit backdrop preserves background tile size");for(unsigned offset:{0x68,0x6c,0x70,0x74})check(*reinterpret_cast<float*>(style+offset)==.002f,"64-bit backdrop insets");
+ float multiplier=0;check(wht::ParseSpeedMultiplier129(L"",multiplier)&&multiplier==1,"speed default reset");
+ check(wht::ParseSpeedMultiplier129(L"2.5",multiplier)&&multiplier==2.5f,"fractional speed");
+ for(const auto* arg:{L"0",L"71",L"nan",L"2 extra"})check(!wht::ParseSpeedMultiplier129(arg,multiplier),"invalid speed rejected");
+ wht::ScaledClock129 speedClock;speedClock.Set(100,2);check(speedClock.Read(150)==200,"double clock");speedClock.Set(150,1);check(speedClock.Read(200)==250,"clock remains continuous on reset");
+ wht::ScaledTick129 ticks;ticks.Set(0xfffffff0u,2);check(ticks.Read(0x10u)==0x30u,"scaled DWORD wrap");
+ wht::SlotRemap131 remapTest;wht::Config remapConfig;remapConfig.commandEnabled=true;remapConfig.inventoryEnabled=true;
+ remapConfig.command[3]={unsigned('Q'),true};remapConfig.inventory[2]={unsigned('Q'),true};unsigned remapSlot=99,remapCalls=0;
+ auto remapClick=[&](unsigned slot){remapSlot=slot;++remapCalls;return true;};
+ check(remapTest.Input(WM_KEYDOWN,'Q',false,true,false,remapConfig,remapClick)&&remapSlot==14,"inventory mapping wins duplicate keys");
+ check(remapTest.Input(WM_KEYDOWN,'Q',true,true,false,remapConfig,remapClick)&&remapCalls==1,"held key does not issue repeated orders");
+ check(remapTest.Input(WM_KEYUP,'Q',false,false,false,remapConfig,remapClick),"release consumed after disable");
+ check(!remapTest.Input(WM_KEYDOWN,'Q',false,false,false,remapConfig,remapClick)&&!remapTest.Input(WM_KEYDOWN,'Q',false,true,true,remapConfig,remapClick),"typing/menu and modifier gates");
+ remapConfig.inventoryEnabled=false;check(remapTest.Input(WM_KEYDOWN,'Q',false,true,false,remapConfig,remapClick)&&remapSlot==3,"command grid maps row-major slot");remapTest.Reset();
+ check(!remapTest.Input(WM_KEYDOWN,'Q',false,true,false,remapConfig,[](unsigned){return false;}),"unavailable button preserves native key");
+ check(wht::RemapControl131(L"SlotHotkey",L"SlotCommand3Enabled")&&wht::RemapControl131(L"SlotHotkey",L"QuickCastCommand3")&&!wht::RemapControl131(L"SlotHotkeyShop",L"AutoTargetCommand3"),"only implemented remap controls unlocked");
+ uintptr_t castMode=0;unsigned castClicks=0,castTargets=0;
+ auto readCastMode=[&](){return castMode;};auto activateCast=[&](){++castClicks;castMode=123;return true;};auto confirmCast=[&](uintptr_t mode){check(mode==123,"confirm exact newly active mode");++castTargets;return true;};
+ check(wht::ActivateQuickCast131(true,readCastMode,activateCast,confirmCast)&&castClicks==1&&castTargets==1,"new target mode quick casts once");
+ check(wht::ActivateQuickCast131(true,readCastMode,activateCast,confirmCast)&&castTargets==1,"pre-existing target mode never auto confirms");
+ castMode=0;check(wht::ActivateQuickCast131(false,readCastMode,activateCast,confirmCast)&&castTargets==1,"disabled quickcast retains normal targeting");
+ castMode=0;check(wht::ActivateQuickCast131(true,readCastMode,[](){return true;},confirmCast)&&castTargets==1,"instant or passive command does not click");
+ check(!wht::ActivateQuickCast131(true,readCastMode,[](){return false;},confirmCast)&&castTargets==1,"failed activation does not click");
+ check(wht::QuickCastPoint131(500,300,1000,800)&&!wht::QuickCastPoint131(500,750,1000,800)&&!wht::QuickCastPoint131(-1,300,1000,800),"target clicks restricted to world viewport");
+ wht::SelfCastSource131 selfSource{11,22,33,{44,55},100,200};uintptr_t selfMode=0;unsigned selfRead=0,selfClick=0,selfSend=0;
+ auto selfReader=[&](wht::SelfCastSource131& out){++selfRead;out=selfSource;return true;};auto selfTarget=[&](){return selfMode;};
+ auto selfActivate=[&](){++selfClick;selfMode=77;return true;};auto selfOrder=[](uintptr_t mode){return mode==77?0xd0012u:0u;};
+ auto selfFinish=[&](const wht::SelfCastSource131& source,uintptr_t mode,unsigned order){check(source.unit==22&&mode==77&&order==0xd0012,"self uses saved raw unit/order/mode");++selfSend;return true;};
+ check(wht::ActivateSelfCast131(selfReader,selfTarget,selfActivate,selfOrder,selfFinish)&&selfSend==1&&selfRead==2,"self native activation revalidates selection");
+ check(!wht::ActivateSelfCast131(selfReader,selfTarget,selfActivate,selfOrder,selfFinish)&&selfClick==1,"self refuses an existing target cursor");
+ selfMode=0;unsigned readChanged=0;auto selfChanged=[&](wht::SelfCastSource131& out){out=selfSource;if(++readChanged==2)out.id.high++;return true;};
+ check(!wht::ActivateSelfCast131(selfChanged,selfTarget,selfActivate,selfOrder,selfFinish)&&selfSend==1,"self rejects reused unit identity");
+ selfMode=0;check(wht::ActivateSelfCast131(selfReader,selfTarget,[](){return true;},selfOrder,selfFinish)&&selfSend==1,"instant self spells do not submit another order");
+ check(wht::RemapControl131(L"SlotHotkey",L"AutoTargetCommandMe0")&&wht::RemapControl131(L"SlotHotkeyInv",L"AutoTargetCommandMe5")&&wht::RemapControl131(L"SlotHotkey",L"AutoTargetCommand0"),"self controls enabled without pinned target controls");
+ wht::SelfCastApi131 selfAbiApi{reinterpret_cast<decltype(wht::SelfCastApi131::cancel)>(SelfAbiCancel131),reinterpret_cast<decltype(wht::SelfCastApi131::submit)>(SelfAbiSubmit131)};
+ for(unsigned i=0;i<256;++i){*reinterpret_cast<unsigned*>(selfAbiMode+(sizeof(void*)==8?0x1c:0x10))=0xd0012;const auto savedOrder=wht::SelfCastOrder131(reinterpret_cast<uintptr_t>(selfAbiMode));check(wht::FinishSelfCast131(selfAbiApi,selfSource,reinterpret_cast<uintptr_t>(selfAbiMode),savedOrder),"native self cancel/submit ABI repeated");}
+ check(selfAbiOk&&selfAbiCancelCount==256&&selfAbiSubmitCount==256,"cancel precedes saved-order submission; raw unit and float ABI preserved");
+ wht::ToolMenuOverlay escapeMenu;escapeMenu.visible=true;escapeMenu.open=true;
+ check(escapeMenu.Escape()&&!escapeMenu.open,"Escape closes tool menu without an active editor");
+ escapeMenu.open=true;escapeMenu.editing=1;escapeMenu.editBuffer=L"unsaved";escapeMenu.pressed=1;
+ check(escapeMenu.Escape()&&!escapeMenu.open&&escapeMenu.editing==-1&&escapeMenu.editBuffer.empty()&&escapeMenu.pressed==-3,"Escape closes tool menu and discards active edit");
+ escapeMenu.open=true;escapeMenu.dropdown=1;check(escapeMenu.Escape()&&!escapeMenu.open&&escapeMenu.dropdown==-1,"Escape closes dropdown and menu in one press");
+ check(!escapeMenu.Escape(),"Escape passes through to game when tool UI is closed");
+ escapeMenu.macroOpen=true;check(escapeMenu.Escape()&&!escapeMenu.macroOpen,"Escape also closes standalone macro panel");
+ wht::SelfCastSource131 pinnedSource{11,66,33,{77,88},300,400};unsigned pinnedCalls=0,pinnedReads=0;uintptr_t pinnedMode=0;
+ auto pinSource=[&](wht::SelfCastSource131& out){out=selfSource;return true;};
+ auto pinRead=[&](wht::SelfCastSource131& out){out=pinnedSource;out.x+=float(++pinnedReads);return true;};
+ auto pinMode=[&](){return pinnedMode;};auto pinClick=[&](){pinnedMode=99;return true;};
+ auto pinFinish=[&](const wht::SelfCastSource131& out,uintptr_t mode,unsigned order){check(out.unit==66&&out.x==302&&mode==99&&order==123,"pinned target uses raw destination and refreshed coordinates");++pinnedCalls;return true;};
+ check(wht::ActivateTargetCast131(pinSource,pinRead,pinMode,pinClick,[](uintptr_t){return 123u;},pinFinish)&&pinnedCalls==1,"pinned cast activates caster but submits destination");
+ pinnedMode=0;unsigned pinChanges=0;auto changedPin=[&](wht::SelfCastSource131& out){out=pinnedSource;if(++pinChanges==2)++out.id.high;return true;};
+ check(!wht::ActivateTargetCast131(pinSource,changedPin,pinMode,pinClick,[](uintptr_t){return 123u;},pinFinish)&&pinnedCalls==1,"pinned target reused identity refused");
+ pinnedMode=0;check(!wht::ActivateTargetCast131(pinSource,[](wht::SelfCastSource131&){return false;},pinMode,pinClick,[](uintptr_t){return 123u;},pinFinish),"missing/dead pinned target refused before activation");
+ auto wrongSession=[&](wht::SelfCastSource131& out){out=pinnedSource;++out.session;return true;};
+ check(!wht::ActivateTargetCast131(pinSource,wrongSession,pinMode,pinClick,[](uintptr_t){return 123u;},pinFinish),"pinned target cannot cross sessions");
+ wht::ToolMenuOverlay toggleMenu;
+ check(!toggleMenu.ToggleKey(VK_F8,VK_F9,false,false)&&!toggleMenu.open,"F8 has no fixed menu shortcut");
+ check(toggleMenu.ToggleKey(VK_F9,VK_F9,false,false)&&toggleMenu.open,"configured shortcut opens menu");
+ check(!toggleMenu.ToggleKey(VK_F9,VK_F9,true,false)&&toggleMenu.open,"held shortcut does not toggle repeatedly");
+ check(toggleMenu.ToggleKey(VK_F9,VK_F9,false,false)&&!toggleMenu.open,"same configured shortcut closes menu");
+ check(!toggleMenu.ToggleKey(VK_F8,0,false,false),"disabled shortcut has no F8 fallback");
+ check(!toggleMenu.ToggleKey(VK_F9,VK_F9,false,true),"typing does not toggle menu");
+ toggleMenu.open=true;toggleMenu.editing=1;check(!toggleMenu.ToggleKey(VK_F9,VK_F9,false,false)&&toggleMenu.open,"key editor can capture currently bound shortcut");
+ toggleMenu.CancelEdit();check(toggleMenu.ToggleKey(VK_F8,VK_F8,false,false)&&!toggleMenu.open,"F8 works when explicitly configured");
+ check(!wht::AlternatePanel131([](unsigned){return 0u;}),"empty command panel never becomes shop");
+ for(const unsigned order:{0xd000fu,0xd0016u,0xd0012u,0xd0004u,0xd0019u})check(!wht::AlternatePanel131([&](unsigned slot){return slot==5?order:0xd0007u;}),"basic unit orders retain hero command bindings");
+ check(wht::AlternatePanel131([](unsigned slot){return slot==11?0xd0007u:0x41303030u+slot;}),"learn/book/shop panel selects alternate bindings");
+ wht::Config shopConfig;shopConfig.commandEnabled=shopConfig.shopEnabled=true;shopConfig.command[2]={unsigned('Q'),true};shopConfig.shop[2]={unsigned('W'),true};
+ wht::SlotRemap131 shopInput;unsigned shopSlot=99;auto shopClick=[&](unsigned slot){shopSlot=slot;return true;};
+ check(!shopInput.Input(WM_KEYDOWN,'Q',false,true,false,shopConfig,shopClick,true),"hero key does not activate shop");
+ check(shopInput.Input(WM_KEYDOWN,'W',false,true,false,shopConfig,shopClick,true)&&shopSlot==2,"shop key activates exact native grid slot");shopInput.Reset();
+ check(!shopInput.Input(WM_KEYDOWN,'W',false,true,false,shopConfig,shopClick,false),"shop key does not replace hero key");
+ check(wht::RemappedKey131(shopConfig,2,true)=='W'&&wht::RemappedKey131(shopConfig,2,false)=='Q',"labels and input select matching binding group");
+ check(wht::RemapControl131(L"SlotHotkeyShop",L"SlotCommandShop2Enabled")&&!wht::RemapControl131(L"SlotHotkeyShop",L"QuickCastCommandShop2"),"base shop controls only");
+ keyButton[sizeof(void*)==8?0xf1:0x9d]=1;
+ *reinterpret_cast<unsigned*>(keyData+(sizeof(void*)==8?12:8))=0;*reinterpret_cast<unsigned*>(keyData+(sizeof(void*)==8?8:4))=0x49303031;
+ check(!wht::PanelButtonPopulated131(reinterpret_cast<uintptr_t>(keyButton),2,false,true)&&!wht::PanelButtonPopulated131(reinterpret_cast<uintptr_t>(keyButton),2,false,false),"passive records with no executable order never show remapped labels");
+ *reinterpret_cast<unsigned*>(keyData+(sizeof(void*)==8?8:4))=0;check(!wht::PanelButtonPopulated131(reinterpret_cast<uintptr_t>(keyButton),2,false,true),"empty shop slot has no label");
+ wht::SlotRemap131 lazyRemap;unsigned panelScans=0;auto classifyLazy=[&](){++panelScans;return false;};
+ for(unsigned i=0;i<1000;++i){lazyRemap.Input(WM_MOUSEMOVE,0,false,true,false,shopConfig,shopClick,classifyLazy);lazyRemap.Input(WM_KEYDOWN,'Z',false,true,false,shopConfig,shopClick,classifyLazy);}
+ check(panelScans==0,"mouse and unrelated keys never scan native command panel");
+ lazyRemap.Input(WM_KEYDOWN,'Q',false,false,false,shopConfig,shopClick,classifyLazy);check(panelScans==0,"disabled input never scans native panel");
+ lazyRemap.Input(WM_KEYDOWN,'Q',false,true,false,shopConfig,shopClick,classifyLazy);check(panelScans==1,"matching fresh key scans native panel once");
+ wht::HotkeyLabels131 cadence;check(cadence.Due(0,false)&&!cadence.Due(1000,false)&&cadence.Due(1001,true)&&!cadence.Due(1100,true)&&cadence.Due(1151,true)&&cadence.Due(1152,false),"hotkey labels sample at150ms and clear immediately on disable");
+ std::array<wht::SkillButton131,12> learnButtons{};learnButtons[3].order=wht::AllSkills131::plus;int learnPoints=2;unsigned learnedSlot=99;std::vector<unsigned> learnClicks;
+ auto learnData=[&](unsigned slot){return learnButtons[slot];};auto learnRead=[&](wht::SelfCastSource131& out){out=selfSource;return true;};
+ auto learnClick=[&](unsigned slot){learnClicks.push_back(slot);if(slot==3&&learnButtons[3].order==wht::AllSkills131::plus){learnButtons={};learnButtons[2]={wht::AllSkills131::heroAbility,0x41303031};learnButtons[11].order=wht::AllSkills131::back;}else if(slot==11){learnButtons={};learnButtons[3].order=wht::AllSkills131::plus;}else if(slot==2){--learnPoints;learnedSlot=slot;}return true;};
+ check(wht::LearnSlot131(2,learnRead,[&](uintptr_t){return learnPoints;},learnData,learnClick)&&learnedSlot==2&&learnPoints==1&&learnClicks==std::vector<unsigned>({3,2,11}),"single learn shortcut opens plus learns exact slot and returns before render");
+ learnClicks.clear();learnButtons={};learnButtons[2]={wht::AllSkills131::heroAbility,0x41303031};learnButtons[11].order=wht::AllSkills131::back;
+ check(wht::LearnSlot131(2,learnRead,[&](uintptr_t){return learnPoints;},learnData,learnClick)&&learnClicks==std::vector<unsigned>({2})&&learnButtons[11].order==wht::AllSkills131::back,"manually opened learn panel stays open");
+ learnClicks.clear();check(!wht::LearnSlot131(2,learnRead,[](uintptr_t){return 0;},learnData,learnClick)&&learnClicks.empty(),"zero hero points never opens learn panel");
+ for(const auto& p:wht::inventoryProfiles131){alignas(uintptr_t) unsigned char passiveItem[0x100]{};*reinterpret_cast<uintptr_t*>(passiveItem)=0x10000000+p.itemTable;const auto object=reinterpret_cast<uintptr_t>(passiveItem);auto& flags=*reinterpret_cast<unsigned*>(passiveItem+(sizeof(void*)==8?0x38:0x20));
+ flags=0x2000;check(!wht::InventoryItemUsable131(0x10000000,p,object),"pawnable passive item has no use hotkey");
+ flags|=0x200;check(wht::InventoryItemUsable131(0x10000000,p,object),"active usable item retains use hotkey regardless current cooldown/mana");
+ flags&=~0x200u;check(!wht::InventoryItemUsable131(0x10000000,p,object),"passive replacement immediately removes use capability");}
  std::cout<<"WHT x64 contracts passed\n";return 0;
  }catch(const std::exception& error){std::cerr<<error.what()<<"\n";return 1;}}
