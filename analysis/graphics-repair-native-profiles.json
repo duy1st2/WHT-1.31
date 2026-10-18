@@ -1,0 +1,114 @@
+[
+  {
+    "build": 12164,
+    "architecture": 32,
+    "statBarTable": "0x182e5fc",
+    "bind": "0xb9c790",
+    "update": "0xb9ca70",
+    "overrides": [
+      27,
+      30,
+      31
+    ],
+    "copiedMethods": 33,
+    "preserves": "COL at table[-1], native unit argument and integer return register; UI instance only",
+    "statPanels": {
+      "damage": "0x182b22c",
+      "armor": "0x182b2a4",
+      "hero": "0x182b484"
+    },
+    "statsValueFields": [
+      "0x12c"
+    ],
+    "heroValueFields": [
+      "0x128",
+      "0x12c",
+      "0x130"
+    ],
+    "infoScanLimit": "0x400"
+  },
+  {
+    "build": 12173,
+    "architecture": 32,
+    "statBarTable": "0x17e34dc",
+    "bind": "0xb5bfd0",
+    "update": "0xb5c2b0",
+    "overrides": [
+      27,
+      30,
+      31
+    ],
+    "copiedMethods": 33,
+    "preserves": "COL at table[-1], native unit argument and integer return register; UI instance only",
+    "statPanels": {
+      "damage": "0x17e010c",
+      "armor": "0x17e0184",
+      "hero": "0x17e0364"
+    },
+    "statsValueFields": [
+      "0x12c"
+    ],
+    "heroValueFields": [
+      "0x128",
+      "0x12c",
+      "0x130"
+    ],
+    "infoScanLimit": "0x400"
+  },
+  {
+    "build": 12164,
+    "architecture": 64,
+    "statBarTable": "0x1c14f08",
+    "bind": "0xcf91d0",
+    "update": "0xcf94d0",
+    "overrides": [
+      27,
+      30,
+      31
+    ],
+    "copiedMethods": 33,
+    "preserves": "COL at table[-1], native unit argument and integer return register; UI instance only",
+    "statPanels": {
+      "damage": "0x1c0eea8",
+      "armor": "0x1c0ef98",
+      "hero": "0x1c0f358"
+    },
+    "statsValueFields": [
+      "0x1e8"
+    ],
+    "heroValueFields": [
+      "0x1e0",
+      "0x1e8",
+      "0x1f0"
+    ],
+    "infoScanLimit": "0x680"
+  },
+  {
+    "build": 12173,
+    "architecture": 64,
+    "statBarTable": "0x1c43dc8",
+    "bind": "0xd37dd0",
+    "update": "0xd380d0",
+    "overrides": [
+      27,
+      30,
+      31
+    ],
+    "copiedMethods": 33,
+    "preserves": "COL at table[-1], native unit argument and integer return register; UI instance only",
+    "statPanels": {
+      "damage": "0x1c3dd68",
+      "armor": "0x1c3de58",
+      "hero": "0x1c3e218"
+    },
+    "statsValueFields": [
+      "0x1e8"
+    ],
+    "heroValueFields": [
+      "0x1e0",
+      "0x1e8",
+      "0x1f0"
+    ],
+    "infoScanLimit": "0x680"
+  }
+]

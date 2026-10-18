@@ -1,0 +1,11 @@
+{
+  "pid": 16468,
+  "build": 12173,
+  "bits": 64,
+  "codeGuards": true,
+  "uiAvailable": true,
+  "barSlot": "0x738",
+  "mode": 0,
+  "editClass": false,
+  "labelReadable": true
+}

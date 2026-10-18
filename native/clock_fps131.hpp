@@ -25,7 +25,7 @@ inline const ClockFpsProfile131* ClockFpsProfile(unsigned build){for(const auto&
 // scheduler vtable (CSiDispatch<CPrRelation,int>), not that header.
 // Its first scheduler is the simulation channel. Its current float wraps
 // at the scheduler period, incrementing the adjacent cycle counter.
-inline bool SimulationSeconds131(uintptr_t base,const ClockFpsProfile131& p,uint32_t& seconds){
+inline bool SimulationSeconds131(uintptr_t base,const ClockFpsProfile131& p,uint32_t& seconds,double* precise=nullptr){
  seconds=0;if(!base)return false;
  __try {
   const auto clock=*reinterpret_cast<uintptr_t*>(base+p.clockGlobal);
@@ -35,7 +35,7 @@ inline bool SimulationSeconds131(uintptr_t base,const ClockFpsProfile131& p,uint
   const unsigned cycles=*reinterpret_cast<unsigned*>(field+4);
   if(!std::isfinite(current)||!std::isfinite(period)||current<0||period<=0||period>864000||current>period)return false;
   const double total=double(current)+double(cycles)*period;
-  if(total>=864000)return false;seconds=static_cast<uint32_t>(total);return true;
+  if(total>=864000)return false;seconds=static_cast<uint32_t>(total);if(precise)*precise=total;return true;
  }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
 inline std::string TimerText131(uint32_t seconds){char text[96]{};std::snprintf(text,sizeof(text),"|cfffcd211%02u:%02u:%02u|r",seconds/3600,(seconds/60)%60,seconds%60);return text;}

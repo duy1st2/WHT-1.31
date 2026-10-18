@@ -1,0 +1,106 @@
+[
+  {
+    "build": 12164,
+    "architecture": 32,
+    "tooltipTable": "0x182a5c4",
+    "hierarchy": [
+      {
+        "name": ".?AVCUberToolTipWar3@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCToolTipWar3@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCSimpleFrame@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCLayoutFrame@@",
+        "offset": 0
+      }
+    ],
+    "rootLayoutOffset": "0xbc",
+    "anchorPoint": 8,
+    "setterEvidence": "black-bar-native-profiles.json"
+  },
+  {
+    "build": 12173,
+    "architecture": 32,
+    "tooltipTable": "0x17df4a4",
+    "hierarchy": [
+      {
+        "name": ".?AVCUberToolTipWar3@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCToolTipWar3@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCSimpleFrame@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCLayoutFrame@@",
+        "offset": 0
+      }
+    ],
+    "rootLayoutOffset": "0xbc",
+    "anchorPoint": 8,
+    "setterEvidence": "black-bar-native-profiles.json"
+  },
+  {
+    "build": 12164,
+    "architecture": 64,
+    "tooltipTable": "0x1c0dbd0",
+    "hierarchy": [
+      {
+        "name": ".?AVCUberToolTipWar3@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCToolTipWar3@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCSimpleFrame@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCLayoutFrame@@",
+        "offset": 0
+      }
+    ],
+    "rootLayoutOffset": "0x158",
+    "anchorPoint": 8,
+    "setterEvidence": "black-bar-native-profiles.json"
+  },
+  {
+    "build": 12173,
+    "architecture": 64,
+    "tooltipTable": "0x1c3ca90",
+    "hierarchy": [
+      {
+        "name": ".?AVCUberToolTipWar3@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCToolTipWar3@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCSimpleFrame@@",
+        "offset": 0
+      },
+      {
+        "name": ".?AVCLayoutFrame@@",
+        "offset": 0
+      }
+    ],
+    "rootLayoutOffset": "0x158",
+    "anchorPoint": 8,
+    "setterEvidence": "black-bar-native-profiles.json"
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "build": 12164,
+    "architecture": 32,
+    "fontTable": "0x1853b0c",
+    "setText": "0xdfe830",
+    "hpNumericReturn": "0xb85d1a",
+    "mpNumericReturn": "0xb85f77",
+    "hpWidthReturn": "0xb85d4c",
+    "mpWidthReturn": "0xb85fa1",
+    "manaFieldInstruction": "0xb85986",
+    "hpFontOffset": "0x24c",
+    "mpFontOffset": "0x250"
+  },
+  {
+    "build": 12173,
+    "architecture": 32,
+    "fontTable": "0x1808a2c",
+    "setText": "0xdbd630",
+    "hpNumericReturn": "0xb4588a",
+    "mpNumericReturn": "0xb45ae7",
+    "hpWidthReturn": "0xb458bc",
+    "mpWidthReturn": "0xb45b11",
+    "manaFieldInstruction": "0xb454f6",
+    "hpFontOffset": "0x24c",
+    "mpFontOffset": "0x250"
+  },
+  {
+    "build": 12164,
+    "architecture": 64,
+    "fontTable": "0x1c58298",
+    "setText": "0xfb9660",
+    "hpNumericReturn": "0xce0bb4",
+    "mpNumericReturn": "0xce0dce",
+    "hpWidthReturn": "0xce0bd9",
+    "mpWidthReturn": "0xce0deb",
+    "manaFieldInstruction": "0xce075d",
+    "hpFontOffset": "0x3c8",
+    "mpFontOffset": "0x3d0"
+  },
+  {
+    "build": 12173,
+    "architecture": 64,
+    "fontTable": "0x1c871a8",
+    "setText": "0xff61d0",
+    "hpNumericReturn": "0xd206d0",
+    "mpNumericReturn": "0xd208ea",
+    "hpWidthReturn": "0xd206f5",
+    "mpWidthReturn": "0xd20907",
+    "manaFieldInstruction": "0xd20279",
+    "hpFontOffset": "0x3c8",
+    "mpFontOffset": "0x3d0"
+  }
+]

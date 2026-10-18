@@ -1,3 +1,16 @@
+#include "repeat_message131.hpp"
+#include "quick_chat131.hpp"
+#include "ui_refresh131.hpp"
+#include "graphics_diagnostic131.hpp"
+#include "match_start131.hpp"
+#include "life_mana_hook131.hpp"
+#include "mouse_tooltip131.hpp"
+#include "black_bar131.hpp"
+#include "console_ui131.hpp"
+#include "time_of_day131.hpp"
+#include "multiboard131.hpp"
+#include "hero_keys131.hpp"
+#include "auto_click131.hpp"
 #include "learn_slot131.hpp"
 #include "target_cast131.hpp"
 #include "self_cast131.hpp"
@@ -35,9 +48,19 @@ std::unordered_map<void*,Placement64> placements64;
 wht::Gameplay64 gameplay64;wht::MacroRecorder macro64;bool settings64=true,typed64=false;std::wstring chat64;
 wht::HotkeyLabels131 hotkeys64;
 wht::SlotRemap131 remap64;
+wht::QuickChatEcho131 quickChatEcho64;
+wht::RepeatMessage131 repeatMessage64;
+bool SendChat64(const std::string& text);
+wht::TimeOfDay131 timeOfDay64;
+wht::ConsoleUi131 consoleUi64;
+wht::BlackBar131 blackBar64;
+wht::MouseTooltip131 mouseTooltip64;
+wht::AutoClick131 autoClick64;
 wht::SelfCastSource131 pinned64;
 wht::MessageTimers131 messageTimers64;
 wht::ResourceBoard131 resources64;
+wht::GraphicsDiagnostic131 graphicsDiagnostic64;
+wht::MatchStart131 matchStart64;
 wht::ClockOverlay131 clock64;wht::FpsState131 fps64;
 wht::QuickDropInput131 quickDrop64;
 wht::Reveal131 reveal64;
@@ -69,7 +92,7 @@ void Camera64(){if(!wht::Object64(camera64,base64,profile64->cameraVtable)){came
 void Width64(void* object,float value){auto& p=placements64[object];p.sized=true;p.width=value;reinterpret_cast<void(*)(void*,float)>(base64+profile64->width)(object,value*scale64);}
 void Absolute64(void* object,int point,float x,float y,int flag){auto& p=placements64[object];p.absolute=true;p.relative=false;p.point=point;p.x=x;p.y=y;p.flag=flag;reinterpret_cast<void(*)(void*,int,float,float,int)>(base64+profile64->absolute)(object,point,.4f+(x-.4f)*scale64,y,flag);}
 void Relative64(void* object,int point,void* other,int otherPoint,float x,float y,int flag){auto& p=placements64[object];p.absolute=false;p.relative=true;p.point=point;p.other=other;p.otherPoint=otherPoint;p.x=x;p.y=y;p.flag=flag;reinterpret_cast<void(*)(void*,int,void*,int,float,float,int)>(base64+profile64->relative)(object,point,other,otherPoint,x*scale64,y,flag);}
-bool Identity64(uintptr_t object,uintptr_t table){__try{return object&&*reinterpret_cast<uintptr_t*>(object)==base64+table;}__except(1){return false;}}
+bool Identity64(uintptr_t object,uintptr_t table){__try{return wht::ComponentIdentity131(object,base64+table);}__except(1){return false;}}
 uintptr_t CurrentUi64(){__try{auto ui=reinterpret_cast<uintptr_t(*)(bool,bool)>(base64+profile64->uiGet)(false,false);return Identity64(ui,profile64->uiVtable)?ui:0;}__except(1){return 0;}}
 struct Span64{const char* data;size_t size;};
 uintptr_t Mount64(const char* path){__try{return reinterpret_cast<uintptr_t(*)(Span64,unsigned,unsigned,unsigned,uintptr_t,bool)>(base64+profile64->archiveOpen)({path,strlen(path)},2,0,100,0,false);}__except(1){return 0;}}
@@ -89,12 +112,13 @@ wht::ExtendedFrameApi Api64(){wht::nativeFrameLayout={0x1d0,0x13c,0x150,0xe4,0xf
 #undef P64
  api.setFont=Font64;api.setWidth=Width64;api.setAbsPoint=Absolute64;api.setRelPoint=Relative64;return api;}
 bool Control64(const wht::ToolMenuControl& c){const std::wstring section=c.section,key=c.key;
+ if(section==L"Graphics"&&(key==L"timeOfDayUI"||key==L"ConsoleUI"||key==L"BlackBarUI"||key==L"MouseTooltipUI"||key==L"BarInvul"||key==L"Color Player"||key==L"Text Life/Mana Commas"||key==L"Text Life/Mana No Hide"||key==L"Text Stats Commas"))return true;
+ if(section==L"Quick Chat")return true;
  if(section==L"DelayClear"||section==L"Language"||section==L"MacroRecorder"||section==L"StateTag")return true;
- if(section==L"ManaBar")return key==L"Enable"||key==L"EnableForHero"||key==L"EnableForNonHero";
- if(section==L"Event")return key==L"Camera"||key==L"FogZ"||key==L"Show Mem"||key==L"ShowCooldown"||key==L"ShowRegenHP"||key==L"ShowRegenMana"||key==L"Show Hotkey In Panel"||key==L"Show Resource"||key==L"Show Timer"||key==L"Show FPS"||key==L"Quick Drop Item"||key==L"Reveal Invisibles"||key==L"Show Sell All"||key==L"Show Auto Pick"||key==L"Show Drop All"||key==L"Show Ins All Skills";
- if(section==L"HotKeyHero"&&(key==L"SetIdTarget"||key==L"SellFast"))return true;
+ if(section==L"Event")return key==L"Camera"||key==L"FogZ"||key==L"Show Mem"||key==L"ShowCooldown"||key==L"ShowRegenHP"||key==L"ShowRegenMana"||key==L"Show Hotkey In Panel"||key==L"Show Resource"||key==L"Show Timer"||key==L"Show FPS"||key==L"Sound Start Game"||key==L"Quick Drop Item"||key==L"Reveal Invisibles"||key==L"Show Sell All"||key==L"Show Auto Pick"||key==L"Show Drop All"||key==L"Show Ins All Skills";
+ if(section==L"HotKeyHero"&&(key==L"SetIdTarget"||key==L"SellFast"||key==L"AutoClickLeft"||key==L"AutoClickRight"||key.rfind(L"HeroF",0)==0))return true;
  if(wht::RemapControl131(section,key))return true;
- if(section==L"HotKeyOther")return key==L"hko_menu"||key==L"hko_command";return false;}
+ if(section==L"HotKeyOther")return key==L"hko_menu"||key==L"hko_command"||key==L"hko_MinimizeMultiboard";return false;}
 void Reload64(){config64=wht::LoadConfig(ini64);wht::toolEnglish=config64.english;menu64.nextRefresh=0;}
 bool BeginSell64(int selectedSlot=-1){
  if(!(Allowed64()&&!menu64.open&&!macro64.playing&&!macro64.recording&&!dropAllNetwork64.active&&GetForegroundWindow()==window64))return false;
@@ -115,6 +139,7 @@ bool Command64(const std::wstring& text){std::wistringstream in(text);std::wstri
   if(std::wstring(c.section)==L"Language"){const bool english=std::wstring(c.key)==L"English"?value==L"1":value!=L"1";wht::SaveSetting(ini64,L"Language",L"English",english?L"1":L"0");wht::SaveSetting(ini64,L"Language",L"Vietnamese",english?L"0":L"1");}
   else if(!wht::SaveSetting(ini64,c.section,c.key,value))return false;Reload64();return true;}
  if(!authorized64||config64.mode!=wht::RunMode::Local||!ui64)return false;
+ if(cmd==L"#repeat"){std::wstring args;std::getline(in,args);const bool ok=repeatMessage64.Command(args);wht::Log(folder64,ok?"WHT: Repeat updated; #repeat stop cancels.":"WHT: Usage #repeat <1..10000> <text> (1..128 UTF-8 bytes); #repeat stop");return ok;}
  if(cmd==L"#speed"){std::wstring args;std::getline(in,args);const bool ok=wht::SetSpeed131(args);wht::Log(folder64,ok?"WHT: Game Speed "+std::to_string(wht::speedMultiplier131)+"x":"WHT: #speed requires 1..70; clock hooks unavailable or invalid argument.");return ok;}
  if(cmd==L"#tanghinh"||cmd==L"#invis"||cmd==L"#reveal"||cmd==L"#revealinvis"){std::wstring arg,extra;in>>arg;if(in>>extra)return false;wht::FoldCommandName(arg);bool next=!config64.revealInvisible;
   if(arg==L"on"||arg==L"1")next=true;else if(arg==L"off"||arg==L"0")next=false;else if(!arg.empty()&&arg!=L"toggle")return false;
@@ -129,12 +154,28 @@ bool Command64(const std::wstring& text){std::wistringstream in(text);std::wstri
  if(config64.macroEnabled){if(cmd==L"#macroplay"){macro64.Play();return true;}if(cmd==L"#macrostop"){macro64.Stop();return true;}if(cmd==L"#macrorecord"){macro64.Record();return true;}if(cmd==L"#macroscript"){macro64.Edit();return true;}}
  return false;
 }
-void Destroy64(){wht::ResetSpeed131();if(menu64.independentHost&&Identity64(reinterpret_cast<uintptr_t>(menu64.independentHost),profile64->simpleVtable)){
+void Destroy64(){wht::ForgetUiRefresh131();wht::ResetSpeed131();wht::ResetLifeMana131();if(menu64.independentHost&&Identity64(reinterpret_cast<uintptr_t>(menu64.independentHost),profile64->simpleVtable)){
  auto table=*reinterpret_cast<uintptr_t*>(menu64.independentHost);reinterpret_cast<void(*)(void*,unsigned)>(*reinterpret_cast<uintptr_t*>(table+16))(menu64.independentHost,1);}
- menu64.Reset();placements64.clear();status64=nullptr;menuLogged64=false;gameplay64.Reset();hotkeys64.Reset();remap64.Reset();pinned64={};messageTimers64.Reset();resources64.Reset();clock64.Reset();fps64.Reset();quickDrop64={};dropIcon64.Reset();pickIcon64.Reset();sellIcon64.Reset();reveal64.Reset();sellAll64.Reset();autoPick64.Reset();autoPickEnabled64=false;dropAllNetwork64.Reset();skillsIcon64.Reset();allSkills64.Reset();camera64=0;cameraMask64=0;cameraLogged64=false;typed64=false;chat64.clear();macro64.Stop();}
-void Update64(){const auto ui=CurrentUi64();if(ui!=ui64){Destroy64();ui64=ui;}if(!Allowed64())wht::ResetSpeed131();if(!ui)return; if(auto p=wht::RevealProfileFor131(profile64->build)){
+ menu64.Reset();placements64.clear();status64=nullptr;menuLogged64=false;gameplay64.Reset();hotkeys64.Reset();remap64.Reset();quickChatEcho64.Reset();repeatMessage64.Reset();timeOfDay64.Reset();consoleUi64.Reset();blackBar64.Reset();mouseTooltip64.Reset();autoClick64.Reset();pinned64={};messageTimers64.Reset();resources64.Reset();clock64.Reset();matchStart64.Reset();fps64.Reset();quickDrop64={};dropIcon64.Reset();pickIcon64.Reset();sellIcon64.Reset();reveal64.Reset();sellAll64.Reset();autoPick64.Reset();autoPickEnabled64=false;dropAllNetwork64.Reset();skillsIcon64.Reset();allSkills64.Reset();camera64=0;cameraMask64=0;cameraLogged64=false;typed64=false;chat64.clear();macro64.Stop();}
+void PresentGraphics64(){
+ if(wht::uiRefreshOwner131!=ui64||!ui64)return;
+if(config64.lifeManaCommas||config64.lifeManaNoHide||config64.statsCommas||wht::lifeFlags131||!wht::lifeUi131)if(const auto* p=wht::LifeProfileFor131(profile64->build))wht::UpdateLifeMana131(base64,profile64->build,ui64,wht::Component64(ui64,base64,p->portrait),wht::Component64(ui64,base64,profile64->infoVtable),(Allowed64()&&settings64)?((config64.lifeManaCommas?1u:0u)|(config64.lifeManaNoHide?2u:0u)|(config64.statsCommas?4u:0u)):0u,[](uintptr_t unit,bool mana,float& value,float& maximum){float rate=0;return wht::State64(unit,base64,*profile64,mana,value,maximum,rate);},true);
+}
+void PresentBar64(uintptr_t bar){
+ if(!ui64||!menu64.initialized)return;
+ auto raw=api64;raw.setWidth=reinterpret_cast<decltype(raw.setWidth)>(base64+profile64->width);raw.setAbsPoint=reinterpret_cast<decltype(raw.setAbsPoint)>(base64+profile64->absolute);raw.setRelPoint=reinterpret_cast<decltype(raw.setRelPoint)>(base64+profile64->relative);gameplay64.WriteBar(bar,base64,*profile64,config64,Allowed64()&&settings64,raw);
+}
+void Update64(){const auto ui=CurrentUi64();if(ui!=ui64){Destroy64();ui64=ui;}if(!Allowed64()||!settings64)repeatMessage64.Reset();if(!Allowed64())wht::ResetSpeed131();if(!ui)return; wht::InstallUiRefresh131(base64,profile64->build,ui,PresentGraphics64);graphicsDiagnostic64.Update(base64,profile64->build,ui,config64,Allowed64(),folder64,consoleUi64,mouseTooltip64,[&](uintptr_t table){return wht::Component64(ui,base64,table);}); wht::UpdateMatchStart131(matchStart64,base64,profile64->build,ui,Allowed64()&&settings64&&config64.soundStartGame,module64,folder64); if(auto p=wht::RevealProfileFor131(profile64->build)){
   if(reveal64.Update(base64,profile64->build,wht::Component64(ui64,base64,p->worldTable),Allowed64()&&settings64&&config64.revealInvisible)&&!reveal64.reported){reveal64.reported=true;wht::Log(folder64,"WHT: native invisible-unit display enabled.");}
  }
+if(config64.lifeManaCommas||config64.lifeManaNoHide||config64.statsCommas||wht::lifeFlags131||!wht::lifeUi131)if(const auto* p=wht::LifeProfileFor131(profile64->build))wht::UpdateLifeMana131(base64,profile64->build,ui64,wht::Component64(ui64,base64,p->portrait),wht::Component64(ui64,base64,profile64->infoVtable),(Allowed64()&&settings64)?((config64.lifeManaCommas?1u:0u)|(config64.lifeManaNoHide?2u:0u)|(config64.statsCommas?4u:0u)):0u,[](uintptr_t unit,bool mana,float& value,float& maximum){float rate=0;return wht::State64(unit,base64,*profile64,mana,value,maximum,rate);});
+ if(config64.mouseTooltip||mouseTooltip64.active){const auto* tip=wht::MouseTooltipProfileFor131(profile64->build);const auto* console=wht::ConsoleProfileFor131(profile64->build);
+  if(tip&&console)wht::UpdateMouseTooltip131(mouseTooltip64,base64,profile64->build,ui64,wht::Component64(ui64,base64,tip->table),wht::ConsoleComponent131(ui64,base64,console->table),window64,Allowed64()&&settings64&&!menu64.open&&config64.mouseTooltip);
+ }
+ if(config64.hideBlackBar||blackBar64.Active())if(const auto* p=wht::BlackBarProfileFor131(profile64->build))blackBar64.Update(base64,profile64->build,ui64,wht::Component64(ui64,base64,p->worldTable),Allowed64()&&settings64&&config64.hideBlackBar);
+ if(config64.hideConsoleUI||consoleUi64.active)if(const auto* p=wht::ConsoleProfileFor131(profile64->build))consoleUi64.Update(base64,profile64->build,wht::ConsoleComponent131(ui64,base64,p->table),Allowed64()&&settings64&&config64.hideConsoleUI);
+ if(config64.hideTimeOfDay||timeOfDay64.active)if(const auto* p=wht::TimeOfDayProfileFor131(profile64->build))timeOfDay64.Update(base64,profile64->build,wht::Component64(ui64,base64,p->table),Allowed64()&&settings64&&config64.hideTimeOfDay);
+ wht::UpdateAutoClick131(autoClick64,config64,window64,Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&!sellAll64.active&&!dropAllNetwork64.active);
 Camera64();if(!Assets64())return;
  const auto cleared=messageTimers64.Update(base64,ui,profile64->build,config64,Allowed64()&&!typed64,GetTickCount64());
  const auto freshClear=cleared&~messageTimers64.reported;
@@ -149,6 +190,7 @@ Camera64();if(!Assets64())return;
  if(menu64.initialized&&!menuLogged64){menuLogged64=true;wht::Log(folder64,"WHT x64: native eight-tab menu constructed.");}
  if(menu64.initialized&&!status64){status64=wht::NativeCreateFontString(api64,menu64.independentHost,.012f,"",4);if(status64){api64.setWidth(status64,.45f);api64.setHeight(status64,.018f);api64.setAbsPoint(status64,0,.01f,.59f,1);}}
  if(menu64.initialized){auto raw=api64;raw.setWidth=reinterpret_cast<decltype(raw.setWidth)>(base64+profile64->width);raw.setAbsPoint=reinterpret_cast<decltype(raw.setAbsPoint)>(base64+profile64->absolute);raw.setRelPoint=reinterpret_cast<decltype(raw.setRelPoint)>(base64+profile64->relative);
+  wht::statPaintPresentation131=PresentBar64;
   auto observed=gameplay64.Update(base64,ui,*profile64,config64,Allowed64(),menu64,raw);unsigned fresh=observed&~gameplay64.reported;
   if(resources64.Update(base64,profile64->build,Allowed64()&&config64.showResource,GetTickCount64(),menu64,folder64)&&!resources64.reported){resources64.reported=true;wht::Log(folder64,"WHT x64: native resource table displayed.");}
   if(clock64.Update(base64,profile64->build,Allowed64()&&config64.showTimer,menu64)&&!clock64.reported){clock64.reported=true;wht::Log(folder64,"WHT x64: native simulation timer displayed.");}
@@ -181,13 +223,20 @@ Camera64();if(!Assets64())return;
   if(allSkills64.Tick(GetTickCount64(),Allowed64()&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==window64,[&](){return wht::Selected64(ui64,base64,*profile64);},SkillPoints64,SkillData64,ClickSkill64))wht::Log(folder64,"WHT x64: all skills native sequence finished; submitted "+std::to_string(allSkills64.submitted));
   if(fps64.Update(base64,ui,profile64->build,Allowed64(),config64.showFps)&&!fps64.reported){fps64.reported=true;wht::Log(folder64,"WHT x64: native FPS toggle installed.");}
   if(hotkeys64.Due(GetTickCount64(),Allowed64()&&config64.showHotkeyInPanel)&&hotkeys64.Update(Allowed64()&&config64.showHotkeyInPanel,menu64,[&](unsigned slot){return wht::Button64(ui,base64,*profile64,slot);},&config64,(Allowed64()&&config64.showHotkeyInPanel)?InventoryMask64(true):0,(Allowed64()&&config64.showHotkeyInPanel)?AlternatePanel64():false)&&!hotkeys64.reported){hotkeys64.reported=true;wht::Log(folder64,"WHT x64: native panel hotkey labels displayed.");}
-  for(auto entry:{std::pair<unsigned,const char*>{1,"selected-unit HP/s MP/s"},{2,"cooldown seconds"},{4,"native mana bar"},{8,"HP/Mana values"},{16,"hero level"}})if(fresh&entry.first)wht::Log(folder64,std::string("WHT x64: live ")+entry.second+" displayed.");gameplay64.reported|=observed;
+  for(auto entry:{std::pair<unsigned,const char*>{1,"selected-unit HP/s MP/s"},{2,"cooldown seconds"},{8,"HP/Mana values"},{16,"hero level"}})if(fresh&entry.first)wht::Log(folder64,std::string("WHT x64: live ")+entry.second+" displayed.");gameplay64.reported|=observed;
  }
  if(status64){std::string text="|cffffcc00WHT " WHT_VERSION_STRING " | 1.31.1."+std::to_string(profile64->build)+" x64|r";if(!authorized64)text+=" |cffff4444Login LoadFileMapWar3|r";else if(config64.showMem){float mb=0,percent=0;if(wht::GetCurrentProcessMemoryUsage(mb,percent))text+=" | "+std::to_string(int(mb))+" MB";}api64.setText(status64,text.c_str());}
+ repeatMessage64.Tick(Allowed64()&&settings64,!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&GetForegroundWindow()==window64,GetTickCount64(),SendChat64);
  menu64.PlaybackVisual(macro64.playing);macro64.Tick(Allowed64()&&!typed64&&!menu64.open);
 }
 void Safe64(){__try{Update64();}__except(1){menu64.failed=true;}}
+bool SendChat64(const std::string& text){
+ __try{return wht::SendQuickChat131(text,wht::QuickChatNative131(base64,profile64->build),[](wht::QuickChatView131& out){const auto ui=CurrentUi64();return ui&&ui==ui64&&wht::ReadQuickChat131(base64,profile64->build,ui,out);});}__except(1){return false;}
+}
 LRESULT CALLBACK Window64(HWND hwnd,UINT message,WPARAM key,LPARAM value){if(message==update64){Safe64();return 0;}
+ if(message==WM_KILLFOCUS)quickChatEcho64.Reset();
+ if(message==WM_KEYDOWN&&!(value&(1LL<<30)))quickChatEcho64.Reset();
+ if(message==WM_CHAR&&quickChatEcho64.Character(value,GetTickCount64()))return 0;
  if((message==WM_KEYUP||message==WM_SYSKEYUP)&&remap64.Input(message,unsigned(key),false,false,false,config64,[](unsigned){return false;}))return 0;
  {RECT rect{};GetClientRect(hwnd,&rect);
  if(skillsIcon64.Mouse(message,{short(LOWORD(value)),short(HIWORD(value))},rect.right,rect.bottom,Allowed64()&&config64.showInsAllSkills&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==hwnd,[&](){
@@ -223,6 +272,15 @@ LRESULT CALLBACK Window64(HWND hwnd,UINT message,WPARAM key,LPARAM value){if(mes
   if(Allowed64()&&!typed64&&!repeat&&!menu64.open&&key==VK_TAB&&config64.showResource&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){resources64.Toggle();return 0;}
   if(Allowed64()&&!typed64&&!repeat){if(key==config64.commandKey){settings64=!settings64;Camera64();return 0;}
    bool chord=(GetKeyState(VK_CONTROL)&0x8000)&&(GetKeyState(VK_SHIFT)&0x8000);if(config64.macroEnabled){if(key==config64.macroKeys[0]||(chord&&key==VK_F10)){macro64.Play();return 0;}if(key==config64.macroKeys[1]||(chord&&key==VK_F12)){macro64.Stop();return 0;}if(key==config64.macroKeys[2]||(chord&&key==VK_F9)){macro64.Record();return 0;}if(key==config64.macroKeys[3]||(chord&&key==VK_F11)){macro64.Edit();return 0;}}}}
+ if(message==WM_KEYDOWN&&!(value&(1LL<<30))&&key&&key==config64.multiboardKey&&Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&GetForegroundWindow()==window64&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+  const auto* p=wht::MultiboardProfileFor131(profile64->build);
+  if(p&&wht::ToggleMultiboard131(base64,profile64->build,wht::Component64(ui64,base64,p->table))){if(key<256)remap64.pressed[key]=true;return 0;}
+ }
+ if(message==WM_KEYDOWN&&!(value&(1LL<<30))&&Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&GetForegroundWindow()==window64&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+  const int slot=wht::HeroKeySlot131(unsigned(key),config64);const auto* p=wht::HeroProfileFor131(profile64->build);
+  if(slot>=0&&p&&wht::ClickHero131(base64,profile64->build,wht::Component64(ui64,base64,p->bar),unsigned(slot))){if(key<256)remap64.pressed[key]=true;return 0;}
+ }
+ if(message==WM_KEYDOWN&&!(value&(1LL<<30))&&Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&GetForegroundWindow()==window64&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)&&autoClick64.Key(unsigned(key),config64)){if(key<256)remap64.pressed[key]=true;wht::Log(folder64,std::string("WHT: Auto Click ")+(key==config64.autoClickLeftKey?"Left: ":"Right: ")+((key==config64.autoClickLeftKey?autoClick64.left:autoClick64.right)?"ON":"OFF"));return 0;}
  if(message==WM_KEYDOWN&&!(value&(1LL<<30))&&key&&key==config64.sellFastKey&&Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&GetForegroundWindow()==hwnd&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
   if(SellHovered64()){if(key<256)remap64.pressed[key]=true;return 0;}
  }
@@ -245,9 +303,11 @@ LRESULT CALLBACK Window64(HWND hwnd,UINT message,WPARAM key,LPARAM value){if(mes
   }
   return wht::ActivateQuickCast131(binding.quickCast,target,[&](){return ClickSkill64(slot);},[&](uintptr_t mode){return wht::QuickCastCursor131(hwnd,mode,target);});
  },AlternatePanel64,LearnSlot64))return 0;
+ if(message==WM_KEYDOWN&&wht::QuickChatKey131(unsigned(key),bool(value&(1LL<<30)),Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&GetForegroundWindow()==hwnd,(GetKeyState(VK_CONTROL)&0x8000)||(GetKeyState(VK_SHIFT)&0x8000)||(GetKeyState(VK_MENU)&0x8000),config64,SendChat64)){remap64.pressed[key]=true;quickChatEcho64.Sent(value,GetTickCount64());return 0;}
  if(message==WM_CHAR){wchar_t ch=wchar_t(key);if(ch==L'#'){typed64=true;chat64=L"#";}else if(typed64){if(ch==8){if(!chat64.empty())chat64.pop_back();}else if(ch>=32&&chat64.size()<1024)chat64+=ch;}}
  if(message==WM_LBUTTONDOWN||message==WM_LBUTTONUP||message==WM_LBUTTONDBLCLK){POINT p{short(LOWORD(value)),short(HIWORD(value))};RECT r{};GetClientRect(hwnd,&r);if(menu64.Mouse(message,p,r.right,r.bottom,Command64,&config64))return 0;}
- MSG msg{hwnd,message,key,value};macro64.Capture(msg,!menu64.open&&!typed64);return CallWindowProcW(previous64,hwnd,message,key,value);}
+ MSG msg{hwnd,message,key,value};macro64.Capture(msg,!menu64.open&&!typed64);const auto result=CallWindowProcW(previous64,hwnd,message,key,value);
+ return result;}
 BOOL CALLBACK FindWindow64(HWND hwnd,LPARAM){DWORD pid=0;GetWindowThreadProcessId(hwnd,&pid);if(pid==GetCurrentProcessId()&&IsWindowVisible(hwnd)&&!GetWindow(hwnd,GW_OWNER)){window64=hwnd;return FALSE;}return TRUE;}
 DWORD WINAPI Auth64(void*){while(true){auto identity=wht::VerifySession(folder64);{std::lock_guard<std::mutex> guard(wht::sessionMutex);wht::sessionIdentity=identity;}authorized64=!identity.username.empty()&&wht::SessionReady()&&!wht::StartupUpdatePending();Sleep(5000);}return 0;}
 DWORD WINAPI Install64(void* module){module64=static_cast<HMODULE>(module);wchar_t path[32768]{};GetModuleFileNameW(module64,path,32768);folder64=std::filesystem::path(path).parent_path().wstring();ini64=folder64+L"\\WHT.ini";GetModuleFileNameW(nullptr,path,32768);profile64=wht::FindProfile64(wht::HashFile(path));if(!profile64)return 1;base64=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));Reload64();api64=Api64();menu64.controlAvailable=Control64;

@@ -1,0 +1,70 @@
+[
+  {
+    "architecture": "x86",
+    "build": 12164,
+    "helper": "0xb812a0",
+    "innerReturn": "0xb8134b",
+    "setter": "0xdfe830",
+    "callers": {
+      "damage": "0xb7ff05",
+      "armor": "0xb7f27f",
+      "strength": "0xb80785",
+      "agility": "0xb80814",
+      "intelligence": "0xb808aa"
+    },
+    "outerReturnOffset": "0x218",
+    "stackDerivation": "push EBP + local 0x204 + EBX/EDI + text argument + inner return; temporary ESI popped before call",
+    "verified": "memory image prologue and six direct CALL targets; not a live visual test"
+  },
+  {
+    "architecture": "x86",
+    "build": 12173,
+    "helper": "0xb40ea0",
+    "innerReturn": "0xb40f4b",
+    "setter": "0xdbd630",
+    "callers": {
+      "damage": "0xb3fb05",
+      "armor": "0xb3ee7f",
+      "strength": "0xb40385",
+      "agility": "0xb40414",
+      "intelligence": "0xb404aa"
+    },
+    "outerReturnOffset": "0x218",
+    "stackDerivation": "push EBP + local 0x204 + EBX/EDI + text argument + inner return; temporary ESI popped before call",
+    "verified": "memory image prologue and six direct CALL targets; not a live visual test"
+  },
+  {
+    "architecture": "x64",
+    "build": 12164,
+    "helper": "0xcdb8e0",
+    "innerReturn": "0xcdb99f",
+    "setter": "0xfb9660",
+    "callers": {
+      "damage": "0xcd9cc8",
+      "armor": "0xcd8e52",
+      "strength": "0xcda9a1",
+      "agility": "0xcdaa27",
+      "intelligence": "0xcdaab5"
+    },
+    "outerReturnOffset": "0x240",
+    "stackDerivation": "push RDI + local 0x230 + inner return",
+    "verified": "memory image prologue and six direct CALL targets; not a live visual test"
+  },
+  {
+    "architecture": "x64",
+    "build": 12173,
+    "helper": "0xd1b490",
+    "innerReturn": "0xd1b54f",
+    "setter": "0xff61d0",
+    "callers": {
+      "damage": "0xd19878",
+      "armor": "0xd18a02",
+      "strength": "0xd1a551",
+      "agility": "0xd1a5d7",
+      "intelligence": "0xd1a665"
+    },
+    "outerReturnOffset": "0x240",
+    "stackDerivation": "push RDI + local 0x230 + inner return",
+    "verified": "memory image prologue and six direct CALL targets; not a live visual test"
+  }
+]

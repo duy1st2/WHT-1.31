@@ -1,0 +1,64 @@
+{
+  "pid": 26304,
+  "build": 12164,
+  "architecture": 32,
+  "nativeHpRoots": 21,
+  "nestedStatBars": [],
+  "valueHosts": [
+    {
+      "frame": "0x2aac5808",
+      "parent": "0x2aab9608",
+      "visibility": "0100"
+    },
+    {
+      "frame": "0x2aac5a08",
+      "parent": "0x2aabd208",
+      "visibility": "0101"
+    },
+    {
+      "frame": "0x29c7a608",
+      "parent": "0x22d63408",
+      "visibility": "0100"
+    },
+    {
+      "frame": "0x2aa81008",
+      "parent": "0x2aaba208",
+      "visibility": "0100"
+    },
+    {
+      "frame": "0x2aa81208",
+      "parent": "0x22d62208",
+      "visibility": "0100"
+    },
+    {
+      "frame": "0x2a8cbc08",
+      "parent": "0x2a7afe08",
+      "visibility": "0100"
+    },
+    {
+      "frame": "0x2a7bee08",
+      "parent": "0x2aabb608",
+      "visibility": "0100"
+    },
+    {
+      "frame": "0x29c73808",
+      "parent": "0x21a74008",
+      "visibility": "0100"
+    },
+    {
+      "frame": "0x2a8c0208",
+      "parent": "0x2aabc808",
+      "visibility": "0100"
+    },
+    {
+      "frame": "0x2ab19608",
+      "parent": "0x2aab1608",
+      "visibility": "0100"
+    },
+    {
+      "frame": "0x2aae1a08",
+      "parent": "0x22d63e08",
+      "visibility": "0100"
+    }
+  ]
+}

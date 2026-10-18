@@ -1,0 +1,42 @@
+[
+  {
+    "build": 12164,
+    "architecture": 32,
+    "uiTable": "0x18240a0",
+    "worldTable": "0x1825828",
+    "relativeAnchorTable": "0x1856104",
+    "setPoint": "0xdfb030",
+    "layoutInstruction": "0xaf35f0",
+    "layoutOffset": "0xbc"
+  },
+  {
+    "build": 12173,
+    "architecture": 32,
+    "uiTable": "0x17d8f80",
+    "worldTable": "0x17da708",
+    "relativeAnchorTable": "0x180b024",
+    "setPoint": "0xdb9e30",
+    "layoutInstruction": "0xab2591",
+    "layoutOffset": "0xbc"
+  },
+  {
+    "build": 12164,
+    "architecture": 64,
+    "uiTable": "0x1c00ec0",
+    "worldTable": "0x1c03a08",
+    "relativeAnchorTable": "0x1c5dc18",
+    "setPoint": "0xfb5a70",
+    "layoutInstruction": "0xc3c213",
+    "layoutOffset": "0x158"
+  },
+  {
+    "build": 12173,
+    "architecture": 64,
+    "uiTable": "0x1c2fd78",
+    "worldTable": "0x1c328c0",
+    "relativeAnchorTable": "0x1c8cb28",
+    "setPoint": "0xff25e0",
+    "layoutInstruction": "0xc82aa3",
+    "layoutOffset": "0x158"
+  }
+]

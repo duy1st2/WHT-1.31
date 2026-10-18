@@ -67,11 +67,11 @@ struct Config {
     // Group 1: HPBar, ManaBar, StateTag & Dimensions
     uint32_t hpBarColor=0xFF32CD32;
     uint32_t hpBarColorEnemy=0xFFFF4242;
-    bool manaBarEnable=true;
+    bool manaBarEnable=false;
     uint32_t manaBarColor=0xFF08FCDC;
     uint32_t manaBarColorEnemy=0xFF47B9FF;
-    bool manaBarHero=true;
-    bool manaBarNonHero=true;
+    bool manaBarHero=false;
+    bool manaBarNonHero=false;
     bool stateTagEnable=false;
     bool stateTagHero=true;
     bool stateTagNonHero=true;

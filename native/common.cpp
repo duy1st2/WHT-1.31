@@ -176,14 +176,11 @@ Config LoadConfig(const std::wstring& ini) {
     c.vertexColor=Read(ini,L"Graphics",L"VertexColor",L"0")==L"1";
     c.colorPlayer=Read(ini,L"Graphics",L"Color Player",L"0")==L"1";
     c.hideInvulnerableBars=Read(ini,L"Graphics",L"BarInvul",L"0")==L"1";
-    // Group 1: HPBar, ManaBar, StateTag & Dimensions
+    // Mana bars were removed from the 1.31 port at the user's request.
+    c.manaBarEnable=c.manaBarHero=c.manaBarNonHero=false;
+    // Group 1: HPBar, StateTag & Dimensions
     c.hpBarColor=ParseHexColor(Read(ini,L"HPBar",L"Color",L"0xFF32CD32"),0xFF32CD32);
     c.hpBarColorEnemy=ParseHexColor(Read(ini,L"HPBar",L"Color Enemy",L"0xFFff4242"),0xFFFF4242);
-    c.manaBarEnable=Read(ini,L"ManaBar",L"Enable",L"1")==L"1";
-    c.manaBarColor=ParseHexColor(Read(ini,L"ManaBar",L"Color",L"0xFF08fcdc"),0xFF08FCDC);
-    c.manaBarColorEnemy=ParseHexColor(Read(ini,L"ManaBar",L"Color Enemy",L"0xFF47b9ff"),0xFF47B9FF);
-    c.manaBarHero=Read(ini,L"ManaBar",L"EnableForHero",L"1")==L"1";
-    c.manaBarNonHero=Read(ini,L"ManaBar",L"EnableForNonHero",L"1")==L"1";
     c.stateTagEnable=Read(ini,L"StateTag",L"Enable",L"0")==L"1";
     c.stateTagHero=Read(ini,L"StateTag",L"EnableForHero",L"1")==L"1";
     c.stateTagNonHero=Read(ini,L"StateTag",L"EnableForNonHero",L"1")==L"1";

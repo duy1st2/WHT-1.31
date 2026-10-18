@@ -1,3 +1,16 @@
+#include "component_lookup131.hpp"
+#include "match_start131.hpp"
+#include "stats_labels131.hpp"
+#include "life_labels131.hpp"
+#include "hp_player_color131.hpp"
+#include "invulnerable_bar131.hpp"
+#include "mouse_tooltip131.hpp"
+#include "black_bar131.hpp"
+#include "console_ui131.hpp"
+#include "time_of_day131.hpp"
+#include "multiboard131.hpp"
+#include "hero_keys131.hpp"
+#include "auto_click131.hpp"
 #include "learn_slot131.hpp"
 #include "target_cast131.hpp"
 #include "self_cast131.hpp"
@@ -44,7 +57,64 @@ void __fastcall PriorityTestPoint(void* RESOURCE_TEST_EDX,int,float,float,int){}
 #include "auto-pick131-contracts.hpp"
 #include "sell-all131-contracts.hpp"
 #include "reveal131-contracts.hpp"
+#include "hero-keys131-contracts.hpp"
+#include "multiboard131-contracts.hpp"
+#include "time-of-day131-contracts.hpp"
+#include "console-ui131-contracts.hpp"
+#include "black-bar131-contracts.hpp"
+#include "mouse-tooltip131-contracts.hpp"
+#include "invulnerable-bar131-contracts.hpp"
+#include "hp-player-color131-contracts.hpp"
+#include "life-labels131-contracts.hpp"
+#include "stats-labels131-contracts.hpp"
+#include "graphics-repair131-contracts.hpp"
+#include "quick-chat131-contracts.hpp"
+#include "repeat-message131-contracts.hpp"
 int main(){try{
+ CheckGraphicsRepair131();
+ CheckQuickChat131();
+ CheckRepeatMessage131();
+ CheckStatsLabels131();
+ {wht::ComponentLookup131 lookup;alignas(uintptr_t) uintptr_t ui[32]{},a[2]{},b[2]{};const uintptr_t base=0x100000,table=0x1234;a[0]=b[0]=base+table;
+ ui[1]=1;ui[2]=0x12345;ui[3]=~uintptr_t(0);ui[9]=reinterpret_cast<uintptr_t>(a);
+ auto root=reinterpret_cast<uintptr_t>(ui);
+ check(lookup.Find(root,base,table,sizeof(ui),0)==reinterpret_cast<uintptr_t>(a),"component discovery skips scalar fields without faults");
+ ui[9]=reinterpret_cast<uintptr_t>(b);check(lookup.Find(root,base,table,sizeof(ui),1)==reinterpret_cast<uintptr_t>(b),"cached slot reads current object");
+ ui[9]=0;check(!lookup.Find(root,base,table,sizeof(ui),2),"destroyed component rejected");ui[10]=reinterpret_cast<uintptr_t>(a);
+ check(!lookup.Find(root,base,table,sizeof(ui),3)&&lookup.Find(root,base,table,sizeof(ui),252)==reinterpret_cast<uintptr_t>(a),"missing component discovery throttled then retried");
+ check(!wht::ReadableComponent131(1,8)&&!wht::ReadableComponent131(~uintptr_t(0),8),"invalid memory ranges rejected");}
+
+ {wht::MatchStart131 sound;
+ check(!sound.Observe(1,false,0,true),"sound waits for verified clock");
+ check(sound.Observe(1,true,0,true),"sound at match start");
+ check(!sound.Observe(1,true,1,true),"sound only once");
+ sound.Reset();check(!sound.Observe(1,true,0,false)&&!sound.Observe(1,true,1,true),"enable mid-match remains silent");
+ check(!sound.Observe(2,true,5.01,true),"late attachment silent");
+ check(sound.Observe(3,true,5,true),"new match and boundary");
+ sound.Reset();check(!sound.Observe(0,true,0,true),"no UI no sound");}
+
+ CheckLifeLabels131();
+ CheckHpPlayerColor131();
+ CheckInvulnerableBars131();
+ CheckMouseTooltip131();
+ CheckBlackBar131();
+ CheckConsoleUi131();
+ CheckTimeOfDay131();
+ CheckMultiboard131();
+ CheckHeroKeys131();
+ {wht::AutoClick131 click;wht::Config c;c.autoClickLeftKey='L';c.autoClickRightKey='R';c.autoClickInterval=20;
+ check(!click.Key(0,c)&&!click.Key('X',c),"only configured click toggles");
+ check(click.Key('L',c)&&click.left&&!click.right,"left toggle");
+ std::vector<std::pair<UINT,WPARAM>> events;auto send=[&](UINT m,WPARAM k){events.emplace_back(m,k);};
+ click.Tick(c,true,100,send);check(events.size()==2&&events[0]==std::make_pair(UINT(WM_LBUTTONDOWN),WPARAM(MK_LBUTTON))&&events[1]==std::make_pair(UINT(WM_LBUTTONUP),WPARAM(0)),"paired left click");
+ click.Tick(c,true,119,send);check(events.size()==2,"cadence prevents hot-loop bursts");
+ click.Key('R',c);click.Tick(c,false,120,send);check(events.size()==2&&click.left&&click.right,"pause preserves toggles without input");
+ click.Tick(c,true,121,send);check(events.size()==6&&events[4].first==WM_RBUTTONDOWN&&events[5].first==WM_RBUTTONUP,"resume both buttons");
+ click.Key('L',c);click.Key('R',c);click.Tick(c,true,200,send);check(events.size()==6,"both off stops messages");
+ c.autoClickInterval=0;click.Key('R',c);click.Tick(c,true,300,send);check(click.due==305,"lower cadence bound");
+ c.autoClickInterval=2000;click.Tick(c,true,305,send);check(click.due==1305,"upper cadence bound");
+ click.Reset();check(!click.left&&!click.right&&!click.due,"new match resets toggles");}
+
 
  CheckReveal131();
  CheckSellAll131();

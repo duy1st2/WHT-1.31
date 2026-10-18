@@ -1,0 +1,162 @@
+{
+  "pid": 26304,
+  "build": 12164,
+  "architecture": 32,
+  "consoles": [
+    {
+      "offset": "0x46c",
+      "visibility": "0101"
+    },
+    {
+      "offset": "0x474",
+      "visibility": "0101"
+    }
+  ],
+  "HP": "",
+  "MP": "",
+  "frames": 600,
+  "boundBars": [
+    {
+      "bar": 564609032,
+      "unit": 359154064,
+      "owner": 27,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x60e",
+      "gated": true,
+      "texture": 564609544
+    },
+    {
+      "bar": 584458760,
+      "unit": 359154064,
+      "owner": 27,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x60e",
+      "gated": true,
+      "texture": 584459272
+    },
+    {
+      "bar": 584463368,
+      "unit": 359109300,
+      "owner": 24,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x1646",
+      "gated": true,
+      "texture": 584463880
+    },
+    {
+      "bar": 584465928,
+      "unit": 359120852,
+      "owner": 27,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x1446",
+      "gated": true,
+      "texture": 564625416
+    },
+    {
+      "bar": 712703496,
+      "unit": 359154064,
+      "owner": 27,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x60e",
+      "gated": true,
+      "texture": 712683272
+    },
+    {
+      "bar": 715855368,
+      "unit": 359154064,
+      "owner": 27,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x60e",
+      "gated": true,
+      "texture": 715855880
+    },
+    {
+      "bar": 715888136,
+      "unit": 359120852,
+      "owner": 27,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x1446",
+      "gated": true,
+      "texture": 715888904
+    },
+    {
+      "bar": 715891208,
+      "unit": 359120852,
+      "owner": 27,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x1446",
+      "gated": true,
+      "texture": 715891720
+    },
+    {
+      "bar": 715893768,
+      "unit": 359120852,
+      "owner": 27,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x1446",
+      "gated": true,
+      "texture": 715894280
+    },
+    {
+      "bar": 715896328,
+      "unit": 359154064,
+      "owner": 27,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x60e",
+      "gated": true,
+      "texture": 715897096
+    },
+    {
+      "bar": 715900936,
+      "unit": 359154064,
+      "owner": 27,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x60e",
+      "gated": true,
+      "texture": 715901704
+    },
+    {
+      "bar": 715903496,
+      "unit": 359109300,
+      "owner": 24,
+      "textureABGR": "ff01fcff",
+      "visibility": "0101",
+      "unitFlags": "0x1646",
+      "gated": true,
+      "texture": 715904264
+    }
+  ],
+  "colorSamples": [
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff"
+  ]
+}

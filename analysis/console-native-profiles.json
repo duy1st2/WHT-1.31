@@ -1,0 +1,50 @@
+[
+  {
+    "build": 12164,
+    "architecture": 32,
+    "table": "0x182d714",
+    "rtti": ".?AVCSimpleConsole@@",
+    "show": "0xdfff60",
+    "hide": "0xdff850",
+    "requestedCheckOffset": "0x50",
+    "attachedSetOffset": "0xb3",
+    "requestedByte": "0x9c",
+    "attachedByte": "0x9d"
+  },
+  {
+    "build": 12173,
+    "architecture": 32,
+    "table": "0x17e25f4",
+    "rtti": ".?AVCSimpleConsole@@",
+    "show": "0xdbed60",
+    "hide": "0xdbe650",
+    "requestedCheckOffset": "0x21",
+    "attachedSetOffset": "0x84",
+    "requestedByte": "0x9c",
+    "attachedByte": "0x9d"
+  },
+  {
+    "build": 12164,
+    "architecture": 64,
+    "table": "0x1c13208",
+    "rtti": ".?AVCSimpleConsole@@",
+    "show": "0xfbb160",
+    "hide": "0xfba8d0",
+    "requestedCheckOffset": "0x34",
+    "attachedSetOffset": "0xd8",
+    "requestedByte": "0xf0",
+    "attachedByte": "0xf1"
+  },
+  {
+    "build": 12173,
+    "architecture": 64,
+    "table": "0x1c420c8",
+    "rtti": ".?AVCSimpleConsole@@",
+    "show": "0xff7cd0",
+    "hide": "0xff7440",
+    "requestedCheckOffset": "0x71",
+    "attachedSetOffset": "0x115",
+    "requestedByte": "0xf0",
+    "attachedByte": "0xf1"
+  }
+]

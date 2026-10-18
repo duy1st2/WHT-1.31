@@ -1,4 +1,5 @@
 #pragma once
+#include "component_lookup131.hpp"
 #include <windows.h>
 #include <cstdint>
 #include <cstring>
@@ -20,7 +21,7 @@ inline uintptr_t QuickCastTarget131(uintptr_t base,uintptr_t ui,uintptr_t uiTabl
   const unsigned char comparison[]={0x8b,0x81,0xc4,1,0,0,0x3b,0x81,0x48,2,0,0};
   constexpr uintptr_t currentOffset=0x1c4,targetOffset=0x248;
 #endif
-  if(memcmp(reinterpret_cast<void*>(base+p.compare),comparison,sizeof(comparison))||*reinterpret_cast<uintptr_t*>(ui)!=base+uiTable)return 0;
+  if(memcmp(reinterpret_cast<void*>(base+p.compare),comparison,sizeof(comparison))||!ComponentIdentity131(ui,base+uiTable))return 0;
   const auto current=*reinterpret_cast<uintptr_t*>(ui+currentOffset);
   if(!current||current!=*reinterpret_cast<uintptr_t*>(ui+targetOffset)||*reinterpret_cast<uintptr_t*>(current)!=base+p.targetTable)return 0;
   return current;

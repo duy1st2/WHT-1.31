@@ -39,13 +39,14 @@ inline bool CameraCommand131(const std::wstring& text,int& field,float& value){
 }
 inline bool ControlAvailable131(const ToolMenuControl& d){
  const std::wstring section=d.section,key=d.key;
+ if(section==L"Graphics"&&(key==L"timeOfDayUI"||key==L"ConsoleUI"||key==L"BlackBarUI"||key==L"MouseTooltipUI"||key==L"BarInvul"||key==L"Color Player"||key==L"Text Life/Mana Commas"||key==L"Text Life/Mana No Hide"||key==L"Text Stats Commas"))return true;
+ if(section==L"Quick Chat")return true;
  if(section==L"DelayClear"||section==L"Language"||section==L"MacroRecorder")return true;
- if(section==L"ManaBar")return key==L"Enable"||key==L"EnableForHero"||key==L"EnableForNonHero";
  if(section==L"StateTag")return true;
- if(section==L"Event")return key==L"Camera"||key==L"FogZ"||key==L"Show Mem"||key==L"ShowCooldown"||key==L"ShowRegenHP"||key==L"ShowRegenMana"||key==L"Show Hotkey In Panel"||key==L"Show Resource"||key==L"Show Timer"||key==L"Show FPS"||key==L"Quick Drop Item"||key==L"Reveal Invisibles"||key==L"Show Sell All"||key==L"Show Auto Pick"||key==L"Show Drop All"||key==L"Show Ins All Skills";
- if(section==L"HotKeyHero"&&(key==L"SetIdTarget"||key==L"SellFast"))return true;
+ if(section==L"Event")return key==L"Camera"||key==L"FogZ"||key==L"Show Mem"||key==L"ShowCooldown"||key==L"ShowRegenHP"||key==L"ShowRegenMana"||key==L"Show Hotkey In Panel"||key==L"Show Resource"||key==L"Show Timer"||key==L"Show FPS"||key==L"Sound Start Game"||key==L"Quick Drop Item"||key==L"Reveal Invisibles"||key==L"Show Sell All"||key==L"Show Auto Pick"||key==L"Show Drop All"||key==L"Show Ins All Skills";
+ if(section==L"HotKeyHero"&&(key==L"SetIdTarget"||key==L"SellFast"||key==L"AutoClickLeft"||key==L"AutoClickRight"||key.rfind(L"HeroF",0)==0))return true;
  if(RemapControl131(section,key))return true;
- if(section==L"HotKeyOther")return key==L"hko_menu"||key==L"hko_command";
+ if(section==L"HotKeyOther")return key==L"hko_menu"||key==L"hko_command"||key==L"hko_MinimizeMultiboard";
  return false;
 }
 using CameraSetter131=void(__thiscall*)(uintptr_t,int,float,float,int);

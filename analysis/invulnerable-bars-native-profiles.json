@@ -1,0 +1,58 @@
+[
+  {
+    "build": 12164,
+    "architecture": 32,
+    "abilityTable": "0x17891d4",
+    "abilityRTTI": ".?AVCAbilityInvulnerable@@",
+    "onAdd": "0x507d30",
+    "nativeUnitAddInvulnerability": "0xbadd00",
+    "readOnlyFlagEvidence": "0xbadd15",
+    "opcode": "834e2008",
+    "barTable": "0x182e5fc",
+    "unitTable": "0x182eeb0",
+    "flagsOffset": "0x20",
+    "visibility": "native show/hide; requested byte unchanged"
+  },
+  {
+    "build": 12173,
+    "architecture": 32,
+    "abilityTable": "0x173e204",
+    "abilityRTTI": ".?AVCAbilityInvulnerable@@",
+    "onAdd": "0x4defd0",
+    "nativeUnitAddInvulnerability": "0xb6d1a0",
+    "readOnlyFlagEvidence": "0xb6d1b5",
+    "opcode": "834e2008",
+    "barTable": "0x17e34dc",
+    "unitTable": "0x17e3d90",
+    "flagsOffset": "0x20",
+    "visibility": "native show/hide; requested byte unchanged"
+  },
+  {
+    "build": 12164,
+    "architecture": 64,
+    "abilityTable": "0x1aa6e70",
+    "abilityRTTI": ".?AVCAbilityInvulnerable@@",
+    "onAdd": "0x59a0c0",
+    "nativeUnitAddInvulnerability": "0xd0ba10",
+    "readOnlyFlagEvidence": "0xd0ba28",
+    "opcode": "83493808",
+    "barTable": "0x1c14f08",
+    "unitTable": "0x1c16140",
+    "flagsOffset": "0x38",
+    "visibility": "native show/hide; requested byte unchanged"
+  },
+  {
+    "build": 12173,
+    "architecture": 64,
+    "abilityTable": "0x1ad5e70",
+    "abilityRTTI": ".?AVCAbilityInvulnerable@@",
+    "onAdd": "0x5fd5c0",
+    "nativeUnitAddInvulnerability": "0xd4a4b0",
+    "readOnlyFlagEvidence": "0xd4a4c8",
+    "opcode": "83493808",
+    "barTable": "0x1c43dc8",
+    "unitTable": "0x1c45000",
+    "flagsOffset": "0x38",
+    "visibility": "native show/hide; requested byte unchanged"
+  }
+]

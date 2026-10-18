@@ -1,0 +1,368 @@
+[Runtime]
+Mode=local
+Enabled=1
+
+[License]
+Server=http://127.0.0.1:5187
+Key=
+
+[Event]
+; D3D8 ambient grayscale 1..255; 0 keeps/restores engine ownership (not gamma).
+Light=0
+; Remove visual scene fog only; does not reveal fog of war. #nfe toggles.
+Remove Fog Effect=0
+; Alert when enemy player clicks / selects units in Fog of War. #fc toggles.
+Fog Click=0
+; Notification when player is kicked or banned. #hn toggles.
+Show Noti Kick/Ban=1
+; Notification & file logging when a player saves the game. #csave toggles.
+Noti/Log Info Players Save Game=0
+; Original ETS sound, once on the next match-start event; disabled by default.
+Sound Start Game=0
+; Use Warcraft's existing FPS display (not the ETS custom overlay).
+Show FPS=1
+; Native Warcraft resource table. Requires WHTResource.mpq; Tab collapses/expands.
+Show Resource=1
+; Imported native overlays. Existing user INI files are not rewritten during merge.
+Show Hotkey In Panel=1
+ShowCooldown=1
+Show Timer=1
+ShowRegenHP=1
+ShowRegenMana=1
+; Quick Drop Item (Shift+RightClick on inventory item)
+Quick Drop Item=1
+; Auto Pick Items nearby (scan radius 350, issues smart order)
+Auto Pick Item=0
+; HUD Action Toolbar (Buttons beside inventory: Pick, Drop All, Sell All, All Skills)
+Show Auto Pick=1
+Show Drop All=1
+Show Sell All=1
+Show Ins All Skills=1
+; Speeds up glue-menu animation; disabled by default in this rebuild.
+Fast Menu=0
+; Hide/Disable Option Menu (F10 in-game menu). #menu toggles.
+Hide Option Menu=0
+; ModeCast: 0 = Quick Cast, 1 = Smart Cast, 2 = Quick Cast Old. #mc toggles.
+ModeCast=0
+Camera=2800
+FogZ=20000
+WideScreen=0
+Local Game Delay Reducer=100
+Lan Game Delay Reducer=100
+Net Game Delay Reducer=250
+Delay Start Game=6
+Unlock Map Size=1
+; Load loose files in game directory before MPQ archives (models, UI, textures).
+Allow Local Files=0
+; Fast Jass: optimizes and accelerates JASS execution in Warcraft III. #fastjass toggles.
+Fast Jass=1
+; Custom / Fake player name in-game and lobby. Commands: #name <new> / #n <new>
+OLDNames=
+NewNames=
+OLDNames_Ex=
+NewNames_Ex=
+NameCreate=
+; Load extra DLLs on startup (comma-separated list, e.g. custom.dll,hook.dll). Command: #loaddll <dll>
+LoadDll=
+; Load extra MPQ archives on startup (comma-separated list, e.g. CustomUI.mpq). Command: #loadmpq <mpq>
+LoadMPQ=
+; Custom terrain rawcode applied across entire map on match start (e.g. Ldrt, Yblm). Command: #codenen <rawcode>
+code_nen=
+Keyboard Scroll Speed=100
+Mouse Scroll Speed=100
+whp=0.000000
+wmp=0.000000
+hhp=0.000000
+hmp=0.000000
+Show Mem=1
+Reveal Invisibles=1
+
+[HPBar]
+Color=0xFF32CD32
+Color Enemy=0xFFff4242
+
+[ManaBar]
+Enable=1
+Color=0xFF00fcf8
+Color Enemy=0xFF47b9ff
+EnableForHero=1
+EnableForNonHero=1
+
+[StateTag]
+Enable=1
+EnableForHero=1
+EnableForNonHero=1
+ShowMaxValues=1
+ShowHpValue=1
+ShowManaValue=1
+FontSize=4.0000
+ShowLevelHero=1
+
+[Graphics]
+; Hide existing overhead HP/Mana frame while native Invulnerable flag is set.
+; Does not create a mana bar or alter HP/MP/invulnerability.
+BarInvul=1
+; Force vertex alpha to 255 during native color updates; RGB unchanged. Opt-in.
+VertexColor=0
+; Display Overhead HP Bar in each unit's Player Color (Player 1..16).
+Color Player=1
+; Format existing HP/MP labels only; both options are opt-in.
+Text Life/Mana Commas=1
+Text Life/Mana No Hide=1
+; Group existing damage/armor/hero-stat text, preserving bonus colors.
+Text Stats Commas=1
+; 0 keeps/restores the game's setting; optional numeric cap 60..1000, memory only.
+Fps Limit=0
+Unlock Limit FPS=0
+; Fullscreen display refresh rate in Hz (e.g. 60, 75, 120, 144, 240); 0 = default.
+Refresh Rate=0
+; Vertical sync: 0 = disabled (immediate swap), 1 = enabled (sync to monitor refresh).
+Vsync=0
+timeOfDayUI=0
+; Extend the scene viewport into the bottom black-bar area (not console hiding).
+BlackBarUI=0
+; Hide the bottom stone console frame (CSimpleConsole) to expand screen view.
+ConsoleUI=0
+; Move the existing skill/item tooltip near the mouse; restore its prior anchor on disable.
+MouseTooltipUI=1
+
+; Independent periodic clearing, seconds 1..17. Off by default.
+[DelayClear]
+Enable Delay Clear Text Screen=0
+Delay Clear Text Screen=3
+Enable Delay Clear Chat Screen=0
+Delay Clear Chat Screen=3
+
+[Window]
+Borderless=0
+Lock Cursor=0
+
+; Select hero by portrait order. A quick second press centers the camera.
+; -1 disables a binding; ETS engine codes are used, e.g. F1=768.
+[HotKeyHero]
+HeroF1=-1
+HeroF2=-1
+HeroF3=-1
+HeroF4=-1
+HeroF5=-1
+HeroF6=-1
+HeroF7=-1
+AutoClickLeft=-1
+AutoClickRight=-1
+AutoClickInterval=10
+; SetIdTarget: hotkey to lock target unit under cursor or selection. #cs clears target.
+SetIdTarget=-1
+
+[HotKeyOther]
+hko_MinimizeMultiboard=515
+; Opens/hides the rebuild Control panel. 775=F8, -1=disabled (default).
+hko_menu=-1
+
+; One message per press, 128 UTF-8 bytes maximum. -1 disables a slot.
+[Quick Chat]
+Enable=0
+QuickChatHotkey1=-1
+QuickChatText1=
+QuickChatHotkey2=-1
+QuickChatText2=
+QuickChatHotkey3=-1
+QuickChatText3=
+QuickChatHotkey4=-1
+QuickChatText4=
+QuickChatHotkey5=-1
+QuickChatText5=
+QuickChatHotkey6=-1
+QuickChatText6=
+QuickChatHotkey7=-1
+QuickChatText7=
+QuickChatHotkey8=-1
+QuickChatText8=
+QuickChatHotkey9=-1
+QuickChatText9=
+
+; Original ETS engine key codes: A=65, Q=81, F1=768, NumPad1=258.
+; Groups and slots start disabled. Quick cast uses native target events at the current cursor.
+[SlotHotkeyInv]
+Enable=1
+SlotInventory0=49
+SlotInventory0Enabled=1
+SlotInventory1=50
+SlotInventory1Enabled=1
+SlotInventory2=51
+SlotInventory2Enabled=1
+SlotInventory3=52
+SlotInventory3Enabled=1
+SlotInventory4=53
+SlotInventory4Enabled=1
+SlotInventory5=54
+SlotInventory5Enabled=1
+QuickCastInventory0=0
+QuickCastInventory1=0
+QuickCastInventory2=0
+QuickCastInventory3=0
+QuickCastInventory4=0
+QuickCastInventory5=0
+
+[SlotHotkey]
+Enable=0
+SlotCommand0=-1
+SlotCommand0Enabled=1
+SlotCommand1=-1
+SlotCommand1Enabled=1
+SlotCommand2=-1
+SlotCommand2Enabled=1
+SlotCommand3=-1
+SlotCommand3Enabled=1
+SlotCommand4=-1
+SlotCommand4Enabled=1
+SlotCommand5=84
+SlotCommand5Enabled=1
+SlotCommand6=89
+SlotCommand6Enabled=1
+SlotCommand7=-1
+SlotCommand7Enabled=1
+SlotCommand8=81
+SlotCommand8Enabled=1
+SlotCommand9=87
+SlotCommand9Enabled=1
+SlotCommand10=69
+SlotCommand10Enabled=1
+SlotCommand11=82
+SlotCommand11Enabled=1
+QuickCastCommand0=0
+QuickCastCommand1=0
+QuickCastCommand2=0
+QuickCastCommand3=0
+QuickCastCommand4=0
+QuickCastCommand5=1
+QuickCastCommand6=1
+QuickCastCommand7=1
+QuickCastCommand8=1
+QuickCastCommand9=1
+QuickCastCommand10=1
+QuickCastCommand11=1
+; Auto-target command buttons 0..11: 0 = normal target cursor, 1 = auto-target on cast
+AutoTargetCommand0=0
+AutoTargetCommand1=0
+AutoTargetCommand2=0
+AutoTargetCommand3=0
+AutoTargetCommand4=0
+AutoTargetCommand5=0
+AutoTargetCommand6=0
+AutoTargetCommand7=0
+AutoTargetCommand8=0
+AutoTargetCommand9=0
+AutoTargetCommand10=0
+AutoTargetCommand11=0
+; Auto-target self (local hero) for command buttons 0..11
+AutoTargetCommandMe0=0
+AutoTargetCommandMe1=0
+AutoTargetCommandMe2=0
+AutoTargetCommandMe3=0
+AutoTargetCommandMe4=0
+AutoTargetCommandMe5=1
+AutoTargetCommandMe6=1
+AutoTargetCommandMe7=0
+AutoTargetCommandMe8=1
+AutoTargetCommandMe9=1
+AutoTargetCommandMe10=1
+AutoTargetCommandMe11=1
+
+[SlotHotkeyShop]
+Enable=1
+SlotCommandShop0=81
+SlotCommandShop0Enabled=1
+SlotCommandShop1=87
+SlotCommandShop1Enabled=1
+SlotCommandShop2=69
+SlotCommandShop2Enabled=1
+SlotCommandShop3=82
+SlotCommandShop3Enabled=1
+SlotCommandShop4=65
+SlotCommandShop4Enabled=1
+SlotCommandShop5=83
+SlotCommandShop5Enabled=1
+SlotCommandShop6=68
+SlotCommandShop6Enabled=1
+SlotCommandShop7=70
+SlotCommandShop7Enabled=1
+SlotCommandShop8=90
+SlotCommandShop8Enabled=1
+SlotCommandShop9=88
+SlotCommandShop9Enabled=1
+SlotCommandShop10=67
+SlotCommandShop10Enabled=1
+SlotCommandShop11=86
+SlotCommandShop11Enabled=1
+QuickCastCommandShop0=0
+QuickCastCommandShop1=0
+QuickCastCommandShop2=0
+QuickCastCommandShop3=0
+QuickCastCommandShop4=0
+QuickCastCommandShop5=0
+QuickCastCommandShop6=0
+QuickCastCommandShop7=0
+QuickCastCommandShop8=0
+QuickCastCommandShop9=0
+QuickCastCommandShop10=0
+QuickCastCommandShop11=0
+; Auto-target shop command buttons 0..11
+AutoTargetCommandShop0=0
+AutoTargetCommandShop1=0
+AutoTargetCommandShop2=0
+AutoTargetCommandShop3=0
+AutoTargetCommandShop4=0
+AutoTargetCommandShop5=0
+AutoTargetCommandShop6=0
+AutoTargetCommandShop7=0
+AutoTargetCommandShop8=0
+AutoTargetCommandShop9=0
+AutoTargetCommandShop10=0
+AutoTargetCommandShop11=0
+
+; Auto Courier / Ga chuyen do
+[Courier]
+AutoCourier=1
+CourierHotkey=-1
+BackHotkey=-1
+
+; Map Tong Hop (MTH) Chay Ga / Chay Soi automation
+[MTHKEY]
+ChayGa1=-1
+ChayGa2=-1
+ChayGa3=-1
+ChaySoi1=-1
+ChaySoi2=-1
+ChaySoi3=-1
+ChayGa1_count=5
+ChayGa2_count=5
+ChayGa3_count=5
+ChaySoi1_count=5
+ChaySoi2_count=5
+ChaySoi3_count=5
+MTH49Enable=1
+G17Enable=0
+Noti=1
+Shield=-1
+Ice=-1
+Wild=-1
+Frozen=-1
+Phoenix=-1
+PickGoku=-1
+ShieldDraw=1
+IceDraw=1
+WildDraw=1
+FrozenDraw=1
+PhoenixDraw=1
+PickGokuDraw=0
+AutoGaDraw1=0
+AutoGaDraw2=0
+AutoGaDraw3=0
+AutoSoiDraw1=0
+AutoSoiDraw2=0
+AutoSoiDraw3=0
+
+; Custom war3map script loader & defeat protection
+[war3map]
+enable=0
+load=0

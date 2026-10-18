@@ -1,3 +1,6 @@
+#include "world_present131.hpp"
+#include "hp_player_color131.hpp"
+#include "invulnerable_bar131.hpp"
 #pragma once
 #include "regen131.hpp"
 #include <unordered_set>
@@ -36,6 +39,7 @@ inline bool SampleStateBar131(uintptr_t bar,uintptr_t base,const StateBarProfile
  if(!Identity131(bar,base,p.bar))return false;
  __try{
   if(*reinterpret_cast<unsigned*>(bar+0x134)!=5)return false;
+  if(Identity131(*reinterpret_cast<uintptr_t*>(bar+0x78),base,p.bar))return false; // tool mana child, not a native HP root
   unit=*reinterpret_cast<uintptr_t*>(bar+0x154);if(!Identity131(unit,base,r.unit))return false;
   if(*reinterpret_cast<unsigned*>(bar+0x90)>7)return false;
   visible=*reinterpret_cast<unsigned char*>(bar+0x9d)!=0;
@@ -65,59 +69,52 @@ inline bool WorldChild131(void* child,uintptr_t parent,uintptr_t base,uintptr_t 
  if(!Identity131(reinterpret_cast<uintptr_t>(child),base,table))return false;
  __try{return *reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(child)+0x78)==parent;}__except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
-inline void* CreateMana131(uintptr_t base,uintptr_t bar,uintptr_t unit,const StateBarProfile131& p,const NativeFrameApi& api){
- __try{auto memory=api.alloc(0x158,"WHTMana131",1,0);auto frame=memory?reinterpret_cast<void*(__thiscall*)(void*,void*,uintptr_t,int)>(base+p.ctor)(memory,reinterpret_cast<void*>(bar),unit,0):nullptr;
-  if(frame&&!NativeSetOwnedFrameLevel(frame,base,p.bar,kToolFeatureFrameLevel)){NativeFrameHide(frame);return nullptr;}return frame;}
- __except(EXCEPTION_EXECUTE_HANDLER){return nullptr;}
-}
-inline bool UpdateMana131(uintptr_t base,void* frame,uintptr_t bar,uintptr_t unit,const StateBarProfile131& p,const Config& config,const NativeFrameApi& api){
- __try{
-  const float width=*reinterpret_cast<float*>(bar+0x58),height=*reinterpret_cast<float*>(bar+0x5c);
-  if(!std::isfinite(width)||!std::isfinite(height)||width<=0||height<=0||width>100||height>100)return false;
-  api.setWidth(frame,std::isfinite(config.barWidthMp)&&config.barWidthMp>0&&config.barWidthMp<=100?config.barWidthMp:width);
-  api.setHeight(frame,std::isfinite(config.barHeightMp)&&config.barHeightMp>0&&config.barHeightMp<=100?config.barHeightMp:height);
-  api.setRelPoint(frame,1,reinterpret_cast<void*>(bar),7,0,-.001f,1);
-  reinterpret_cast<void(__thiscall*)(void*,uintptr_t)>(base+p.bind)(frame,unit);
-  const auto texture=*reinterpret_cast<void**>(reinterpret_cast<uintptr_t>(frame)+0x130);
-  if(texture)reinterpret_cast<void(__thiscall*)(void*,const uint32_t*)>(base+p.color)(texture,&config.manaBarColor);
-  NativeFrameShow(frame);return true;
- }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
-}
 struct StateBars131 {
- struct Entry {void* mana=nullptr;void* host=nullptr;void* levelBackground=nullptr;std::array<void*,2> fonts{},levelFonts{};std::array<std::string,2> text{};std::string levelText;uint32_t backgroundColor=0xffffffff;};
- std::unordered_map<uintptr_t,Entry> entries;bool manaReported=false,stateReported=false,levelReported=false;
- void Reset(){entries.clear();manaReported=stateReported=levelReported=false;}
+ struct Entry {void* host=nullptr;void* levelBackground=nullptr;std::array<void*,2> fonts{},levelFonts{};std::array<std::string,2> text{};std::string levelText;float layoutSize=0,backgroundWidth=0;std::array<float,2> fontSizes{};uint32_t backgroundColor=0xffffffff;};
+ HpPlayerColor131 hpColors;
+ InvulnerableBars131 invulnerable;
+ std::unordered_map<uintptr_t,Entry> entries;bool stateReported=false,levelReported=false;unsigned observedNative=0;
+ void Reset(){ForgetStatPaint131();hpColors.Reset();invulnerable.Reset();entries.clear();stateReported=levelReported=false;observedNative=0;}
  // Children are owned by each native HP parent. Never dereference a cached
- // child unless the complete manager snapshot still contains it and its parent.
+ // child unless its native class and parent still match. The timer only
+ // discovers/prunes roots; native paint callbacks own presentation writes.
  unsigned Update(uintptr_t base,void* root,const Profile131& p,const RegenProfile131& r,const StateBarProfile131& s,const Config& config,bool allowed,const NativeFrameApi& raw){
   std::unordered_set<uintptr_t> frames;if(!root||!RegisteredFrames131(root,frames))return 0;
   for(auto it=entries.begin();it!=entries.end();)if(!frames.count(it->first))it=entries.erase(it);else ++it;
-  unsigned observed=0;
+  PruneStatPaint131(frames);hpColors.Prune(frames);
+  invulnerable.Prune(frames);
   for(const auto bar:frames){uintptr_t unit=0;bool visible=false,hero=false;
    if(!SampleStateBar131(bar,base,s,r,unit,visible,hero))continue;
-   const bool manaEnabled=allowed&&visible&&config.manaBarEnable&&(hero?config.manaBarHero:config.manaBarNonHero);
-   const bool stateEnabled=allowed&&visible&&config.stateTagEnable&&(hero?config.stateTagHero:config.stateTagNonHero);
-   const auto levelText=HeroLevelText131(allowed&&visible&&hero&&config.stateTagShowLevel?HeroLevel131(unit,base,r,s):0);
-   auto found=entries.find(bar);if(found==entries.end()){if((!manaEnabled&&!stateEnabled&&levelText.empty())||entries.size()>=4096)continue;found=entries.emplace(bar,Entry{}).first;}
+   StatPaintRecord131 record;record.unit=unit;record.unitTable=base+r.unit;
+   const bool enabled=allowed&&(config.colorPlayer||config.hideInvulnerableBars||config.stateTagEnable||config.stateTagShowLevel);
+   if(!enabled){auto previous=statPaintRecords131.find(bar);if(previous!=statPaintRecords131.end()&&previous->second.presentation)WriteBar(bar,base,p,r,s,config,allowed,raw);}
+   SetStatPaint131(base,s.bar,bar,false,record,enabled,true);
+  }
+  return observedNative;
+ }
+ unsigned WriteBar(uintptr_t bar,uintptr_t base,const Profile131& p,const RegenProfile131& r,const StateBarProfile131& s,const Config& config,bool allowed,const NativeFrameApi& raw){unsigned observed=0;
+uintptr_t unit=0;bool visible=false,hero=false;
+   if(!SampleStateBar131(bar,base,s,r,unit,visible,hero))return observed;
+   invulnerable.Update(base,p.build,bar,unit,allowed&&config.hideInvulnerableBars,visible);
+   hpColors.Update(base,p.build,bar,unit,allowed&&config.colorPlayer,GetTickCount64());
+   const bool eligible=OverheadEligible131(allowed,config.hideInvulnerableBars,OverheadUnitFlags131(unit));
+   const bool stateEnabled=eligible&&config.stateTagEnable&&(hero?config.stateTagHero:config.stateTagNonHero);
+   const auto levelText=HeroLevelText131(eligible&&hero&&config.stateTagShowLevel?HeroLevel131(unit,base,r,s):0);
+   auto found=entries.find(bar);if(found==entries.end()){if((!stateEnabled&&levelText.empty())||entries.size()>=4096)return observed;found=entries.emplace(bar,Entry{}).first;}
    auto& entry=found->second;
-   if(entry.mana&&(!frames.count(reinterpret_cast<uintptr_t>(entry.mana))||!WorldChild131(entry.mana,bar,base,s.bar)))entry.mana=nullptr;
-   if(entry.host&&(!frames.count(reinterpret_cast<uintptr_t>(entry.host))||!WorldChild131(entry.host,bar,base,p.simpleVtable))){entry.host=nullptr;entry.fonts={};entry.text={};entry.levelFonts={};entry.levelBackground=nullptr;entry.levelText.clear();entry.backgroundColor=0xffffffff;}
+   if(entry.host&&(!WorldChild131(entry.host,bar,base,p.simpleVtable))){entry.host=nullptr;entry.fonts={};entry.text={};entry.levelFonts={};entry.levelBackground=nullptr;entry.levelText.clear();entry.backgroundColor=0xffffffff;entry.layoutSize=entry.backgroundWidth=0;entry.fontSizes={};}
    float value=0,maximum=0;
-   if(manaEnabled&&ReadState131(unit,base,r,p,s,true,value,maximum)){
-    if(!entry.mana)entry.mana=CreateMana131(base,bar,unit,s,raw);
-    if(entry.mana){if(UpdateMana131(base,entry.mana,bar,unit,s,config,raw))observed|=1;else NativeFrameHide(entry.mana);}
-   }else if(entry.mana)NativeFrameHide(entry.mana);
-   if(!stateEnabled&&levelText.empty()){if(entry.host)NativeFrameHide(entry.host);continue;}
+   if(!stateEnabled&&levelText.empty()){if(entry.host)HideWorldHost131(entry.host);return observed;}
    if(!entry.host){auto memory=raw.alloc(nativeFrameLayout.frameSize,"WHTState131",1,0);if(memory)entry.host=raw.frameCtor(memory,reinterpret_cast<void*>(bar));
     if(entry.host&&!NativeSetOwnedFrameLevel(entry.host,base,nativeFrameLayout.simpleVtable,kToolFeatureFrameLevel)){NativeFrameHide(entry.host);entry.host=nullptr;}}
-   if(!entry.host)continue;
-   raw.setRelPoint(entry.host,4,reinterpret_cast<void*>(bar),4,0,0,1);raw.setWidth(entry.host,.08f);raw.setHeight(entry.host,.03f);
+   if(!entry.host)return observed;
+   if(!entry.layoutSize){raw.setRelPoint(entry.host,4,reinterpret_cast<void*>(bar),4,0,0,1);raw.setWidth(entry.host,.08f);raw.setHeight(entry.host,.03f);entry.layoutSize=1;}
    const float size=(std::isfinite(config.stateTagFontSize)?std::clamp(config.stateTagFontSize,1.f,20.f):4.f)*.0015f;
    for(unsigned n=0;n<2;++n){std::string text;
     if(stateEnabled&&(n?config.stateTagManaValue:config.stateTagHpValue)&&ReadState131(unit,base,r,p,s,n!=0,value,maximum))text=StateText131(value,maximum,config.stateTagShowMax,n!=0,config.lifeManaCommas);
     if(!entry.fonts[n]&&!text.empty())entry.fonts[n]=NativeCreateFontString(raw,entry.host,size,"",2);
-    if(entry.fonts[n]){raw.setFont(entry.fonts[n],"WHTUI_FRIZQT__.ttf",size,1);raw.setTextAlign(entry.fonts[n],2);
-     raw.setRelPoint(entry.fonts[n],4,reinterpret_cast<void*>(bar),4,0,n?-(size+.004f):size+.002f,1);
+    if(entry.fonts[n]){if(entry.fontSizes[n]!=size){raw.setFont(entry.fonts[n],"WHTUI_FRIZQT__.ttf",size,1);raw.setTextAlign(entry.fonts[n],2);
+     raw.setRelPoint(entry.fonts[n],4,reinterpret_cast<void*>(bar),4,0,n?-(size+.004f):size+.002f,1);entry.fontSizes[n]=size;}
      if(entry.text[n]!=text){raw.setText(entry.fonts[n],text.c_str());entry.text[n]=text;}if(!text.empty())observed|=2;}
    }
    if(!entry.levelBackground&&!levelText.empty()){
@@ -149,12 +146,12 @@ struct StateBars131 {
     if(entry.backgroundColor!=color){
      reinterpret_cast<bool(__thiscall*)(void*,const uint32_t*)>(base+s.solidColor)(entry.levelBackground,&color);
      entry.backgroundColor=color;}
-    if(visible){raw.setWidth(entry.levelBackground,width/scale+.002f);raw.setHeight(entry.levelBackground,.012546875f);
+    if(visible&&entry.backgroundWidth!=width/scale+.002f){entry.backgroundWidth=width/scale+.002f;raw.setWidth(entry.levelBackground,entry.backgroundWidth);raw.setHeight(entry.levelBackground,.012546875f);
      raw.setRelPoint(entry.levelBackground,4,entry.levelFonts[1],4,0,0,1);}
    }
    entry.levelText=levelText;if(!levelText.empty())observed|=4;
-   NativeFrameShow(entry.host);
-  }return observed;
+   MaintainWorldHost131(entry.host,bar);
+  observedNative|=observed;return observed;
  }
 };
 }

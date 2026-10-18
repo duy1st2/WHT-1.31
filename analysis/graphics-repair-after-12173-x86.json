@@ -1,0 +1,90 @@
+{
+  "pid": 23516,
+  "consoleFlags": "0101",
+  "auxConsoleFlags": "0101",
+  "HP": "2,500 / 2,500",
+  "MP": "1,080 / 1,080",
+  "frames": 596,
+  "bars": [
+    {
+      "unit": "0x0",
+      "owner": 0,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x0",
+      "gated": false
+    },
+    {
+      "unit": "0x0",
+      "owner": 0,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x0",
+      "gated": false
+    },
+    {
+      "unit": "0x0",
+      "owner": 0,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x0",
+      "gated": false
+    },
+    {
+      "unit": "0x0",
+      "owner": 0,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x0",
+      "gated": false
+    },
+    {
+      "unit": "0x0",
+      "owner": 0,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x0",
+      "gated": false
+    },
+    {
+      "unit": "0x0",
+      "owner": 0,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x0",
+      "gated": false
+    },
+    {
+      "unit": "0x0",
+      "owner": 0,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x0",
+      "gated": false
+    },
+    {
+      "unit": "0x0",
+      "owner": 0,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x0",
+      "gated": false
+    },
+    {
+      "unit": "0x0",
+      "owner": 0,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x0",
+      "gated": false
+    },
+    {
+      "unit": "0x0",
+      "owner": 0,
+      "textureABGR": "ff00ff00",
+      "visibility": "0000",
+      "unitFlags": "0x0",
+      "gated": false
+    }
+  ]
+}

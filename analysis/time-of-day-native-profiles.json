@@ -1,0 +1,46 @@
+[
+  {
+    "build": 12164,
+    "architecture": 32,
+    "table": "0x182ddb0",
+    "show": "0xdf73a0",
+    "hide": "0xdf42f0",
+    "flagsOffset": "0xb8",
+    "rtti": ".?AVCTimeOfDayIndicator@@",
+    "showGuard": "568bf18b86b8000000a801746483e0fe8986b8000000",
+    "hideGuard": "568bf18b86b8000000a801755b83c8018986b8000000"
+  },
+  {
+    "build": 12173,
+    "architecture": 32,
+    "table": "0x17e2c90",
+    "show": "0xdb61a0",
+    "hide": "0xdb30f0",
+    "flagsOffset": "0xb8",
+    "rtti": ".?AVCTimeOfDayIndicator@@",
+    "showGuard": "568bf18b86b8000000a801746483e0fe8986b8000000",
+    "hideGuard": "568bf18b86b8000000a801755b83c8018986b8000000"
+  },
+  {
+    "build": 12164,
+    "architecture": 64,
+    "table": "0x1c14048",
+    "show": "0xfb0bd0",
+    "hide": "0xfad510",
+    "flagsOffset": "0x150",
+    "rtti": ".?AVCTimeOfDayIndicator@@",
+    "showGuard": "40574883ec208b8150010000488bf9a801747683e0fe898150010000",
+    "hideGuard": "40534883ec208b8150010000488bd9a801757e83c801898150010000"
+  },
+  {
+    "build": 12173,
+    "architecture": 64,
+    "table": "0x1c42f08",
+    "show": "0xfed740",
+    "hide": "0xfea080",
+    "flagsOffset": "0x150",
+    "rtti": ".?AVCTimeOfDayIndicator@@",
+    "showGuard": "40574883ec208b8150010000488bf9a801747683e0fe898150010000",
+    "hideGuard": "40534883ec208b8150010000488bd9a801757e83c801898150010000"
+  }
+]

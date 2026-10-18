@@ -1,0 +1,58 @@
+[
+  {
+    "build": 12164,
+    "architecture": 32,
+    "bar": "0x1825ca0",
+    "button": "0x1825c08",
+    "listener": "0x1825d18",
+    "callback": "0xb30ee0",
+    "lookup": "0xb30481",
+    "guard": "8b864c01000003c98b44c8048d4d088b38ffb7c4010000",
+    "rtti": [
+      ".?AVCHeroBar@@",
+      ".?AVCHeroBarButton@@"
+    ]
+  },
+  {
+    "build": 12173,
+    "architecture": 32,
+    "bar": "0x17dab80",
+    "button": "0x17daae8",
+    "listener": "0x17dabf8",
+    "callback": "0xaf06b0",
+    "lookup": "0xaefc61",
+    "guard": "8b864c01000003c98b44c8048d4d088b38ffb7c4010000",
+    "rtti": [
+      ".?AVCHeroBar@@",
+      ".?AVCHeroBarButton@@"
+    ]
+  },
+  {
+    "build": 12164,
+    "architecture": 64,
+    "bar": "0x1c04558",
+    "button": "0x1c04428",
+    "listener": "0x1c04648",
+    "callback": "0xc81010",
+    "lookup": "0xc8033e",
+    "guard": "488b8500020000488b4c01084c8b31498bb6d8020000",
+    "rtti": [
+      ".?AVCHeroBar@@",
+      ".?AVCHeroBarButton@@"
+    ]
+  },
+  {
+    "build": 12173,
+    "architecture": 64,
+    "bar": "0x1c33418",
+    "button": "0x1c332e8",
+    "listener": "0x1c33508",
+    "callback": "0xcc3e20",
+    "lookup": "0xcc31be",
+    "guard": "488b8500020000488b4c01084c8b31498bb6d8020000",
+    "rtti": [
+      ".?AVCHeroBar@@",
+      ".?AVCHeroBarButton@@"
+    ]
+  }
+]

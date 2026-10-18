@@ -1,0 +1,46 @@
+[
+  {
+    "build": 12164,
+    "bits": 32,
+    "table": "0x18240a0",
+    "slot": 12,
+    "method": "0xb019d0",
+    "prefix": "558bec83ec10535657894dfc",
+    "methods": 64,
+    "col": "0x198f17c",
+    "x86StackPop": 12
+  },
+  {
+    "build": 12173,
+    "bits": 32,
+    "table": "0x17d8f80",
+    "slot": 12,
+    "method": "0xac15e0",
+    "prefix": "558bec83ec10535657894dfc",
+    "methods": 64,
+    "col": "0x1946f8c",
+    "x86StackPop": 12
+  },
+  {
+    "build": 12164,
+    "bits": 64,
+    "table": "0x1c00ec0",
+    "slot": 12,
+    "method": "0xc4d9e0",
+    "prefix": "48895c2410564883ec",
+    "methods": 64,
+    "col": "0x1e0b4d8",
+    "x86StackPop": null
+  },
+  {
+    "build": 12173,
+    "bits": 64,
+    "table": "0x1c2fd78",
+    "slot": 12,
+    "method": "0xc90f00",
+    "prefix": "48895c2410564883ec",
+    "methods": 64,
+    "col": "0x1e392f8",
+    "x86StackPop": null
+  }
+]

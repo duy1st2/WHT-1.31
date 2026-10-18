@@ -1,0 +1,54 @@
+[
+  {
+    "build": 12164,
+    "architecture": 32,
+    "vtable": "0x18267c8",
+    "rtti": ".?AVCMultiboard@@",
+    "minimize": "0xb41a70",
+    "maximize": "0xb419b0",
+    "stateType": "uint8",
+    "stateOffset": "0x1c4",
+    "prefix": "56578bf96a015768",
+    "stateWrite": "c687c4010000",
+    "writeOffset": "0x7a"
+  },
+  {
+    "build": 12173,
+    "architecture": 32,
+    "vtable": "0x17db6a8",
+    "rtti": ".?AVCMultiboard@@",
+    "minimize": "0xb01760",
+    "maximize": "0xb016a0",
+    "stateType": "uint8",
+    "stateOffset": "0x1c4",
+    "prefix": "56578bf96a015768",
+    "stateWrite": "c687c4010000",
+    "writeOffset": "0x7a"
+  },
+  {
+    "build": 12164,
+    "architecture": 64,
+    "vtable": "0x1c05d20",
+    "rtti": ".?AVCMultiboard@@",
+    "minimize": "0xc91cc0",
+    "maximize": "0xc91bc0",
+    "stateType": "uint8",
+    "stateOffset": "0x308",
+    "prefix": "48895c24084889742410574883ec30488bf14c8bc1488b89e802000041b101ba",
+    "stateWrite": "c68608030000",
+    "writeOffset": "0xa1"
+  },
+  {
+    "build": 12173,
+    "architecture": 64,
+    "vtable": "0x1c34be0",
+    "rtti": ".?AVCMultiboard@@",
+    "minimize": "0xcd4b40",
+    "maximize": "0xcd4a30",
+    "stateType": "uint8",
+    "stateOffset": "0x308",
+    "prefix": "48895c24084889742410574883ec30488bf14c8bc1488b89e802000041b101ba",
+    "stateWrite": "c68608030000",
+    "writeOffset": "0xa1"
+  }
+]

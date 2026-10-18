@@ -1,5 +1,6 @@
 #pragma once
 #include "runtime131.hpp"
+#include "component_lookup131.hpp"
 #include <cstdio>
 namespace wht {
 struct CooldownProfile131 {unsigned build;uintptr_t button,commandBar,infoBar,inventoryBar,abilityGetter,spellRemaining;};
@@ -7,10 +8,8 @@ inline constexpr CooldownProfile131 cooldownProfiles131[]={
  {12164,0x182a764,0x18273e8,0x1827518,0x18276a8,0xb6d2a0,0x3a1d80},
  {12173,0x17df644,0x17dc2c8,0x17dc3f8,0x17dc588,0xb2cfa0,0x380290}
 };
-inline bool Identity131(uintptr_t value,uintptr_t base,uintptr_t table){__try{return value&&*reinterpret_cast<uintptr_t*>(value)==base+table;}__except(EXCEPTION_EXECUTE_HANDLER){return false;}}
-inline uintptr_t Component131(uintptr_t ui,uintptr_t base,uintptr_t table){
- __try{for(unsigned off=4;off<0x4d4;off+=4){const auto value=*reinterpret_cast<uintptr_t*>(ui+off);if(Identity131(value,base,table))return value;}}__except(EXCEPTION_EXECUTE_HANDLER){}return 0;
-}
+inline bool Identity131(uintptr_t value,uintptr_t base,uintptr_t table){__try{return value&&NativeClass131(value,*reinterpret_cast<uintptr_t*>(value),base+table);}__except(EXCEPTION_EXECUTE_HANDLER){return false;}}
+inline uintptr_t Component131(uintptr_t ui,uintptr_t base,uintptr_t table){return FindComponent131(ui,base,table,0x4d4);}
 inline uintptr_t CooldownButton131(uintptr_t ui,uintptr_t base,const CooldownProfile131& p,unsigned slot){
  if(slot>=18)return 0;
  __try{

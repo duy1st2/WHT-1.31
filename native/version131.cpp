@@ -1,3 +1,16 @@
+#include "repeat_message131.hpp"
+#include "quick_chat131.hpp"
+#include "ui_refresh131.hpp"
+#include "graphics_diagnostic131.hpp"
+#include "match_start131.hpp"
+#include "life_mana_hook131.hpp"
+#include "mouse_tooltip131.hpp"
+#include "black_bar131.hpp"
+#include "console_ui131.hpp"
+#include "time_of_day131.hpp"
+#include "multiboard131.hpp"
+#include "hero_keys131.hpp"
+#include "auto_click131.hpp"
 #include "learn_slot131.hpp"
 #include "target_cast131.hpp"
 #include "self_cast131.hpp"
@@ -38,9 +51,19 @@ wht::CameraSetter131 originalCamera131=nullptr;wht::CameraOverride131 camera131;
 wht::CooldownOverlay131 cooldown131;const wht::CooldownProfile131* cooldownProfile131=nullptr;
 wht::HotkeyLabels131 hotkeys131;
 wht::SlotRemap131 remap131;
+wht::QuickChatEcho131 quickChatEcho131;
+wht::RepeatMessage131 repeatMessage131;
+bool SendChat131(const std::string& text);
+wht::TimeOfDay131 timeOfDay131;
+wht::ConsoleUi131 consoleUi131;
+wht::BlackBar131 blackBar131;
+wht::MouseTooltip131 mouseTooltip131;
+wht::AutoClick131 autoClick131;
 wht::SelfCastSource131 pinned131;
 wht::MessageTimers131 messageTimers131;
 wht::ResourceBoard131 resources131;
+wht::GraphicsDiagnostic131 graphicsDiagnostic131;
+wht::MatchStart131 matchStart131;
 wht::ClockOverlay131 clock131;wht::FpsState131 fps131;
 wht::QuickDropInput131 quickDrop131;
 wht::Reveal131 reveal131;
@@ -101,7 +124,7 @@ uintptr_t CurrentUi131(){
  __try{
   auto get=reinterpret_cast<uintptr_t(__cdecl*)(int,int)>(base131+profile131->uiGet);
   const auto ui=get(0,0);
-  return ui&&*reinterpret_cast<uintptr_t*>(ui)==base131+profile131->uiVtable?ui:0;
+  return wht::ComponentIdentity131(ui,base131+profile131->uiVtable)?ui:0;
  }__except(EXCEPTION_EXECUTE_HANDLER){return 0;}
 }
 bool CameraLive131(uintptr_t ui){
@@ -190,6 +213,7 @@ bool Command131(const std::wstring& text){
  }
  if(command==L"#tool"||command==L"#menu"){menu131.Toggle();return true;}
  if(!Allowed131()){wht::Log(folder131,"WHT 1.31: command requires Local mode, active match and LoadFileMapWar3 session.");return false;}
+ if(command==L"#repeat"){std::wstring args;std::getline(in,args);const bool ok=repeatMessage131.Command(args);wht::Log(folder131,ok?"WHT: Repeat updated; #repeat stop cancels.":"WHT: Usage #repeat <1..10000> <text> (1..128 UTF-8 bytes); #repeat stop");return ok;}
  if(command==L"#speed"){std::wstring args;std::getline(in,args);const bool ok=wht::SetSpeed131(args);wht::Log(folder131,ok?"WHT: Game Speed "+std::to_string(wht::speedMultiplier131)+"x":"WHT: #speed requires 1..70; clock hooks unavailable or invalid argument.");return ok;}
  if(command==L"#tanghinh"||command==L"#invis"||command==L"#reveal"||command==L"#revealinvis"){std::wstring arg,extra;in>>arg;if(in>>extra)return false;wht::FoldCommandName(arg);bool next=!config131.revealInvisible;
   if(arg==L"on"||arg==L"1")next=true;else if(arg==L"off"||arg==L"0")next=false;else if(!arg.empty()&&arg!=L"toggle")return false;
@@ -259,23 +283,46 @@ bool DestroyHost131(){
  }return true;}__except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
 void DestroyUi131(){
+ wht::ForgetUiRefresh131();
  if(!DestroyHost131())wht::Log(folder131,"WHT 1.31: native menu cleanup exception.");
- wht::ResetSpeed131();menu131.Reset();memoryFont131=nullptr;camera131.Reset();cameraSlot131=0;cameraWrittenMask131=0;typed131=false;text131.clear();macro131.Stop();
+ wht::ResetSpeed131();wht::ResetLifeMana131();menu131.Reset();memoryFont131=nullptr;camera131.Reset();cameraSlot131=0;cameraWrittenMask131=0;typed131=false;text131.clear();macro131.Stop();
  placements131.clear();
  cooldown131.Reset();
- hotkeys131.Reset();remap131.Reset();pinned131={};
+ hotkeys131.Reset();remap131.Reset();quickChatEcho131.Reset();repeatMessage131.Reset();timeOfDay131.Reset();consoleUi131.Reset();blackBar131.Reset();mouseTooltip131.Reset();autoClick131.Reset();pinned131={};
  messageTimers131.Reset();
- resources131.Reset();clock131.Reset();fps131.Reset();quickDrop131={};dropIcon131.Reset();pickIcon131.Reset();sellIcon131.Reset();reveal131.Reset();sellAll131.Reset();autoPick131.Reset();autoPickEnabled131=false;dropAllNetwork131.Reset();skillsIcon131.Reset();allSkills131.Reset();
+ resources131.Reset();clock131.Reset();matchStart131.Reset();fps131.Reset();quickDrop131={};dropIcon131.Reset();pickIcon131.Reset();sellIcon131.Reset();reveal131.Reset();sellAll131.Reset();autoPick131.Reset();autoPickEnabled131=false;dropAllNetwork131.Reset();skillsIcon131.Reset();allSkills131.Reset();
  regen131.Reset();
  stateBars131.Reset();
  menuReported131=cameraReported131=writeReported131=false;if(lock131)ClipCursor(nullptr);
 }
+void PresentGraphics131(){
+ if(wht::uiRefreshOwner131!=currentUi131||!currentUi131)return;
+ if(config131.lifeManaCommas||config131.lifeManaNoHide||config131.statsCommas||wht::lifeFlags131||!wht::lifeUi131)if(const auto* p=wht::LifeProfileFor131(profile131->build))wht::UpdateLifeMana131(base131,profile131->build,currentUi131,wht::Component131(currentUi131,base131,p->portrait),wht::Component131(currentUi131,base131,cooldownProfile131->infoBar),(Allowed131()&&settings131)?((config131.lifeManaCommas?1u:0u)|(config131.lifeManaNoHide?2u:0u)|(config131.statsCommas?4u:0u)):0u,[](uintptr_t unit,bool mana,float& value,float& maximum){return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,mana,value,maximum);},true);
+}
+void PresentBar131(uintptr_t bar){
+ if(!currentUi131||!menu131.initialized||!regenProfile131||!stateBarProfile131)return;
+ auto raw=frame131;raw.setWidth=reinterpret_cast<decltype(raw.setWidth)>(base131+profile131->width);
+ raw.setAbsPoint=reinterpret_cast<decltype(raw.setAbsPoint)>(base131+profile131->absPoint);
+ raw.setRelPoint=reinterpret_cast<decltype(raw.setRelPoint)>(base131+profile131->relPoint);
+ stateBars131.WriteBar(bar,base131,*profile131,*regenProfile131,*stateBarProfile131,config131,Allowed131()&&settings131,raw);
+}
 void UpdateUi131(){
  const auto ui=CurrentUi131();
  if(currentUi131!=ui){DestroyUi131();currentUi131=ui;}
+ if(!Allowed131()||!settings131)repeatMessage131.Reset();
  if(!Allowed131())wht::ResetSpeed131();
  if(!ui){if(lock131)ClipCursor(nullptr);return;}
+ wht::InstallUiRefresh131(base131,profile131->build,ui,PresentGraphics131);
+ graphicsDiagnostic131.Update(base131,profile131->build,ui,config131,Allowed131(),folder131,consoleUi131,mouseTooltip131,[&](uintptr_t table){return wht::Component131(ui,base131,table);}); wht::UpdateMatchStart131(matchStart131,base131,profile131->build,ui,Allowed131()&&settings131&&config131.soundStartGame,module131,folder131);
  ApplyCamera131();
+ if(config131.lifeManaCommas||config131.lifeManaNoHide||config131.statsCommas||wht::lifeFlags131||!wht::lifeUi131)if(const auto* p=wht::LifeProfileFor131(profile131->build))wht::UpdateLifeMana131(base131,profile131->build,currentUi131,wht::Component131(currentUi131,base131,p->portrait),wht::Component131(currentUi131,base131,cooldownProfile131->infoBar),(Allowed131()&&settings131)?((config131.lifeManaCommas?1u:0u)|(config131.lifeManaNoHide?2u:0u)|(config131.statsCommas?4u:0u)):0u,[](uintptr_t unit,bool mana,float& value,float& maximum){return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,mana,value,maximum);});
+ if(config131.mouseTooltip||mouseTooltip131.active){const auto* tip=wht::MouseTooltipProfileFor131(profile131->build);const auto* console=wht::ConsoleProfileFor131(profile131->build);
+  if(tip&&console)wht::UpdateMouseTooltip131(mouseTooltip131,base131,profile131->build,currentUi131,wht::Component131(currentUi131,base131,tip->table),wht::ConsoleComponent131(currentUi131,base131,console->table),gameWindow131,Allowed131()&&settings131&&!menu131.open&&config131.mouseTooltip);
+ }
+ if(config131.hideBlackBar||blackBar131.Active())if(const auto* p=wht::BlackBarProfileFor131(profile131->build))blackBar131.Update(base131,profile131->build,currentUi131,wht::Component131(currentUi131,base131,p->worldTable),Allowed131()&&settings131&&config131.hideBlackBar);
+ if(config131.hideConsoleUI||consoleUi131.active)if(const auto* p=wht::ConsoleProfileFor131(profile131->build))consoleUi131.Update(base131,profile131->build,wht::ConsoleComponent131(currentUi131,base131,p->table),Allowed131()&&settings131&&config131.hideConsoleUI);
+ if(config131.hideTimeOfDay||timeOfDay131.active)if(const auto* p=wht::TimeOfDayProfileFor131(profile131->build))timeOfDay131.Update(base131,profile131->build,wht::Component131(currentUi131,base131,p->table),Allowed131()&&settings131&&config131.hideTimeOfDay);
+ wht::UpdateAutoClick131(autoClick131,config131,gameWindow131,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!sellAll131.active&&!dropAllNetwork131.active);
  if(auto p=wht::RevealProfileFor131(profile131->build)){
   if(reveal131.Update(base131,profile131->build,wht::Component131(currentUi131,base131,p->worldTable),Allowed131()&&settings131&&config131.revealInvisible)&&!reveal131.reported){reveal131.reported=true;wht::Log(folder131,"WHT: native invisible-unit display enabled.");}
  }
@@ -298,8 +345,8 @@ void UpdateUi131(){
   raw.setWidth=reinterpret_cast<decltype(raw.setWidth)>(base131+profile131->width);
   raw.setAbsPoint=reinterpret_cast<decltype(raw.setAbsPoint)>(base131+profile131->absPoint);
   raw.setRelPoint=reinterpret_cast<decltype(raw.setRelPoint)>(base131+profile131->relPoint);
+  wht::statPaintPresentation131=PresentBar131;
   const auto observed=stateBars131.Update(base131,menu131.independentHost,*profile131,*regenProfile131,*stateBarProfile131,config131,Allowed131()&&settings131,raw);
-  if((observed&1)&&!stateBars131.manaReported){stateBars131.manaReported=true;wht::Log(folder131,"WHT 1.31: native overhead mana bar bound to live CUnit.");}
   if((observed&2)&&!stateBars131.stateReported){stateBars131.stateReported=true;wht::Log(folder131,"WHT 1.31: overhead HP/Mana native values displayed.");}
   if((observed&4)&&!stateBars131.levelReported){stateBars131.levelReported=true;wht::Log(folder131,"WHT 1.31: overhead hero level queried from native CAbilityHero and displayed.");}
  }
@@ -309,6 +356,7 @@ void UpdateUi131(){
   if(!authorized131.load())label+=" |cffff4444Login LoadFileMapWar3|r";
   else if(config131.showMem&&wht::GetCurrentProcessMemoryUsage(mb,percent))label+=" | "+std::to_string(int(mb))+" MB";
   frame131.setText(memoryFont131,label.c_str());}
+ repeatMessage131.Tick(Allowed131()&&settings131,!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131,GetTickCount64(),SendChat131);
  menu131.PlaybackVisual(macro131.playing);macro131.Tick(Allowed131()&&!typed131&&!menu131.open);
  if(menu131.initialized&&resources131.Update(base131,profile131->build,Allowed131()&&settings131&&config131.showResource,GetTickCount64(),menu131,folder131)&&!resources131.reported){resources131.reported=true;wht::Log(folder131,"WHT 1.31: native resource table displayed.");}
  if(clock131.Update(base131,profile131->build,Allowed131()&&settings131&&config131.showTimer,menu131)&&!clock131.reported){clock131.reported=true;wht::Log(folder131,"WHT 1.31: native simulation timer displayed.");}
@@ -347,7 +395,8 @@ void UpdateUi131(){
  messageTimers131.reported|=cleared;
  if(lock131){if(GetForegroundWindow()==gameWindow131&&!menu131.open){POINT tl{0,0},br{r.right,r.bottom};ClientToScreen(gameWindow131,&tl);ClientToScreen(gameWindow131,&br);RECT clip{tl.x,tl.y,br.x,br.y};ClipCursor(&clip);}else ClipCursor(nullptr);}
 }
-void SafeUpdate131(){__try{UpdateUi131();}__except(EXCEPTION_EXECUTE_HANDLER){menu131.failed=true;}}
+void ReportUpdateException131(unsigned code){static unsigned errors=0;if(errors++<4)wht::Log(folder131,"WHT UI update exception="+std::to_string(code));}
+void SafeUpdate131(){__try{UpdateUi131();}__except(EXCEPTION_EXECUTE_HANDLER){ReportUpdateException131(GetExceptionCode());menu131.failed=true;}}
 void SafeReload131(){__try{Reload131();}__except(EXCEPTION_EXECUTE_HANDLER){menu131.failed=true;}}
 void CALLBACK Tick131(HWND,UINT,UINT_PTR,DWORD){
  if(ticking131)return;ticking131=true;
@@ -356,7 +405,13 @@ void CALLBACK Tick131(HWND,UINT,UINT_PTR,DWORD){
  if(now>=updateNext131){updateNext131=now+33;SafeUpdate131();}
  ticking131=false;
 }
+bool SendChat131(const std::string& text){
+ __try{return wht::SendQuickChat131(text,wht::QuickChatNative131(base131,profile131->build),[](wht::QuickChatView131& out){const auto ui=CurrentUi131();return ui&&ui==currentUi131&&wht::ReadQuickChat131(base131,profile131->build,ui,out);});}__except(1){return false;}
+}
 bool Input131(MSG& msg){
+ if(msg.message==WM_KILLFOCUS)quickChatEcho131.Reset();
+ if(msg.message==WM_KEYDOWN&&!(msg.lParam&(1L<<30)))quickChatEcho131.Reset();
+ if(msg.message==WM_CHAR&&quickChatEcho131.Character(msg.lParam,GetTickCount64()))return true;
  if(!ready131.load()||GetForegroundWindow()!=gameWindow131)return false;
  const bool keyDown=msg.message==WM_KEYDOWN||msg.message==WM_SYSKEYDOWN;
  const auto key=unsigned(msg.wParam);const bool repeat=bool(msg.lParam&(1L<<30));
@@ -419,6 +474,15 @@ bool Input131(MSG& msg){
   if((config131.macroKeys[3]&&key==config131.macroKeys[3])||(chord&&key==VK_F11)){macro131.Edit();return true;}
  }
  if(keyDown&&!repeat&&key==config131.commandKey){settings131=!settings131;ApplyCamera131();return true;}
+ if(keyDown&&!repeat&&key&&key==config131.multiboardKey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+  const auto* p=wht::MultiboardProfileFor131(profile131->build);
+  if(p&&wht::ToggleMultiboard131(base131,profile131->build,wht::Component131(currentUi131,base131,p->table))){if(key<256)remap131.pressed[key]=true;return true;}
+ }
+ if(keyDown&&!repeat&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+  const int slot=wht::HeroKeySlot131(unsigned(key),config131);const auto* p=wht::HeroProfileFor131(profile131->build);
+  if(slot>=0&&p&&wht::ClickHero131(base131,profile131->build,wht::Component131(currentUi131,base131,p->bar),unsigned(slot))){if(key<256)remap131.pressed[key]=true;return true;}
+ }
+ if(keyDown&&!repeat&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)&&autoClick131.Key(unsigned(key),config131)){if(key<256)remap131.pressed[key]=true;wht::Log(folder131,std::string("WHT: Auto Click ")+(key==config131.autoClickLeftKey?"Left: ":"Right: ")+((key==config131.autoClickLeftKey?autoClick131.left:autoClick131.right)?"ON":"OFF"));return true;}
  if(keyDown&&!repeat&&key&&key==config131.sellFastKey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
   if(SellHovered131()){if(key<256)remap131.pressed[key]=true;return true;}
  }
@@ -441,6 +505,7 @@ bool Input131(MSG& msg){
   }
   return wht::ActivateQuickCast131(binding.quickCast,target,[&](){return ClickSkill131(slot);},[&](uintptr_t mode){return wht::QuickCastCursor131(gameWindow131,mode,target);});
  },AlternatePanel131,LearnSlot131))return true;
+ if(msg.message==WM_KEYDOWN&&wht::QuickChatKey131(key,repeat,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131,(GetKeyState(VK_CONTROL)&0x8000)||(GetKeyState(VK_SHIFT)&0x8000)||(GetKeyState(VK_MENU)&0x8000),config131,SendChat131)){remap131.pressed[key]=true;quickChatEcho131.Sent(msg.lParam,GetTickCount64());return true;}
  macro131.Capture(msg,!menu131.open);return false;
 }
 LRESULT CALLBACK Message131(int code,WPARAM removed,LPARAM argument){
@@ -458,7 +523,8 @@ LRESULT CALLBACK Window131(HWND window,UINT message,WPARAM key,LPARAM data){
  if(message==updateMessage131){Tick131(nullptr,0,0,0);return 0;}
  MSG input{};input.hwnd=window;input.message=message;input.wParam=key;input.lParam=data;
  if(Input131(input))return 0;
- return CallWindowProcW(windowProc131,window,message,key,data);
+ const auto result=CallWindowProcW(windowProc131,window,message,key,data);
+ return result;
 }
 BOOL CALLBACK FindGame131(HWND window,LPARAM){
  DWORD pid=0;GetWindowThreadProcessId(window,&pid);if(pid!=GetCurrentProcessId()||GetWindow(window,GW_OWNER))return TRUE;

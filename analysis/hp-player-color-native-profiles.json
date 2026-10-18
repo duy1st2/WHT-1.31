@@ -1,0 +1,46 @@
+[
+  {
+    "build": 12164,
+    "architecture": 32,
+    "textureTable": "0x1853acc",
+    "rtti": ".?AVCSimpleTexture@@",
+    "tint": "0xdfce40",
+    "ownerGetter": "0xba33a0",
+    "nativeTextureColorOffset": "0x74",
+    "storage": "A B G R; public setter receives ARGB",
+    "playerColorSource": "existing independently profiled ResourceProfile131 CPlayer colorOffset"
+  },
+  {
+    "build": 12173,
+    "architecture": 32,
+    "textureTable": "0x18089ec",
+    "rtti": ".?AVCSimpleTexture@@",
+    "tint": "0xdbbc40",
+    "ownerGetter": "0xb62a50",
+    "nativeTextureColorOffset": "0x74",
+    "storage": "A B G R; public setter receives ARGB",
+    "playerColorSource": "existing independently profiled ResourceProfile131 CPlayer colorOffset"
+  },
+  {
+    "build": 12164,
+    "architecture": 64,
+    "textureTable": "0x1c58218",
+    "rtti": ".?AVCSimpleTexture@@",
+    "tint": "0xfb7b00",
+    "ownerGetter": "0xd006a0",
+    "nativeTextureColorOffset": "0xb8",
+    "storage": "A B G R; public setter receives ARGB",
+    "playerColorSource": "existing independently profiled ResourceProfile131 CPlayer colorOffset"
+  },
+  {
+    "build": 12173,
+    "architecture": 64,
+    "textureTable": "0x1c87128",
+    "rtti": ".?AVCSimpleTexture@@",
+    "tint": "0xff4670",
+    "ownerGetter": "0xd3f2d0",
+    "nativeTextureColorOffset": "0xb8",
+    "storage": "A B G R; public setter receives ARGB",
+    "playerColorSource": "existing independently profiled ResourceProfile131 CPlayer colorOffset"
+  }
+]

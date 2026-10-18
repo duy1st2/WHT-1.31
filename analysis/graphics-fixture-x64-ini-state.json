@@ -1,0 +1,7 @@
+{
+  "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini",
+  "backup": "WHT-1.31\\analysis\\graphics-fixture-12173-x64.ini.backup",
+  "before": "62e581f03b48edd17ce89e753d85d7f9dce303f408596e6a966f037616ec59e8",
+  "written": "205b6b4e9a1d63be6158fdf75ed13598fbb3167cde8a9c5ae10a50bbb7b26ae0",
+  "cleanup": "All seven fixture keys already match original snapshot; no INI write required, later user edits preserved."
+}

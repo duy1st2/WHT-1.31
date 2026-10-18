@@ -1,0 +1,102 @@
+{
+  "pid": 32156,
+  "build": 12173,
+  "architecture": 64,
+  "consoles": [
+    {
+      "offset": "0x788",
+      "visibility": "0101"
+    },
+    {
+      "offset": "0x798",
+      "visibility": "0101"
+    }
+  ],
+  "HP": "887,820 / 887,820",
+  "MP": "250,800 / 250,800",
+  "frames": 641,
+  "boundBars": [
+    {
+      "bar": 2672623467528,
+      "unit": 2672449598368,
+      "owner": 24,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x1646",
+      "gated": true,
+      "texture": 2672623469064
+    },
+    {
+      "bar": 2672844708872,
+      "unit": 2672449598368,
+      "owner": 24,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x1646",
+      "gated": true,
+      "texture": 2672844710408
+    },
+    {
+      "bar": 2672844715016,
+      "unit": 2672449598368,
+      "owner": 24,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x1646",
+      "gated": true,
+      "texture": 2672844716552
+    },
+    {
+      "bar": 2672844737544,
+      "unit": 2672449598368,
+      "owner": 24,
+      "textureABGR": "ff01fcff",
+      "visibility": "0101",
+      "unitFlags": "0x1646",
+      "gated": true,
+      "texture": 2672844738568
+    },
+    {
+      "bar": 2672844770312,
+      "unit": 2672449598368,
+      "owner": 24,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x1646",
+      "gated": true,
+      "texture": 2672844775432
+    },
+    {
+      "bar": 2672844783624,
+      "unit": 2672449598368,
+      "owner": 24,
+      "textureABGR": "ff01fcff",
+      "visibility": "0000",
+      "unitFlags": "0x1646",
+      "gated": true,
+      "texture": 2672844784648
+    }
+  ],
+  "colorSamples": [
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff",
+    "ff01fcff"
+  ]
+}
