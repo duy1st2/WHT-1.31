@@ -51,6 +51,7 @@ void __fastcall PriorityTestPoint(void* RESOURCE_TEST_EDX,int,float,float,int){}
 #include "quick-drop131-contracts.hpp"
 #include "all-skills131-contracts.hpp"
 #include "auto-pick131-contracts.hpp"
+#include "goku-pick131-contracts.hpp"
 #include "sell-all131-contracts.hpp"
 #include "reveal131-contracts.hpp"
 #include "hero-keys131-contracts.hpp"
@@ -66,10 +67,30 @@ void __fastcall PriorityTestPoint(void* RESOURCE_TEST_EDX,int,float,float,int){}
 #include "graphics-repair131-contracts.hpp"
 #include "quick-chat131-contracts.hpp"
 #include "repeat-message131-contracts.hpp"
+#include "time-boss131-contracts.hpp"
+#include "manual-clear131-contracts.hpp"
+#include "detailed-tooltip131-contracts.hpp"
+#include "view-commands131-contracts.hpp"
+#include "mth-notice131-contracts.hpp"
+#include "mth-route-buttons131-contracts.hpp"
+#include "mth-route131-contracts.hpp"
+#include "courier-route131-contracts.hpp"
+#include "drop-commands131-contracts.hpp"
+#include "auto-click-commands131-contracts.hpp"
 int main(){try{
  CheckGraphicsRepair131();
  CheckQuickChat131();
  CheckRepeatMessage131();
+ CheckTimeBoss131();
+ CheckManualClear131();
+ CheckDetailedTooltip131();
+ CheckViewCommands131();
+ CheckMthNotice131();
+ CheckRouteButtons131();
+ CheckMthRoute131();
+ CheckCourierRoute131();
+ CheckDropCommands131();
+ CheckAutoClickCommands131();
  CheckStatsLabels131();
  {wht::ComponentLookup131 lookup;alignas(uintptr_t) uintptr_t ui[32]{},a[2]{},b[2]{};const uintptr_t base=0x100000,table=0x1234;a[0]=b[0]=base+table;
  ui[1]=1;ui[2]=0x12345;ui[3]=~uintptr_t(0);ui[9]=reinterpret_cast<uintptr_t>(a);
@@ -115,6 +136,7 @@ int main(){try{
  CheckReveal131();
  CheckSellAll131();
  CheckAutoPick131();
+ CheckGokuPick131();
  CheckAllSkills131();
  CheckQuickDrop131();
  CheckClockFps131();

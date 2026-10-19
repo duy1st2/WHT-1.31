@@ -39,7 +39,8 @@ inline bool CameraCommand131(const std::wstring& text,int& field,float& value){
 }
 inline bool ControlAvailable131(const ToolMenuControl& d){
  const std::wstring section=d.section,key=d.key;
- if(section==L"Graphics"&&(key==L"timeOfDayUI"||key==L"ConsoleUI"||key==L"BlackBarUI"||key==L"MouseTooltipUI"||key==L"BarInvul"||key==L"Color Player"||key==L"Text Life/Mana Commas"||key==L"Text Life/Mana No Hide"||key==L"Text Stats Commas"))return true;
+ if(section==L"Graphics"&&(key==L"timeOfDayUI"||key==L"ConsoleUI"||key==L"BlackBarUI"||key==L"MouseTooltipUI"||key==L"BarInvul"||key==L"Color Player"||key==L"Text Life/Mana Commas"||key==L"Text Life/Mana No Hide"||key==L"Text Stats Commas"||key==L"Detailed Stats Tooltip"))return true;
+ if(section==L"MTHKEY"&&(key==L"Noti"||key==L"AutoGaDraw1"||key==L"AutoGaDraw2"||key==L"AutoGaDraw3"||key==L"AutoSoiDraw1"||key==L"AutoSoiDraw2"||key==L"AutoSoiDraw3"||key==L"ChayGa1"||key==L"ChayGa2"||key==L"ChayGa3"||key==L"ChaySoi1"||key==L"ChaySoi2"||key==L"ChaySoi3"||key==L"ChayGa1_count"||key==L"ChayGa2_count"||key==L"ChayGa3_count"||key==L"ChaySoi1_count"||key==L"ChaySoi2_count"||key==L"ChaySoi3_count"||key==L"PickGoku"||key==L"PickGokuDraw"||key==L"TimeBoss"||key==L"MTH49Enable"||key==L"G17Enable"))return true;
  if(section==L"Quick Chat")return true;
  if(section==L"DelayClear"||section==L"Language"||section==L"MacroRecorder")return true;
  if(section==L"StateTag")return true;

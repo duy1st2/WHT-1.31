@@ -1,3 +1,14 @@
+#include "mth_queue131.hpp"
+#include "courier_route131.hpp"
+#include "mth_route_buttons131.hpp"
+#include "mth_route131.hpp"
+#include "mth_notice131.hpp"
+#include "drop_commands131.hpp"
+#include "auto_click_commands131.hpp"
+#include "view_commands131.hpp"
+#include "detailed_tooltip131.hpp"
+#include "manual_clear131.hpp"
+#include "time_boss131.hpp"
 #include "repeat_message131.hpp"
 #include "quick_chat131.hpp"
 #include "ui_refresh131.hpp"
@@ -58,14 +69,17 @@ wht::MouseTooltip131 mouseTooltip64;
 wht::AutoClick131 autoClick64;
 wht::SelfCastSource131 pinned64;
 wht::MessageTimers131 messageTimers64;
+wht::ManualClear131 manualClear64;
 wht::ResourceBoard131 resources64;
 wht::GraphicsDiagnostic131 graphicsDiagnostic64;
 wht::MatchStart131 matchStart64;
+wht::TimeBoss131 timeBoss64;
+wht::DetailedTooltip131 detailTooltip64;
 wht::ClockOverlay131 clock64;wht::FpsState131 fps64;
-wht::QuickDropInput131 quickDrop64;
+wht::QuickDropInput131 quickDrop64;wht::QuickDropFlow131 quickDropFlow64;
 wht::Reveal131 reveal64;
 wht::SellIcon131 sellIcon64;wht::SellAll131 sellAll64;
-wht::AutoPickIcon131 pickIcon64;wht::AutoPick131 autoPick64;bool autoPickEnabled64=false;
+wht::SelfCastSource131 courier64;bool routePinned64=false;wht::RouteButtons131 routeButtons64;wht::MthRoute131 mthRoute64;wht::MthNotice131 mthNotice64;wht::GokuIcon131 gokuIcon64;bool gokuEnabled64=false;wht::AutoPickIcon131 pickIcon64;wht::AutoPick131 autoPick64;bool autoPickEnabled64=false;
 wht::DropIcon131 dropIcon64;wht::DropAllState dropAllNetwork64;
 wht::SkillsIcon131 skillsIcon64;wht::AllSkills131 allSkills64;
 int SkillPoints64(uintptr_t unit){const auto* p=wht::SkillProfile(profile64->build);if(!p)return -1;float current=0,maximum=0,rate=0;
@@ -112,7 +126,8 @@ wht::ExtendedFrameApi Api64(){wht::nativeFrameLayout={0x1d0,0x13c,0x150,0xe4,0xf
 #undef P64
  api.setFont=Font64;api.setWidth=Width64;api.setAbsPoint=Absolute64;api.setRelPoint=Relative64;return api;}
 bool Control64(const wht::ToolMenuControl& c){const std::wstring section=c.section,key=c.key;
- if(section==L"Graphics"&&(key==L"timeOfDayUI"||key==L"ConsoleUI"||key==L"BlackBarUI"||key==L"MouseTooltipUI"||key==L"BarInvul"||key==L"Color Player"||key==L"Text Life/Mana Commas"||key==L"Text Life/Mana No Hide"||key==L"Text Stats Commas"))return true;
+ if(section==L"MTHKEY"&&(key==L"Noti"||key==L"AutoGaDraw1"||key==L"AutoGaDraw2"||key==L"AutoGaDraw3"||key==L"AutoSoiDraw1"||key==L"AutoSoiDraw2"||key==L"AutoSoiDraw3"||key==L"ChayGa1"||key==L"ChayGa2"||key==L"ChayGa3"||key==L"ChaySoi1"||key==L"ChaySoi2"||key==L"ChaySoi3"||key==L"ChayGa1_count"||key==L"ChayGa2_count"||key==L"ChayGa3_count"||key==L"ChaySoi1_count"||key==L"ChaySoi2_count"||key==L"ChaySoi3_count"||key==L"PickGoku"||key==L"PickGokuDraw"||key==L"TimeBoss"||key==L"MTH49Enable"||key==L"G17Enable"))return true;
+ if(section==L"Graphics"&&(key==L"timeOfDayUI"||key==L"ConsoleUI"||key==L"BlackBarUI"||key==L"MouseTooltipUI"||key==L"BarInvul"||key==L"Color Player"||key==L"Text Life/Mana Commas"||key==L"Text Life/Mana No Hide"||key==L"Text Stats Commas"||key==L"Detailed Stats Tooltip"))return true;
  if(section==L"Quick Chat")return true;
  if(section==L"DelayClear"||section==L"Language"||section==L"MacroRecorder"||section==L"StateTag")return true;
  if(section==L"Event")return key==L"Camera"||key==L"FogZ"||key==L"Show Mem"||key==L"ShowCooldown"||key==L"ShowRegenHP"||key==L"ShowRegenMana"||key==L"Show Hotkey In Panel"||key==L"Show Resource"||key==L"Show Timer"||key==L"Show FPS"||key==L"Sound Start Game"||key==L"Quick Drop Item"||key==L"Reveal Invisibles"||key==L"Show Sell All"||key==L"Show Auto Pick"||key==L"Show Drop All"||key==L"Show Ins All Skills";
@@ -120,9 +135,40 @@ bool Control64(const wht::ToolMenuControl& c){const std::wstring section=c.secti
  if(wht::RemapControl131(section,key))return true;
  if(section==L"HotKeyOther")return key==L"hko_menu"||key==L"hko_command"||key==L"hko_MinimizeMultiboard";return false;}
 void Reload64(){config64=wht::LoadConfig(ini64);wht::toolEnglish=config64.english;menu64.nextRefresh=0;}
+bool ReadSelectedRoute64(wht::SelfCastSource131& out){return wht::ReadSelfCastSource131(base64,profile64->build,ui64,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float value=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,value,maximum,rate)&&value>.405f;},out)&&wht::RouteMovable131(base64,profile64->build,out.unit);}
+bool ReadCourier64(uintptr_t unit,wht::SelfCastSource131& out){return wht::ReadSelfCastSource131(base64,profile64->build,ui64,[&](){return unit;},[&](uintptr_t unit){float v=0,m=0,r=0;return wht::State64(unit,base64,*profile64,false,v,m,r)&&v>.405f;},out)&&wht::RouteMovable131(base64,profile64->build,unit);}
+bool ResolveRoute64(wht::SelfCastSource131& out){
+ if(ReadSelectedRoute64(out)){courier64=out;routePinned64=true;return true;}
+ if(courier64.unit&&ReadCourier64(courier64.unit,out)&&wht::SameSelfCastSource131(out,courier64)){routePinned64=true;return true;}
+ courier64={};
+ const auto* sp=wht::SellProfileFor131(profile64->build);const auto* pp=wht::PickProfileFor131(profile64->build);const auto* inv=wht::InventoryProfile(profile64->build);if(!sp||!pp||!inv)return false;
+ auto api=wht::SellNative131(base64,*sp);auto inventory=wht::InventoryNative131(base64,*inv);if(!api||!inventory)return false;
+ __try{const auto worldFrame=wht::Component64(ui64,base64,pp->worldTable);if(!worldFrame)return false;const auto list=api.list(worldFrame,true);if(list!=worldFrame+sp->listOffset)return false;const auto count=*reinterpret_cast<unsigned*>(list);const auto data=*reinterpret_cast<uintptr_t*>(list+sizeof(uintptr_t));if(count>8192||(count&&!data))return false;
+  wht::SelfCastSource131 fallback;bool fallbackItems=false;
+  for(unsigned pass=0;pass<2&&!fallback.unit;++pass)for(unsigned i=0;i<count;++i){const auto unit=*reinterpret_cast<uintptr_t*>(data+i*sizeof(uintptr_t));wht::SelfCastSource131 candidate;if(!ReadCourier64(unit,candidate)||(pass==0&&!wht::RouteNonHero131(base64,profile64->build,unit)))continue;
+   bool hasItem=false;if(wht::InventoryIdentity131(wht::ComponentLookup131::Slot(unit,inv->inventoryOffset),base64,inv->inventoryTable)){const auto capacity=inventory.size(unit);if(capacity<=6)for(unsigned k=0;k<capacity;++k)hasItem|=inventory.item(unit,k)!=0;}
+   const uint64_t id=(uint64_t(candidate.id.low)<<32)|candidate.id.high,oldId=(uint64_t(fallback.id.low)<<32)|fallback.id.high;
+   if(!fallback.unit||(hasItem&&!fallbackItems)||(hasItem==fallbackItems&&id<oldId)){fallback=candidate;fallbackItems=hasItem;}
+  }
+  if(!fallback.unit)return false;out=courier64=fallback;routePinned64=true;return true;
+ }__except(1){return false;}
+}
+bool ReadRoute64(wht::SelfCastSource131& out){return routePinned64?ReadCourier64(mthRoute64.owner.unit,out):ReadSelectedRoute64(out);}
+
+bool BeginQuickDrop64(unsigned slot){
+ if(!Allowed64()||!settings64||slot>=6)return false;
+ return quickDropFlow64.Run(GetTickCount64(),[&](){sellAll64.Reset();},[&](){
+  const auto* p=wht::InventoryProfile(profile64->build);if(!p)return false;
+  const auto* networkProfile=wht::DropNetworkProfileFor131(profile64->build);if(!networkProfile)return false;
+  const auto network=wht::DropNetworkNative131(base64,*networkProfile,*p);
+  const auto ok=wht::QuickDropNetwork131(base64,*p,wht::InventoryNative131(base64,*p),network,slot,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;},[&](uintptr_t unit){return wht::DropOwned131(base64,profile64->build,network,unit);});
+  return ok;
+ });
+}
+bool CaptureDrop64(wht::DropSnapshot& snapshot){return wht::DropSnapshot131(base64,profile64->build,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;},snapshot);}
 bool BeginSell64(int selectedSlot=-1){
  if(!(Allowed64()&&!menu64.open&&!macro64.playing&&!macro64.recording&&!dropAllNetwork64.active&&GetForegroundWindow()==window64))return false;
-  autoPickEnabled64=false;autoPick64.Reset();wht::SellView131 view;
+  autoPick64.Reset();wht::SellView131 view;
   const bool started=wht::ReadSellView131(base64,profile64->build,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;},view)&&sellAll64.Start(view,GetTickCount64(),selectedSlot);
  wht::Log(folder64,started?"WHT: Sell All queued.":"WHT: Sell All unavailable (selection/pawnable items/active worker).");
  return started;
@@ -139,6 +185,22 @@ bool Command64(const std::wstring& text){std::wistringstream in(text);std::wstri
   if(std::wstring(c.section)==L"Language"){const bool english=std::wstring(c.key)==L"English"?value==L"1":value!=L"1";wht::SaveSetting(ini64,L"Language",L"English",english?L"1":L"0");wht::SaveSetting(ini64,L"Language",L"Vietnamese",english?L"0":L"1");}
   else if(!wht::SaveSetting(ini64,c.section,c.key,value))return false;Reload64();return true;}
  if(!authorized64||config64.mode!=wht::RunMode::Local||!ui64)return false;
+ if(cmd==L"#setga"){std::wstring extra;if(in>>extra||mthRoute64.route>=0)return false;wht::SelfCastSource131 source;if(!ReadSelectedRoute64(source))return false;courier64=source;wht::Log(folder64,"WHT: selected courier assigned.");return true;}
+ if(const int route=wht::RouteCommand131(cmd);route>=0){std::wstring extra;if(in>>extra)return false;if(!settings64||!(config64.mth49Enable||config64.g17Enable)||!wht::PointNative131(base64,profile64->build))return false;
+  const int counts[]={config64.chayGa1Count,config64.chayGa2Count,config64.chayGa3Count,config64.chaySoi1Count,config64.chaySoi2Count,config64.chaySoi3Count};wht::SelfCastSource131 source;const bool ok=ResolveRoute64(source)&&mthRoute64.Start(route,counts[route],source);wht::Log(folder64,ok?"WHT: MTH native queued route requested.":"WHT: no living owned moving courier found; select courier and use #setga.");return ok;}
+ if(const auto* draw=wht::RouteDrawCommand131(cmd)){std::wstring args;std::getline(in,args);return wht::ApplyRouteDraw131(*draw,args,config64,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini64,section,key,value);},[&](){Reload64();});}
+ if(cmd==L"#gokudraw"){std::wstring args;std::getline(in,args);return wht::ApplyGokuDraw131(args,config64.pickGokuDraw,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini64,section,key,value);},[&](){Reload64();});}
+ if(cmd==L"#goku"||cmd==L"#autopickgoku"){std::wstring args;std::getline(in,args);bool next=false;if(!settings64||!wht::ViewToggle131(args,gokuEnabled64,next)||(next&&!(config64.mth49Enable||config64.g17Enable)))return false;gokuEnabled64=next;autoPick64.Reset();mthNotice64.Event(next?wht::MthNoticeKind131::On:wht::MthNoticeKind131::Off,config64.mthNoti,GetTickCount64());wht::Log(folder64,next?"WHT: Auto Pick Goku ON.":"WHT: Auto Pick Goku OFF.");return true;}
+ if(wht::DropCommand131(cmd)){std::wstring args;std::getline(in,args);int slot=-1;
+  if(!settings64||menu64.open||macro64.playing||macro64.recording||allSkills64.active||dropAllNetwork64.active||GetForegroundWindow()!=window64||!wht::DropCommandSlot131(cmd,args,slot))return false;
+  if(slot>=0){const bool ok=BeginQuickDrop64(unsigned(slot));wht::Log(folder64,ok?"WHT: single item drop submitted once.":"WHT: item drop refused.");return ok;}
+  sellAll64.Reset();quickDropFlow64.pickupAfter=GetTickCount64()+2000;
+  wht::DropSnapshot snapshot;const bool ok=CaptureDrop64(snapshot)&&dropAllNetwork64.Start(snapshot,GetTickCount64());
+  wht::Log(folder64,ok?"WHT: drop all worker started.":"WHT: drop all command refused.");return ok;
+ }
+ if(wht::AutoClickCommand131(cmd)){std::wstring args;std::getline(in,args);if(!settings64)return false;const bool ok=wht::ApplyAutoClickCommand131(cmd,args,autoClick64,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini64,section,key,value);},[&](){Reload64();});wht::Log(folder64,ok?"WHT: Auto Click Left="+std::to_string(autoClick64.left)+" Right="+std::to_string(autoClick64.right)+" interval="+std::to_string(config64.autoClickInterval)+"ms":"WHT: Usage #autol/#autor [0|1]; #clickdelay <5..1000>");return ok;}
+ if(const auto* option=wht::ViewCommandFor131(cmd)){std::wstring args;std::getline(in,args);return wht::ApplyViewCommand131(*option,args,config64,[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){return wht::SaveSetting(ini64,section,key,value);},[&](){Reload64();});}
+ if(const auto kind=wht::ManualClearKind131(cmd)){std::wstring extra;if(!settings64||(in>>extra))return false;return manualClear64.Queue(ui64,kind,GetTickCount64());}
  if(cmd==L"#repeat"){std::wstring args;std::getline(in,args);const bool ok=repeatMessage64.Command(args);wht::Log(folder64,ok?"WHT: Repeat updated; #repeat stop cancels.":"WHT: Usage #repeat <1..10000> <text> (1..128 UTF-8 bytes); #repeat stop");return ok;}
  if(cmd==L"#speed"){std::wstring args;std::getline(in,args);const bool ok=wht::SetSpeed131(args);wht::Log(folder64,ok?"WHT: Game Speed "+std::to_string(wht::speedMultiplier131)+"x":"WHT: #speed requires 1..70; clock hooks unavailable or invalid argument.");return ok;}
  if(cmd==L"#tanghinh"||cmd==L"#invis"||cmd==L"#reveal"||cmd==L"#revealinvis"){std::wstring arg,extra;in>>arg;if(in>>extra)return false;wht::FoldCommandName(arg);bool next=!config64.revealInvisible;
@@ -156,16 +218,21 @@ bool Command64(const std::wstring& text){std::wistringstream in(text);std::wstri
 }
 void Destroy64(){wht::ForgetUiRefresh131();wht::ResetSpeed131();wht::ResetLifeMana131();if(menu64.independentHost&&Identity64(reinterpret_cast<uintptr_t>(menu64.independentHost),profile64->simpleVtable)){
  auto table=*reinterpret_cast<uintptr_t*>(menu64.independentHost);reinterpret_cast<void(*)(void*,unsigned)>(*reinterpret_cast<uintptr_t*>(table+16))(menu64.independentHost,1);}
- menu64.Reset();placements64.clear();status64=nullptr;menuLogged64=false;gameplay64.Reset();hotkeys64.Reset();remap64.Reset();quickChatEcho64.Reset();repeatMessage64.Reset();timeOfDay64.Reset();consoleUi64.Reset();blackBar64.Reset();mouseTooltip64.Reset();autoClick64.Reset();pinned64={};messageTimers64.Reset();resources64.Reset();clock64.Reset();matchStart64.Reset();fps64.Reset();quickDrop64={};dropIcon64.Reset();pickIcon64.Reset();sellIcon64.Reset();reveal64.Reset();sellAll64.Reset();autoPick64.Reset();autoPickEnabled64=false;dropAllNetwork64.Reset();skillsIcon64.Reset();allSkills64.Reset();camera64=0;cameraMask64=0;cameraLogged64=false;typed64=false;chat64.clear();macro64.Stop();}
+ menu64.Reset();placements64.clear();status64=nullptr;menuLogged64=false;gameplay64.Reset();hotkeys64.Reset();remap64.Reset();quickChatEcho64.Reset();repeatMessage64.Reset();timeOfDay64.Reset();consoleUi64.Reset();blackBar64.Reset();mouseTooltip64.Reset();autoClick64.Reset();pinned64={};messageTimers64.Reset();manualClear64.Reset();resources64.Reset();clock64.Reset();matchStart64.Reset();timeBoss64.Reset();detailTooltip64.Reset();fps64.Reset();quickDrop64={};quickDropFlow64.Reset();dropIcon64.Reset();pickIcon64.Reset();gokuIcon64.Reset();mthNotice64.Reset();mthRoute64.Reset();routeButtons64.Reset();courier64={};routePinned64=false;gokuEnabled64=false;sellIcon64.Reset();reveal64.Reset();sellAll64.Reset();autoPick64.Reset();autoPickEnabled64=false;dropAllNetwork64.Reset();skillsIcon64.Reset();allSkills64.Reset();camera64=0;cameraMask64=0;cameraLogged64=false;typed64=false;chat64.clear();macro64.Stop();}
 void PresentGraphics64(){
  if(wht::uiRefreshOwner131!=ui64||!ui64)return;
 if(config64.lifeManaCommas||config64.lifeManaNoHide||config64.statsCommas||wht::lifeFlags131||!wht::lifeUi131)if(const auto* p=wht::LifeProfileFor131(profile64->build))wht::UpdateLifeMana131(base64,profile64->build,ui64,wht::Component64(ui64,base64,p->portrait),wht::Component64(ui64,base64,profile64->infoVtable),(Allowed64()&&settings64)?((config64.lifeManaCommas?1u:0u)|(config64.lifeManaNoHide?2u:0u)|(config64.statsCommas?4u:0u)):0u,[](uintptr_t unit,bool mana,float& value,float& maximum){float rate=0;return wht::State64(unit,base64,*profile64,mana,value,maximum,rate);},true);
+ if(config64.statsTooltip||detailTooltip64.Active())if(const auto* life=wht::LifeProfileFor131(profile64->build)){const auto source=wht::ReadLifeSource131(base64,*life,ui64,wht::Component64(ui64,base64,life->portrait));
+  detailTooltip64.Update(base64,profile64->build,ui64,source,wht::Component64(ui64,base64,profile64->infoVtable),Allowed64()&&settings64&&config64.statsTooltip&&!menu64.open,GetTickCount64(),[&](uintptr_t table){return wht::Component64(ui64,base64,table);});}
 }
 void PresentBar64(uintptr_t bar){
+ timeBoss64.RememberBar(bar);
  if(!ui64||!menu64.initialized)return;
  auto raw=api64;raw.setWidth=reinterpret_cast<decltype(raw.setWidth)>(base64+profile64->width);raw.setAbsPoint=reinterpret_cast<decltype(raw.setAbsPoint)>(base64+profile64->absolute);raw.setRelPoint=reinterpret_cast<decltype(raw.setRelPoint)>(base64+profile64->relative);gameplay64.WriteBar(bar,base64,*profile64,config64,Allowed64()&&settings64,raw);
 }
-void Update64(){const auto ui=CurrentUi64();if(ui!=ui64){Destroy64();ui64=ui;}if(!Allowed64()||!settings64)repeatMessage64.Reset();if(!Allowed64())wht::ResetSpeed131();if(!ui)return; wht::InstallUiRefresh131(base64,profile64->build,ui,PresentGraphics64);graphicsDiagnostic64.Update(base64,profile64->build,ui,config64,Allowed64(),folder64,consoleUi64,mouseTooltip64,[&](uintptr_t table){return wht::Component64(ui,base64,table);}); wht::UpdateMatchStart131(matchStart64,base64,profile64->build,ui,Allowed64()&&settings64&&config64.soundStartGame,module64,folder64); if(auto p=wht::RevealProfileFor131(profile64->build)){
+void Update64(){const auto ui=CurrentUi64();if(ui!=ui64){Destroy64();ui64=ui;}if(!Allowed64()||!settings64)repeatMessage64.Reset();if(!Allowed64()||!settings64||!config64.timeBoss||!(config64.mth49Enable||config64.g17Enable))timeBoss64.active=false;if(!Allowed64())wht::ResetSpeed131(); manualClear64.Update(base64,profile64->build,ui64,Allowed64()&&settings64,!typed64&&!menu64.open&&GetForegroundWindow()==window64,GetTickCount64());
+
+if(!ui)return; wht::InstallUiRefresh131(base64,profile64->build,ui,PresentGraphics64);graphicsDiagnostic64.Update(base64,profile64->build,ui,config64,Allowed64(),folder64,consoleUi64,mouseTooltip64,[&](uintptr_t table){return wht::Component64(ui,base64,table);}); wht::UpdateMatchStart131(matchStart64,base64,profile64->build,ui,Allowed64()&&settings64&&config64.soundStartGame,module64,folder64); if(auto p=wht::RevealProfileFor131(profile64->build)){
   if(reveal64.Update(base64,profile64->build,wht::Component64(ui64,base64,p->worldTable),Allowed64()&&settings64&&config64.revealInvisible)&&!reveal64.reported){reveal64.reported=true;wht::Log(folder64,"WHT: native invisible-unit display enabled.");}
  }
 if(config64.lifeManaCommas||config64.lifeManaNoHide||config64.statsCommas||wht::lifeFlags131||!wht::lifeUi131)if(const auto* p=wht::LifeProfileFor131(profile64->build))wht::UpdateLifeMana131(base64,profile64->build,ui64,wht::Component64(ui64,base64,p->portrait),wht::Component64(ui64,base64,profile64->infoVtable),(Allowed64()&&settings64)?((config64.lifeManaCommas?1u:0u)|(config64.lifeManaNoHide?2u:0u)|(config64.statsCommas?4u:0u)):0u,[](uintptr_t unit,bool mana,float& value,float& maximum){float rate=0;return wht::State64(unit,base64,*profile64,mana,value,maximum,rate);});
@@ -198,23 +265,33 @@ Camera64();if(!Assets64())return;
   if(sellAll64.active){wht::SellView131 view;bool valid=Allowed64()&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==window64&&wht::ReadSellView131(base64,profile64->build,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;},view);
   if(valid&&sellAll64.scanning){auto p=wht::PickProfileFor131(profile64->build);valid=p&&wht::ScanSellShops131(base64,profile64->build,wht::Component64(ui64,base64,p->worldTable),sellAll64.scanCursor,view,[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;});}
   const auto result=sellAll64.Step(valid?&view:nullptr,GetTickCount64(),[&](const wht::DropSnapshot& source,const wht::DropItem& item,const wht::SellShop131& shop){return wht::SendSell131(base64,profile64->build,source,item,shop,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;});});
+  if(!sellAll64.active)quickDropFlow64.pickupAfter=(std::max)(quickDropFlow64.pickupAfter,GetTickCount64()+1000);
   if(result==wht::SellResult131::Submitted)wht::Log(folder64,"WHT: Sell All synchronized shop order submitted.");
   else if(result!=wht::SellResult131::Working&&result!=wht::SellResult131::Idle)wht::Log(folder64,std::string("WHT: Sell All ")+(result==wht::SellResult131::Complete?"completed":result==wht::SellResult131::NoShop?"no accessible purchase shop":result==wht::SellResult131::Cancelled?"cancelled":"remaining")+"; sold="+std::to_string(sellAll64.sold)+" skipped="+std::to_string(sellAll64.skipped)+" remaining="+std::to_string(sellAll64.remaining)+" gold delta="+std::to_string(sellAll64.goldDelta));
  }
  sellIcon64.latched=sellAll64.active;sellIcon64.Update(base64,Allowed64()&&config64.showSellAll,menu64);
- if(!config64.showAutoPick)autoPickEnabled64=false;
- if(autoPickEnabled64&&(Allowed64()&&config64.showAutoPick&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==window64)&&!dropAllNetwork64.active){const auto now=GetTickCount64();
-  if(now>=autoPick64.next){auto p=wht::PickProfileFor131(profile64->build);wht::PickSnapshot131 snapshot;
-   const bool valid=p&&wht::ReadPickSnapshot131(base64,profile64->build,wht::Component64(ui64,base64,p->worldTable),[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;},snapshot);
-   const auto result=autoPick64.Tick(now,valid?&snapshot:nullptr,[&](const wht::DropSnapshot& source,const wht::PickCandidate131& item){return wht::SendPick131(base64,profile64->build,source,item,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;});});
+ if(gokuEnabled64&&!(Allowed64()&&settings64&&(config64.mth49Enable||config64.g17Enable))){gokuEnabled64=false;autoPick64.Reset();}
+ if((autoPickEnabled64||gokuEnabled64)&&!sellAll64.active&&(Allowed64()&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==window64)&&!dropAllNetwork64.active){const auto now=GetTickCount64();
+  if(now>=autoPick64.next&&now>=quickDropFlow64.pickupAfter){auto p=wht::PickProfileFor131(profile64->build);wht::PickSnapshot131 snapshot;bool acquiredGoku=false;
+   const bool valid=p&&wht::ReadPickSnapshot131(base64,profile64->build,wht::Component64(ui64,base64,p->worldTable),[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;},snapshot,gokuEnabled64?wht::gokuType131:0,&acquiredGoku);
+   if(valid&&gokuEnabled64&&acquiredGoku){gokuEnabled64=false;autoPick64.Reset();autoPick64.next=now+250;mthNotice64.Event(wht::MthNoticeKind131::Acquired,config64.mthNoti,now);wht::Log(folder64,"WHT: Auto Pick Goku OFF (confirmed in inventory).");}else{
+   const auto result=autoPick64.Tick(now,valid?&snapshot:nullptr,[&](const wht::DropSnapshot& source,const wht::PickCandidate131& item){const auto* inventory=wht::InventoryProfile(profile64->build);if(gokuEnabled64&&(!inventory||!wht::ItemCodeGuard131(base64,*inventory)||wht::ItemCodeValue131(base64,*inventory,item.object)!=wht::gokuType131))return false;return wht::SendPick131(base64,profile64->build,source,item,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;});});
    if(result==wht::PickResult131::Submitted)wht::Log(folder64,"WHT: Auto Pick native target order submitted.");
-   if(result==wht::PickResult131::Cancelled){autoPickEnabled64=false;wht::Log(folder64,"WHT: Auto Pick stopped (selection/session/native validation).");}
+   }
+   // Invalid selection/session clears only the target; the manual toggle stays on.
+
   }
  }else autoPick64.Reset();
+ if(mthRoute64.route>=0)mthRoute64.TickQueued(Allowed64()&&settings64&&(config64.mth49Enable||config64.g17Enable),!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!sellAll64.active&&!dropAllNetwork64.active&&!allSkills64.active&&GetForegroundWindow()==window64,ReadRoute64,[&](const wht::SelfCastSource131& before,const wht::Route131& route,int count){wht::SelfCastSource131 current;if(!ReadCourier64(before.unit,current)||!wht::SameSelfCastSource131(before,current))return false;const auto api=wht::MthQueueNative131(base64,profile64->build);const auto select=wht::CourierSelectNative131(base64,profile64->build);wht::SelectionRoster131 roster;if(!api||!select||!wht::ReadSelectionRoster131(base64,profile64->build,roster))return false;const bool submitted=wht::SubmitCourierRoute131(roster,current.unit,select,api,ui64,route,count);wht::Log(folder64,submitted?"WHT: MTH native route queue submitted.":"WHT: MTH native route queue failed; no replay.");return submitted;});
+ mthNotice64.Update(base64,Allowed64()&&settings64&&(config64.mth49Enable||config64.g17Enable),config64,menu64,GetTickCount64());
+ auto mthRaw64=menu64.api;mthRaw64.setWidth=reinterpret_cast<decltype(mthRaw64.setWidth)>(base64+profile64->width);mthRaw64.setAbsPoint=reinterpret_cast<decltype(mthRaw64.setAbsPoint)>(base64+profile64->absolute);
+ routeButtons64.Update(base64,Allowed64()&&settings64,config64,mthRoute64.route,menu64,&mthRaw64);
+ gokuIcon64.latched=gokuEnabled64;gokuIcon64.Update(base64,Allowed64()&&settings64&&!menu64.open&&(config64.mth49Enable||config64.g17Enable)&&config64.pickGokuDraw,menu64,&mthRaw64);
  pickIcon64.latched=autoPickEnabled64;pickIcon64.Update(base64,Allowed64()&&config64.showAutoPick,menu64);
  dropIcon64.Update(base64,Allowed64()&&config64.showDropAll,menu64);
- if(dropAllNetwork64.active){wht::DropSnapshot snapshot;const bool valid=Allowed64()&&config64.showDropAll&&!sellAll64.active&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==window64&&wht::DropSnapshot131(base64,profile64->build,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;},snapshot);
+ if(dropAllNetwork64.active){wht::DropSnapshot snapshot;const bool valid=Allowed64()&&!sellAll64.active&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==window64&&wht::DropSnapshot131(base64,profile64->build,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;},snapshot);
   const auto result=dropAllNetwork64.Step(valid?&snapshot:nullptr,GetTickCount64(),[&](const wht::DropSnapshot& source,const wht::DropItem& item){return wht::SendDropSnapshot131(base64,profile64->build,source,item);});
+  if(result==wht::DropResult::Complete||result==wht::DropResult::Remaining)quickDropFlow64.pickupAfter=GetTickCount64()+2000;
   if(result==wht::DropResult::Complete)wht::Log(folder64,"WHT: synchronized drop all completed; original items absent from inventory.");
   else if(result==wht::DropResult::Cancelled)wht::Log(folder64,"WHT: synchronized drop all cancelled.");
   else if(result==wht::DropResult::Remaining)wht::Log(folder64,"WHT: synchronized drop all stopped; remaining "+std::to_string(dropAllNetwork64.remaining));
@@ -226,6 +303,7 @@ Camera64();if(!Assets64())return;
   for(auto entry:{std::pair<unsigned,const char*>{1,"selected-unit HP/s MP/s"},{2,"cooldown seconds"},{8,"HP/Mana values"},{16,"hero level"}})if(fresh&entry.first)wht::Log(folder64,std::string("WHT x64: live ")+entry.second+" displayed.");gameplay64.reported|=observed;
  }
  if(status64){std::string text="|cffffcc00WHT " WHT_VERSION_STRING " | 1.31.1."+std::to_string(profile64->build)+" x64|r";if(!authorized64)text+=" |cffff4444Login LoadFileMapWar3|r";else if(config64.showMem){float mb=0,percent=0;if(wht::GetCurrentProcessMemoryUsage(mb,percent))text+=" | "+std::to_string(int(mb))+" MB";}api64.setText(status64,text.c_str());}
+ timeBoss64.Update(base64,profile64->build,ui64,Allowed64()&&settings64&&config64.timeBoss&&(config64.mth49Enable||config64.g17Enable),GetTickCount64(),menu64,[&](uintptr_t unit,float& hp){float maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,hp,maximum,rate);});
  repeatMessage64.Tick(Allowed64()&&settings64,!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&GetForegroundWindow()==window64,GetTickCount64(),SendChat64);
  menu64.PlaybackVisual(macro64.playing);macro64.Tick(Allowed64()&&!typed64&&!menu64.open);
 }
@@ -244,26 +322,24 @@ LRESULT CALLBACK Window64(HWND hwnd,UINT message,WPARAM key,LPARAM value){if(mes
   wht::Log(folder64,started?"WHT x64: all skills sequence queued.":"WHT x64: all skills unavailable (hero/points/menu).");
  }))return 0;}
  {RECT rect{};GetClientRect(hwnd,&rect);
- if(pickIcon64.Mouse(message,{short(LOWORD(value)),short(HIWORD(value))},rect.right,rect.bottom,Allowed64()&&config64.showAutoPick&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==hwnd&&!dropAllNetwork64.active&&!sellAll64.active,[&](){autoPickEnabled64=!autoPickEnabled64;autoPick64.Reset();wht::Log(folder64,autoPickEnabled64?"WHT: Auto Pick enabled.":"WHT: Auto Pick disabled.");}))return 0;
+ if(routeButtons64.Mouse(message,{short(LOWORD(value)),short(HIWORD(value))},rect.right,rect.bottom,Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==window64,[&](unsigned route){const wchar_t* commands[]={L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};Command64(commands[route]);}))return 0;
+ if(gokuIcon64.Mouse(message,{short(LOWORD(value)),short(HIWORD(value))},rect.right,rect.bottom,Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==window64,[&](){Command64(L"#goku");}))return 0;
+ if(pickIcon64.Mouse(message,{short(LOWORD(value)),short(HIWORD(value))},rect.right,rect.bottom,Allowed64()&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==hwnd&&!dropAllNetwork64.active&&!sellAll64.active,[&](){autoPickEnabled64=!autoPickEnabled64;autoPick64.Reset();wht::Log(folder64,autoPickEnabled64?"WHT: Auto Pick enabled.":"WHT: Auto Pick disabled.");}))return 0;
  if(sellIcon64.Mouse(message,{short(LOWORD(value)),short(HIWORD(value))},rect.right,rect.bottom,Allowed64()&&config64.showSellAll&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==hwnd&&!dropAllNetwork64.active,[&](){
   BeginSell64();
  }))return 0;
  if(dropIcon64.Mouse(message,{short(LOWORD(value)),short(HIWORD(value))},rect.right,rect.bottom,Allowed64()&&config64.showDropAll&&!sellAll64.active&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==hwnd,[&](){
-  autoPickEnabled64=false;autoPick64.Reset();
+  autoPick64.Reset();quickDropFlow64.pickupAfter=GetTickCount64()+2000;
   const auto* p=wht::InventoryProfile(profile64->build);if(!p)return;
   wht::DropSnapshot snapshot;
   const bool started=wht::DropSnapshot131(base64,profile64->build,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;},snapshot)&&dropAllNetwork64.Start(snapshot,GetTickCount64());
   wht::Log(folder64,started?"WHT: synchronized drop all queued.":"WHT: drop all unavailable or already active.");
  }))return 0;}
- if(quickDrop64.Mouse(message,Allowed64()&&config64.quickDropItem&&!sellAll64.active&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==hwnd&&(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000),[&](){
+ if(quickDrop64.Mouse(message,Allowed64()&&config64.quickDropItem&&!consoleUi64.active&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&GetForegroundWindow()==hwnd&&(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)&&!([&](){const auto* p=wht::QuickCastProfile(profile64->build);return p&&wht::QuickCastTarget131(base64,ui64,profile64->uiVtable,*p);})(),[&](){
   RECT rect{};GetClientRect(hwnd,&rect);POINT point{short(LOWORD(value)),short(HIWORD(value))};
   return wht::InventorySlotHit131(point,rect.right,rect.bottom,[&](unsigned slot){return wht::Button64(ui64,base64,*profile64,slot+12);});
  },[&](unsigned slot){
-  autoPickEnabled64=false;autoPick64.Reset();
-  const auto* p=wht::InventoryProfile(profile64->build);if(!p)return;
-  const auto* networkProfile=wht::DropNetworkProfileFor131(profile64->build);if(!networkProfile)return;
-  const auto network=wht::DropNetworkNative131(base64,*networkProfile,*p);
-  const auto ok=wht::QuickDropNetwork131(base64,*p,wht::InventoryNative131(base64,*p),network,slot,[&](){return wht::Selected64(ui64,base64,*profile64);},[&](uintptr_t unit){float current=0,maximum=0,rate=0;return wht::State64(unit,base64,*profile64,false,current,maximum,rate)&&current>.405f;},[&](uintptr_t unit){return wht::DropOwned131(base64,profile64->build,network,unit);});
+  const bool ok=BeginQuickDrop64(slot);
   wht::Log(folder64,ok?"WHT x64: quick drop synchronized action submitted.":"WHT x64: quick drop refused or slot empty.");
  }))return 0;
  if(message==WM_KEYDOWN){bool repeat=(value&(1LL<<30))!=0;if(menu64.ToggleKey(unsigned(key),config64.menuKey,repeat,typed64))return 0;if(!repeat&&key==VK_ESCAPE&&menu64.Escape())return 0;if(menu64.Key(unsigned(key),unsigned((value>>16)&255),Command64))return 0;
@@ -272,6 +348,8 @@ LRESULT CALLBACK Window64(HWND hwnd,UINT message,WPARAM key,LPARAM value){if(mes
   if(Allowed64()&&!typed64&&!repeat&&!menu64.open&&key==VK_TAB&&config64.showResource&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){resources64.Toggle();return 0;}
   if(Allowed64()&&!typed64&&!repeat){if(key==config64.commandKey){settings64=!settings64;Camera64();return 0;}
    bool chord=(GetKeyState(VK_CONTROL)&0x8000)&&(GetKeyState(VK_SHIFT)&0x8000);if(config64.macroEnabled){if(key==config64.macroKeys[0]||(chord&&key==VK_F10)){macro64.Play();return 0;}if(key==config64.macroKeys[1]||(chord&&key==VK_F12)){macro64.Stop();return 0;}if(key==config64.macroKeys[2]||(chord&&key==VK_F9)){macro64.Record();return 0;}if(key==config64.macroKeys[3]||(chord&&key==VK_F11)){macro64.Edit();return 0;}}}}
+ if(message==WM_KEYDOWN&&!(value&(1LL<<30))&&Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&(config64.mth49Enable||config64.g17Enable)&&GetForegroundWindow()==window64&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){const unsigned keys[]={config64.chayGa1Hotkey,config64.chayGa2Hotkey,config64.chayGa3Hotkey,config64.chaySoi1Hotkey,config64.chaySoi2Hotkey,config64.chaySoi3Hotkey};const wchar_t* commands[]={L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};for(unsigned i=0;i<6;++i)if(key&&key==keys[i]){Command64(commands[i]);if(key<256)remap64.pressed[key]=true;return 0;}}
+ if(message==WM_KEYDOWN&&!(value&(1LL<<30))&&key&&key==config64.pickGokuHotkey&&Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&(config64.mth49Enable||config64.g17Enable)&&GetForegroundWindow()==window64&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){Command64(L"#goku");if(key<256)remap64.pressed[key]=true;return 0;}
  if(message==WM_KEYDOWN&&!(value&(1LL<<30))&&key&&key==config64.multiboardKey&&Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&GetForegroundWindow()==window64&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
   const auto* p=wht::MultiboardProfileFor131(profile64->build);
   if(p&&wht::ToggleMultiboard131(base64,profile64->build,wht::Component64(ui64,base64,p->table))){if(key<256)remap64.pressed[key]=true;return 0;}

@@ -1,0 +1,8 @@
+{
+  "WHT-1.29/native/version129.cpp": "9b5f0ae8daf274dce976e53c63135c1b41fa69281f7cb2ce6fd983179a45b905",
+  "WHT-1.29/native/quick_drop_network129.hpp": "d73764217fe7ae56d82c6b1e98f388cc7df0c189e713869642daaaa916713354",
+  "WHT-1.29/native/quick_drop129.hpp": "e9332ec9b6f80ac0a310f2c9f8e20d5fd209a0309f005f96ac9fdbf9d11d1dd4",
+  "WHT-1.29/native/inventory_actions129.hpp": "53d2f243ae9876222b4ef38a5d54d7fffa317f0776330e099383fc0ffd1e08a1",
+  "WHT/native/drop_all.hpp": "0512edf25ecfe0a61036f119adc1c62301b18551ad9b2aba0509900c70dfa8e6",
+  "WHT/native/auto_pick.hpp": "683dd0b3707a9ccfbf7fe192c971bf4cfa3d684dc3de36d500395046f448d836"
+}

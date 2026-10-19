@@ -1,3 +1,14 @@
+#include "mth_queue131.hpp"
+#include "courier_route131.hpp"
+#include "mth_route_buttons131.hpp"
+#include "mth_route131.hpp"
+#include "mth_notice131.hpp"
+#include "drop_commands131.hpp"
+#include "auto_click_commands131.hpp"
+#include "view_commands131.hpp"
+#include "detailed_tooltip131.hpp"
+#include "manual_clear131.hpp"
+#include "time_boss131.hpp"
 #include "repeat_message131.hpp"
 #include "quick_chat131.hpp"
 #include "ui_refresh131.hpp"
@@ -61,14 +72,17 @@ wht::MouseTooltip131 mouseTooltip131;
 wht::AutoClick131 autoClick131;
 wht::SelfCastSource131 pinned131;
 wht::MessageTimers131 messageTimers131;
+wht::ManualClear131 manualClear131;
 wht::ResourceBoard131 resources131;
 wht::GraphicsDiagnostic131 graphicsDiagnostic131;
 wht::MatchStart131 matchStart131;
+wht::TimeBoss131 timeBoss131;
+wht::DetailedTooltip131 detailTooltip131;
 wht::ClockOverlay131 clock131;wht::FpsState131 fps131;
-wht::QuickDropInput131 quickDrop131;
+wht::QuickDropInput131 quickDrop131;wht::QuickDropFlow131 quickDropFlow131;
 wht::Reveal131 reveal131;
 wht::SellIcon131 sellIcon131;wht::SellAll131 sellAll131;
-wht::AutoPickIcon131 pickIcon131;wht::AutoPick131 autoPick131;bool autoPickEnabled131=false;
+wht::SelfCastSource131 courier131;bool routePinned131=false;wht::RouteButtons131 routeButtons131;wht::MthRoute131 mthRoute131;wht::MthNotice131 mthNotice131;wht::GokuIcon131 gokuIcon131;bool gokuEnabled131=false;wht::AutoPickIcon131 pickIcon131;wht::AutoPick131 autoPick131;bool autoPickEnabled131=false;
 wht::DropIcon131 dropIcon131;wht::DropAllState dropAllNetwork131;
 wht::SkillsIcon131 skillsIcon131;wht::AllSkills131 allSkills131;
 wht::RegenOverlay131 regen131;const wht::RegenProfile131* regenProfile131=nullptr;
@@ -184,9 +198,40 @@ bool ToggleArgument131(std::wistringstream& in,bool old,bool& value){
  else if(arg==L"0"||arg==L"off"||arg==L"false")value=false;else return false;return true;
 }
 void Reload131(){config131=wht::LoadConfig(ini131);wht::toolEnglish.store(config131.english);menu131.nextRefresh=0;ApplyCamera131();}
+bool ReadSelectedRoute131(wht::SelfCastSource131& out){return wht::ReadSelfCastSource131(base131,profile131->build,currentUi131,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},out)&&wht::RouteMovable131(base131,profile131->build,out.unit);}
+bool ReadCourier131(uintptr_t unit,wht::SelfCastSource131& out){return wht::ReadSelfCastSource131(base131,profile131->build,currentUi131,[&](){return unit;},[&](uintptr_t unit){float v=0,m=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,v,m)&&v>.405f;},out)&&wht::RouteMovable131(base131,profile131->build,unit);}
+bool ResolveRoute131(wht::SelfCastSource131& out){
+ if(ReadSelectedRoute131(out)){courier131=out;routePinned131=true;return true;}
+ if(courier131.unit&&ReadCourier131(courier131.unit,out)&&wht::SameSelfCastSource131(out,courier131)){routePinned131=true;return true;}
+ courier131={};
+ const auto* sp=wht::SellProfileFor131(profile131->build);const auto* pp=wht::PickProfileFor131(profile131->build);const auto* inv=wht::InventoryProfile(profile131->build);if(!sp||!pp||!inv)return false;
+ auto api=wht::SellNative131(base131,*sp);auto inventory=wht::InventoryNative131(base131,*inv);if(!api||!inventory)return false;
+ __try{const auto worldFrame=wht::Component131(currentUi131,base131,pp->worldTable);if(!worldFrame)return false;const auto list=api.list(worldFrame,true);if(list!=worldFrame+sp->listOffset)return false;const auto count=*reinterpret_cast<unsigned*>(list);const auto data=*reinterpret_cast<uintptr_t*>(list+sizeof(uintptr_t));if(count>8192||(count&&!data))return false;
+  wht::SelfCastSource131 fallback;bool fallbackItems=false;
+  for(unsigned pass=0;pass<2&&!fallback.unit;++pass)for(unsigned i=0;i<count;++i){const auto unit=*reinterpret_cast<uintptr_t*>(data+i*sizeof(uintptr_t));wht::SelfCastSource131 candidate;if(!ReadCourier131(unit,candidate)||(pass==0&&!wht::RouteNonHero131(base131,profile131->build,unit)))continue;
+   bool hasItem=false;if(wht::InventoryIdentity131(wht::ComponentLookup131::Slot(unit,inv->inventoryOffset),base131,inv->inventoryTable)){const auto capacity=inventory.size(unit);if(capacity<=6)for(unsigned k=0;k<capacity;++k)hasItem|=inventory.item(unit,k)!=0;}
+   const uint64_t id=(uint64_t(candidate.id.low)<<32)|candidate.id.high,oldId=(uint64_t(fallback.id.low)<<32)|fallback.id.high;
+   if(!fallback.unit||(hasItem&&!fallbackItems)||(hasItem==fallbackItems&&id<oldId)){fallback=candidate;fallbackItems=hasItem;}
+  }
+  if(!fallback.unit)return false;out=courier131=fallback;routePinned131=true;return true;
+ }__except(1){return false;}
+}
+bool ReadRoute131(wht::SelfCastSource131& out){return routePinned131?ReadCourier131(mthRoute131.owner.unit,out):ReadSelectedRoute131(out);}
+
+bool BeginQuickDrop131(unsigned slot){
+ if(!Allowed131()||!settings131||slot>=6)return false;
+ return quickDropFlow131.Run(GetTickCount64(),[&](){sellAll131.Reset();},[&](){
+  const auto* p=wht::InventoryProfile(profile131->build);if(!p||!regenProfile131||!stateBarProfile131)return false;
+  const auto* networkProfile=wht::DropNetworkProfileFor131(profile131->build);if(!networkProfile)return false;
+  const auto network=wht::DropNetworkNative131(base131,*networkProfile,*p);
+  const auto ok=wht::QuickDropNetwork131(base131,*p,wht::InventoryNative131(base131,*p),network,slot,[&](){return wht::SelectedUnit131(currentUi131,base131,*regenProfile131);},[&](uintptr_t unit){float value=0,maximum=0;return wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},[&](uintptr_t unit){return wht::DropOwned131(base131,profile131->build,network,unit);});
+  return ok;
+ });
+}
+bool CaptureDrop131(wht::DropSnapshot& snapshot){return wht::DropSnapshot131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},snapshot);}
 bool BeginSell131(int selectedSlot=-1){
  if(!(Allowed131()&&!menu131.open&&!macro131.playing&&!macro131.recording&&!dropAllNetwork131.active&&GetForegroundWindow()==gameWindow131&&settings131))return false;
-  autoPickEnabled131=false;autoPick131.Reset();wht::SellView131 view;
+  autoPick131.Reset();wht::SellView131 view;
   const bool started=wht::ReadSellView131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},view)&&sellAll131.Start(view,GetTickCount64(),selectedSlot);
  wht::Log(folder131,started?"WHT: Sell All queued.":"WHT: Sell All unavailable (selection/pawnable items/active worker).");
  return started;
@@ -213,6 +258,22 @@ bool Command131(const std::wstring& text){
  }
  if(command==L"#tool"||command==L"#menu"){menu131.Toggle();return true;}
  if(!Allowed131()){wht::Log(folder131,"WHT 1.31: command requires Local mode, active match and LoadFileMapWar3 session.");return false;}
+ if(command==L"#setga"){std::wstring extra;if(in>>extra||mthRoute131.route>=0)return false;wht::SelfCastSource131 source;if(!ReadSelectedRoute131(source))return false;courier131=source;wht::Log(folder131,"WHT: selected courier assigned.");return true;}
+ if(const int route=wht::RouteCommand131(command);route>=0){std::wstring extra;if(in>>extra)return false;if(!settings131||!(config131.mth49Enable||config131.g17Enable)||!wht::PointNative131(base131,profile131->build))return false;
+  const int counts[]={config131.chayGa1Count,config131.chayGa2Count,config131.chayGa3Count,config131.chaySoi1Count,config131.chaySoi2Count,config131.chaySoi3Count};wht::SelfCastSource131 source;const bool ok=ResolveRoute131(source)&&mthRoute131.Start(route,counts[route],source);wht::Log(folder131,ok?"WHT: MTH native queued route requested.":"WHT: no living owned moving courier found; select courier and use #setga.");return ok;}
+ if(const auto* draw=wht::RouteDrawCommand131(command)){std::wstring args;std::getline(in,args);return wht::ApplyRouteDraw131(*draw,args,config131,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(command==L"#gokudraw"){std::wstring args;std::getline(in,args);return wht::ApplyGokuDraw131(args,config131.pickGokuDraw,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(command==L"#goku"||command==L"#autopickgoku"){std::wstring args;std::getline(in,args);bool next=false;if(!settings131||!wht::ViewToggle131(args,gokuEnabled131,next)||(next&&!(config131.mth49Enable||config131.g17Enable)))return false;gokuEnabled131=next;autoPick131.Reset();mthNotice131.Event(next?wht::MthNoticeKind131::On:wht::MthNoticeKind131::Off,config131.mthNoti,GetTickCount64());wht::Log(folder131,next?"WHT: Auto Pick Goku ON.":"WHT: Auto Pick Goku OFF.");return true;}
+ if(wht::DropCommand131(command)){std::wstring args;std::getline(in,args);int slot=-1;
+  if(!settings131||menu131.open||macro131.playing||macro131.recording||allSkills131.active||dropAllNetwork131.active||GetForegroundWindow()!=gameWindow131||!wht::DropCommandSlot131(command,args,slot))return false;
+  if(slot>=0){const bool ok=BeginQuickDrop131(unsigned(slot));wht::Log(folder131,ok?"WHT: single item drop submitted once.":"WHT: item drop refused.");return ok;}
+  sellAll131.Reset();quickDropFlow131.pickupAfter=GetTickCount64()+2000;
+  wht::DropSnapshot snapshot;const bool ok=CaptureDrop131(snapshot)&&dropAllNetwork131.Start(snapshot,GetTickCount64());
+  wht::Log(folder131,ok?"WHT: drop all worker started.":"WHT: drop all command refused.");return ok;
+ }
+ if(wht::AutoClickCommand131(command)){std::wstring args;std::getline(in,args);if(!settings131)return false;const bool ok=wht::ApplyAutoClickCommand131(command,args,autoClick131,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});wht::Log(folder131,ok?"WHT: Auto Click Left="+std::to_string(autoClick131.left)+" Right="+std::to_string(autoClick131.right)+" interval="+std::to_string(config131.autoClickInterval)+"ms":"WHT: Usage #autol/#autor [0|1]; #clickdelay <5..1000>");return ok;}
+ if(const auto* option=wht::ViewCommandFor131(command)){std::wstring args;std::getline(in,args);return wht::ApplyViewCommand131(*option,args,config131,[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(const auto kind=wht::ManualClearKind131(command)){std::wstring extra;if(!settings131||(in>>extra))return false;return manualClear131.Queue(currentUi131,kind,GetTickCount64());}
  if(command==L"#repeat"){std::wstring args;std::getline(in,args);const bool ok=repeatMessage131.Command(args);wht::Log(folder131,ok?"WHT: Repeat updated; #repeat stop cancels.":"WHT: Usage #repeat <1..10000> <text> (1..128 UTF-8 bytes); #repeat stop");return ok;}
  if(command==L"#speed"){std::wstring args;std::getline(in,args);const bool ok=wht::SetSpeed131(args);wht::Log(folder131,ok?"WHT: Game Speed "+std::to_string(wht::speedMultiplier131)+"x":"WHT: #speed requires 1..70; clock hooks unavailable or invalid argument.");return ok;}
  if(command==L"#tanghinh"||command==L"#invis"||command==L"#reveal"||command==L"#revealinvis"){std::wstring arg,extra;in>>arg;if(in>>extra)return false;wht::FoldCommandName(arg);bool next=!config131.revealInvisible;
@@ -289,8 +350,8 @@ void DestroyUi131(){
  placements131.clear();
  cooldown131.Reset();
  hotkeys131.Reset();remap131.Reset();quickChatEcho131.Reset();repeatMessage131.Reset();timeOfDay131.Reset();consoleUi131.Reset();blackBar131.Reset();mouseTooltip131.Reset();autoClick131.Reset();pinned131={};
- messageTimers131.Reset();
- resources131.Reset();clock131.Reset();matchStart131.Reset();fps131.Reset();quickDrop131={};dropIcon131.Reset();pickIcon131.Reset();sellIcon131.Reset();reveal131.Reset();sellAll131.Reset();autoPick131.Reset();autoPickEnabled131=false;dropAllNetwork131.Reset();skillsIcon131.Reset();allSkills131.Reset();
+ messageTimers131.Reset();manualClear131.Reset();
+ resources131.Reset();clock131.Reset();matchStart131.Reset();timeBoss131.Reset();detailTooltip131.Reset();fps131.Reset();quickDrop131={};quickDropFlow131.Reset();dropIcon131.Reset();pickIcon131.Reset();gokuIcon131.Reset();mthNotice131.Reset();mthRoute131.Reset();routeButtons131.Reset();courier131={};routePinned131=false;gokuEnabled131=false;sellIcon131.Reset();reveal131.Reset();sellAll131.Reset();autoPick131.Reset();autoPickEnabled131=false;dropAllNetwork131.Reset();skillsIcon131.Reset();allSkills131.Reset();
  regen131.Reset();
  stateBars131.Reset();
  menuReported131=cameraReported131=writeReported131=false;if(lock131)ClipCursor(nullptr);
@@ -298,8 +359,11 @@ void DestroyUi131(){
 void PresentGraphics131(){
  if(wht::uiRefreshOwner131!=currentUi131||!currentUi131)return;
  if(config131.lifeManaCommas||config131.lifeManaNoHide||config131.statsCommas||wht::lifeFlags131||!wht::lifeUi131)if(const auto* p=wht::LifeProfileFor131(profile131->build))wht::UpdateLifeMana131(base131,profile131->build,currentUi131,wht::Component131(currentUi131,base131,p->portrait),wht::Component131(currentUi131,base131,cooldownProfile131->infoBar),(Allowed131()&&settings131)?((config131.lifeManaCommas?1u:0u)|(config131.lifeManaNoHide?2u:0u)|(config131.statsCommas?4u:0u)):0u,[](uintptr_t unit,bool mana,float& value,float& maximum){return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,mana,value,maximum);},true);
+ if(config131.statsTooltip||detailTooltip131.Active())if(const auto* life=wht::LifeProfileFor131(profile131->build))if(cooldownProfile131){const auto source=wht::ReadLifeSource131(base131,*life,currentUi131,wht::Component131(currentUi131,base131,life->portrait));
+  detailTooltip131.Update(base131,profile131->build,currentUi131,source,wht::Component131(currentUi131,base131,cooldownProfile131->infoBar),Allowed131()&&settings131&&config131.statsTooltip&&!menu131.open,GetTickCount64(),[&](uintptr_t table){return wht::Component131(currentUi131,base131,table);});}
 }
 void PresentBar131(uintptr_t bar){
+ timeBoss131.RememberBar(bar);
  if(!currentUi131||!menu131.initialized||!regenProfile131||!stateBarProfile131)return;
  auto raw=frame131;raw.setWidth=reinterpret_cast<decltype(raw.setWidth)>(base131+profile131->width);
  raw.setAbsPoint=reinterpret_cast<decltype(raw.setAbsPoint)>(base131+profile131->absPoint);
@@ -309,8 +373,10 @@ void PresentBar131(uintptr_t bar){
 void UpdateUi131(){
  const auto ui=CurrentUi131();
  if(currentUi131!=ui){DestroyUi131();currentUi131=ui;}
- if(!Allowed131()||!settings131)repeatMessage131.Reset();
+ if(!Allowed131()||!settings131)repeatMessage131.Reset();if(!Allowed131()||!settings131||!config131.timeBoss||!(config131.mth49Enable||config131.g17Enable))timeBoss131.active=false;
  if(!Allowed131())wht::ResetSpeed131();
+ manualClear131.Update(base131,profile131->build,currentUi131,Allowed131()&&settings131,!typed131&&!menu131.open&&GetForegroundWindow()==gameWindow131,GetTickCount64());
+
  if(!ui){if(lock131)ClipCursor(nullptr);return;}
  wht::InstallUiRefresh131(base131,profile131->build,ui,PresentGraphics131);
  graphicsDiagnostic131.Update(base131,profile131->build,ui,config131,Allowed131(),folder131,consoleUi131,mouseTooltip131,[&](uintptr_t table){return wht::Component131(ui,base131,table);}); wht::UpdateMatchStart131(matchStart131,base131,profile131->build,ui,Allowed131()&&settings131&&config131.soundStartGame,module131,folder131);
@@ -356,6 +422,7 @@ void UpdateUi131(){
   if(!authorized131.load())label+=" |cffff4444Login LoadFileMapWar3|r";
   else if(config131.showMem&&wht::GetCurrentProcessMemoryUsage(mb,percent))label+=" | "+std::to_string(int(mb))+" MB";
   frame131.setText(memoryFont131,label.c_str());}
+ timeBoss131.Update(base131,profile131->build,currentUi131,Allowed131()&&settings131&&config131.timeBoss&&(config131.mth49Enable||config131.g17Enable),GetTickCount64(),menu131,[&](uintptr_t unit,float& hp){float maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,hp,maximum);});
  repeatMessage131.Tick(Allowed131()&&settings131,!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131,GetTickCount64(),SendChat131);
  menu131.PlaybackVisual(macro131.playing);macro131.Tick(Allowed131()&&!typed131&&!menu131.open);
  if(menu131.initialized&&resources131.Update(base131,profile131->build,Allowed131()&&settings131&&config131.showResource,GetTickCount64(),menu131,folder131)&&!resources131.reported){resources131.reported=true;wht::Log(folder131,"WHT 1.31: native resource table displayed.");}
@@ -364,23 +431,33 @@ void UpdateUi131(){
  if(sellAll131.active){wht::SellView131 view;bool valid=Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&wht::ReadSellView131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},view);
   if(valid&&sellAll131.scanning){auto p=wht::PickProfileFor131(profile131->build);valid=p&&wht::ScanSellShops131(base131,profile131->build,wht::Component131(currentUi131,base131,p->worldTable),sellAll131.scanCursor,view,[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;});}
   const auto result=sellAll131.Step(valid?&view:nullptr,GetTickCount64(),[&](const wht::DropSnapshot& source,const wht::DropItem& item,const wht::SellShop131& shop){return wht::SendSell131(base131,profile131->build,source,item,shop,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;});});
+  if(!sellAll131.active)quickDropFlow131.pickupAfter=(std::max)(quickDropFlow131.pickupAfter,GetTickCount64()+1000);
   if(result==wht::SellResult131::Submitted)wht::Log(folder131,"WHT: Sell All synchronized shop order submitted.");
   else if(result!=wht::SellResult131::Working&&result!=wht::SellResult131::Idle)wht::Log(folder131,std::string("WHT: Sell All ")+(result==wht::SellResult131::Complete?"completed":result==wht::SellResult131::NoShop?"no accessible purchase shop":result==wht::SellResult131::Cancelled?"cancelled":"remaining")+"; sold="+std::to_string(sellAll131.sold)+" skipped="+std::to_string(sellAll131.skipped)+" remaining="+std::to_string(sellAll131.remaining)+" gold delta="+std::to_string(sellAll131.goldDelta));
  }
  sellIcon131.latched=sellAll131.active;sellIcon131.Update(base131,Allowed131()&&settings131&&config131.showSellAll,menu131);
- if(!config131.showAutoPick)autoPickEnabled131=false;
- if(autoPickEnabled131&&(Allowed131()&&settings131&&config131.showAutoPick&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131)&&!dropAllNetwork131.active){const auto now=GetTickCount64();
-  if(now>=autoPick131.next){auto p=wht::PickProfileFor131(profile131->build);wht::PickSnapshot131 snapshot;
-   const bool valid=p&&wht::ReadPickSnapshot131(base131,profile131->build,wht::Component131(currentUi131,base131,p->worldTable),[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},snapshot);
-   const auto result=autoPick131.Tick(now,valid?&snapshot:nullptr,[&](const wht::DropSnapshot& source,const wht::PickCandidate131& item){return wht::SendPick131(base131,profile131->build,source,item,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;});});
+ if(gokuEnabled131&&!(Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable))){gokuEnabled131=false;autoPick131.Reset();}
+ if((autoPickEnabled131||gokuEnabled131)&&!sellAll131.active&&(Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131)&&!dropAllNetwork131.active){const auto now=GetTickCount64();
+  if(now>=autoPick131.next&&now>=quickDropFlow131.pickupAfter){auto p=wht::PickProfileFor131(profile131->build);wht::PickSnapshot131 snapshot;bool acquiredGoku=false;
+   const bool valid=p&&wht::ReadPickSnapshot131(base131,profile131->build,wht::Component131(currentUi131,base131,p->worldTable),[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},snapshot,gokuEnabled131?wht::gokuType131:0,&acquiredGoku);
+   if(valid&&gokuEnabled131&&acquiredGoku){gokuEnabled131=false;autoPick131.Reset();autoPick131.next=now+250;mthNotice131.Event(wht::MthNoticeKind131::Acquired,config131.mthNoti,now);wht::Log(folder131,"WHT: Auto Pick Goku OFF (confirmed in inventory).");}else{
+   const auto result=autoPick131.Tick(now,valid?&snapshot:nullptr,[&](const wht::DropSnapshot& source,const wht::PickCandidate131& item){const auto* inventory=wht::InventoryProfile(profile131->build);if(gokuEnabled131&&(!inventory||!wht::ItemCodeGuard131(base131,*inventory)||wht::ItemCodeValue131(base131,*inventory,item.object)!=wht::gokuType131))return false;return wht::SendPick131(base131,profile131->build,source,item,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;});});
    if(result==wht::PickResult131::Submitted)wht::Log(folder131,"WHT: Auto Pick native target order submitted.");
-   if(result==wht::PickResult131::Cancelled){autoPickEnabled131=false;wht::Log(folder131,"WHT: Auto Pick stopped (selection/session/native validation).");}
+   }
+   // Invalid selection/session clears only the target; the manual toggle stays on.
+
   }
  }else autoPick131.Reset();
+ if(mthRoute131.route>=0)mthRoute131.TickQueued(Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable),!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&GetForegroundWindow()==gameWindow131,ReadRoute131,[&](const wht::SelfCastSource131& before,const wht::Route131& route,int count){wht::SelfCastSource131 current;if(!ReadCourier131(before.unit,current)||!wht::SameSelfCastSource131(before,current))return false;const auto api=wht::MthQueueNative131(base131,profile131->build);const auto select=wht::CourierSelectNative131(base131,profile131->build);wht::SelectionRoster131 roster;if(!api||!select||!wht::ReadSelectionRoster131(base131,profile131->build,roster))return false;const bool submitted=wht::SubmitCourierRoute131(roster,current.unit,select,api,currentUi131,route,count);wht::Log(folder131,submitted?"WHT: MTH native route queue submitted.":"WHT: MTH native route queue failed; no replay.");return submitted;});
+ mthNotice131.Update(base131,Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable),config131,menu131,GetTickCount64());
+ auto mthRaw131=menu131.api;mthRaw131.setWidth=reinterpret_cast<decltype(mthRaw131.setWidth)>(base131+profile131->width);mthRaw131.setAbsPoint=reinterpret_cast<decltype(mthRaw131.setAbsPoint)>(base131+profile131->absPoint);
+ routeButtons131.Update(base131,Allowed131()&&settings131,config131,mthRoute131.route,menu131,&mthRaw131);
+ gokuIcon131.latched=gokuEnabled131;gokuIcon131.Update(base131,Allowed131()&&settings131&&!menu131.open&&(config131.mth49Enable||config131.g17Enable)&&config131.pickGokuDraw,menu131,&mthRaw131);
  pickIcon131.latched=autoPickEnabled131;pickIcon131.Update(base131,Allowed131()&&settings131&&config131.showAutoPick,menu131);
  dropIcon131.Update(base131,Allowed131()&&settings131&&config131.showDropAll,menu131);
- if(dropAllNetwork131.active){wht::DropSnapshot snapshot;const bool valid=Allowed131()&&settings131&&config131.showDropAll&&!sellAll131.active&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&wht::DropSnapshot131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},snapshot);
+ if(dropAllNetwork131.active){wht::DropSnapshot snapshot;const bool valid=Allowed131()&&settings131&&!sellAll131.active&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&wht::DropSnapshot131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},snapshot);
   const auto result=dropAllNetwork131.Step(valid?&snapshot:nullptr,GetTickCount64(),[&](const wht::DropSnapshot& source,const wht::DropItem& item){return wht::SendDropSnapshot131(base131,profile131->build,source,item);});
+  if(result==wht::DropResult::Complete||result==wht::DropResult::Remaining)quickDropFlow131.pickupAfter=GetTickCount64()+2000;
   if(result==wht::DropResult::Complete)wht::Log(folder131,"WHT: synchronized drop all completed; original items absent from inventory.");
   else if(result==wht::DropResult::Cancelled)wht::Log(folder131,"WHT: synchronized drop all cancelled.");
   else if(result==wht::DropResult::Remaining)wht::Log(folder131,"WHT: synchronized drop all stopped; remaining "+std::to_string(dropAllNetwork131.remaining));
@@ -422,7 +499,9 @@ bool Input131(MSG& msg){
   const auto started=allSkills131.Start(GetTickCount64(),[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},SkillPoints131,SkillData131);
   wht::Log(folder131,started?"WHT 1.31: all skills sequence queued.":"WHT 1.31: all skills unavailable (hero/points/menu).");
  }))return true;
- if(pickIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&config131.showAutoPick&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&!dropAllNetwork131.active&&!sellAll131.active,[&](){autoPickEnabled131=!autoPickEnabled131;autoPick131.Reset();wht::Log(folder131,autoPickEnabled131?"WHT: Auto Pick enabled.":"WHT: Auto Pick disabled.");}))return true;
+ if(routeButtons131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131,[&](unsigned route){const wchar_t* commands[]={L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};Command131(commands[route]);}))return true;
+ if(gokuIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131,[&](){Command131(L"#goku");}))return true;
+ if(pickIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&!dropAllNetwork131.active&&!sellAll131.active,[&](){autoPickEnabled131=!autoPickEnabled131;autoPick131.Reset();wht::Log(folder131,autoPickEnabled131?"WHT: Auto Pick enabled.":"WHT: Auto Pick disabled.");}))return true;
  if(sellIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&!dropAllNetwork131.active,[&](){
   BeginSell131();
  }))return true;
@@ -432,14 +511,11 @@ bool Input131(MSG& msg){
   const bool started=wht::DropSnapshot131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},snapshot,&diagnostic)&&dropAllNetwork131.Start(snapshot,GetTickCount64());
   wht::Log(folder131,started?"WHT: synchronized drop all queued.":std::string("WHT: drop all refused at ")+diagnostic+(dropAllNetwork131.active?" (already active)":""));
  }))return true;
- if(quickDrop131.Mouse(msg.message,Allowed131()&&settings131&&config131.quickDropItem&&!sellAll131.active&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000),[&](){
+ if(quickDrop131.Mouse(msg.message,Allowed131()&&settings131&&config131.quickDropItem&&!consoleUi131.active&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)&&!([&](){const auto* p=wht::QuickCastProfile(profile131->build);return p&&wht::QuickCastTarget131(base131,currentUi131,profile131->uiVtable,*p);})(),[&](){
   if(!cooldownProfile131)return -1;POINT point{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))};
   return wht::InventorySlotHit131(point,r.right,r.bottom,[&](unsigned slot){return wht::CooldownButton131(currentUi131,base131,*cooldownProfile131,slot+12);});
  },[&](unsigned slot){
-  const auto* p=wht::InventoryProfile(profile131->build);if(!p||!regenProfile131||!stateBarProfile131)return;
-  const auto* networkProfile=wht::DropNetworkProfileFor131(profile131->build);if(!networkProfile)return;
-  const auto network=wht::DropNetworkNative131(base131,*networkProfile,*p);
-  const auto ok=wht::QuickDropNetwork131(base131,*p,wht::InventoryNative131(base131,*p),network,slot,[&](){return wht::SelectedUnit131(currentUi131,base131,*regenProfile131);},[&](uintptr_t unit){float value=0,maximum=0;return wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},[&](uintptr_t unit){return wht::DropOwned131(base131,profile131->build,network,unit);});
+  const bool ok=BeginQuickDrop131(slot);
   wht::Log(folder131,ok?"WHT 1.31: quick drop synchronized action submitted.":"WHT 1.31: quick drop refused or slot empty.");
  }))return true;
  if(msg.message==WM_LBUTTONDOWN||msg.message==WM_LBUTTONUP||msg.message==WM_RBUTTONDOWN||msg.message==WM_RBUTTONUP){
@@ -474,6 +550,8 @@ bool Input131(MSG& msg){
   if((config131.macroKeys[3]&&key==config131.macroKeys[3])||(chord&&key==VK_F11)){macro131.Edit();return true;}
  }
  if(keyDown&&!repeat&&key==config131.commandKey){settings131=!settings131;ApplyCamera131();return true;}
+ if(keyDown&&!repeat&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&(config131.mth49Enable||config131.g17Enable)&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){const unsigned keys[]={config131.chayGa1Hotkey,config131.chayGa2Hotkey,config131.chayGa3Hotkey,config131.chaySoi1Hotkey,config131.chaySoi2Hotkey,config131.chaySoi3Hotkey};const wchar_t* commands[]={L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};for(unsigned i=0;i<6;++i)if(key&&key==keys[i]){Command131(commands[i]);if(key<256)remap131.pressed[key]=true;return true;}}
+ if(keyDown&&!repeat&&key&&key==config131.pickGokuHotkey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&(config131.mth49Enable||config131.g17Enable)&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){Command131(L"#goku");if(key<256)remap131.pressed[key]=true;return true;}
  if(keyDown&&!repeat&&key&&key==config131.multiboardKey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
   const auto* p=wht::MultiboardProfileFor131(profile131->build);
   if(p&&wht::ToggleMultiboard131(base131,profile131->build,wht::Component131(currentUi131,base131,p->table))){if(key<256)remap131.pressed[key]=true;return true;}

@@ -56,7 +56,7 @@ struct Gameplay64 {
   invulnerable.Prune(frames);
   for(auto bar:frames){uintptr_t unit=0;bool visible=false;if(!Hp64(bar,base,p,unit,visible))continue;
    StatPaintRecord131 record;record.unit=unit;record.unitTable=base+p.unitVtable;
-   const bool enabled=allowed&&(c.colorPlayer||c.hideInvulnerableBars||c.stateTagEnable||c.stateTagShowLevel);
+   const bool enabled=allowed&&(c.colorPlayer||c.hideInvulnerableBars||c.stateTagEnable||c.stateTagShowLevel||(c.timeBoss&&(c.mth49Enable||c.g17Enable)));
    if(!enabled){auto previous=statPaintRecords131.find(bar);if(previous!=statPaintRecords131.end()&&previous->second.presentation)WriteBar(bar,base,p,c,allowed,raw);}
    SetStatPaint131(base,p.statVtable,bar,false,record,enabled,true);
   }

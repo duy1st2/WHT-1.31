@@ -101,7 +101,7 @@ template<class Selected,class Alive> DropAllResult131 DropAll131(uintptr_t base,
 inline bool InventoryHit131(const float* bounds,float x,float y){
  const float bottom=bounds[0],left=bounds[1],top=bounds[2],right=bounds[3];
  return std::isfinite(bottom)&&std::isfinite(left)&&std::isfinite(top)&&std::isfinite(right)&&std::isfinite(x)&&std::isfinite(y)&&
-  right-left>=.015f&&right-left<=.08f&&top-bottom>=.015f&&top-bottom<=.08f&&x>=left&&x<right&&y>=bottom&&y<top;
+  left>=0&&right<=.8f&&bottom>=0&&top<=.6f&&right-left>=.015f&&right-left<=.08f&&top-bottom>=.015f&&top-bottom<=.08f&&x>=left&&x<right&&y>=bottom&&y<top;
 }
 template<class Button> int InventorySlotHit131(POINT point,int width,int height,Button get){
  if(width<=0||height<=0||point.x<0||point.y<0||point.x>=width||point.y>=height)return -1;
@@ -112,12 +112,20 @@ template<class Button> int InventorySlotHit131(POINT point,int width,int height,
   if(InventoryHit131(reinterpret_cast<const float*>(button+(sizeof(uintptr_t)==8?0x88:0x44)),x,y))return int(slot);
  }}__except(1){}return -1;
 }
+// Reference1.29 #dropitem: stop selling, pause pickup2s, submit once.
+struct QuickDropFlow131 {
+ uint64_t pickupAfter=0;
+ void Reset(){pickupAfter=0;}
+ template<class StopSell,class Send> bool Run(uint64_t now,StopSell stopSell,Send send){stopSell();pickupAfter=now+2000;return send();}
+};
 struct QuickDropInput131 {
  bool consumed=false;
  template<class Hit,class Drop> bool Mouse(unsigned message,bool enabled,Hit hit,Drop drop){
   if(message==WM_RBUTTONUP){const bool result=consumed;consumed=false;return result;}
   if(message!=WM_RBUTTONDOWN&&message!=WM_RBUTTONDBLCLK)return false;
-  consumed=false;if(!enabled)return false;const int slot=hit();if(slot<0||slot>=6)return false;
+  // Keep the accepted gesture latched until its release, even if context changes.
+  if(consumed)return true;
+  if(!enabled)return false;const int slot=hit();if(slot<0||slot>=6)return false;
   consumed=true;drop(unsigned(slot));return true;
  }
 };

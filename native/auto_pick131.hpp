@@ -13,10 +13,11 @@ struct AutoPick131 {
  void Reset(){*this={};}
  bool Excluded(const DropObjectId& id,uint64_t now)const{for(const auto& failed:failures)if(failed.until>now&&failed.id==id)return true;return false;}
  template<class Send> PickResult131 Tick(uint64_t now,const PickSnapshot131* snapshot,Send send){
-  if(!snapshot){Reset();return PickResult131::Cancelled;}
+  const auto cancel=[&](){Reset();next=now+250;return PickResult131::Cancelled;};
+  if(!snapshot)return cancel();
   const auto& source=snapshot->owner;
-  if(!source.root||!source.session||!source.unit||!source.id.Valid()||!std::isfinite(source.x)||!std::isfinite(source.y)||!snapshot->capacity||snapshot->capacity>6||snapshot->occupied>snapshot->capacity){Reset();return PickResult131::Cancelled;}
-  if(bound&&(source.root!=owner.root||source.session!=owner.session||source.unit!=owner.unit||!(source.id==owner.id))){Reset();return PickResult131::Cancelled;}
+  if(!source.root||!source.session||!source.unit||!source.id.Valid()||!std::isfinite(source.x)||!std::isfinite(source.y)||!snapshot->capacity||snapshot->capacity>6||snapshot->occupied>snapshot->capacity){return cancel();}
+  if(bound&&(source.root!=owner.root||source.session!=owner.session||source.unit!=owner.unit||!(source.id==owner.id))){return cancel();}
   owner=source;bound=true;
   if(now<next)return PickResult131::Waiting;next=now+250;
   if(snapshot->occupied>=snapshot->capacity){waiting=false;return PickResult131::Waiting;}
@@ -28,7 +29,7 @@ struct AutoPick131 {
   for(const auto& item:snapshot->ground){if(!item.id.Valid()||!std::isfinite(item.x)||!std::isfinite(item.y)||Excluded(item.id,now))continue;
    const float dx=item.x-source.x,dy=item.y-source.y,d=dx*dx+dy*dy;if(d<distance){distance=d;best=&item;}}
   if(!best)return PickResult131::Idle;
-  if(!send(source,*best)){Reset();return PickResult131::Cancelled;}
+  if(!send(source,*best)){return cancel();}
   target=best->id;submittedAt=now;waiting=true;return PickResult131::Submitted;
  }
 };

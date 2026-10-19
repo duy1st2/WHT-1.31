@@ -86,7 +86,7 @@ struct StateBars131 {
   for(const auto bar:frames){uintptr_t unit=0;bool visible=false,hero=false;
    if(!SampleStateBar131(bar,base,s,r,unit,visible,hero))continue;
    StatPaintRecord131 record;record.unit=unit;record.unitTable=base+r.unit;
-   const bool enabled=allowed&&(config.colorPlayer||config.hideInvulnerableBars||config.stateTagEnable||config.stateTagShowLevel);
+   const bool enabled=allowed&&(config.colorPlayer||config.hideInvulnerableBars||config.stateTagEnable||config.stateTagShowLevel||(config.timeBoss&&(config.mth49Enable||config.g17Enable)));
    if(!enabled){auto previous=statPaintRecords131.find(bar);if(previous!=statPaintRecords131.end()&&previous->second.presentation)WriteBar(bar,base,p,r,s,config,allowed,raw);}
    SetStatPaint131(base,s.bar,bar,false,record,enabled,true);
   }

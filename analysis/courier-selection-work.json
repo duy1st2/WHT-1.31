@@ -1,0 +1,38 @@
+[
+  {
+    "pid": 14740,
+    "bits": 32,
+    "send": "0xc5f230",
+    "removeCall": "0x92c287",
+    "addCall": "0x92c29b",
+    "context": "0x92bd10",
+    "helper": "0x9d0cb0"
+  },
+  {
+    "pid": 23884,
+    "bits": 32,
+    "send": "0xc1a3d0",
+    "removeCall": "0x8f9548",
+    "addCall": "0x8f955c",
+    "context": "0x8f8fa0",
+    "helper": "0x991a10"
+  },
+  {
+    "pid": 6688,
+    "bits": 64,
+    "send": "0xdd7750",
+    "removeCall": "0xa44755",
+    "addCall": "0xa44765",
+    "context": "0xa44100",
+    "helper": "0xaf3b70"
+  },
+  {
+    "pid": 29928,
+    "bits": 64,
+    "send": "0xe13990",
+    "removeCall": "0xa8f86e",
+    "addCall": "0xa8f87e",
+    "context": "0xa8f219",
+    "helper": "0x0"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "pid": 14740,
+    "bits": 32,
+    "base": "0x1d0000",
+    "selectionTable": "0x180750c",
+    "sender": "0xc5f230",
+    "removeCall": "0x92c287",
+    "addCall": "0x92c29b",
+    "copySet": "0x9d0cb0",
+    "prefix": "558bec6aff6848977e0164a100000000",
+    "removeBytes": "85db740e8d45b46a0250e8a42f3300",
+    "addBytes": "d400740e8d45a46a0150e8902f3300",
+    "countBytes": "8b4610",
+    "rootBytes": "8b4e0cf6"
+  },
+  {
+    "pid": 23884,
+    "bits": 32,
+    "base": "0x270000",
+    "selectionTable": "0x17bc53c",
+    "sender": "0xc1a3d0",
+    "removeCall": "0x8f9548",
+    "addCall": "0x8f955c",
+    "copySet": "0x991a10",
+    "prefix": "558bec6aff68e8b4840164a100000000",
+    "removeBytes": "85db740e8d45b46a0250e8830e3200",
+    "addBytes": "d400740e8d45a46a0150e86f0e3200",
+    "countBytes": "8b4610",
+    "rootBytes": "8b4e0cf6"
+  },
+  {
+    "pid": 6688,
+    "bits": 64,
+    "base": "0x7ff782f60000",
+    "selectionTable": "0x1bc68b8",
+    "sender": "0xdd7750",
+    "removeCall": "0xa44755",
+    "addCall": "0xa44765",
+    "copySet": "0xaf3b70",
+    "prefix": "4c8bdc57415641574881ec8000000049",
+    "removeBytes": "e4740cb202488d4c2460e8f62f3900",
+    "addBytes": "85f6740bb201488d4d80e8e62f3900",
+    "countBytes": "8b5720",
+    "rootBytes": "488b4f18"
+  },
+  {
+    "pid": 29928,
+    "bits": 64,
+    "base": "0x7ff626470000",
+    "selectionTable": "0x1bf5898",
+    "sender": "0xe13990",
+    "removeCall": "0xa8f86e",
+    "addCall": "0xa8f87e",
+    "copySet": "0xb3c4d0",
+    "prefix": "488bc441564881ec8000000048c74098",
+    "removeBytes": "e4740cb202488d4c2450e81d413800",
+    "addBytes": "f6740cb201488d4c2470e80d413800",
+    "countBytes": "8b5720",
+    "rootBytes": "488b4f18"
+  }
+]

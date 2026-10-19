@@ -25,7 +25,8 @@ inline void CheckSellAll131(){
  check(worker.Start(view,1000)&&worker.remaining==2&&worker.skipped==1&&!worker.Start(view,1000),"sale snapshots eligible originals and refuses duplicate start");
  check(worker.Step(&view,1000,send)==wht::SellResult131::Submitted&&sends==1,"one synchronized shop order per tick");
  check(worker.Step(&view,1100,send)==wht::SellResult131::Working&&sends==1&&worker.sold==0,"submitted order is not yet a confirmed sale");
- view.owner.items[0]={};view.gold=550;check(worker.Step(&view,1350,send)==wht::SellResult131::Submitted&&sends==2&&worker.sold==1,"inventory absence confirms first original then next order");
+ view.owner.items[0]={};view.gold=550;check(worker.Step(&view,1120,send)==wht::SellResult131::Working&&sends==1&&worker.sold==1,"inventory absence starts reference25ms settlement instead of waiting350ms");
+ check(worker.Step(&view,1145,send)==wht::SellResult131::Submitted&&sends==2,"confirmed sale advances to next original after25ms");
  view.owner.items[5]={};view.gold=600;check(worker.Step(&view,1400,send)==wht::SellResult131::Working,"sale waits for final resource settlement");
  check(worker.Step(&view,1425,send)==wht::SellResult131::Remaining&&!worker.active&&worker.sold==2&&worker.skipped==1&&worker.goldDelta==100&&view.owner.items[2].handle,"unpawnable original remains held and gold delta is reported");
  view.owner.items[0]={1,{10,11}};view.shops.clear();worker.Reset();worker.Start(view,2000);check(worker.Step(&view,2000,send)==wht::SellResult131::NoShop&&sends==2,"no purchase shop sends no item-transfer order");
@@ -37,6 +38,14 @@ inline void CheckSellAll131(){
   unsigned oneSends=0;auto oneSend=[&](const auto&,const wht::DropItem& item,const auto&){check(item.id==single.owner.items[hovered].id,"SellFast never submits another item's ID");++oneSends;return true;};
   check(one.Step(&single,1000,oneSend)==wht::SellResult131::Submitted&&oneSends==1,"single hovered item dispatched");
   auto after=single;after.owner.items[hovered]={};one.Step(&after,1350,oneSend);one.Step(&after,1375,oneSend);check(oneSends==1&&!one.active&&one.sold==1,"other five items remain outside SellFast worker");
+ }
+ // A farView shop keeps its native movement deadline only while the item is held.
+ {auto farView=single;farView.shops[0].x=1000;wht::SellAll131 fast;unsigned count=0;
+  auto order=[&](const auto&,const auto&,const auto&){++count;return true;};
+  check(fast.Start(farView,1000)&&fast.Step(&farView,1000,order)==wht::SellResult131::Submitted&&fast.next==5000,"unconfirmed farView order retains4s movement window");
+  check(fast.Step(&farView,1100,order)==wht::SellResult131::Working&&count==1,"held farView item cannot cause order spam");
+  farView.owner.items[0]={};check(fast.Step(&farView,1200,order)==wht::SellResult131::Working&&fast.next==1225,"confirmed farView sale overrides4s wait");
+  check(fast.Step(&farView,1225,order)==wht::SellResult131::Submitted&&count==2&&fast.sold==1,"next item follows native confirmation without4s stall");
  }
  wht::SellAll131 invalidSingle;check(!invalidSingle.Start(single,1000,6)&&!invalidSingle.Start(single,1000,-2),"invalid sell slot cannot become sell all");
  single.owner.items[2]={};check(!invalidSingle.Start(single,1000,2),"empty hovered slot never starts sale of another item");

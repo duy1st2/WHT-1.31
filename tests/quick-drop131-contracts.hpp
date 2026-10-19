@@ -100,9 +100,13 @@ inline void CheckQuickDrop131(){
  check(wht::InventorySlotHit131({900,810},1200,900,get)==3,"classic hit uses same native bounds");
  button[visible]=0;check(wht::InventorySlotHit131({1300,810},2000,900,get)==-1,"hidden inventory button excluded");
  button[visible]=1;check(wht::InventorySlotHit131({-1,810},2000,900,get)==-1,"outside client rejected");
+ const float outsideLeft[]={.04f,-.01f,.08f,.03f},outsideTop[]={.58f,.58f,.62f,.62f};
+ check(!wht::InventoryHit131(outsideLeft,0,.06f)&&!wht::InventoryHit131(outsideTop,.6f,.6f),"native inventory bounds must remain inside UI canvas like129");
  wht::QuickDropInput131 input;unsigned sent=0;auto hit=[](){return 3;};auto send=[&](unsigned slot){check(slot==3,"mouse dispatch slot");++sent;};
  check(!input.Mouse(WM_RBUTTONDOWN,false,hit,send)&&sent==0,"disabled gesture passes through");
  check(input.Mouse(WM_RBUTTONDOWN,true,hit,send)&&sent==1,"one drop per pressed gesture");
+ check(input.Mouse(WM_RBUTTONDOWN,true,hit,send)&&sent==1,"duplicate down before release never resubmits");
+ check(input.Mouse(WM_RBUTTONDBLCLK,false,[](){return -1;},send)&&sent==1,"latched double click stays consumed when context changes");
  check(input.Mouse(WM_RBUTTONUP,false,hit,send)&&sent==1,"consumed mouse release cannot issue normal order");
  check(!input.Mouse(WM_RBUTTONUP,true,hit,send)&&sent==1,"release consumed only once");
  check(!input.Mouse(WM_RBUTTONDOWN,true,[](){return -1;},send)&&sent==1,"noninventory right click passes through");

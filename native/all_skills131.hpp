@@ -1,6 +1,7 @@
 #pragma once
 #include "drop_icon131.hpp"
 #include "quick_drop131.hpp"
+#include "component_lookup131.hpp"
 namespace wht {
 struct SkillProfile131 {unsigned build;uintptr_t click,eventTable,buttonTable,unitTable,heroTable,heroMember,points;};
 #ifdef _WIN64
@@ -27,6 +28,22 @@ inline SkillButton131 SkillButtonData131(uintptr_t button){
   return {*reinterpret_cast<unsigned*>(data+(sizeof(uintptr_t)==8?8:4)),*reinterpret_cast<unsigned*>(data+(sizeof(uintptr_t)==8?12:8))};
  }__except(1){return {};}
 }
+// UI refresh replaces only CGameUI virtual12. Button receiver virtual3
+// must still resolve to the original native method on that exact registered UI.
+inline bool SkillListener131(uintptr_t base,uintptr_t end,uintptr_t listener){
+ if(!base||end<=base||!listener)return false;
+ __try{
+  constexpr uintptr_t slot=3*sizeof(uintptr_t);
+  const auto actual=*reinterpret_cast<uintptr_t*>(listener);auto table=actual;
+  if(listener==uiRefreshOwner131&&actual==uiRefreshProxyTable131){
+   table=uiRefreshOriginalTable131;
+   if(table<base||table>=end||end-table<slot+sizeof(uintptr_t))return false;
+   if(*reinterpret_cast<uintptr_t*>(actual+slot)!=*reinterpret_cast<uintptr_t*>(table+slot))return false;
+  }
+  if(table<base||table>=end||end-table<slot+sizeof(uintptr_t))return false;
+  const auto invoke=*reinterpret_cast<uintptr_t*>(table+slot);return invoke>=base&&invoke<end;
+ }__except(1){return false;}
+}
 inline bool SkillClick131(uintptr_t button,uintptr_t base,const SkillProfile131& p){
  __try{
   if(!InventoryIdentity131(button,base,p.buttonTable))return false;
@@ -41,8 +58,7 @@ inline bool SkillClick131(uintptr_t button,uintptr_t base,const SkillProfile131&
 #endif
   const auto listener=*reinterpret_cast<uintptr_t*>(button+(sizeof(uintptr_t)==8?0x1d0:0x120));if(!listener)return false;
   const auto dos=reinterpret_cast<IMAGE_DOS_HEADER*>(base);const auto pe=reinterpret_cast<IMAGE_NT_HEADERS*>(base+dos->e_lfanew);const auto end=base+pe->OptionalHeader.SizeOfImage;
-  const auto table=*reinterpret_cast<uintptr_t*>(listener);if(table<base||table+(sizeof(uintptr_t)==8?0x18:0xc)+sizeof(uintptr_t)>end)return false;
-  const auto invoke=*reinterpret_cast<uintptr_t*>(table+(sizeof(uintptr_t)==8?0x18:0xc));if(invoke<base||invoke>=end)return false;
+  if(!SkillListener131(base,end,listener))return false;
   reinterpret_cast<void(__thiscall*)(uintptr_t,int)>(base+p.click)(button,1);return true;
  }__except(1){return false;}
 }

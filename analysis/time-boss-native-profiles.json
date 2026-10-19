@@ -1,0 +1,394 @@
+[
+  {
+    "build": 12164,
+    "bits": 32,
+    "unit": "0x182eeb0",
+    "level": "0xbabfa0",
+    "codeOffset": "0x34",
+    "highByteCheck": "0fb6463783f841721683f85a",
+    "fieldReads": [
+      {
+        "slot": 0,
+        "function": "0x2726f0",
+        "address": "0x272768",
+        "instruction": "mov eax, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 55,
+        "function": "0xbc18f0",
+        "address": "0xbc1909",
+        "instruction": "mov ecx, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 82,
+        "function": "0xbd4810",
+        "address": "0xbd483b",
+        "instruction": "mov eax, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 83,
+        "function": "0xbd4a10",
+        "address": "0xbd4a7e",
+        "instruction": "mov eax, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 96,
+        "function": "0xbc2550",
+        "address": "0xbc2590",
+        "instruction": "mov eax, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 111,
+        "function": "0xba68d0",
+        "address": "0xba6936",
+        "instruction": "mov esi, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 114,
+        "function": "0xbd12f0",
+        "address": "0xbd1302",
+        "instruction": "mov edi, dword ptr [esi + 0x34]"
+      },
+      {
+        "slot": 120,
+        "function": "0x2726f0",
+        "address": "0x272768",
+        "instruction": "mov eax, dword ptr [edi + 0x34]"
+      }
+    ],
+    "typeMethod": "0xbc18f0",
+    "typeCheckOffset": "0x19",
+    "typeCheck": "8b4f34",
+    "guardsVerified": true
+  },
+  {
+    "build": 12173,
+    "bits": 32,
+    "unit": "0x17e3d90",
+    "level": "0xb6b410",
+    "codeOffset": "0x34",
+    "highByteCheck": "0fb6463783f841721683f85a",
+    "fieldReads": [
+      {
+        "slot": 55,
+        "function": "0xb80bc0",
+        "address": "0xb80bd9",
+        "instruction": "mov ecx, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 82,
+        "function": "0xb943e0",
+        "address": "0xb9440b",
+        "instruction": "mov eax, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 83,
+        "function": "0xb945e0",
+        "address": "0xb9464e",
+        "instruction": "mov eax, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 96,
+        "function": "0xb81820",
+        "address": "0xb81860",
+        "instruction": "mov eax, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 111,
+        "function": "0xb65dc0",
+        "address": "0xb65e26",
+        "instruction": "mov esi, dword ptr [edi + 0x34]"
+      },
+      {
+        "slot": 114,
+        "function": "0xb90db0",
+        "address": "0xb90dc2",
+        "instruction": "mov edi, dword ptr [esi + 0x34]"
+      }
+    ],
+    "typeMethod": "0xb80bc0",
+    "typeCheckOffset": "0x19",
+    "typeCheck": "8b4f34",
+    "guardsVerified": true
+  },
+  {
+    "build": 12164,
+    "bits": 64,
+    "unit": "0x1c16140",
+    "level": "0xd096e0",
+    "codeOffset": "0x58",
+    "highByteCheck": "0fb6435b488b74245083e84183f819",
+    "fieldReads": [
+      {
+        "slot": 54,
+        "function": "0xd3a270",
+        "address": "0xd3a317",
+        "instruction": "mov ecx, dword ptr [rdi + 0x58]"
+      },
+      {
+        "slot": 55,
+        "function": "0xd23ad0",
+        "address": "0xd23b0f",
+        "instruction": "mov r10d, dword ptr [rdi + 0x58]"
+      },
+      {
+        "slot": 58,
+        "function": "0xd24800",
+        "address": "0xd2481e",
+        "instruction": "mov edx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 66,
+        "function": "0xd37790",
+        "address": "0xd377be",
+        "instruction": "mov edi, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 78,
+        "function": "0xd00890",
+        "address": "0xd0089a",
+        "instruction": "mov ebx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 80,
+        "function": "0xd00870",
+        "address": "0xd0089a",
+        "instruction": "mov ebx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 81,
+        "function": "0xd00880",
+        "address": "0xd0089a",
+        "instruction": "mov ebx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 82,
+        "function": "0xd3b1a0",
+        "address": "0xd3b1e1",
+        "instruction": "mov ecx, dword ptr [rdi + 0x58]"
+      },
+      {
+        "slot": 83,
+        "function": "0xd3b3d0",
+        "address": "0xd3b451",
+        "instruction": "mov ecx, dword ptr [rsi + 0x58]"
+      },
+      {
+        "slot": 84,
+        "function": "0xd3b520",
+        "address": "0xd3b548",
+        "instruction": "mov ecx, dword ptr [rbx + 0x58]"
+      },
+      {
+        "slot": 85,
+        "function": "0xd3b640",
+        "address": "0xd3b66b",
+        "instruction": "mov ecx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 88,
+        "function": "0xcff210",
+        "address": "0xcff210",
+        "instruction": "mov ecx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 88,
+        "function": "0xcff210",
+        "address": "0xcff220",
+        "instruction": "mov ecx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 89,
+        "function": "0xcff220",
+        "address": "0xcff220",
+        "instruction": "mov ecx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 90,
+        "function": "0xcff240",
+        "address": "0xcff249",
+        "instruction": "mov edx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 95,
+        "function": "0xd6eb50",
+        "address": "0xd6eb53",
+        "instruction": "mov ecx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 96,
+        "function": "0xd24a30",
+        "address": "0xd24a99",
+        "instruction": "mov eax, dword ptr [rdi + 0x58]"
+      },
+      {
+        "slot": 100,
+        "function": "0xd36b30",
+        "address": "0xd36ba0",
+        "instruction": "mov ecx, dword ptr [rdi + 0x58]"
+      },
+      {
+        "slot": 111,
+        "function": "0xd03930",
+        "address": "0xd03999",
+        "instruction": "mov ebx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 113,
+        "function": "0xcff260",
+        "address": "0xcff269",
+        "instruction": "mov edx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 114,
+        "function": "0xd377a0",
+        "address": "0xd377be",
+        "instruction": "mov edi, dword ptr [rcx + 0x58]"
+      }
+    ],
+    "typeMethod": "0xd23ad0",
+    "typeCheckOffset": "0x3f",
+    "typeCheck": "448b5758",
+    "guardsVerified": true
+  },
+  {
+    "build": 12173,
+    "bits": 64,
+    "unit": "0x1c45000",
+    "level": "0xd481a0",
+    "codeOffset": "0x58",
+    "highByteCheck": "0fb6435b488b74245083e84183f819",
+    "fieldReads": [
+      {
+        "slot": 54,
+        "function": "0xd78c10",
+        "address": "0xd78cb7",
+        "instruction": "mov ecx, dword ptr [rdi + 0x58]"
+      },
+      {
+        "slot": 55,
+        "function": "0xd62350",
+        "address": "0xd6238f",
+        "instruction": "mov r10d, dword ptr [rdi + 0x58]"
+      },
+      {
+        "slot": 58,
+        "function": "0xd63080",
+        "address": "0xd6309e",
+        "instruction": "mov edx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 66,
+        "function": "0xd76050",
+        "address": "0xd7607e",
+        "instruction": "mov edi, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 78,
+        "function": "0xd3f4c0",
+        "address": "0xd3f4ca",
+        "instruction": "mov ebx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 80,
+        "function": "0xd3f4a0",
+        "address": "0xd3f4ca",
+        "instruction": "mov ebx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 81,
+        "function": "0xd3f4b0",
+        "address": "0xd3f4ca",
+        "instruction": "mov ebx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 82,
+        "function": "0xd79a20",
+        "address": "0xd79a61",
+        "instruction": "mov ecx, dword ptr [rdi + 0x58]"
+      },
+      {
+        "slot": 83,
+        "function": "0xd79c50",
+        "address": "0xd79cd1",
+        "instruction": "mov ecx, dword ptr [rsi + 0x58]"
+      },
+      {
+        "slot": 84,
+        "function": "0xd79da0",
+        "address": "0xd79dc8",
+        "instruction": "mov ecx, dword ptr [rbx + 0x58]"
+      },
+      {
+        "slot": 85,
+        "function": "0xd79ec0",
+        "address": "0xd79eeb",
+        "instruction": "mov ecx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 88,
+        "function": "0xd3ddc0",
+        "address": "0xd3ddc0",
+        "instruction": "mov ecx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 88,
+        "function": "0xd3ddc0",
+        "address": "0xd3ddd0",
+        "instruction": "mov ecx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 89,
+        "function": "0xd3ddd0",
+        "address": "0xd3ddd0",
+        "instruction": "mov ecx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 90,
+        "function": "0xd3ddf0",
+        "address": "0xd3ddf9",
+        "instruction": "mov edx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 95,
+        "function": "0xdac740",
+        "address": "0xdac743",
+        "instruction": "mov ecx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 96,
+        "function": "0xd632b0",
+        "address": "0xd63319",
+        "instruction": "mov eax, dword ptr [rdi + 0x58]"
+      },
+      {
+        "slot": 100,
+        "function": "0xd75510",
+        "address": "0xd75580",
+        "instruction": "mov ecx, dword ptr [rdi + 0x58]"
+      },
+      {
+        "slot": 111,
+        "function": "0xd42580",
+        "address": "0xd425e9",
+        "instruction": "mov ebx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 113,
+        "function": "0xd3de10",
+        "address": "0xd3de19",
+        "instruction": "mov edx, dword ptr [rcx + 0x58]"
+      },
+      {
+        "slot": 114,
+        "function": "0xd76060",
+        "address": "0xd7607e",
+        "instruction": "mov edi, dword ptr [rcx + 0x58]"
+      }
+    ],
+    "typeMethod": "0xd62350",
+    "typeCheckOffset": "0x3f",
+    "typeCheck": "448b5758",
+    "guardsVerified": true
+  }
+]

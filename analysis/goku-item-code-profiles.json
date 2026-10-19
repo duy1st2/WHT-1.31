@@ -1,0 +1,38 @@
+[
+  {
+    "pid": 14740,
+    "bits": 32,
+    "table": "0x182f8f4",
+    "constructor": "0xbd31f0",
+    "store": "0xbd3202",
+    "signature": "894334",
+    "prefix": "558bec8b450883ec6c5356578bd9536a0050894334"
+  },
+  {
+    "pid": 23884,
+    "bits": 32,
+    "table": "0x17e47d4",
+    "constructor": "0xb92de0",
+    "store": "0xb92df2",
+    "signature": "894334",
+    "prefix": "558bec8b450883ec6c5356578bd9536a0050894334"
+  },
+  {
+    "pid": 6688,
+    "bits": 64,
+    "table": "0x1c18060",
+    "constructor": "0xd39b70",
+    "store": "0xd39b9d",
+    "signature": "895158",
+    "prefix": "488bc44889580848897018488978205541564157488d68a84881ec400100000f2970d8498bf00f2978c8488bf9895158"
+  },
+  {
+    "pid": 29928,
+    "bits": 64,
+    "table": "0x1c46f20",
+    "constructor": "0xd78510",
+    "store": "0xd7853d",
+    "signature": "895158",
+    "prefix": "488bc44889580848897018488978205541564157488d68a84881ec400100000f2970d8498bf00f2978c8488bf9895158"
+  }
+]

@@ -7,7 +7,7 @@ struct SellShop131 {uintptr_t unit=0;DropObjectId id;float x=0,y=0;};
 struct SellView131 {DropSnapshot owner;std::array<bool,6> pawnable{};std::vector<SellShop131> shops;bool scanDone=false;int gold=0;};
 enum class SellResult131 {Idle,Working,Submitted,Complete,NoShop,Remaining,Cancelled,Empty};
 struct SellAll131 {
- bool active=false,scanning=false,waiting=false,settling=false;DropSnapshot owner;std::array<DropItem,6> original{};std::array<bool,6> ordered{};
+ bool active=false,scanning=false,waiting=false,confirming=false;DropSnapshot owner;std::array<DropItem,6> original{};std::array<bool,6> ordered{};
  std::vector<SellShop131> shops;unsigned scanCursor=0,slot=0,shop=0,passes=0,submitted=0,sold=0,remaining=0,skipped=0;int initialGold=0,goldDelta=0;uint64_t next=0,deadline=0;
  void Reset(){*this={};}
  bool Start(const SellView131& view,uint64_t now,int selectedSlot=-1){
@@ -22,7 +22,14 @@ struct SellAll131 {
   goldDelta=view->gold-initialGold;remaining=0;
   for(unsigned i=0;i<6;++i){if(!original[i].handle)continue;bool held=false;for(const auto& item:view->owner.items)if(item.handle&&item.id==original[i].id)held=true;
    if(!held){if(ordered[i])++sold;original[i]={};}else ++remaining;}
-  if(!remaining){if(!settling){settling=true;next=now+25;return SellResult131::Working;}if(now<next)return SellResult131::Working;active=false;return skipped?SellResult131::Remaining:SellResult131::Complete;}
+  // Match WHT SellAll: confirmed inventory removal overrides the walking/
+  // refusal deadline, but allow25ms for the independently updated gold field.
+  if(waiting&&slot<6&&!original[slot].handle){
+   if(!confirming){confirming=true;next=now+25;}
+   if(now<next)return SellResult131::Working;
+   waiting=confirming=false;shop=0;
+  }
+  if(!remaining){active=false;return skipped?SellResult131::Remaining:SellResult131::Complete;}
   if(now>=deadline){active=false;return SellResult131::Remaining;}if(now<next)return SellResult131::Working;
   if(scanning){for(const auto& candidate:view->shops){if(!candidate.unit||!candidate.id.Valid()||!std::isfinite(candidate.x)||!std::isfinite(candidate.y))continue;
     bool duplicate=false;for(const auto& s:shops)if(s.id==candidate.id)duplicate=true;if(duplicate)continue;

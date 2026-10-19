@@ -10,6 +10,19 @@ inline void CheckAllSkills131(){
   *reinterpret_cast<int*>(hero+points)=-1;check(wht::HeroPoints131(reinterpret_cast<uintptr_t>(unit),base,p)==-1,"negative hero points rejected");
   *reinterpret_cast<uintptr_t*>(hero)=0;check(wht::HeroPoints131(reinterpret_cast<uintptr_t>(unit),base,p)==-1,"nonhero skill points rejected");
  }
+ // Reproduce the UI refresh proxy introduced by the anti-flicker fix.
+ {alignas(uintptr_t) uintptr_t image[128]{},proxy[64]{},listener=0,other=0;
+  const auto base=reinterpret_cast<uintptr_t>(image),end=base+sizeof(image),nativeTable=base+16*sizeof(uintptr_t);
+  image[19]=base+100*sizeof(uintptr_t);proxy[3]=image[19];listener=nativeTable;
+  const auto oldOwner=wht::uiRefreshOwner131,oldOriginal=wht::uiRefreshOriginalTable131,oldProxy=wht::uiRefreshProxyTable131;
+  check(wht::SkillListener131(base,end,reinterpret_cast<uintptr_t>(&listener)),"ordinary native button listener accepted");
+  listener=reinterpret_cast<uintptr_t>(proxy);wht::uiRefreshOwner131=reinterpret_cast<uintptr_t>(&listener);wht::uiRefreshOriginalTable131=nativeTable;wht::uiRefreshProxyTable131=listener;
+  check(wht::SkillListener131(base,end,reinterpret_cast<uintptr_t>(&listener)),"registered UI refresh proxy preserves native click callback");
+  other=listener;check(!wht::SkillListener131(base,end,reinterpret_cast<uintptr_t>(&other)),"same proxy on another object refused");
+  proxy[3]=base+101*sizeof(uintptr_t);check(!wht::SkillListener131(base,end,reinterpret_cast<uintptr_t>(&listener)),"changed receiver callback refused");proxy[3]=image[19];
+  wht::uiRefreshOriginalTable131=end;check(!wht::SkillListener131(base,end,reinterpret_cast<uintptr_t>(&listener)),"invalid original native table refused");
+  wht::uiRefreshOwner131=oldOwner;wht::uiRefreshOriginalTable131=oldOriginal;wht::uiRefreshProxyTable131=oldProxy;
+ }
  wht::AllSkills131 batch;uintptr_t selectedUnit=123;int points=2;bool menuOpen=false;unsigned opened=0,closed=0,learned=0;
  auto selected=[&](){return selectedUnit;};auto available=[&](uintptr_t){return points;};
  auto data=[&](unsigned slot)->wht::SkillButton131 {

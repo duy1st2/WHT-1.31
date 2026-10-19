@@ -1,5 +1,6 @@
 #pragma once
 #include "auto_pick131.hpp"
+#include "goku_pick131.hpp"
 #include "quick_drop_network131.hpp"
 #include "drop_icon131.hpp"
 namespace wht {
@@ -47,18 +48,26 @@ inline bool GroundPickItem131(uintptr_t base,const InventoryProfile131& p,uintpt
   return *reinterpret_cast<uint32_t*>(owner)==0xffffffffu&&*reinterpret_cast<uint32_t*>(owner+4)==0xffffffffu&&DropIdentity131(item).Valid();
  }__except(1){return false;}
 }
-template<class Selected,class Alive> bool ReadPickSnapshot131(uintptr_t base,unsigned build,uintptr_t worldFrame,Selected selected,Alive alive,PickSnapshot131& out){
+template<class Selected,class Alive> bool ReadPickSnapshot131(uintptr_t base,unsigned build,uintptr_t worldFrame,Selected selected,Alive alive,PickSnapshot131& out,uint32_t requiredType=0,bool* acquired=nullptr){
+ if(acquired)*acquired=false;
  auto p=PickProfileFor131(build);auto inventory=InventoryProfile(build);auto np=DropNetworkProfileFor131(build);if(!p||!inventory||!np||!InventoryIdentity131(worldFrame,base,p->worldTable))return false;
  auto api=PickNative131(base,*p,*inventory);auto network=DropNetworkNative131(base,*np,*inventory);if(!api||!network)return false;
  if(!DropSnapshot131(base,build,selected,alive,out.owner))return false;
  __try{
   out.capacity=InventoryNative131(base,*inventory).size(out.owner.unit);out.occupied=0;for(const auto& item:out.owner.items)if(item.handle)++out.occupied;
   if(!out.capacity||out.capacity>6||out.occupied>out.capacity)return false;
-  out.ground.clear();if(out.occupied==out.capacity)return true;
+  out.ground.clear();
+  if(requiredType){
+   if(!ItemCodeGuard131(base,*inventory))return false;
+   const bool held=InventoryHasType131(base,*inventory,InventoryNative131(base,*inventory),out.owner.unit,out.capacity,requiredType);
+   if(acquired)*acquired=held;
+   if(held)return selected()==out.owner.unit&&DropSession131(network)==out.owner.session&&alive(out.owner.unit)&&DropOwned131(base,build,network,out.owner.unit);
+  }
+  if(out.occupied==out.capacity)return true;
   const auto list=api.list(worldFrame,true);if(list!=worldFrame+p->listOffset)return false;
   const unsigned count=*reinterpret_cast<unsigned*>(list);const auto data=*reinterpret_cast<uintptr_t*>(list+sizeof(uintptr_t));if(count>8192||(count&&!data))return false;
   out.ground.reserve((std::min)(count,8192u));
-  for(unsigned i=0;i<count;++i){auto item=*reinterpret_cast<uintptr_t*>(data+i*sizeof(uintptr_t));if(!GroundPickItem131(base,*inventory,item))continue;
+  for(unsigned i=0;i<count;++i){auto item=*reinterpret_cast<uintptr_t*>(data+i*sizeof(uintptr_t));if(!GroundPickItem131(base,*inventory,item)||(requiredType&&ItemCodeValue131(base,*inventory,item)!=requiredType))continue;
    float xyz[3]{};network.position(item+(sizeof(uintptr_t)==8?0x228:0x1c0),xyz);
    if(!std::isfinite(xyz[0])||!std::isfinite(xyz[1]))continue;
    out.ground.push_back({DropIdentity131(item),xyz[0],xyz[1],item});
