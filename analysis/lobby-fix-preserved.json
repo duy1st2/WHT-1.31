@@ -1,0 +1,62 @@
+[
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini",
+    "size": 10144,
+    "sha256": "29663df0493dcf4b9a26b7b4384dec5c56f5511fe5fd067ba490c1ecaa1c4337"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log",
+    "size": 307091,
+    "sha256": "0f5846312c249f8b39092a4ee7dbac342915bcc8a3398ed6f697b6858c73c8f0"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.update.log",
+    "size": 5556,
+    "sha256": "c855bad5449f4aa87f8031b85771969b6915f060aa96117e79bb125d61296676"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini",
+    "size": 9315,
+    "sha256": "5e2097164f1911229d739776dd56e423b3766daa5f4af5d3f85b91227a8d77d0"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log",
+    "size": 76429,
+    "sha256": "7f7407131e64c79b5a5114c096824aa2623a51697240b494fc2a05a365d74cd4"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\cef\\logs\\browser\\cef_debug.log",
+    "size": 30484,
+    "sha256": "901c7ae092197101ee3c2e8a57e63716ecfad9e719f03b4f4bc1fbbdab630727"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini",
+    "size": 9481,
+    "sha256": "71c8deee8a923706b7e2a933676a6030d02839ea8bb286ddb2152d14302b4c21"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log",
+    "size": 313021,
+    "sha256": "d3a54ba77329fa93871959ba876fef022f33e4f2fcdca298c4a91ad10e904503"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.update.log",
+    "size": 3855,
+    "sha256": "9aaa4e8c7390ab58bd7f4a1fd4510bbc0698d229a25fc6e601a92e08d01561a3"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini",
+    "size": 9787,
+    "sha256": "9f72b1f7817c11ec707a3b2f73a9dcedd0ce05ccddda6b22b0bf6502ac99227f"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log",
+    "size": 215021,
+    "sha256": "bc1ebb0f03d902caf0fa80141462b37d5847e3198b931b0e299476977610d4b2"
+  },
+  {
+    "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\cef\\logs\\browser\\cef_debug.log",
+    "size": 15365,
+    "sha256": "972f0d85c46e767b92c9ff789ed83eac3ed3fb2b3ced4fe674d3185d855bcac7"
+  }
+]

@@ -1,3 +1,7 @@
+﻿#include "native-ping-contracts.hpp"
+#include <winsock2.h>
+#include "resource_board131.hpp"
+#include "tool_help131.hpp"
 #include "component_lookup131.hpp"
 #include "match_start131.hpp"
 #include "stats_labels131.hpp"
@@ -75,13 +79,39 @@ void __fastcall PriorityTestPoint(void* RESOURCE_TEST_EDX,int,float,float,int){}
 #include "manual-clear131-contracts.hpp"
 #include "detailed-tooltip131-contracts.hpp"
 #include "view-commands131-contracts.hpp"
+#include "resource-mouse131-contracts.hpp"
 #include "mth-notice131-contracts.hpp"
 #include "mth-route-buttons131-contracts.hpp"
 #include "mth-route131-contracts.hpp"
 #include "courier-route131-contracts.hpp"
+#include "inventory-info131-contracts.hpp"
+#include "notification131-contracts.hpp"
+#include "scroll131-contracts.hpp"
+#include "window131-contracts.hpp"
+#include "presentation131-contracts.hpp"
+#include "option-menu131-contracts.hpp"
 #include "drop-commands131-contracts.hpp"
 #include "auto-click-commands131-contracts.hpp"
+#include "mth-craft131-contracts.hpp"
+#include "courier-delivery131-contracts.hpp"
+#include "hp-dimensions131-contracts.hpp"
+#include "auto-skills131-contracts.hpp"
+#include "menu-fog-vertex131-contracts.hpp"
+#include "unit-info131-contracts.hpp"
+#include "button-animation131-contracts.hpp"
+#include "host-moderation131-contracts.hpp"
 int main(){try{
+ TestNativePingReading(check);
+ CheckHostModeration131();
+ CheckButtonAnimation131();
+ CheckUnitInfo131();
+ for(bool english:{false,true}){wht::toolEnglish.store(english);for(unsigned kind=0;kind<8;++kind){auto help=wht::HudHelp131(kind);if(help.empty()||help.find('\n')==std::string::npos||help.find('?')!=std::string::npos)throw std::runtime_error("HUD tooltip translation");}}wht::toolEnglish.store(false);
+
+ CheckAutoSkills131();
+ CheckMenuFogVertex131();
+ CheckHpDimensions131();
+ CheckMthCraft131();
+ CheckCourierDelivery131();
  CheckGraphicsRepair131();
  CheckQuickChat131();
  CheckRepeatMessage131();
@@ -89,10 +119,17 @@ int main(){try{
  CheckManualClear131();
  CheckDetailedTooltip131();
  CheckViewCommands131();
+ CheckResourceMouse131();
  CheckMthNotice131();
  CheckRouteButtons131();
  CheckMthRoute131();
  CheckCourierRoute131();
+ CheckInventoryInfo131();
+ CheckNotifications131();
+ CheckScroll131();
+ CheckWindow131();
+ CheckPresentation131();
+ CheckOptionMenu131();
  CheckDropCommands131();
  CheckAutoClickCommands131();
  CheckStatsLabels131();
@@ -276,7 +313,7 @@ int main(){try{
  check(calls==2&&!override.active,"restoration on suspend");
  check(override.Observe(200,0,1700,false,config)==1700&&override.seen==1,"new identity removes stale values");
  for(const auto& control:wht::kToolMenuControls){
-  if(std::wstring(control.section)==L"MTHKEY"){const std::wstring key=control.key;check(wht::ControlAvailable131(control)==(key==L"Noti"||key==L"AutoGaDraw1"||key==L"AutoGaDraw2"||key==L"AutoGaDraw3"||key==L"AutoSoiDraw1"||key==L"AutoSoiDraw2"||key==L"AutoSoiDraw3"||key==L"ChayGa1"||key==L"ChayGa2"||key==L"ChayGa3"||key==L"ChaySoi1"||key==L"ChaySoi2"||key==L"ChaySoi3"||key==L"ChayGa1_count"||key==L"ChayGa2_count"||key==L"ChayGa3_count"||key==L"ChaySoi1_count"||key==L"ChaySoi2_count"||key==L"ChaySoi3_count"||key==L"TimeBoss"||key==L"MTH49Enable"||key==L"G17Enable"||key==L"PickGoku"||key==L"PickGokuDraw"),"only verified Time Boss and Goku MTH controls enabled");}
+  if(std::wstring(control.section)==L"MTHKEY"){const std::wstring key=control.key;check(wht::ControlAvailable131(control)==(key==L"Shield"||key==L"Ice"||key==L"Wild"||key==L"Frozen"||key==L"Phoenix"||key==L"ShieldDraw"||key==L"IceDraw"||key==L"WildDraw"||key==L"FrozenDraw"||key==L"PhoenixDraw"||key==L"Noti"||key==L"AutoGaDraw1"||key==L"AutoGaDraw2"||key==L"AutoGaDraw3"||key==L"AutoSoiDraw1"||key==L"AutoSoiDraw2"||key==L"AutoSoiDraw3"||key==L"ChayGa1"||key==L"ChayGa2"||key==L"ChayGa3"||key==L"ChaySoi1"||key==L"ChaySoi2"||key==L"ChaySoi3"||key==L"ChayGa1_count"||key==L"ChayGa2_count"||key==L"ChayGa3_count"||key==L"ChaySoi1_count"||key==L"ChaySoi2_count"||key==L"ChaySoi3_count"||key==L"TimeBoss"||key==L"MTH49Enable"||key==L"G17Enable"||key==L"PickGoku"||key==L"PickGokuDraw"),"only ported MTH controls enabled");}
   if(std::wstring(control.section)==L"MacroRecorder")check(wht::ControlAvailable131(control),"macro controls available");
  }
  std::vector<wht::MacroStep> steps;std::string error;

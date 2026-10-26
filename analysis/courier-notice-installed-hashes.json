@@ -1,0 +1,58 @@
+﻿[
+    {
+        "build":  "12164",
+        "architecture":  "x86",
+        "file":  "WHT.mix",
+        "sha256":  "B64C277C030E2584F2BF1C56B7D010617E9C343EB00B477D273472EF1A7E0480",
+        "matches":  true
+    },
+    {
+        "build":  "12164",
+        "architecture":  "x86",
+        "file":  "WHT131Launcher.exe",
+        "sha256":  "3CF56169D420734F964A229C939428E7D046F4AFBE7272E26657C7A87E5034F0",
+        "matches":  true
+    },
+    {
+        "build":  "12164",
+        "architecture":  "x86_64",
+        "file":  "WHT.mix",
+        "sha256":  "583D085F5937E62F40411EEF74685312B557EAD2EA6B66EA410BD85FEF63CCBF",
+        "matches":  true
+    },
+    {
+        "build":  "12164",
+        "architecture":  "x86_64",
+        "file":  "WHT131Launcher.exe",
+        "sha256":  "F80E9129098EA871F3983EF6CC041A2D64A6BB422C6B404DD41F7DB785857509",
+        "matches":  true
+    },
+    {
+        "build":  "12173",
+        "architecture":  "x86",
+        "file":  "WHT.mix",
+        "sha256":  "B64C277C030E2584F2BF1C56B7D010617E9C343EB00B477D273472EF1A7E0480",
+        "matches":  true
+    },
+    {
+        "build":  "12173",
+        "architecture":  "x86",
+        "file":  "WHT131Launcher.exe",
+        "sha256":  "3CF56169D420734F964A229C939428E7D046F4AFBE7272E26657C7A87E5034F0",
+        "matches":  true
+    },
+    {
+        "build":  "12173",
+        "architecture":  "x86_64",
+        "file":  "WHT.mix",
+        "sha256":  "583D085F5937E62F40411EEF74685312B557EAD2EA6B66EA410BD85FEF63CCBF",
+        "matches":  true
+    },
+    {
+        "build":  "12173",
+        "architecture":  "x86_64",
+        "file":  "WHT131Launcher.exe",
+        "sha256":  "F80E9129098EA871F3983EF6CC041A2D64A6BB422C6B404DD41F7DB785857509",
+        "matches":  true
+    }
+]

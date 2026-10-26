@@ -1,0 +1,40 @@
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNAllSkills.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNAllSkillsDow.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNAutoPick.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNAutoPickDow.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNDropItem.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNDropItemDow.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNSellItem.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNSellItemDow.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNWHT_Menu.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNWHT_Rec.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "CommandCardHuman.tga" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "fonts_VN.ttf" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "FRIZQT__.ttf" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "InventoryHuman.tga" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "Transparent.tga" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "UI\Widgets\EscMenu\Human\human-options-button-border-up.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "UI\Widgets\EscMenu\Human\human-options-menu-background.blp" /c
+add "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "WHTUI_GreyBackground.tga" /c
+compact "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNAllSkills.blp" "..\verify\0"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNAllSkillsDow.blp" "..\verify\1"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNAutoPick.blp" "..\verify\2"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNAutoPickDow.blp" "..\verify\3"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNDropItem.blp" "..\verify\4"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNDropItemDow.blp" "..\verify\5"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNSellItem.blp" "..\verify\6"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNSellItemDow.blp" "..\verify\7"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNWHT_Menu.blp" "..\verify\8"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "BTNWHT_Rec.blp" "..\verify\9"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "CommandCardHuman.tga" "..\verify\10"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "fonts_VN.ttf" "..\verify\11"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "FRIZQT__.ttf" "..\verify\12"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "InventoryHuman.tga" "..\verify\13"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "Transparent.tga" "..\verify\14"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "UI\Widgets\EscMenu\Human\human-options-button-border-up.blp" "..\verify\15"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "UI\Widgets\EscMenu\Human\human-options-menu-background.blp" "..\verify\16"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" "WHTUI_GreyBackground.tga" "..\verify\17"
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\overlay-clean-20261024-143840\clean.mpq" (listfile) ..\verify
+
+exit

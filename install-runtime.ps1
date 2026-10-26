@@ -2,6 +2,8 @@ param([ValidateSet("x86","x64")][string]$Architecture="x86",[string]$BuildDir=(J
 $ErrorActionPreference='Stop'
 $clientArch=if($Architecture -eq 'x64'){'x86_64'}else{'x86'}
 if($Architecture -eq 'x64' -and $BuildDir -eq (Join-Path $PSScriptRoot 'build-wht')){$BuildDir=Join-Path $PSScriptRoot 'build-wht-x64'}
+if(![IO.Path]::IsPathRooted($BuildDir)){$BuildDir=Join-Path $PSScriptRoot $BuildDir}
+$BuildDir=[IO.Path]::GetFullPath($BuildDir)
 $allowedRoot=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot 'runtime-test')).TrimEnd('\')+'\'
 $hashes=@{'12164'='9FEAB92F0D8898904122E25AC0ECE42C2070EBD443E4716A62B4767B0F6D0D72';'12173'='93E3D7B38952D6649383C636AF4F766AA599CA25E10A150774F221F1CB4C3EA1'}
 if($Architecture -eq 'x64'){$hashes=@{'12164'='0F82359F25B0C25FED3BD379C482BDD695636F16E064526C2943E453FF4E9AAF';'12173'='BA77193D0C5A94F3EDCFD4933987764C6FAF8AB97CB93D6256B645BBAC8939E1'}}
@@ -46,6 +48,16 @@ foreach($target in $Targets){
  # 1.31 local lookup may use either the client root or the x86 working dir.
  foreach($base in @($full,$arch)){
   $assetDest=Join-Path $base 'WHT-assets';New-Item -ItemType Directory -Path $assetDest -Force | Out-Null
+  foreach($obsolete in @('AARDV.ttf','WHTUI_FRIZQT__.ttf')){
+   $oldAsset=Join-Path $assetDest $obsolete
+   if(Test-Path -LiteralPath $oldAsset){
+    $old=Join-Path $backup ((Split-Path $base -Leaf)+'\assets\'+$obsolete)
+    New-Item -ItemType Directory -Path (Split-Path $old) -Force | Out-Null
+    Copy-Item -LiteralPath $oldAsset -Destination $old -Force
+    if((Get-FileHash -LiteralPath $oldAsset).Hash -ne (Get-FileHash -LiteralPath $old).Hash){throw 'Obsolete asset backup mismatch'}
+    Remove-Item -LiteralPath $oldAsset
+   }
+  }
   foreach($asset in Get-ChildItem -LiteralPath $assets -Recurse -File){
    $relative=$asset.FullName.Substring($assets.Length+1);$dest=Join-Path $assetDest $relative
    if(Test-Path -LiteralPath $dest){$old=Join-Path $backup ((Split-Path $base -Leaf)+'\assets\'+$relative);New-Item -ItemType Directory -Path (Split-Path $old) -Force | Out-Null;Copy-Item -LiteralPath $dest -Destination $old}

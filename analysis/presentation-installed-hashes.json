@@ -1,0 +1,34 @@
+﻿[
+    {
+        "sha256":  "75913DFC14D0B2FEDBE304B4D483047D1A07FE5B5223640D0B8BE4C4198C7D3B",
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.mix"
+    },
+    {
+        "sha256":  "BC0BA8FF76469FACE545EE4939047094617497BDAA3C8AF447394976AC30CB0B",
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT131Launcher.exe"
+    },
+    {
+        "sha256":  "75913DFC14D0B2FEDBE304B4D483047D1A07FE5B5223640D0B8BE4C4198C7D3B",
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.mix"
+    },
+    {
+        "sha256":  "BC0BA8FF76469FACE545EE4939047094617497BDAA3C8AF447394976AC30CB0B",
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT131Launcher.exe"
+    },
+    {
+        "sha256":  "6873C4454613F5EB637F8004F3E43DE3DDB81CE998923CE88EF0BC9D85C93CC4",
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.mix"
+    },
+    {
+        "sha256":  "C2735E888776ED08FCCF23396F03F9739BEFA0EDD7A48920D1DC34D7592DBF42",
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT131Launcher.exe"
+    },
+    {
+        "sha256":  "6873C4454613F5EB637F8004F3E43DE3DDB81CE998923CE88EF0BC9D85C93CC4",
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.mix"
+    },
+    {
+        "sha256":  "C2735E888776ED08FCCF23396F03F9739BEFA0EDD7A48920D1DC34D7592DBF42",
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT131Launcher.exe"
+    }
+]

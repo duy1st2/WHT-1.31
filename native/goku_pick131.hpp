@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 #include "quick_drop131.hpp"
 #include "drop_icon131.hpp"
+#include "mth_presentation131.hpp"
 namespace wht {
 inline constexpr uint32_t gokuType131=0x49303136; // I016, same reference map item.
 struct ItemCodeProfile131 {unsigned build;uintptr_t constructor;};
@@ -31,19 +32,22 @@ inline bool MthResolvedRect131(uintptr_t frame,float& left,float& bottom,float& 
  __try{if(!frame)return false;const auto bounds=reinterpret_cast<const float*>(frame+(sizeof(uintptr_t)==8?0x88:0x44));bottom=bounds[0];left=bounds[1];top=bounds[2];right=bounds[3];return std::isfinite(left)&&std::isfinite(bottom)&&std::isfinite(right)&&std::isfinite(top)&&right>left&&top>bottom&&right-left<.2f&&top-bottom<.1f;}__except(1){return false;}
 }
 struct GokuIcon131:DropIcon131 {
+ MthPresentation131 presentation;
  void* label=nullptr;const char* title="Goku";std::string appliedTitle;ToolMenuRect appliedArea{};
- GokuIcon131(){area={.305f,.142f,.038f,.024f};}
+ GokuIcon131(){pressMs=140;area={.305f,.142f,.038f,.024f};}
  void Reset(){*this=GokuIcon131{};}
  void Update(uintptr_t base,bool enabled,ToolMenuOverlay& menu,const NativeFrameApi* raw=nullptr){
   if(!menu.initialized)return;
   if(enabled&&!frame){frame=menu.Frame(base,menu.independentHost,area);if(frame)NativeSetFrameBackdropEx(menu.api,frame,"UI\\Widgets\\EscMenu\\Human\\human-options-menu-background.blp","UI\\Widgets\\EscMenu\\Human\\human-options-button-border-up.blp",.0125f,.0045f);}
   if(frame&&!label){label=menu.Font(frame,.010f,title);if(label){menu.api.setWidth(label,area.width);menu.api.setHeight(label,area.height);menu.api.setTextAlign(label,2);}}
   shown=enabled&&frame&&label;
+  if(!shown){animation.Reset();pressed=false;}const bool down=shown&&animation.Down(GetTickCount64());const float dx=down?.0012f:0.f,dy=down?-.0012f:0.f;auto visualArea=area;visualArea.right+=dx;visualArea.bottom+=dy;
   if(frame){if(shown){
-   if(appliedArea.right!=area.right||appliedArea.bottom!=area.bottom||appliedArea.width!=area.width||appliedArea.height!=area.height){menu.api.setWidth(frame,area.width);menu.api.setHeight(frame,area.height);menu.api.setAbsPoint(frame,0,area.right-area.width,area.bottom+area.height,1);appliedArea=area;}
-   const auto text=std::string(latched?"|cff00ff00":"|cffffcc00")+title+"|r";if(text!=appliedTitle){menu.api.setText(label,text.c_str());appliedTitle=text;}NativeFrameShow(frame);
-   float left=0,bottom=0,right=0,top=0;if(raw&&MthResolvedRect131(reinterpret_cast<uintptr_t>(frame),left,bottom,right,top)){raw->setWidth(label,right-left);raw->setHeight(label,top-bottom);raw->setAbsPoint(label,4,(left+right)*.5f,(bottom+top)*.5f,1);}
-  }else NativeFrameHide(frame);}
+   if(appliedArea.right!=visualArea.right||appliedArea.bottom!=visualArea.bottom||appliedArea.width!=area.width||appliedArea.height!=area.height){menu.api.setWidth(frame,area.width);menu.api.setHeight(frame,area.height);menu.api.setAbsPoint(frame,0,visualArea.right-area.width,visualArea.bottom+area.height,1);appliedArea=visualArea;}
+   const auto text=std::string(!strcmp(title,"Goku")?(latched?"|cff44ff3d":"|cffffcc00"):(down?"|cffff9900":"|cffffcc00"))+title+"|r";const bool textChanged=text!=appliedTitle;if(textChanged){menu.api.setText(label,text.c_str());appliedTitle=text;}
+   presentation.Visibility(true,[&](){NativeFrameShow(frame);},[&](){NativeFrameHide(frame);});
+   float left=0,bottom=0,right=0,top=0;if(raw&&MthResolvedRect131(reinterpret_cast<uintptr_t>(frame),left,bottom,right,top))presentation.Layout(left,bottom,right,top,textChanged,[&](){raw->setWidth(label,right-left);raw->setHeight(label,top-bottom);raw->setAbsPoint(label,4,(left+right)*.5f,(bottom+top)*.5f,1);});
+  }else presentation.Visibility(false,[&](){NativeFrameShow(frame);},[&](){NativeFrameHide(frame);});}
  }
 };
 }

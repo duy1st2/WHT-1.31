@@ -1,0 +1,47 @@
+[
+  {
+    "profile": "131-12164-x86",
+    "getter": "0x14e8e70",
+    "data": "0x1c62058",
+    "code": "d9055820e301c3",
+    "source": "stock native Ping formatter",
+    "units": "milliseconds",
+    "live_sample_verified": false
+  },
+  {
+    "profile": "131-12173-x86",
+    "getter": "0x14a8af0",
+    "data": "0x1c1a058",
+    "code": "d90558a0e801c3",
+    "source": "stock native Ping formatter",
+    "units": "milliseconds",
+    "live_sample_verified": false
+  },
+  {
+    "profile": "131-12164-x64",
+    "getter": "0x17a8550",
+    "data": "0x22b50e0",
+    "code": "f30f100588cbb000c3",
+    "source": "stock native Ping formatter",
+    "units": "milliseconds",
+    "live_sample_verified": false
+  },
+  {
+    "profile": "131-12173-x64",
+    "getter": "0x17e4140",
+    "data": "0x22e20e0",
+    "code": "f30f100598dfaf00c3",
+    "source": "stock native Ping formatter",
+    "units": "milliseconds",
+    "live_sample_verified": false
+  },
+  {
+    "profile": "129-9231-x86",
+    "getter": "0x6b2b20",
+    "data": "0xdb4a0c",
+    "code": "d9050c4a1b01c3",
+    "source": "stock native Ping formatter",
+    "units": "milliseconds",
+    "live_sample_verified": false
+  }
+]

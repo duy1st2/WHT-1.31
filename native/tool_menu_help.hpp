@@ -7,6 +7,12 @@ inline std::string MthActionHelp(int action){
  return Utf8(std::wstring(names[action])+L"\n"+(action<5?L"Thực hiện chuỗi mua và ghép đồ tương ứng trong MTH.":action==5?L"Thực hiện thao tác nhặt Goku trong MTH.":L"Điều khiển đơn vị chạy tuyến tương ứng; số lệnh xếp hàng theo mức đã chọn."));
 }
 inline std::string MenuControlHelp(const ToolMenuControl& d){
+ if(!wcscmp(d.key,L"Fog Click")&&toolEnglish.load())return "Fog Click alerts\nWarn about selecting a unit hidden from that player. Shared vision and duplicate alerts are checked.";
+ if(!wcscmp(d.section,L"AutoHeal")||!wcscmp(d.section,L"AutoMana")){
+  if(toolEnglish.load())return !wcscmp(d.key,L"Enabled")?"Automatically use registered potion types from any inventory slot for the selected living owned unit. Standard potion types work without registration. Pauses during chat, menus and other automation.":"Use a potion below this percentage (integer 1..99). HP attempts have priority; potion attempts share 1.5 seconds of spacing.";
+  return Utf8(!wcscmp(d.key,L"Enabled")?L"T\u1ef1 t\u00ecm b\u00ecnh trong c\u1ea3 6 \u00f4 t\u00fai c\u1ee7a \u0111\u01a1n v\u1ecb \u0111ang ch\u1ecdn. B\u00ecnh chu\u1ea9n kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd.":L"D\u00f9ng b\u00ecnh khi th\u1ea5p h\u01a1n ng\u01b0\u1ee1ng n\u00e0y (1-99%). \u01afu ti\u00ean HP; kho\u1ea3ng ch\u1edd gi\u1eefa c\u00e1c l\u1ea7n th\u1eed l\u00e0 1,5 gi\u00e2y.");
+ }
+
  if(!wcscmp(d.key,L"Reveal Invisibles"))return toolEnglish.load()?"Show invisible units\nToggle invisible unit display, sharing the state of #tanghinh.":Utf8(L"Hi\u1ec3n th\u1ecb t\u00e0ng h\u00ecnh\nB\u1eadt/t\u1eaft hi\u1ec3n th\u1ecb unit t\u00e0ng h\u00ecnh, c\u00f9ng tr\u1ea1ng th\u00e1i v\u1edbi #tanghinh.");
  if(!wcscmp(d.section,L"Graphics")&&!wcscmp(d.key,L"Detailed Stats Tooltip"))return toolEnglish.load()?"Detailed damage/armor tooltips\nHover over Damage to see attacks per second, attack interval, attack speed bonus and the map maximum. Hover over Armor to see numeric movement speed. Turning this off restores the original tooltip.":Utf8(L"Chi ti\u1ebft damage/armor\nTr\u1ecf chu\u1ed9t v\u00e0o Damage \u0111\u1ec3 xem s\u1ed1 \u0111\u00f2n/gi\u00e2y, th\u1eddi gian gi\u1eefa hai \u0111\u00f2n, bonus t\u1ed1c \u0111\u1ed9 \u0111\u00e1nh v\u00e0 m\u1ee9c t\u1ed1i \u0111a c\u1ee7a map. Tr\u1ecf v\u00e0o Armor \u0111\u1ec3 xem t\u1ed1c \u0111\u1ed9 di chuy\u1ec3n b\u1eb1ng s\u1ed1. T\u1eaft \u0111\u1ec3 hi\u1ec7n tooltip g\u1ed1c.");
 
@@ -15,10 +21,11 @@ inline std::string MenuControlHelp(const ToolMenuControl& d){
  if(!wcscmp(d.key,L"Lock Cursor"))return Utf8(L"Kh\u00f3a chu\u1ed9t\nTh\u1ea3 kh\u00f3a khi game m\u1ea5t focus.");
  if(!wcscmp(d.key,L"Sound Start Game"))return Utf8(L"\u00c2m b\u00e1o b\u1eaft \u0111\u1ea7u tr\u1eadn\nB\u1eadt gi\u1eefa tr\u1eadn kh\u00f4ng ph\u00e1t \u00e2m thanh.");
 
- if(!wcscmp(d.key,L"Fast Menu"))return Utf8(L"Fast Menu\nR\u00fat ng\u1eafn th\u1eddi gian ch\u1edd chuy\u1ec3n menu game. Gi\u1eef c\u00e1c thao t\u00e1c v\u00e0 callback g\u1ed1c.");
+ if(!wcscmp(d.key,L"Fast Menu"))return toolEnglish.load()?"Fast Menu\nAccelerate menu animations and cap transition wait at 0.001 seconds. Native actions and completion callbacks remain in control.":Utf8(L"Fast Menu\nT\u0103ng t\u1ed1c animation menu v\u00e0 r\u00fat th\u1eddi gian chuy\u1ec3n m\u00e0n xu\u1ed1ng 0,001 gi\u00e2y. Gi\u1eef thao t\u00e1c v\u00e0 callback g\u1ed1c.");
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"ShowHpValue"))return Utf8(L"S\u1ed1 HP tr\u00ean unit\nB\u1eadt/t\u1eaft s\u1ed1 HP ri\u00eang v\u1edbi mana. B\u1eadt HP/Mana value trong T\u1ed5ng qu\u00e1t tr\u01b0\u1edbc.");
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"FontSize"))return Utf8(L"C\u1ee1 ch\u1eef HP/Mana\nT\u1eeb 1 \u0111\u1ebfn 20; m\u1eb7c \u0111\u1ecbnh 4. C\u1eadp nh\u1eadt ch\u1eef v\u00e0 kho\u1ea3ng c\u00e1ch d\u00f2ng ngay.");
- if(!wcscmp(d.key,L"ModeCast"))return Utf8(L"Ch\u1ebf \u0111\u1ed9 thi tri\u1ec3n\nQuick Cast: khi nh\u1ea5n ph\u00edm. Smart Cast: khi th\u1ea3 ph\u00edm. B\u1eadt Quick Cast \u1edf t\u1eebng \u00f4.");
+ if(!wcscmp(d.key,L"ModeCast"))return Utf8(L"Ch\u1ebf \u0111\u1ed9 thi tri\u1ec3n\nNormal: ch\u1ecdn m\u1ee5c ti\u00eau nh\u01b0 game. Quick Cast: thi tri\u1ec3n t\u1ea1i chu\u1ed9t khi nh\u1ea5n ph\u00edm g\u1ed1c. Ph\u00edm remap v\u00e0 Cast on Self \u0111\u01b0\u1ee3c \u01b0u ti\u00ean.");
+ if(!wcscmp(d.key,L"Hide Option Menu"))return toolEnglish.load()?"Block game menu (F10)\nBlock unmodified F10 and the Warcraft Menu button. The configured tool-menu key keeps priority.":Utf8(L"Kh\u00f3a m\u1edf menu game (F10)\nCh\u1eb7n F10 v\u00e0 n\u00fat Menu c\u1ee7a Warcraft. Ph\u00edm m\u1edf menu tool v\u1eabn \u0111\u01b0\u1ee3c \u01b0u ti\u00ean.");
  std::wstring key=d.key,section=d.section,title,help;
  auto set=[&](const wchar_t* t,const wchar_t* h){title=t;help=h;};
  auto starts=[&](const wchar_t* s){return key.rfind(s,0)==0;};
@@ -69,11 +76,12 @@ inline std::string MenuControlHelp(const ToolMenuControl& d){
    {L"ShowMaxValues",L"Giá trị máu/năng lượng tối đa",L"Thêm giá trị tối đa sau giá trị hiện tại. Cần bật hiển thị giá trị máu/năng lượng."},
    {L"ShowManaValue",L"Giá trị năng lượng",L"Thêm số năng lượng bên cạnh số máu của đơn vị."},
    {L"ShowLevelHero",L"Cấp tướng",L"Hiển thị cấp của tướng trên màn hình trận đấu."},
-   {L"Fog Click",L"Thao tác trong sương mù",L"Cho phép thao tác qua vùng sương mù theo cơ chế hỗ trợ của tool."},
+   {L"Fog Click",L"C\u1ea3nh b\u00e1o Fog Click",L"B\u00e1o khi ng\u01b0\u1eddi ch\u01a1i ch\u1ecdn unit khu\u1ea5t t\u1ea7m nh\u00ecn c\u1ee7a h\u1ecd. C\u00f3 ki\u1ec3m tra chia s\u1ebb t\u1ea7m nh\u00ecn v\u00e0 ch\u1ed1ng l\u1eb7p c\u1ea3nh b\u00e1o."},
    {L"Show Hotkey In Panel",L"Hiện phím trên nút",L"Hiển thị phím tắt trên các nút kỹ năng và vật phẩm."},
    {L"Show Resource",L"Bảng tài nguyên",L"Hiển thị bảng vàng, gỗ và quân số của người chơi."},
    {L"Quick Drop Item",L"Thả đồ nhanh",L"Giữ Shift và nhấn chuột phải vào vật phẩm trong túi để thả nhanh."},
    {L"Show Timer",L"Thời gian trận",L"Hiển thị thời gian đã trôi qua trong trận."},
+   {L"Show Ping",L"Hi\u1ec3n th\u1ecb ping",L"B\u1eadt/t\u1eaft hi\u1ec3n th\u1ecb \u0111\u1ed9 tr\u1ec5 m\u1ea1ng (ms), \u0111\u1ed9c l\u1eadp v\u1edbi FPS."},
    {L"Show FPS",L"Số khung hình",L"Hiển thị số khung hình mỗi giây (FPS)."},
    {L"Show Mem",L"Bộ nhớ sử dụng",L"Hiển thị lượng bộ nhớ trò chơi đang sử dụng."},
    {L"Show Auto Pick",L"Nút tự nhặt đồ",L"Hiện nút bật/tắt tự động nhặt vật phẩm gần đơn vị."},
@@ -84,7 +92,8 @@ inline std::string MenuControlHelp(const ToolMenuControl& d){
    {L"Text Life/Mana No Hide",L"Giữ số máu/năng lượng",L"Giữ giá trị dài hiển thị thay vì bị ẩn khi vượt khung."},
    {L"Text Stats Commas",L"Dấu phân cách chỉ số",L"Thêm dấu phân cách hàng nghìn cho các chỉ số."},
    {L"Color Player",L"Màu thanh máu",L"Đổi màu thanh máu theo màu người chơi sở hữu đơn vị."},
-   {L"VSync",L"Đồng bộ khung hình",L"Đồng bộ khung hình với tần số quét màn hình để giảm xé hình."},
+   {L"VSync",L"\u0110\u1ed3ng b\u1ed9 khung h\u00ecnh",L"\u0110\u1ed3ng b\u1ed9 FPS v\u1edbi t\u1ea7n s\u1ed1 qu\u00e9t. Khi b\u1eadt, Unlock Limit FPS t\u1ea1m ng\u01b0ng."},
+   {L"Unlock Limit FPS",L"B\u1ecf gi\u1edbi h\u1ea1n FPS",L"B\u1ecf kho\u1ea3ng ch\u1edd khung h\u00ecnh khi VSync t\u1eaft. T\u1eaft \u0111\u1ec3 kh\u00f4i ph\u1ee5c gi\u1edbi h\u1ea1n g\u1ed1c. FPS th\u1ef1c t\u1ebf ph\u1ee5 thu\u1ed9c m\u00e1y v\u00e0 driver."},
    {L"BarInvul",L"Ẩn thanh của đơn vị bất tử",L"Ẩn thanh máu/năng lượng khi đơn vị không thể bị gây sát thương."},
    {L"ConsoleUI",L"Ẩn bảng điều khiển",L"Ẩn giao diện điều khiển mặc định của trò chơi. Tắt để hiện lại."},
    {L"BlackBarUI",L"Ẩn dải đen",L"Ẩn dải đen của giao diện để mở rộng vùng nhìn."},

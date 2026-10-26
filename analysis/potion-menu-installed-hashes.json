@@ -1,0 +1,34 @@
+[
+    {
+        "Path":  "runtime-test/Warcraft3-1.31.1.12164/x86/WHT.mix",
+        "Hash":  "34C430860697A4C661A64FE18F48D736D3BDAD1FB3BCFD585B6D344C5362F331"
+    },
+    {
+        "Path":  "runtime-test/Warcraft3-1.31.1.12173/x86/WHT.mix",
+        "Hash":  "34C430860697A4C661A64FE18F48D736D3BDAD1FB3BCFD585B6D344C5362F331"
+    },
+    {
+        "Path":  "runtime-test/Warcraft3-1.31.1.12164/x86/WHT131Launcher.exe",
+        "Hash":  "4132EEAA647981C6384EB839B03F906DBA880E26300160448F5EE70DBE041C2A"
+    },
+    {
+        "Path":  "runtime-test/Warcraft3-1.31.1.12173/x86/WHT131Launcher.exe",
+        "Hash":  "4132EEAA647981C6384EB839B03F906DBA880E26300160448F5EE70DBE041C2A"
+    },
+    {
+        "Path":  "runtime-test/Warcraft3-1.31.1.12164/x86_64/WHT.mix",
+        "Hash":  "F1B3A662A314163A0E64149D827197DD00965C742772F4225CFDED1938E77C11"
+    },
+    {
+        "Path":  "runtime-test/Warcraft3-1.31.1.12173/x86_64/WHT.mix",
+        "Hash":  "F1B3A662A314163A0E64149D827197DD00965C742772F4225CFDED1938E77C11"
+    },
+    {
+        "Path":  "runtime-test/Warcraft3-1.31.1.12164/x86_64/WHT131Launcher.exe",
+        "Hash":  "C2735E888776ED08FCCF23396F03F9739BEFA0EDD7A48920D1DC34D7592DBF42"
+    },
+    {
+        "Path":  "runtime-test/Warcraft3-1.31.1.12173/x86_64/WHT131Launcher.exe",
+        "Hash":  "C2735E888776ED08FCCF23396F03F9739BEFA0EDD7A48920D1DC34D7592DBF42"
+    }
+]

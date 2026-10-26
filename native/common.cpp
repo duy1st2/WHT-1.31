@@ -1,4 +1,5 @@
 #include "common.hpp"
+#include "auto_heal.hpp"
 #include <bcrypt.h>
 #include <fstream>
 #include <filesystem>
@@ -148,6 +149,7 @@ Config LoadConfig(const std::wstring& ini) {
     ParseFpsLimit(Read(ini,L"Graphics",L"Fps Limit",L"0"),c.fpsLimit);
     ParseSceneLight(Read(ini,L"Event",L"Light",L"0"),c.sceneLight);
     c.showFps=Read(ini,L"Event",L"Show FPS",L"0")==L"1";
+    c.showPing=Read(ini,L"Event",L"Show Ping",L"0")==L"1";
     c.showResource=Read(ini,L"Event",L"Show Resource",L"0")==L"1";
     c.showHotkeyInPanel=Read(ini,L"Event",L"Show Hotkey In Panel",L"0")==L"1";
     c.showCooldown=Read(ini,L"Event",L"ShowCooldown",L"1")==L"1";
@@ -168,7 +170,7 @@ Config LoadConfig(const std::wstring& ini) {
                        Read(ini,L"hmaph",L"maph_5",L"0")==L"1"):revealSetting==L"1";
     c.showNotiKickBan=Read(ini,L"Event",L"Show Noti Kick/Ban",L"1")==L"1";
     c.notiLogSaveGame=Read(ini,L"Event",L"Noti/Log Info Players Save Game",L"0")==L"1";
-    c.modeCast=std::clamp(static_cast<int>(Number(Read(ini,L"Event",L"ModeCast",L"0"),0,0,2)),0,2);
+    c.modeCast=Read(ini,L"Event",L"ModeCast",L"0")==L"1"?1:0;
     c.lifeManaCommas=Read(ini,L"Graphics",L"Text Life/Mana Commas",L"0")==L"1";
     c.lifeManaNoHide=Read(ini,L"Graphics",L"Text Life/Mana No Hide",L"0")==L"1";
     c.statsTooltip=Read(ini,L"Graphics",L"Detailed Stats Tooltip",L"1")==L"1";
@@ -239,6 +241,12 @@ Config LoadConfig(const std::wstring& ini) {
     c.sellFastKey=ReadKey(ini,L"HotKeyHero",L"SellFast",L"-1");
     c.macroEnabled=Read(ini,L"MacroRecorder",L"Enabled",L"1")==L"1";c.macroShowButton=Read(ini,L"MacroRecorder",L"ShowButton",L"1")==L"1";
     {const wchar_t* keys[]={L"PlayKey",L"StopKey",L"RecordKey",L"ScriptKey"};for(size_t i=0;i<4;++i)c.macroKeys[i]=ReadKey(ini,L"MacroRecorder",keys[i],L"-1");}
+    c.autoManaEnabled=Read(ini,L"AutoMana",L"Enabled",L"0")==L"1";
+    c.autoManaPercent=Number(Read(ini,L"AutoMana",L"Percent",L"35"),35,1,99);
+    c.autoManaItems=HealItemCodes(Read(ini,L"AutoMana",L"ItemTypes",L"pman,pgma"));
+    c.autoHealEnabled=Read(ini,L"AutoHeal",L"Enabled",L"0")==L"1";
+    c.autoHealPercent=Number(Read(ini,L"AutoHeal",L"Percent",L"35"),35,1,99);
+    c.autoHealItems=HealItemCodes(Read(ini,L"AutoHeal",L"ItemTypes",L"phea,pghe"));
     c.autoSkillsEnabled=Read(ini,L"AutoSkills",L"AutoSkills_Enable",L"0")==L"1";
     c.autoSkillsDelay=Number(Read(ini,L"AutoSkills",L"AutoSkills_Delay",L"0.5"),.5f,.05f,10);
     c.autoSkillsRange=Number(Read(ini,L"AutoSkills",L"AutoSkills_Range",L"1024"),1024,128,4096);

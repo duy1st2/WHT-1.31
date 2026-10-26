@@ -1,0 +1,42 @@
+[
+  {
+    "pid": 14740,
+    "build": 12164,
+    "bits": 32,
+    "entry": "0x9d3f00",
+    "length": 291,
+    "relocations": [
+      259
+    ],
+    "evidence": "Full original function: model sequence dispatch, maximum duration, callback/context storage and registration, float return; x86 cdecl six stack args; x64 RCX/RDX/R8/R9 and two stack args."
+  },
+  {
+    "pid": 23884,
+    "build": 12173,
+    "bits": 32,
+    "entry": "0x994c40",
+    "length": 291,
+    "relocations": [
+      259
+    ],
+    "evidence": "Full original function: model sequence dispatch, maximum duration, callback/context storage and registration, float return; x86 cdecl six stack args; x64 RCX/RDX/R8/R9 and two stack args."
+  },
+  {
+    "pid": 6688,
+    "build": 12164,
+    "bits": 64,
+    "entry": "0xaf7150",
+    "length": 337,
+    "relocations": [],
+    "evidence": "Full original function: model sequence dispatch, maximum duration, callback/context storage and registration, float return; x86 cdecl six stack args; x64 RCX/RDX/R8/R9 and two stack args."
+  },
+  {
+    "pid": 29928,
+    "build": 12173,
+    "bits": 64,
+    "entry": "0xb3fb30",
+    "length": 337,
+    "relocations": [],
+    "evidence": "Full original function: model sequence dispatch, maximum duration, callback/context storage and registration, float return; x86 cdecl six stack args; x64 RCX/RDX/R8/R9 and two stack args."
+  }
+]

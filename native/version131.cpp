@@ -1,3 +1,22 @@
+﻿#include "fps_text_cadence131.hpp"
+#include "player_network131.hpp"
+#include "ping_reading.hpp"
+#include "ping_overlay.hpp"
+#include "presentation131.hpp"
+#include "auto_heal131.hpp"
+#include "casting_mode.hpp"
+#include "option_menu131.hpp"
+#include "window_services131.hpp"
+#include "scroll131.hpp"
+#include "inventory_info131.hpp"
+#include "unit_info131.hpp"
+#include "courier_base131.hpp"
+#include "mth_craft_buttons131.hpp"
+#include "auto_skills_native131.hpp"
+#include "hp_dimensions131.hpp"
+#include "mth_text131.hpp"
+#include "ui_perf131.hpp"
+#include "courier_delivery131.hpp"
 #include "mth_queue131.hpp"
 #include "courier_route131.hpp"
 #include "mth_route_buttons131.hpp"
@@ -44,6 +63,7 @@
 #include "hotkey_labels131.hpp"
 #include "message_clear131.hpp"
 #include "resource_board131.hpp"
+#include "tool_help131.hpp"
 #include "regen131.hpp"
 #include "state_bars131.hpp"
 #include <atomic>
@@ -52,7 +72,17 @@
 #include <fstream>
 #include <unordered_map>
 
+#include "command_feedback131.hpp"
+#include "menu_fog_vertex131.hpp"
 namespace {
+wht::OptionMenu131 optionMenu131;
+
+wht::WindowServices131 windowServices131;
+wht::PresentationService131 presentation131;
+wht::MenuFogVertex131 menuFogVertex131;
+
+wht::ScrollPair131 scroll131;
+
 HMODULE module131=nullptr;uintptr_t base131=0;const wht::Profile131* profile131=nullptr;
 HWND gameWindow131=nullptr;HHOOK messageHook131=nullptr;UINT_PTR timer131=0;
 WNDPROC windowProc131=nullptr;constexpr UINT updateMessage131=WM_APP+0x131;
@@ -79,10 +109,15 @@ wht::MatchStart131 matchStart131;
 wht::TimeBoss131 timeBoss131;
 wht::DetailedTooltip131 detailTooltip131;
 wht::ClockOverlay131 clock131;wht::FpsState131 fps131;
+wht::PingOverlay pingOverlay131;
 wht::QuickDropInput131 quickDrop131;wht::QuickDropFlow131 quickDropFlow131;
 wht::Reveal131 reveal131;
 wht::SellIcon131 sellIcon131;wht::SellAll131 sellAll131;
-wht::SelfCastSource131 courier131;bool routePinned131=false;wht::RouteButtons131 routeButtons131;wht::MthRoute131 mthRoute131;wht::MthNotice131 mthNotice131;wht::GokuIcon131 gokuIcon131;bool gokuEnabled131=false;wht::AutoPickIcon131 pickIcon131;wht::AutoPick131 autoPick131;bool autoPickEnabled131=false;
+wht::AutoHeal131 autoHeal131,autoMana131;wht::AutoSkills131 autoSkills131;wht::AutoVision131 autoVision131;
+wht::CourierDelivery131 delivery131;
+wht::MthText131 mthText131;wht::UiPerf131 perf131;
+wht::MthCraftRun131 craft131;wht::SelectionRoster131 craftRoster131;wht::CraftButtons131 craftButtons131;
+wht::LocalInfo131 localInfo131;wht::CourierBase131 courierBase131;wht::SelfCastSource131 courier131;bool routePinned131=false;wht::RouteButtons131 routeButtons131;wht::MthRoute131 mthRoute131;wht::MthNotice131 mthNotice131;wht::GokuIcon131 gokuIcon131;bool gokuEnabled131=false;wht::AutoPickIcon131 pickIcon131;wht::AutoPick131 autoPick131;bool autoPickEnabled131=false;
 wht::DropIcon131 dropIcon131;wht::DropAllState dropAllNetwork131;
 wht::SkillsIcon131 skillsIcon131;wht::AllSkills131 allSkills131;
 wht::RegenOverlay131 regen131;const wht::RegenProfile131* regenProfile131=nullptr;
@@ -96,6 +131,10 @@ bool PinTarget131(){pinned131={};return wht::ReadCastTarget131(base131,profile13
 unsigned InventoryMask131(bool usableOnly=false){if(!profile131)return 0;const auto* p=wht::InventoryProfile(profile131->build);if(!p)return 0;return wht::InventoryMask131(base131,*p,wht::InventoryNative131(base131,*p),(regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0),usableOnly);}
 bool AlternatePanel131(){return wht::AlternatePanel131([&](unsigned slot){const auto data=SkillData131(slot);return data.order?data.order:data.ability;});}
 bool ClickSkill131(unsigned slot){const auto* p=wht::SkillProfile(profile131->build);return p&&cooldownProfile131&&wht::SkillClick131(wht::CooldownButton131(currentUi131,base131,*cooldownProfile131,slot),base131,*p);}
+
+wht::MthCraftApi131 CraftApi131(){const auto* p=wht::PickProfileFor131(profile131->build);return {base131,currentUi131,p?wht::Component131(currentUi131,base131,p->worldTable):0,profile131->build,craftRoster131,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float v=0,m=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,v,m)&&v>.405f;},SkillData131,ClickSkill131};}
+wht::AutoSkillsApi131 AutoApi131(){return {CraftApi131(),autoVision131,profile131->uiVtable,[&](unsigned slot){return cooldownProfile131?wht::CooldownButton131(currentUi131,base131,*cooldownProfile131,slot):0;},&folder131};}
+void CraftReport131(wht::MthResult r){if(const auto* text=wht::CraftNotice131(r)){wht::Log(folder131,text);mthNotice131.EventText(wht::MthNoticeKind131::OrderRefused,text,config131.mthNoti,GetTickCount64());}}
 bool LearnSlot131(unsigned slot){return wht::LearnSlot131(slot,[&](wht::SelfCastSource131& out){return wht::ReadSelfCastSource131(base131,profile131->build,currentUi131,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},out);},SkillPoints131,SkillData131,ClickSkill131);}
 
 std::atomic<bool> authorized131{false},ready131{false};bool settings131=true;
@@ -103,7 +142,7 @@ float cameraWritten131[2]{};unsigned cameraWrittenMask131=0;
 bool menuReported131=false,cameraReported131=false;
 bool ticking131=false,tickReported131=false,writeReported131=false;
 ULONGLONG configNext131=0,updateNext131=0;void* memoryFont131=nullptr;
-bool full131=false,lock131=false;LONG_PTR oldStyle131=0;RECT oldRect131{};
+
 uintptr_t archive131=0;bool archiveAttempt131=false,archiveReady131=false;
 bool ArchiveInfo131(const char* name,uintptr_t& owner){
  __try{return reinterpret_cast<bool(__cdecl*)(const char*,size_t,uintptr_t*)>(base131+profile131->fileInfo)(name,strlen(name),&owner);}
@@ -171,6 +210,7 @@ void ApplyCamera131(){
  if(!originalCamera131)return;if(!CameraLive131(currentUi131))FindCamera131();
  if(!CameraLive131(currentUi131))return;
  const bool enabled=Allowed131()&&settings131;
+ scroll131.Update(base131,profile131->build,camera131.owner,enabled,config131);
  for(int field=0;field<2;++field){float native=0;if(!ReadCamera131(field,native))continue;
   const unsigned bit=1u<<field;
   if(!cameraReported131){cameraReported131=true;wht::Log(folder131,"WHT 1.31: live camera identity and native float getter verified.");}
@@ -182,15 +222,6 @@ void ApplyCamera131(){
    writeReported131=true;wht::Log(folder131,"WHT 1.31: camera distance requested="+std::to_string(desired)+" readback="+std::to_string(observed));}}
  }
  if(!enabled){camera131.Restore(originalCamera131);cameraWrittenMask131=0;}
-}
-void Fullscreen131(bool value){
- if(!gameWindow131||value==full131)return;
- if(value){oldStyle131=GetWindowLongPtrW(gameWindow131,GWL_STYLE);GetWindowRect(gameWindow131,&oldRect131);
-  MONITORINFO info{sizeof(info)};if(!GetMonitorInfoW(MonitorFromWindow(gameWindow131,MONITOR_DEFAULTTONEAREST),&info))return;
-  SetWindowLongPtrW(gameWindow131,GWL_STYLE,oldStyle131&~(WS_CAPTION|WS_THICKFRAME));
-  SetWindowPos(gameWindow131,nullptr,info.rcMonitor.left,info.rcMonitor.top,info.rcMonitor.right-info.rcMonitor.left,info.rcMonitor.bottom-info.rcMonitor.top,SWP_NOZORDER|SWP_FRAMECHANGED);
- }else{SetWindowLongPtrW(gameWindow131,GWL_STYLE,oldStyle131);SetWindowPos(gameWindow131,nullptr,oldRect131.left,oldRect131.top,oldRect131.right-oldRect131.left,oldRect131.bottom-oldRect131.top,SWP_NOZORDER|SWP_FRAMECHANGED);}
- full131=value;
 }
 bool ToggleArgument131(std::wistringstream& in,bool old,bool& value){
  std::wstring arg,extra;if(!(in>>arg)){value=!old;return true;}if(in>>extra)return false;
@@ -230,18 +261,18 @@ bool BeginQuickDrop131(unsigned slot){
 }
 bool CaptureDrop131(wht::DropSnapshot& snapshot){return wht::DropSnapshot131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},snapshot);}
 bool BeginSell131(int selectedSlot=-1){
- if(!(Allowed131()&&!menu131.open&&!macro131.playing&&!macro131.recording&&!dropAllNetwork131.active&&GetForegroundWindow()==gameWindow131&&settings131))return false;
+ if(!(Allowed131()&&!craft131.active&&!delivery131.active&&!menu131.open&&!macro131.playing&&!macro131.recording&&!dropAllNetwork131.active&&GetForegroundWindow()==gameWindow131&&settings131))return false;
   autoPick131.Reset();wht::SellView131 view;
   const bool started=wht::ReadSellView131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},view)&&sellAll131.Start(view,GetTickCount64(),selectedSlot);
- wht::Log(folder131,started?"WHT: Sell All queued.":"WHT: Sell All unavailable (selection/pawnable items/active worker).");
+ wht::ShowNotification131(base131,profile131->build,currentUi131,started?"Sell All: finding a nearby shop":"Sell All: select a living unit with sellable items");wht::Log(folder131,started?"WHT: Sell All queued.":"WHT: Sell All unavailable (selection/pawnable items/active worker).");
  return started;
 }
 bool SellHovered131(){POINT point{};RECT client{};if(!GetCursorPos(&point)||!ScreenToClient(gameWindow131,&point)||!GetClientRect(gameWindow131,&client))return false;
  const int slot=wht::InventorySlotHit131(point,client.right,client.bottom,[&](unsigned slot){return cooldownProfile131?wht::CooldownButton131(currentUi131,base131,*cooldownProfile131,slot+12):0;});
  if(slot<0)return false;BeginSell131(slot);return true;
 }
-bool Command131(const std::wstring& text){
- std::wistringstream in(text);std::wstring command;if(!(in>>command))return false;wht::FoldCommandName(command);
+bool CommandImpl131(const std::wstring& text){
+ std::wistringstream in(text);std::wstring command;if(!(in>>command))return false;command=wht::CanonicalCommand131(command);
  // The settings UI and diagnostics remain usable while a login is pending.
  if(command==L"#toolui"){
   size_t index=0;std::wstring op,value;if(!(in>>index>>op)||index>=wht::kToolMenuControls.size())return false;
@@ -249,6 +280,7 @@ bool Command131(const std::wstring& text){
   if(op==L"toggle")value=wht::ToolMenuOverlay::ReadValue(config131,index)==L"1"?L"0":L"1";
   else if(op==L"clear")value=L"";else if(op==L"set"){std::getline(in,value);if(!value.empty()&&value[0]==L' ')value.erase(0,1);}else return false;
   if(!wht::ValidMenuValue(d,value))return false;
+  if(const auto* mode=wht::MthModeControl131(d.section,d.key))return wht::ApplyMthMode131(mode,value,config131,[&](const wchar_t* section,const wchar_t* key,const wchar_t* saved){return wht::SaveSetting(ini131,section,key,saved);},[&](){Reload131();});
   if(std::wstring(d.section)==L"Language"){
    const bool english=std::wstring(d.key)==L"English"?value==L"1":value!=L"1";
    wht::SaveSetting(ini131,L"Language",L"English",english?L"1":L"0");
@@ -256,16 +288,48 @@ bool Command131(const std::wstring& text){
   }else if(!wht::SaveSetting(ini131,d.section,d.key,value))return false;
   Reload131();return true;
  }
- if(command==L"#tool"||command==L"#menu"){menu131.Toggle();return true;}
+ if(wht::ModerationCommandName131(command)){if(!authorized131||config131.mode!=wht::RunMode::Local)return false;std::wstring args;std::getline(in,args);const auto result=wht::ExecuteModeration131(gameWindow131,folder131,command,args);wht::Log(folder131,result);if(currentUi131)wht::ShowNotification131(base131,profile131->build,currentUi131,result);return true;}
+ if(command==L"#tools"||command==L"#tool"||command==L"#menu"){std::wstring args;std::getline(in,args);return wht::ToolMenuCommand131(command,args,[&](){menu131.Toggle();});}
  if(!Allowed131()){wht::Log(folder131,"WHT 1.31: command requires Local mode, active match and LoadFileMapWar3 session.");return false;}
- if(command==L"#setga"){std::wstring extra;if(in>>extra||mthRoute131.route>=0)return false;wht::SelfCastSource131 source;if(!ReadSelectedRoute131(source))return false;courier131=source;wht::Log(folder131,"WHT: selected courier assigned.");return true;}
- if(const int route=wht::RouteCommand131(command);route>=0){std::wstring extra;if(in>>extra)return false;if(!settings131||!(config131.mth49Enable||config131.g17Enable)||!wht::PointNative131(base131,profile131->build))return false;
-  const int counts[]={config131.chayGa1Count,config131.chayGa2Count,config131.chayGa3Count,config131.chaySoi1Count,config131.chaySoi2Count,config131.chaySoi3Count};wht::SelfCastSource131 source;const bool ok=ResolveRoute131(source)&&mthRoute131.Start(route,counts[route],source);wht::Log(folder131,ok?"WHT: MTH native queued route requested.":"WHT: no living owned moving courier found; select courier and use #setga.");return ok;}
+ if(command==L"#mth49"||command==L"#g17"){std::wstring args;std::getline(in,args);return wht::ApplyMthMode131(command,args,config131,[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(command==L"#mc"||command==L"#modecast"){std::wstring args;std::getline(in,args);return wht::ApplyCastMode131(args,config131,[&](const wchar_t* section,const wchar_t* key,const wchar_t* saved){return wht::SaveSetting(ini131,section,key,saved);},[&](){Reload131();});}
+ if(command==L"#reloadconfig"){std::wstring args;std::getline(in,args);return wht::ReloadConfigCommand131(args,[&](){Reload131();});}
+ if(command==L"#pcam"||command==L"#pzoom"){std::wstring args;std::getline(in,args);return wht::ApplyPresetCamera131(args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(command==L"#full"||command==L"#lock"){std::wstring args;std::getline(in,args);return wht::ApplyWindowToggle131(command,args,config131,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();windowServices131.Apply(gameWindow131,Allowed131()&&settings131&&config131.borderless,Allowed131()&&settings131&&config131.lockCursor,menu131.open);});}
+ if(command==L"#whp"||command==L"#hhp"){std::wstring args;std::getline(in,args);const auto* p=wht::HpDimensionProfileFor131(profile131->build);if(!p||!wht::HpDimensionCode131(base131,*p))return false;const bool ok=wht::ApplyHpDimension131(command,args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});if(ok)wht::ShowNotification131(base131,profile131->build,currentUi131,std::string(command==L"#whp"?"HP bar width: ":"HP bar height: ")+std::to_string(command==L"#whp"?config131.barWidthHp:config131.barHeightHp)+" (0 = native)");return ok;}
+ if(command==L"#wsize"){std::wstring args;std::getline(in,args);int width=0,height=0;return wht::ParseWindowSize131(args,width,height)&&wht::ResizeWindow131(gameWindow131,width,height);}
+ if(command==L"#kscroll"||command==L"#mscroll"){std::wstring args;std::getline(in,args);if(!wht::ScrollCode131(base131,profile131->build))return false;return wht::ApplyScrollCommand131(command,args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(command==L"#ping"){std::wstring extra;if(in>>extra)return false;const auto status=wht::Utf8(wht::PingStatus(base131,wht::PingProfile131(profile131->build)));wht::Log(folder131,status);wht::ShowNotification131(base131,profile131->build,currentUi131,status);return true;}
+ if(command==L"#upos"||command==L"#cname"){std::wstring args;std::getline(in,args);if(!wht::UnitInfoArgs131(args))return false;const bool position=command==L"#upos";wht::UnitInfo131 info;const bool ok=wht::ReadUnitInfo131(base131,profile131->build,position,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},info);const auto text=ok?wht::UnitInfoText131(info,position):std::string(position?"Unit Position: select a unit; position unavailable":"Unit ID: select a unit; type unavailable");localInfo131.Event(text,GetTickCount64());wht::Log(folder131,text);return ok;}
+ if(command==L"#islot"){std::wstring extra;if(in>>extra)return false;wht::InventoryInfo131 info;const bool ok=wht::ReadInventoryInfo131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},info);auto text=ok?wht::InventoryInfoText131(info,true):std::string("Item Slots: select a unit; inventory could not be read");localInfo131.Event(text,GetTickCount64());wht::Log(folder131,text);return ok;}
+ if(wht::DeliveryCommand131(command)){std::wstring extra;if(in>>extra)return false;auto api=CraftApi131();wht::DeliveryBag131 c,h;const bool ok=Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable)&&!craft131.active&&!delivery131.active&&mthRoute131.route<0&&!courierBase131.pending&&!gokuEnabled131&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&wht::DeliveryRead131(api,courier131,false,c)&&wht::DeliveryFindHero131(api,c.source,h)&&delivery131.Start(c,h,GetTickCount64());if(ok&&(courierBase131.ui!=c.source.ui||courierBase131.session!=c.source.session))courierBase131.Save(c.source);const char* text=ok?"Courier Delivery: queued":"Courier Delivery: use #setga, give courier items, select your hero and stop other MTH actions";wht::Log(folder131,text);wht::ShowNotification131(base131,profile131->build,currentUi131,text);return ok;}
+ if(const int action=wht::CraftCommand131(command);action>=0){std::wstring extra;if(in>>extra)return false;auto api=CraftApi131();if(mthRoute131.route>=0||courierBase131.pending||gokuEnabled131||!(!menu131.open&&!macro131.playing&&!macro131.recording&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131)){CraftReport131(wht::MthResult::Busy);return false;}const auto r=craft131.Queue(action,Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable),api);CraftReport131(r);return r==wht::MthResult::Running;}
+ if(const auto* draw=wht::CraftDrawCommand131(command)){std::wstring args;std::getline(in,args);return wht::ApplyCraftDraw131(*draw,args,config131,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(wht::IsAutoHealCommand(command)){std::wstring args;std::getline(in,args);if(args.find_first_of(L"\r\n")!=std::wstring::npos||args.find(L'\0')!=std::wstring::npos)return false;std::wistringstream arguments(args);const wchar_t* key=nullptr;std::wstring value;auto slot=[&](unsigned index){auto api=AutoApi131();wht::SelfCastSource131 source;wht::InventoryInfo131 info;return api.ReadSource(source)&&wht::ReadInventoryInfo131(base131,profile131->build,[&](){return api.core.Selected();},info)?info.codes[index]:0u;};if(!wht::AutoHealSetting(command,arguments,config131,slot,key,value)){wht::ShowNotification131(base131,profile131->build,currentUi131,"Auto Heal: #autoheal [0|1], #healhp <1..99>, #healitem <occupied slot 1..6>");return false;}if(!wht::SaveSetting(ini131,L"AutoHeal",key,value))return false;Reload131();wht::ShowNotification131(base131,profile131->build,currentUi131,command==L"#autoheal"?(config131.autoHealEnabled?"Auto Heal: ON":"Auto Heal: OFF"):command==L"#healhp"?"Auto Heal HP: "+wht::Utf8(value)+"%":"Auto Heal: registered healing item");return true;}
+ if(wht::IsAutoManaCommand(command)){std::wstring args;std::getline(in,args);if(args.find_first_of(L"\r\n")!=std::wstring::npos||args.find(L'\0')!=std::wstring::npos)return false;std::wistringstream arguments(args);const wchar_t* key=nullptr;std::wstring value;auto slot=[&](unsigned index){auto api=AutoApi131();wht::SelfCastSource131 source;wht::InventoryInfo131 info;return api.ReadSource(source)&&wht::ReadInventoryInfo131(base131,profile131->build,[&](){return api.core.Selected();},info)?info.codes[index]:0u;};if(!wht::AutoManaSetting(command,arguments,config131,slot,key,value)){wht::ShowNotification131(base131,profile131->build,currentUi131,"Auto Mana: #automana [0|1], #healmp <1..99>, #manaitem <occupied slot 1..6>");return false;}if(!wht::SaveSetting(ini131,L"AutoMana",key,value))return false;Reload131();wht::ShowNotification131(base131,profile131->build,currentUi131,command==L"#automana"?(config131.autoManaEnabled?"Auto Mana: ON":"Auto Mana: OFF"):command==L"#healmp"?"Auto Mana: "+wht::Utf8(value)+"%":"Auto Mana: registered mana item");return true;}
+ if(command==L"#autoskilldelay"||command==L"#autoskillrange"){std::wstring args;std::getline(in,args);const bool ok=wht::AutoSkillSetting131(command,args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();autoSkills131.CancelScan();autoSkills131.due=0;});if(ok)wht::ShowNotification131(base131,profile131->build,currentUi131,std::string(command==L"#autoskilldelay"?"Auto Skills delay (seconds): ":"Auto Skills range: ")+std::to_string(command==L"#autoskilldelay"?config131.autoSkillsDelay:config131.autoSkillsRange));return ok;}
+ if(command==L"#autoskillswap"){std::wstring args;std::getline(in,args);int first=0,second=0;if(!wht::AutoSkillSwapArgs131(args,first,second))return false;auto api=AutoApi131();wht::SelfCastSource131 source;if(!api.ReadSource(source)||!autoSkills131.Swap(source,first,second))return false;wht::ShowNotification131(base131,profile131->build,currentUi131,autoSkills131.Summary(source));return true;}
+ if(command==L"#autoskilllist"||command==L"#autoskillclear"){std::wstring args;std::getline(in,args);int index=0;if(command==L"#autoskillclear"){if(!AutoSkillClearIndex131(args,index))return false;}else if(args.find_first_not_of(L" \t")!=std::wstring::npos)return false;auto api=AutoApi131();wht::SelfCastSource131 source;if(!api.ReadSource(source))return false;if(command==L"#autoskillclear"&&!autoSkills131.Clear(source,index))return false;wht::ShowNotification131(base131,profile131->build,currentUi131,autoSkills131.Summary(source));return true;}
+ if(command==L"#autoskills"){std::wstring args;std::getline(in,args);bool next=false;if(!wht::ViewToggle131(args,autoSkills131.running,next))return false;auto api=AutoApi131();wht::SelfCastSource131 source;uintptr_t context=0;unsigned local=24,mask=0;const unsigned* views=nullptr;const bool ok=(!next||(config131.autoSkillsEnabled&&api.ReadSource(source)&&api.Context(context,local,mask,views)))&&autoSkills131.Toggle(source,next);wht::ShowNotification131(base131,profile131->build,currentUi131,ok?(next?"Auto Skills: ON":"Auto Skills: OFF"):"Auto Skills: enable in menu, select your unit, bind skills with Ctrl+Alt+1..9; try again in an active match");return ok;}
+ if(command==L"#stopga"||command==L"#stopmth"){std::wstring extra;if(in>>extra)return false;
+  delivery131.Reset();{auto api=CraftApi131();if(craft131.active)craft131.Finish(wht::MthResult::Disabled,api);}mthRoute131.Reset();courierBase131.Cancel();if(gokuEnabled131){gokuEnabled131=false;autoPick131.Reset();}
+  bool stopped=false;wht::SelfCastSource131 source;
+  if(courier131.unit&&ReadCourier131(courier131.unit,source)&&wht::SameSelfCastSource131(source,courier131)){const auto api=wht::MthQueueNative131(base131,profile131->build);const auto select=wht::CourierSelectNative131(base131,profile131->build);wht::SelectionRoster131 roster;if(api.stop&&select&&wht::ReadSelectionRoster131(base131,profile131->build,roster))stopped=wht::StopCourierNative131(roster,source.unit,select,api,currentUi131);}
+  wht::ShowNotification131(base131,profile131->build,currentUi131,stopped?"Courier/MTH: stopped":"Courier/MTH: pending actions cancelled; no courier Stop submitted");return true;
+ }
+ if(command==L"#gabase"||command==L"#backga"||command==L"#backsoi"){std::wstring extra;if(in>>extra)return false;
+  wht::SelfCastSource131 source;if(command==L"#gabase"){const bool ok=wht::ReadSelfCastSource131(base131,profile131->build,currentUi131,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float v=0,m=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,v,m)&&v>.405f;},source)&&courierBase131.Save(source);mthNotice131.Event(ok?wht::MthNoticeKind131::BaseSaved:wht::MthNoticeKind131::BaseRefused,config131.mthNoti,GetTickCount64());wht::Log(folder131,ok?"WHT: courier base position saved.":"WHT: base not saved; select a living owned unit.");return ok;}
+  if(craft131.active||!settings131||!(config131.mth49Enable||config131.g17Enable)||!courier131.unit||!ReadCourier131(courier131.unit,source)||!wht::SameSelfCastSource131(source,courier131)||!courierBase131.Queue(source)){mthNotice131.Event(wht::MthNoticeKind131::CourierRequired,config131.mthNoti,GetTickCount64());wht::Log(folder131,"WHT: courier return refused; use #setga and #gabase in this match first.");return false;}
+  delivery131.Reset();mthRoute131.Reset();mthNotice131.Event(wht::MthNoticeKind131::ReturnQueued,config131.mthNoti,GetTickCount64());wht::Log(folder131,"WHT: courier return queued.");return true;
+ }
+ if(command==L"#setga"){std::wstring extra;if(in>>extra||craft131.active||delivery131.active||mthRoute131.route>=0||courierBase131.pending)return false;wht::SelfCastSource131 source;if(!ReadSelectedRoute131(source)){mthNotice131.Event(wht::MthNoticeKind131::CourierRequired,config131.mthNoti,GetTickCount64());return false;}courier131=source;mthNotice131.Event(wht::MthNoticeKind131::CourierAssigned,config131.mthNoti,GetTickCount64());wht::Log(folder131,"WHT: selected courier assigned.");return true;}
+ if(const int route=wht::RouteCommand131(command);route>=0){std::wstring extra;if(in>>extra)return false;if(craft131.active||delivery131.active||courierBase131.pending||!settings131||!(config131.mth49Enable||config131.g17Enable)||!wht::PointNative131(base131,profile131->build))return false;
+  const int counts[]={config131.chayGa1Count,config131.chayGa2Count,config131.chayGa3Count,config131.chaySoi1Count,config131.chaySoi2Count,config131.chaySoi3Count};wht::SelfCastSource131 source;const bool ok=ResolveRoute131(source)&&mthRoute131.Start(route,counts[route],source);mthNotice131.Event(ok?wht::MthNoticeKind131::RouteQueued:wht::MthNoticeKind131::CourierRequired,config131.mthNoti,GetTickCount64());wht::Log(folder131,ok?"WHT: MTH native queued route requested.":"WHT: no living owned moving courier found; select courier and use #setga.");return ok;}
  if(const auto* draw=wht::RouteDrawCommand131(command)){std::wstring args;std::getline(in,args);return wht::ApplyRouteDraw131(*draw,args,config131,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
  if(command==L"#gokudraw"){std::wstring args;std::getline(in,args);return wht::ApplyGokuDraw131(args,config131.pickGokuDraw,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
- if(command==L"#goku"||command==L"#autopickgoku"){std::wstring args;std::getline(in,args);bool next=false;if(!settings131||!wht::ViewToggle131(args,gokuEnabled131,next)||(next&&!(config131.mth49Enable||config131.g17Enable)))return false;gokuEnabled131=next;autoPick131.Reset();mthNotice131.Event(next?wht::MthNoticeKind131::On:wht::MthNoticeKind131::Off,config131.mthNoti,GetTickCount64());wht::Log(folder131,next?"WHT: Auto Pick Goku ON.":"WHT: Auto Pick Goku OFF.");return true;}
+ if(command==L"#goku"||command==L"#autopickgoku"){std::wstring args;std::getline(in,args);bool next=false;if(craft131.active||delivery131.active||!settings131||!wht::ViewToggle131(args,gokuEnabled131,next)||(next&&!(config131.mth49Enable||config131.g17Enable)))return false;gokuEnabled131=next;autoPick131.Reset();mthNotice131.Event(next?wht::MthNoticeKind131::On:wht::MthNoticeKind131::Off,config131.mthNoti,GetTickCount64());wht::Log(folder131,next?"WHT: Auto Pick Goku ON.":"WHT: Auto Pick Goku OFF.");return true;}
  if(wht::DropCommand131(command)){std::wstring args;std::getline(in,args);int slot=-1;
-  if(!settings131||menu131.open||macro131.playing||macro131.recording||allSkills131.active||dropAllNetwork131.active||GetForegroundWindow()!=gameWindow131||!wht::DropCommandSlot131(command,args,slot))return false;
+  if(!settings131||menu131.open||macro131.playing||macro131.recording||allSkills131.active||craft131.active||delivery131.active||dropAllNetwork131.active||GetForegroundWindow()!=gameWindow131||!wht::DropCommandSlot131(command,args,slot))return false;
   if(slot>=0){const bool ok=BeginQuickDrop131(unsigned(slot));wht::Log(folder131,ok?"WHT: single item drop submitted once.":"WHT: item drop refused.");return ok;}
   sellAll131.Reset();quickDropFlow131.pickupAfter=GetTickCount64()+2000;
   wht::DropSnapshot snapshot;const bool ok=CaptureDrop131(snapshot)&&dropAllNetwork131.Start(snapshot,GetTickCount64());
@@ -274,7 +338,7 @@ bool Command131(const std::wstring& text){
  if(wht::AutoClickCommand131(command)){std::wstring args;std::getline(in,args);if(!settings131)return false;const bool ok=wht::ApplyAutoClickCommand131(command,args,autoClick131,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});wht::Log(folder131,ok?"WHT: Auto Click Left="+std::to_string(autoClick131.left)+" Right="+std::to_string(autoClick131.right)+" interval="+std::to_string(config131.autoClickInterval)+"ms":"WHT: Usage #autol/#autor [0|1]; #clickdelay <5..1000>");return ok;}
  if(const auto* option=wht::ViewCommandFor131(command)){std::wstring args;std::getline(in,args);return wht::ApplyViewCommand131(*option,args,config131,[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
  if(const auto kind=wht::ManualClearKind131(command)){std::wstring extra;if(!settings131||(in>>extra))return false;return manualClear131.Queue(currentUi131,kind,GetTickCount64());}
- if(command==L"#repeat"){std::wstring args;std::getline(in,args);const bool ok=repeatMessage131.Command(args);wht::Log(folder131,ok?"WHT: Repeat updated; #repeat stop cancels.":"WHT: Usage #repeat <1..10000> <text> (1..128 UTF-8 bytes); #repeat stop");return ok;}
+ if(command==L"#repeat"){std::wstring args;std::getline(in,args);const bool ok=repeatMessage131.Command(args,[&](const std::string& text){wht::ShowNotification131(base131,profile131->build,currentUi131,text);});wht::Log(folder131,ok?"WHT: Repeat updated; #repeat stop cancels.":"WHT: Usage #repeat <1..10000> <text> (1..128 UTF-8 bytes); #repeat stop");return ok;}
  if(command==L"#speed"){std::wstring args;std::getline(in,args);const bool ok=wht::SetSpeed131(args);wht::Log(folder131,ok?"WHT: Game Speed "+std::to_string(wht::speedMultiplier131)+"x":"WHT: #speed requires 1..70; clock hooks unavailable or invalid argument.");return ok;}
  if(command==L"#tanghinh"||command==L"#invis"||command==L"#reveal"||command==L"#revealinvis"){std::wstring arg,extra;in>>arg;if(in>>extra)return false;wht::FoldCommandName(arg);bool next=!config131.revealInvisible;
   if(arg==L"on"||arg==L"1")next=true;else if(arg==L"off"||arg==L"0")next=false;else if(!arg.empty()&&arg!=L"toggle")return false;
@@ -294,17 +358,18 @@ bool Command131(const std::wstring& text){
   Reload131();return true;
  }
  if(command==L"#commandsettings"){bool next=false;if(!ToggleArgument131(in,settings131,next))return false;settings131=next;ApplyCamera131();return true;}
- if(command==L"#full"||command==L"#lock"||command==L"#showmem"){
-  bool next=false;if(!ToggleArgument131(in,command==L"#full"?full131:command==L"#lock"?lock131:config131.showMem,next))return false;
-  if(command==L"#full")Fullscreen131(next);else if(command==L"#lock"){lock131=next;if(!next)ClipCursor(nullptr);}
-  else{wht::SaveSetting(ini131,L"Event",L"Show Mem",next?L"1":L"0");Reload131();}return true;
- }
+ if(command==L"#showmem"){bool next=false;if(!ToggleArgument131(in,config131.showMem,next)||!wht::SaveSetting(ini131,L"Event",L"Show Mem",next?L"1":L"0"))return false;Reload131();return true;}
  std::wstring extra;if(in>>extra)return false;
  if(!config131.macroEnabled)return false;
  if(command==L"#macroplay")macro131.Play();else if(command==L"#macrorecord")macro131.Record();
  else if(command==L"#macrostop")macro131.Stop();else if(command==L"#macroscript")macro131.Edit();else return false;
  return true;
 }
+bool Command131(const std::wstring& text){
+ const auto shownBefore=wht::notificationSequence131;const bool ok=CommandImpl131(text);if(wht::notificationSequence131!=shownBefore)return ok;std::wistringstream in(text);std::wstring name,args;if(!(in>>name))return ok;wht::FoldCommandName(name);std::getline(in,args);
+ if(Allowed131()){auto feedback=wht::CommandFeedback131(name,args,ok,config131,menu131.open,settings131,config131.borderless,config131.lockCursor,autoPickEnabled131,autoClick131.left,autoClick131.right);if(ok&&name==L"#wsize")feedback=wht::WindowSizeText131(gameWindow131);if(!feedback.empty())wht::ShowNotification131(base131,profile131->build,currentUi131,feedback);}return ok;
+}
+
 std::string AssetPath131(const char* path){
  if(!path||!*path)return path?path:"";
  if(archiveReady131)return path;
@@ -344,6 +409,12 @@ bool DestroyHost131(){
  }return true;}__except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
 void DestroyUi131(){
+ optionMenu131.Reset();
+
+ menuFogVertex131.ResetMatch();presentation131.Restore();windowServices131.Restore();
+
+ if(profile131)scroll131.Update(base131,profile131->build,camera131.owner,false,config131);scroll131.Reset();
+
  wht::ForgetUiRefresh131();
  if(!DestroyHost131())wht::Log(folder131,"WHT 1.31: native menu cleanup exception.");
  wht::ResetSpeed131();wht::ResetLifeMana131();menu131.Reset();memoryFont131=nullptr;camera131.Reset();cameraSlot131=0;cameraWrittenMask131=0;typed131=false;text131.clear();macro131.Stop();
@@ -351,12 +422,13 @@ void DestroyUi131(){
  cooldown131.Reset();
  hotkeys131.Reset();remap131.Reset();quickChatEcho131.Reset();repeatMessage131.Reset();timeOfDay131.Reset();consoleUi131.Reset();blackBar131.Reset();mouseTooltip131.Reset();autoClick131.Reset();pinned131={};
  messageTimers131.Reset();manualClear131.Reset();
- resources131.Reset();clock131.Reset();matchStart131.Reset();timeBoss131.Reset();detailTooltip131.Reset();fps131.Reset();quickDrop131={};quickDropFlow131.Reset();dropIcon131.Reset();pickIcon131.Reset();gokuIcon131.Reset();mthNotice131.Reset();mthRoute131.Reset();routeButtons131.Reset();courier131={};routePinned131=false;gokuEnabled131=false;sellIcon131.Reset();reveal131.Reset();sellAll131.Reset();autoPick131.Reset();autoPickEnabled131=false;dropAllNetwork131.Reset();skillsIcon131.Reset();allSkills131.Reset();
+ resources131.Reset();clock131.Reset();matchStart131.Reset();timeBoss131.Reset();detailTooltip131.Reset();fps131.Reset();pingOverlay131.Reset();quickDrop131={};quickDropFlow131.Reset();dropIcon131.Reset();pickIcon131.Reset();gokuIcon131.Reset();craft131.Reset();delivery131.Reset();autoSkills131.Reset();autoHeal131.Reset();autoMana131.Reset();craftRoster131={};craftButtons131.Reset();mthNotice131.Reset();localInfo131.Reset();mthRoute131.Reset();courierBase131.Reset();routeButtons131.Reset();courier131={};routePinned131=false;gokuEnabled131=false;sellIcon131.Reset();reveal131.Reset();sellAll131.Reset();autoPick131.Reset();autoPickEnabled131=false;dropAllNetwork131.Reset();skillsIcon131.Reset();allSkills131.Reset();
  regen131.Reset();
  stateBars131.Reset();
- menuReported131=cameraReported131=writeReported131=false;if(lock131)ClipCursor(nullptr);
+ menuReported131=cameraReported131=writeReported131=false;windowServices131.ReleaseClip();
 }
 void PresentGraphics131(){
+ wht::UiPerfScope131 graphicsTiming(perf131,1);
  if(wht::uiRefreshOwner131!=currentUi131||!currentUi131)return;
  if(config131.lifeManaCommas||config131.lifeManaNoHide||config131.statsCommas||wht::lifeFlags131||!wht::lifeUi131)if(const auto* p=wht::LifeProfileFor131(profile131->build))wht::UpdateLifeMana131(base131,profile131->build,currentUi131,wht::Component131(currentUi131,base131,p->portrait),wht::Component131(currentUi131,base131,cooldownProfile131->infoBar),(Allowed131()&&settings131)?((config131.lifeManaCommas?1u:0u)|(config131.lifeManaNoHide?2u:0u)|(config131.statsCommas?4u:0u)):0u,[](uintptr_t unit,bool mana,float& value,float& maximum){return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,mana,value,maximum);},true);
  if(config131.statsTooltip||detailTooltip131.Active())if(const auto* life=wht::LifeProfileFor131(profile131->build))if(cooldownProfile131){const auto source=wht::ReadLifeSource131(base131,*life,currentUi131,wht::Component131(currentUi131,base131,life->portrait));
@@ -371,13 +443,19 @@ void PresentBar131(uintptr_t bar){
  stateBars131.WriteBar(bar,base131,*profile131,*regenProfile131,*stateBarProfile131,config131,Allowed131()&&settings131,raw);
 }
 void UpdateUi131(){
+ perf131.Report(folder131,Allowed131());wht::UiPerfScope131 updateTiming(perf131,0);
+
  const auto ui=CurrentUi131();
  if(currentUi131!=ui){DestroyUi131();currentUi131=ui;}
  if(!Allowed131()||!settings131)repeatMessage131.Reset();if(!Allowed131()||!settings131||!config131.timeBoss||!(config131.mth49Enable||config131.g17Enable))timeBoss131.active=false;
  if(!Allowed131())wht::ResetSpeed131();
  manualClear131.Update(base131,profile131->build,currentUi131,Allowed131()&&settings131,!typed131&&!menu131.open&&GetForegroundWindow()==gameWindow131,GetTickCount64());
 
- if(!ui){if(lock131)ClipCursor(nullptr);return;}
+ wht::UpdateModeration131(base131,profile131->build,ui,authorized131.load()&&settings131&&config131.mode==wht::RunMode::Local,config131,folder131);
+ menuFogVertex131.Update(base131,profile131->build,Allowed131()&&settings131,authorized131.load()&&settings131&&config131.mode==wht::RunMode::Local,ui,config131,folder131,[&](const std::string& text){wht::ShowNotification131(base131,profile131->build,ui,text);});
+ presentation131.Update(base131,profile131->build,Allowed131()&&settings131&&ui!=0,config131.vsync,config131.unlockFps,folder131);
+windowServices131.Apply(gameWindow131,Allowed131()&&settings131&&config131.borderless,Allowed131()&&settings131&&config131.lockCursor,menu131.open);
+ if(!ui){windowServices131.ReleaseClip();return;}
  wht::InstallUiRefresh131(base131,profile131->build,ui,PresentGraphics131);
  graphicsDiagnostic131.Update(base131,profile131->build,ui,config131,Allowed131(),folder131,consoleUi131,mouseTooltip131,[&](uintptr_t table){return wht::Component131(ui,base131,table);}); wht::UpdateMatchStart131(matchStart131,base131,profile131->build,ui,Allowed131()&&settings131&&config131.soundStartGame,module131,folder131);
  ApplyCamera131();
@@ -388,7 +466,7 @@ void UpdateUi131(){
  if(config131.hideBlackBar||blackBar131.Active())if(const auto* p=wht::BlackBarProfileFor131(profile131->build))blackBar131.Update(base131,profile131->build,currentUi131,wht::Component131(currentUi131,base131,p->worldTable),Allowed131()&&settings131&&config131.hideBlackBar);
  if(config131.hideConsoleUI||consoleUi131.active)if(const auto* p=wht::ConsoleProfileFor131(profile131->build))consoleUi131.Update(base131,profile131->build,wht::ConsoleComponent131(currentUi131,base131,p->table),Allowed131()&&settings131&&config131.hideConsoleUI);
  if(config131.hideTimeOfDay||timeOfDay131.active)if(const auto* p=wht::TimeOfDayProfileFor131(profile131->build))timeOfDay131.Update(base131,profile131->build,wht::Component131(currentUi131,base131,p->table),Allowed131()&&settings131&&config131.hideTimeOfDay);
- wht::UpdateAutoClick131(autoClick131,config131,gameWindow131,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!sellAll131.active&&!dropAllNetwork131.active);
+ wht::UpdateAutoClick131(autoClick131,config131,gameWindow131,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&!sellAll131.active&&!dropAllNetwork131.active);
  if(auto p=wht::RevealProfileFor131(profile131->build)){
   if(reveal131.Update(base131,profile131->build,wht::Component131(currentUi131,base131,p->worldTable),Allowed131()&&settings131&&config131.revealInvisible)&&!reveal131.reported){reveal131.reported=true;wht::Log(folder131,"WHT: native invisible-unit display enabled.");}
  }
@@ -398,6 +476,7 @@ void UpdateUi131(){
  Viewport131(r.right,r.bottom);
  // Keep the same eight-tab settings catalog and native mouse/key editing.
  menu131.Update(base131,ui,config131,true,&frame131);
+ if(!menu131.tint){const auto* tintProfile=wht::HpColorProfileFor131(profile131->build);if(tintProfile&&wht::HpColorCode131(base131,*tintProfile))menu131.tint=reinterpret_cast<decltype(menu131.tint)>(base131+tintProfile->tint);}
  if(menu131.failed){if(!menuReported131){menuReported131=true;wht::Log(folder131,std::string("WHT 1.31: native menu unavailable at ")+menu131.initStage);}return;}
  if(menu131.initialized&&!menuReported131){menuReported131=true;wht::Log(folder131,"WHT 1.31: live native menu construction completed.");}
  if(menu131.initialized&&cooldownProfile131&&cooldown131.Update(base131,ui,*cooldownProfile131,Allowed131()&&settings131&&config131.showCooldown,menu131)&&!cooldown131.reported){
@@ -423,9 +502,10 @@ void UpdateUi131(){
   else if(config131.showMem&&wht::GetCurrentProcessMemoryUsage(mb,percent))label+=" | "+std::to_string(int(mb))+" MB";
   frame131.setText(memoryFont131,label.c_str());}
  timeBoss131.Update(base131,profile131->build,currentUi131,Allowed131()&&settings131&&config131.timeBoss&&(config131.mth49Enable||config131.g17Enable),GetTickCount64(),menu131,[&](uintptr_t unit,float& hp){float maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,hp,maximum);});
- repeatMessage131.Tick(Allowed131()&&settings131,!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131,GetTickCount64(),SendChat131);
+ repeatMessage131.Tick(Allowed131()&&settings131,!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131,GetTickCount64(),SendChat131);
  menu131.PlaybackVisual(macro131.playing);macro131.Tick(Allowed131()&&!typed131&&!menu131.open);
  if(menu131.initialized&&resources131.Update(base131,profile131->build,Allowed131()&&settings131&&config131.showResource,GetTickCount64(),menu131,folder131)&&!resources131.reported){resources131.reported=true;wht::Log(folder131,"WHT 1.31: native resource table displayed.");}
+ pingOverlay131.Update(base131,wht::PingProfile131(profile131->build),Allowed131()&&settings131&&config131.showPing,menu131);
  if(clock131.Update(base131,profile131->build,Allowed131()&&settings131&&config131.showTimer,menu131)&&!clock131.reported){clock131.reported=true;wht::Log(folder131,"WHT 1.31: native simulation timer displayed.");}
  clock131.Diagnose(base131,profile131->build,Allowed131()&&settings131&&config131.showTimer,folder131);
  if(sellAll131.active){wht::SellView131 view;bool valid=Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&wht::ReadSellView131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},view);
@@ -434,10 +514,11 @@ void UpdateUi131(){
   if(!sellAll131.active)quickDropFlow131.pickupAfter=(std::max)(quickDropFlow131.pickupAfter,GetTickCount64()+1000);
   if(result==wht::SellResult131::Submitted)wht::Log(folder131,"WHT: Sell All synchronized shop order submitted.");
   else if(result!=wht::SellResult131::Working&&result!=wht::SellResult131::Idle)wht::Log(folder131,std::string("WHT: Sell All ")+(result==wht::SellResult131::Complete?"completed":result==wht::SellResult131::NoShop?"no accessible purchase shop":result==wht::SellResult131::Cancelled?"cancelled":"remaining")+"; sold="+std::to_string(sellAll131.sold)+" skipped="+std::to_string(sellAll131.skipped)+" remaining="+std::to_string(sellAll131.remaining)+" gold delta="+std::to_string(sellAll131.goldDelta));
+  if(result!=wht::SellResult131::Submitted&&result!=wht::SellResult131::Working&&result!=wht::SellResult131::Idle)wht::ShowNotification131(base131,profile131->build,currentUi131,std::string("Sell All: ")+(result==wht::SellResult131::Complete?"completed":result==wht::SellResult131::NoShop?"no nearby shop":result==wht::SellResult131::Cancelled?"cancelled":"remaining items")+"; sold="+std::to_string(sellAll131.sold));
  }
  sellIcon131.latched=sellAll131.active;sellIcon131.Update(base131,Allowed131()&&settings131&&config131.showSellAll,menu131);
  if(gokuEnabled131&&!(Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable))){gokuEnabled131=false;autoPick131.Reset();}
- if((autoPickEnabled131||gokuEnabled131)&&!sellAll131.active&&(Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131)&&!dropAllNetwork131.active){const auto now=GetTickCount64();
+ if((autoPickEnabled131||gokuEnabled131)&&!craft131.active&&!delivery131.active&&!sellAll131.active&&(Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131)&&!dropAllNetwork131.active){const auto now=GetTickCount64();
   if(now>=autoPick131.next&&now>=quickDropFlow131.pickupAfter){auto p=wht::PickProfileFor131(profile131->build);wht::PickSnapshot131 snapshot;bool acquiredGoku=false;
    const bool valid=p&&wht::ReadPickSnapshot131(base131,profile131->build,wht::Component131(currentUi131,base131,p->worldTable),[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},snapshot,gokuEnabled131?wht::gokuType131:0,&acquiredGoku);
    if(valid&&gokuEnabled131&&acquiredGoku){gokuEnabled131=false;autoPick131.Reset();autoPick131.next=now+250;mthNotice131.Event(wht::MthNoticeKind131::Acquired,config131.mthNoti,now);wht::Log(folder131,"WHT: Auto Pick Goku OFF (confirmed in inventory).");}else{
@@ -448,11 +529,23 @@ void UpdateUi131(){
 
   }
  }else autoPick131.Reset();
- if(mthRoute131.route>=0)mthRoute131.TickQueued(Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable),!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&GetForegroundWindow()==gameWindow131,ReadRoute131,[&](const wht::SelfCastSource131& before,const wht::Route131& route,int count){wht::SelfCastSource131 current;if(!ReadCourier131(before.unit,current)||!wht::SameSelfCastSource131(before,current))return false;const auto api=wht::MthQueueNative131(base131,profile131->build);const auto select=wht::CourierSelectNative131(base131,profile131->build);wht::SelectionRoster131 roster;if(!api||!select||!wht::ReadSelectionRoster131(base131,profile131->build,roster))return false;const bool submitted=wht::SubmitCourierRoute131(roster,current.unit,select,api,currentUi131,route,count);wht::Log(folder131,submitted?"WHT: MTH native route queue submitted.":"WHT: MTH native route queue failed; no replay.");return submitted;});
- mthNotice131.Update(base131,Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable),config131,menu131,GetTickCount64());
+ if(delivery131.active){auto api=CraftApi131();const auto result=delivery131.Tick(GetTickCount64(),Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable),!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!craft131.active&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&GetForegroundWindow()==gameWindow131,[&](const wht::SelfCastSource131& source,bool hero,wht::DeliveryBag131& bag){return wht::DeliveryRead131(api,source,hero,bag);},[&](const wht::SelfCastSource131& c,const wht::SelfCastSource131& h){wht::SelectionRoster131 roster;const auto select=wht::CourierSelectNative131(base131,profile131->build);const auto point=wht::PointNative131(base131,profile131->build);return select&&point&&wht::ReadSelectionRoster131(base131,profile131->build,roster)&&wht::SendCourierPointNative131(roster,c.unit,select,point,h.x,h.y);},[&](const wht::SelfCastSource131& c,const wht::SelfCastSource131& h,const wht::DropObjectId& item){return wht::DeliverySend131(api,c,h,item);},[&](const wht::SelfCastSource131& c){courierBase131.Queue(c);});if(const auto* text=wht::DeliveryNotice131(result)){wht::Log(folder131,text);mthNotice131.EventText(wht::MthNoticeKind131::OrderRefused,text,config131.mthNoti,GetTickCount64());}}
+ if(courierBase131.pending)courierBase131.Tick(Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable),!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131,ReadCourier131,[&](const wht::SelfCastSource131& source,float x,float y){const auto select=wht::CourierSelectNative131(base131,profile131->build);const auto point=wht::PointNative131(base131,profile131->build);wht::SelectionRoster131 roster;const bool ok=select&&point&&wht::ReadSelectionRoster131(base131,profile131->build,roster)&&wht::SendCourierPointNative131(roster,source.unit,select,point,x,y);mthNotice131.Event(ok?wht::MthNoticeKind131::ReturnSent:wht::MthNoticeKind131::OrderRefused,config131.mthNoti,GetTickCount64());wht::Log(folder131,ok?"WHT: courier returning to saved base.":"WHT: courier return native order refused; no retry.");return ok;});
+ if(mthRoute131.route>=0)mthRoute131.TickQueued(Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable),!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131,ReadRoute131,[&](const wht::SelfCastSource131& before,const wht::Route131& route,int count){wht::SelfCastSource131 current;if(!ReadCourier131(before.unit,current)||!wht::SameSelfCastSource131(before,current)){mthNotice131.Event(wht::MthNoticeKind131::OrderRefused,config131.mthNoti,GetTickCount64());return false;}const auto api=wht::MthQueueNative131(base131,profile131->build);const auto select=wht::CourierSelectNative131(base131,profile131->build);wht::SelectionRoster131 roster;if(!api||!select||!wht::ReadSelectionRoster131(base131,profile131->build,roster)){mthNotice131.Event(wht::MthNoticeKind131::OrderRefused,config131.mthNoti,GetTickCount64());return false;}const bool submitted=wht::SubmitCourierRoute131(roster,current.unit,select,api,currentUi131,route,count);if(submitted){int index=-1;for(int i=0;i<6;++i)if(wht::routes131[i].x1==route.x1&&wht::routes131[i].y1==route.y1&&wht::routes131[i].x2==route.x2&&wht::routes131[i].y2==route.y2)index=i;mthNotice131.EventText(wht::MthNoticeKind131::RouteSent,wht::MthRouteStarted131(index,count),config131.mthNoti,GetTickCount64());}else mthNotice131.Event(wht::MthNoticeKind131::OrderRefused,config131.mthNoti,GetTickCount64());wht::Log(folder131,submitted?"WHT: MTH native route queue submitted.":"WHT: MTH native route queue failed; no replay.");return submitted;});
+ if(craft131.active){auto api=CraftApi131();CraftReport131(craft131.Tick(GetTickCount64(),Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable),!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&GetForegroundWindow()==gameWindow131,api));}
+ if(config131.autoHealEnabled&&GetTickCount64()>=autoHeal131.state.due&&GetTickCount64()>=autoHeal131.state.retry&&GetTickCount64()>=autoMana131.state.retry&&(Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&!craft131.active&&!delivery131.active&&!autoSkills131.running&&!autoPickEnabled131&&!gokuEnabled131&&mthRoute131.route<0&&!courierBase131.pending&&!autoClick131.left&&!autoClick131.right&&GetForegroundWindow()==gameWindow131)){auto api=AutoApi131();if(!api.Target())autoHeal131.Tick(GetTickCount64(),config131,true,api,[&](uintptr_t unit,float& hp,float& maximum){return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,hp,maximum);});}
+ if(config131.autoManaEnabled&&GetTickCount64()>=autoMana131.state.due&&GetTickCount64()>=autoMana131.state.retry&&GetTickCount64()>=autoHeal131.state.retry&&(Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&!craft131.active&&!delivery131.active&&!autoSkills131.running&&!autoPickEnabled131&&!gokuEnabled131&&mthRoute131.route<0&&!courierBase131.pending&&!autoClick131.left&&!autoClick131.right&&GetForegroundWindow()==gameWindow131)){auto api=AutoApi131();if(!api.Target())autoMana131.Tick(GetTickCount64(),config131,true,api,[&](uintptr_t unit,float& hp,float& maximum){return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,true,hp,maximum);},true);}
+ if(!config131.autoSkillsEnabled){autoSkills131.running=false;autoSkills131.CancelScan();}else if(autoSkills131.running&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&!craft131.active&&!delivery131.active&&!autoPickEnabled131&&!gokuEnabled131&&mthRoute131.route<0&&!courierBase131.pending&&!autoClick131.left&&!autoClick131.right&&GetForegroundWindow()==gameWindow131&&(autoSkills131.scanning||GetTickCount64()>=autoSkills131.due)){auto api=AutoApi131();if(!api.Target())autoSkills131.Tick(GetTickCount64(),true,true,config131.autoSkillsDelay,config131.autoSkillsRange,api);}
+ mthNotice131.Update(base131,profile131->build,currentUi131,Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable),config131,menu131,GetTickCount64());
+ localInfo131.Update(base131,profile131->build,currentUi131,Allowed131()&&settings131,menu131,GetTickCount64());
+ wht::NotificationDiagnostic131(folder131);
+ {wht::UiPerfScope131 toolbarTiming(perf131,2);
  auto mthRaw131=menu131.api;mthRaw131.setWidth=reinterpret_cast<decltype(mthRaw131.setWidth)>(base131+profile131->width);mthRaw131.setAbsPoint=reinterpret_cast<decltype(mthRaw131.setAbsPoint)>(base131+profile131->absPoint);
+ craftButtons131.Update(base131,Allowed131()&&settings131,config131,craft131.active?craft131.kind:-1,menu131,&mthRaw131);
  routeButtons131.Update(base131,Allowed131()&&settings131,config131,mthRoute131.route,menu131,&mthRaw131);
  gokuIcon131.latched=gokuEnabled131;gokuIcon131.Update(base131,Allowed131()&&settings131&&!menu131.open&&(config131.mth49Enable||config131.g17Enable)&&config131.pickGokuDraw,menu131,&mthRaw131);
+ mthText131.Update(base131,profile131->build,folder131,{&craftButtons131.buttons[0],&craftButtons131.buttons[1],&craftButtons131.buttons[2],&craftButtons131.buttons[3],&craftButtons131.buttons[4],&routeButtons131.buttons[0],&routeButtons131.buttons[1],&routeButtons131.buttons[2],&routeButtons131.buttons[3],&routeButtons131.buttons[4],&routeButtons131.buttons[5],&gokuIcon131});
+ }
  pickIcon131.latched=autoPickEnabled131;pickIcon131.Update(base131,Allowed131()&&settings131&&config131.showAutoPick,menu131);
  dropIcon131.Update(base131,Allowed131()&&settings131&&config131.showDropAll,menu131);
  if(dropAllNetwork131.active){wht::DropSnapshot snapshot;const bool valid=Allowed131()&&settings131&&!sellAll131.active&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&wht::DropSnapshot131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},snapshot);
@@ -461,16 +554,18 @@ void UpdateUi131(){
   if(result==wht::DropResult::Complete)wht::Log(folder131,"WHT: synchronized drop all completed; original items absent from inventory.");
   else if(result==wht::DropResult::Cancelled)wht::Log(folder131,"WHT: synchronized drop all cancelled.");
   else if(result==wht::DropResult::Remaining)wht::Log(folder131,"WHT: synchronized drop all stopped; remaining "+std::to_string(dropAllNetwork131.remaining));
+  if(result==wht::DropResult::Complete||result==wht::DropResult::Cancelled||result==wht::DropResult::Remaining)wht::ShowNotification131(base131,profile131->build,currentUi131,std::string("Drop All: ")+(result==wht::DropResult::Complete?"completed":result==wht::DropResult::Cancelled?"cancelled":"remaining items"));
  }
  skillsIcon131.Update(base131,Allowed131()&&settings131&&config131.showInsAllSkills,menu131);
- if(allSkills131.Tick(GetTickCount64(),Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},SkillPoints131,SkillData131,ClickSkill131))wht::Log(folder131,"WHT 1.31: all skills native sequence finished; submitted "+std::to_string(allSkills131.submitted));
+ if(allSkills131.Tick(GetTickCount64(),Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},SkillPoints131,SkillData131,ClickSkill131)){wht::Log(folder131,"WHT 1.31: all skills native sequence finished; submitted "+std::to_string(allSkills131.submitted));wht::ShowNotification131(base131,profile131->build,currentUi131,"All Skills: submitted "+std::to_string(allSkills131.submitted));}
  if(fps131.Update(base131,ui,profile131->build,Allowed131()&&settings131,config131.showFps)&&!fps131.reported){fps131.reported=true;wht::Log(folder131,"WHT 1.31: native FPS toggle installed.");}
  const auto cleared=messageTimers131.Update(base131,ui,profile131->build,config131,Allowed131()&&settings131&&!typed131,GetTickCount64());
  const auto fresh=cleared&~messageTimers131.reported;
  if(fresh&1)wht::Log(folder131,"WHT 1.31: periodic native text clear executed.");
  if(fresh&2)wht::Log(folder131,"WHT 1.31: periodic native chat clear executed.");
  messageTimers131.reported|=cleared;
- if(lock131){if(GetForegroundWindow()==gameWindow131&&!menu131.open){POINT tl{0,0},br{r.right,r.bottom};ClientToScreen(gameWindow131,&tl);ClientToScreen(gameWindow131,&br);RECT clip{tl.x,tl.y,br.x,br.y};ClipCursor(&clip);}else ClipCursor(nullptr);}
+ wht::UpdateToolHelp131(gameWindow131,menu131,config131,dropIcon131,skillsIcon131,pickIcon131,sellIcon131,gokuIcon131,craftButtons131,routeButtons131,resources131);
+
 }
 void ReportUpdateException131(unsigned code){static unsigned errors=0;if(errors++<4)wht::Log(folder131,"WHT UI update exception="+std::to_string(code));}
 void SafeUpdate131(){__try{UpdateUi131();}__except(EXCEPTION_EXECUTE_HANDLER){ReportUpdateException131(GetExceptionCode());menu131.failed=true;}}
@@ -486,6 +581,7 @@ bool SendChat131(const std::string& text){
  __try{return wht::SendQuickChat131(text,wht::QuickChatNative131(base131,profile131->build),[](wht::QuickChatView131& out){const auto ui=CurrentUi131();return ui&&ui==currentUi131&&wht::ReadQuickChat131(base131,profile131->build,ui,out);});}__except(1){return false;}
 }
 bool Input131(MSG& msg){
+ if(optionMenu131.Held(msg.message,unsigned(msg.wParam)))return true;
  if(msg.message==WM_KILLFOCUS)quickChatEcho131.Reset();
  if(msg.message==WM_KEYDOWN&&!(msg.lParam&(1L<<30)))quickChatEcho131.Reset();
  if(msg.message==WM_CHAR&&quickChatEcho131.Character(msg.lParam,GetTickCount64()))return true;
@@ -495,23 +591,25 @@ bool Input131(MSG& msg){
  if((msg.message==WM_KEYUP||msg.message==WM_SYSKEYUP)&&remap131.Input(msg.message,key,repeat,false,false,config131,[](unsigned){return false;}))return true;
  auto queue=[](const wchar_t* command){Command131(command);};
  RECT r{};GetClientRect(gameWindow131,&r);
+ if(resources131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&config131.showResource&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording))return true;
  if(skillsIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&config131.showInsAllSkills&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording,[&](){
   const auto started=allSkills131.Start(GetTickCount64(),[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},SkillPoints131,SkillData131);
   wht::Log(folder131,started?"WHT 1.31: all skills sequence queued.":"WHT 1.31: all skills unavailable (hero/points/menu).");
  }))return true;
+ if(craftButtons131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131,[&](unsigned action){Command131(wht::craftCommands131[action]);}))return true;
  if(routeButtons131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131,[&](unsigned route){const wchar_t* commands[]={L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};Command131(commands[route]);}))return true;
  if(gokuIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131,[&](){Command131(L"#goku");}))return true;
- if(pickIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&!dropAllNetwork131.active&&!sellAll131.active,[&](){autoPickEnabled131=!autoPickEnabled131;autoPick131.Reset();wht::Log(folder131,autoPickEnabled131?"WHT: Auto Pick enabled.":"WHT: Auto Pick disabled.");}))return true;
- if(sellIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&!dropAllNetwork131.active,[&](){
+ if(pickIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,!craft131.active&&!delivery131.active&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&!dropAllNetwork131.active&&!sellAll131.active,[&](){autoPickEnabled131=!autoPickEnabled131;autoPick131.Reset();wht::ShowNotification131(base131,profile131->build,currentUi131,autoPickEnabled131?"Auto Pick: ON":"Auto Pick: OFF");wht::Log(folder131,autoPickEnabled131?"WHT: Auto Pick enabled.":"WHT: Auto Pick disabled.");}))return true;
+ if(sellIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,!craft131.active&&!delivery131.active&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&!dropAllNetwork131.active,[&](){
   BeginSell131();
  }))return true;
- if(dropIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&config131.showDropAll&&!sellAll131.active&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording,[&](){
+ if(dropIcon131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,!craft131.active&&!delivery131.active&&Allowed131()&&settings131&&config131.showDropAll&&!sellAll131.active&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording,[&](){
   const auto* p=wht::InventoryProfile(profile131->build);if(!p||!regenProfile131||!stateBarProfile131)return;
   wht::DropSnapshot snapshot;const char* diagnostic="unknown";
   const bool started=wht::DropSnapshot131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},snapshot,&diagnostic)&&dropAllNetwork131.Start(snapshot,GetTickCount64());
   wht::Log(folder131,started?"WHT: synchronized drop all queued.":std::string("WHT: drop all refused at ")+diagnostic+(dropAllNetwork131.active?" (already active)":""));
  }))return true;
- if(quickDrop131.Mouse(msg.message,Allowed131()&&settings131&&config131.quickDropItem&&!consoleUi131.active&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)&&!([&](){const auto* p=wht::QuickCastProfile(profile131->build);return p&&wht::QuickCastTarget131(base131,currentUi131,profile131->uiVtable,*p);})(),[&](){
+ if(quickDrop131.Mouse(msg.message,!craft131.active&&!delivery131.active&&Allowed131()&&settings131&&config131.quickDropItem&&!consoleUi131.active&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)&&!([&](){const auto* p=wht::QuickCastProfile(profile131->build);return p&&wht::QuickCastTarget131(base131,currentUi131,profile131->uiVtable,*p);})(),[&](){
   if(!cooldownProfile131)return -1;POINT point{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))};
   return wht::InventorySlotHit131(point,r.right,r.bottom,[&](unsigned slot){return wht::CooldownButton131(currentUi131,base131,*cooldownProfile131,slot+12);});
  },[&](unsigned slot){
@@ -522,10 +620,12 @@ bool Input131(MSG& msg){
   POINT p{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))};
   if(menu131.Mouse(msg.message,p,r.right,r.bottom,queue,&config131))return true;
  }
- if(keyDown&&menu131.ToggleKey(key,config131.menuKey,repeat,typed131))return true;
+ if(optionMenu131.Mouse(msg.message,{short(LOWORD(msg.lParam)),short(HIWORD(msg.lParam))},r.right,r.bottom,Allowed131()&&settings131&&config131.hideOptionMenu,typed131,GetForegroundWindow()==gameWindow131))return true;
+ if(keyDown&&menu131.ToggleKey(key,config131.menuKey,repeat,typed131)){optionMenu131.ToolToggle(key);return true;}
  if(menu131.visible&&menu131.open){
   if(keyDown&&!repeat&&key==VK_ESCAPE){menu131.Escape();return true;}
-  if(keyDown&&menu131.Key(key,unsigned((msg.lParam>>16)&255),queue))return true;
+  if(keyDown&&menu131.Key(key,unsigned((msg.lParam>>16)&255),queue)){optionMenu131.ToolToggle(key);return true;}
+  if(keyDown&&key==VK_F10)optionMenu131.ToolToggle(key);
   if(msg.message==WM_CHAR||keyDown||msg.message==WM_KEYUP)return true;
  }
  if(keyDown&&!repeat&&key==VK_ESCAPE){typed131=false;text131.clear();if(menu131.Escape())return true;}
@@ -541,6 +641,7 @@ bool Input131(MSG& msg){
   if(typed131){if(ch==8){if(!text131.empty())text131.pop_back();}else if(ch>=32&&text131.size()<1024)text131+=ch;return false;}}
  if(typed131)return false;
  if(!Allowed131())return false;
+ if(optionMenu131.Key(msg.message,key,Allowed131()&&settings131&&config131.hideOptionMenu,typed131,GetForegroundWindow()==gameWindow131,(GetKeyState(VK_CONTROL)&0x8000)||(GetKeyState(VK_SHIFT)&0x8000)||(GetKeyState(VK_MENU)&0x8000)))return true;
  if(keyDown&&!repeat&&key==VK_TAB&&settings131&&config131.showResource&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000))return resources131.Toggle();
  if(keyDown&&!repeat&&config131.macroEnabled){
   const bool chord=(GetKeyState(VK_CONTROL)&0x8000)&&(GetKeyState(VK_SHIFT)&0x8000);
@@ -549,25 +650,27 @@ bool Input131(MSG& msg){
   if((config131.macroKeys[2]&&key==config131.macroKeys[2])||(chord&&key==VK_F9)){macro131.Record();return true;}
   if((config131.macroKeys[3]&&key==config131.macroKeys[3])||(chord&&key==VK_F11)){macro131.Edit();return true;}
  }
- if(keyDown&&!repeat&&key==config131.commandKey){settings131=!settings131;ApplyCamera131();return true;}
+ if(keyDown&&!repeat&&key==config131.commandKey){settings131=!settings131;ApplyCamera131();wht::ShowNotification131(base131,profile131->build,currentUi131,settings131?"Command Settings: ON":"Command Settings: OFF");return true;}
+ if(keyDown&&!repeat&&config131.autoSkillsEnabled&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131){const bool ctrl=(GetKeyState(VK_CONTROL)&0x8000)!=0,alt=(GetKeyState(VK_MENU)&0x8000)!=0,shift=(GetKeyState(VK_SHIFT)&0x8000)!=0;const int index=wht::AutoSkillNumber131(unsigned(key));if(ctrl&&alt&&!shift&&index>=0){auto api=AutoApi131();wht::SelfCastSource131 source;POINT point{};RECT client{};const bool position=GetCursorPos(&point)&&ScreenToClient(gameWindow131,&point)&&GetClientRect(gameWindow131,&client);const int slot=position?api.Hover(point,client.right,client.bottom):-1;const bool bound=slot>=0&&api.ReadSource(source)&&autoSkills131.Bind(source,index,api.Data(unsigned(slot)));wht::ShowNotification131(base131,profile131->build,currentUi131,bound?"Auto Skills: skill bound to sequence slot "+std::to_string(index+1):"Auto Skills: select your living unit and hover a skill button");if(key<256)remap131.pressed[key]=true;return true;}if(!ctrl&&!alt&&!shift&&key&&key==config131.autoSkillsKey){Command131(L"#autoskills");if(key<256)remap131.pressed[key]=true;return true;}}
+ if(keyDown&&!repeat&&Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable)&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){const unsigned keys[]={config131.shieldHotkey,config131.iceHotkey,config131.wildHotkey,config131.frozenHotkey,config131.phoenixHotkey};for(unsigned i=0;i<5;++i)if(key&&key==keys[i]){Command131(wht::craftCommands131[i]);if(key<256)remap131.pressed[key]=true;return true;}}
  if(keyDown&&!repeat&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&(config131.mth49Enable||config131.g17Enable)&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){const unsigned keys[]={config131.chayGa1Hotkey,config131.chayGa2Hotkey,config131.chayGa3Hotkey,config131.chaySoi1Hotkey,config131.chaySoi2Hotkey,config131.chaySoi3Hotkey};const wchar_t* commands[]={L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};for(unsigned i=0;i<6;++i)if(key&&key==keys[i]){Command131(commands[i]);if(key<256)remap131.pressed[key]=true;return true;}}
- if(keyDown&&!repeat&&key&&key==config131.pickGokuHotkey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&(config131.mth49Enable||config131.g17Enable)&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){Command131(L"#goku");if(key<256)remap131.pressed[key]=true;return true;}
- if(keyDown&&!repeat&&key&&key==config131.multiboardKey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+ if(keyDown&&!repeat&&key&&key==config131.pickGokuHotkey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&(config131.mth49Enable||config131.g17Enable)&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){Command131(L"#goku");if(key<256)remap131.pressed[key]=true;return true;}
+ if(keyDown&&!repeat&&key&&key==config131.multiboardKey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
   const auto* p=wht::MultiboardProfileFor131(profile131->build);
   if(p&&wht::ToggleMultiboard131(base131,profile131->build,wht::Component131(currentUi131,base131,p->table))){if(key<256)remap131.pressed[key]=true;return true;}
  }
- if(keyDown&&!repeat&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+ if(keyDown&&!repeat&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
   const int slot=wht::HeroKeySlot131(unsigned(key),config131);const auto* p=wht::HeroProfileFor131(profile131->build);
   if(slot>=0&&p&&wht::ClickHero131(base131,profile131->build,wht::Component131(currentUi131,base131,p->bar),unsigned(slot))){if(key<256)remap131.pressed[key]=true;return true;}
  }
- if(keyDown&&!repeat&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)&&autoClick131.Key(unsigned(key),config131)){if(key<256)remap131.pressed[key]=true;wht::Log(folder131,std::string("WHT: Auto Click ")+(key==config131.autoClickLeftKey?"Left: ":"Right: ")+((key==config131.autoClickLeftKey?autoClick131.left:autoClick131.right)?"ON":"OFF"));return true;}
- if(keyDown&&!repeat&&key&&key==config131.sellFastKey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+ if(keyDown&&!repeat&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)&&autoClick131.Key(unsigned(key),config131)){if(key<256)remap131.pressed[key]=true;wht::ShowNotification131(base131,profile131->build,currentUi131,std::string("Auto Click ")+(key==config131.autoClickLeftKey?"Left: ":"Right: ")+((key==config131.autoClickLeftKey?autoClick131.left:autoClick131.right)?"ON":"OFF"));wht::Log(folder131,std::string("WHT: Auto Click ")+(key==config131.autoClickLeftKey?"Left: ":"Right: ")+((key==config131.autoClickLeftKey?autoClick131.left:autoClick131.right)?"ON":"OFF"));return true;}
+ if(keyDown&&!repeat&&key&&key==config131.sellFastKey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
   if(SellHovered131()){if(key<256)remap131.pressed[key]=true;return true;}
  }
- if(keyDown&&!repeat&&key&&key==config131.setIdTargetKey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+ if(keyDown&&!repeat&&key&&key==config131.setIdTargetKey&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
   const bool ok=PinTarget131();if(key<256)remap131.pressed[key]=true;wht::Log(folder131,ok?"WHT: selected native unit pinned for target cast.":"WHT: no live target selected; pin cleared.");return true;
  }
- if(remap131.Input(msg.message,unsigned(key),repeat,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131,(GetKeyState(VK_CONTROL)&0x8000)||(GetKeyState(VK_MENU)&0x8000)||(GetKeyState(VK_SHIFT)&0x8000),config131,[&](unsigned slot){
+ if(remap131.Input(msg.message,unsigned(key),repeat,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131,(GetKeyState(VK_CONTROL)&0x8000)||(GetKeyState(VK_MENU)&0x8000)||(GetKeyState(VK_SHIFT)&0x8000),config131,[&](unsigned slot){
   const auto button=cooldownProfile131?wht::CooldownButton131(currentUi131,base131,*cooldownProfile131,slot):0;
   if(slot>=12&&!(InventoryMask131()&(1u<<(slot-12))))return false;
   const auto data=wht::SkillButtonData131(button);
@@ -583,7 +686,15 @@ bool Input131(MSG& msg){
   }
   return wht::ActivateQuickCast131(binding.quickCast,target,[&](){return ClickSkill131(slot);},[&](uintptr_t mode){return wht::QuickCastCursor131(gameWindow131,mode,target);});
  },AlternatePanel131,LearnSlot131))return true;
- if(msg.message==WM_KEYDOWN&&wht::QuickChatKey131(key,repeat,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&GetForegroundWindow()==gameWindow131,(GetKeyState(VK_CONTROL)&0x8000)||(GetKeyState(VK_SHIFT)&0x8000)||(GetKeyState(VK_MENU)&0x8000),config131,SendChat131)){remap131.pressed[key]=true;quickChatEcho131.Sent(msg.lParam,GetTickCount64());return true;}
+ if(msg.message==WM_KEYDOWN&&!repeat&&key&&key<256&&Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000)){
+  const auto target=[&](){const auto* p=wht::QuickCastProfile(profile131->build);return p?wht::QuickCastTarget131(base131,currentUi131,profile131->uiVtable,*p):uintptr_t(0);};
+  if(config131.modeCast==1&&!target()){const bool shop=AlternatePanel131();bool learning=false;if(!shop&&config131.shopEnabled)for(const auto& b:config131.shop)if(b.enabled&&b.vk==key)learning=true;
+   if(!learning){const unsigned mask=InventoryMask131(true);const auto found=wht::FindNativeCastSlot(config131,shop,unsigned(key),[&](bool inventory,int index){const unsigned slot=unsigned(index)+(inventory?12:0);const auto button=cooldownProfile131?wht::CooldownButton131(currentUi131,base131,*cooldownProfile131,slot):0;return wht::PanelButtonKey131(button,slot,inventory&&(mask&(1u<<index)));});
+    if(found.slot>=0&&wht::ActivateQuickCast131(true,target,[&](){return ClickSkill131(unsigned(found.slot)+(found.inventory?12:0));},[&](uintptr_t mode){return wht::QuickCastCursor131(gameWindow131,mode,target);})){remap131.pressed[key]=true;return true;}
+   }
+  }
+ }
+ if(msg.message==WM_KEYDOWN&&wht::QuickChatKey131(key,repeat,Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131,(GetKeyState(VK_CONTROL)&0x8000)||(GetKeyState(VK_SHIFT)&0x8000)||(GetKeyState(VK_MENU)&0x8000),config131,SendChat131)){remap131.pressed[key]=true;quickChatEcho131.Sent(msg.lParam,GetTickCount64());return true;}
  macro131.Capture(msg,!menu131.open);return false;
 }
 LRESULT CALLBACK Message131(int code,WPARAM removed,LPARAM argument){
@@ -665,6 +776,7 @@ DWORD WINAPI Install131(void* parameter){
  for(unsigned attempt=0;attempt<900&&!ProfileReady131();++attempt)Sleep(100);
  if(!ProfileReady131()){wht::Log(folder131,"WHT 1.31: exact native profile validation failed; no hooks installed.");return 2;}
  wht::Log(folder131,"WHT 1.31.1."+std::to_string(profile131->build)+": exact x86 camera/UI profile validated.");
+ wht::Log(folder131,wht::InstallFpsTextCadence131(base131+profile131->fontText)?"WHT: FPS text refresh set to 1000 ms.":"WHT: FPS text cadence hook unavailable.");
  frame131=FrameApi131();menu131.controlAvailable=wht::ControlAvailable131;
  originalCamera131=reinterpret_cast<wht::CameraSetter131>(base131+profile131->cameraSet);
  for(unsigned attempt=0;attempt<3000&&!gameWindow131;++attempt){EnumWindows(FindGame131,0);if(!gameWindow131)Sleep(100);}

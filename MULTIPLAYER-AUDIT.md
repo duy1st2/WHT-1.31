@@ -36,3 +36,6 @@ Before declaring multiplayer support verified, run two real peers on the same ma
 ## 2026-10-17: #speed restored by user request
 
 Supersedes the acceleration restriction above. #speed [1..70] is enabled again on 12164/12173 x86/x64; no argument or 1 restores 1x. Uses the same continuous process-clock scaling policy as the inspected WHT/WHT-1.29 source (QPC, timeGetTime, GetTickCount), with lazy installation, rollback on hook failure and existing match/UI reset. GetTickCount64 remains unscaled for tool scheduling. No unverified 1.29 native game-speed RVA is called: this restores multiplier behavior, not complete implementation parity with its native base-speed setter. Multiplayer safety remains unverified.
+
+
+2026-10-26 host moderation addition: independent Winsock-level host/peer proof and name-based ban persistence; no inherited 1.29 native gameplay layout enabled. Only user-hosted rooms whose complete protocol/identity is observed can request peer shutdown. System ABI/loopback/INI contracts are implemented; live Warcraft and Battle.net validation remains pending. See analysis/host-moderation131-audit.json and the current PORT131.md host-only ban/kick section.

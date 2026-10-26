@@ -19,8 +19,11 @@ inline std::string EnglishTabHelp(size_t page){
 }
 inline std::string EnglishControlLabel(const ToolMenuControl& d){
  std::wstring key=d.key,section=d.section;
+ if(section==L"AutoHeal"||section==L"AutoMana")return key==L"Enabled"?(section==L"AutoHeal"?"Auto Heal":"Auto Mana"):(section==L"AutoHeal"?"HP threshold (%)":"Mana threshold (%)");
+
  if(key==L"Keyboard Scroll Speed")return "Keyboard camera scroll (%)";
  if(key==L"Mouse Scroll Speed")return "Mouse camera scroll (%)";
+ if(key==L"Hide Option Menu")return "Block game menu (F10)";
  if(key==L"Borderless")return "Borderless window";
  if(key==L"Lock Cursor")return "Lock cursor in game";
  if(key==L"Sound Start Game")return "Play match-start sound";
@@ -41,7 +44,7 @@ inline std::string EnglishControlLabel(const ToolMenuControl& d){
  {L"Reveal Invisibles","Show invisible units"},{L"Fog Click","Enable Fog Click"},{L"Show Hotkey In Panel","Show hotkeys on buttons"},
  {L"Enable Delay Clear Text Screen","Periodically clear screen text"},{L"Enable Delay Clear Chat Screen","Periodically clear chat"},
  {L"Show Resource","Show resource table"},{L"Quick Drop Item","Quick drop item (Shift + right click)"},
- {L"Show Timer","Show match time"},{L"Show FPS","Show FPS"},{L"Show Mem","Show memory usage"},
+ {L"Show Timer","Show match time"},{L"Show Ping","Show ping"},{L"Show FPS","Show FPS"},{L"Show Mem","Show memory usage"},
  {L"Show Auto Pick","Show Auto Pick button"},{L"Show Drop All","Show Drop All button"},{L"Show Sell All","Show Sell All button"},{L"Show Ins All Skills","Show All Skills button"},
  {L"hko_MinimizeMultiboard","Collapse/expand multiboard"},{L"hko_menu","Open/close menu"},{L"hko_command","Pause/restore command settings"},
  {L"Text Life/Mana Commas","HP/Mana thousands separators"},{L"Text Life/Mana No Hide","Keep long HP/Mana values visible"},{L"Text Stats Commas","Stats thousands separators"},{L"Detailed Stats Tooltip","Detailed damage/armor tooltips"},
@@ -68,10 +71,10 @@ inline std::string EnglishControlHelp(const ToolMenuControl& d){
  if(!wcscmp(d.key,L"Lock Cursor"))return "Lock cursor in game\nKeep the cursor inside the active game window. Release it when the game loses focus.";
  if(!wcscmp(d.key,L"Sound Start Game"))return "Match-start sound\nPlay once at the start of a new match. Enabling during a match does not play a sound.";
 
- if(!wcscmp(d.key,L"Fast Menu"))return "Fast Menu\nShorten the game menu transition wait. Original game actions and callbacks are retained.";
+ if(!wcscmp(d.key,L"Fast Menu"))return "Fast Menu\nSpeed up menu animations and cap the native transition wait at 0.001 seconds. Original game actions and completion callbacks are retained.";
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"ShowHpValue"))return "Overhead HP value\nShow or hide HP numbers independently of mana. Enable HP/Mana values in General first.";
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"FontSize"))return "Overhead HP/Mana font size\nRange 1 to 20; default 4. Changes existing labels and line spacing immediately.";
- if(!wcscmp(d.key,L"ModeCast"))return "Casting mode\nQuick Cast: on press. Smart Cast: on release. Enable Quick Cast for each slot first.";
+ if(!wcscmp(d.key,L"ModeCast"))return "Casting mode\nNormal: keep native targeting. Quick Cast: cast original hotkeys at cursor on press. Slot-specific remap and self/target cast keep priority.";
  std::wstring key=d.key,section=d.section;auto title=EnglishControlLabel(d);std::string help;
  auto starts=[&](const wchar_t* p){return key.rfind(p,0)==0;};
  auto digit=key.find_first_of(L"0123456789");auto slot=digit==std::wstring::npos?1:1+int(wcstol(key.c_str()+digit,nullptr,10));
@@ -102,6 +105,17 @@ inline std::string EnglishControlHelp(const ToolMenuControl& d){
  else if(key==L"Show Drop All")help="Show the button that drops all carried items (#dropall).";
  else if(key==L"Show Ins All Skills")help="Show the button that spends available hero skill points (#allskills).";
  else if(key==L"Show Auto Pick")help="Show the button that toggles automatic pickup of nearby items.";
+ else if(key==L"Fog Click")help="Allow selection of hidden units through fog. Use only where this behavior is intended.";
+ else if(key==L"VSync")help="Synchronize frames with the display refresh rate. Takes priority over FPS unlock.";
+ else if(key==L"Unlock Limit FPS")help="Remove the native FPS limit. Disable VSync to use the unlocked frame rate.";
+ else if(section==L"AutoHeal"||section==L"AutoMana")help=key==L"Enabled"?"Automatically use a matching potion from the six inventory slots below the configured threshold. Health and mana share a 1.5-second delay.":"Set the recovery threshold from 1 to 99 percent.";
+ else if(key==L"ShowCooldown")help="Display remaining cooldown seconds on skill and item buttons.";
+ else if(key==L"ShowRegenHP"||key==L"ShowRegenMana")help="Display regeneration per second for the selected unit.";
+ else if(key==L"Show Resource")help="Display the player resource board. Click its header or press Tab to collapse it.";
+ else if(key==L"Show Hotkey In Panel")help="Display configured hotkeys on command and inventory buttons.";
+ else if(key==L"Show Ping")help="Show network latency in milliseconds, independently of FPS.";
+ else if(key==L"Show FPS")help="Show the native frame-rate counter.";
+ else if(key==L"Show Mem")help="Show current process memory usage in the tool status line.";
  else if(key==L"ShowMaxValues")help="Append maximum values after current HP/Mana. Requires HP/Mana value display.";
  else if(section==L"DelayClear"){title=key.find(L"Chat")!=std::wstring::npos?"Clear chat":"Clear screen text";help=d.kind==MenuControlKind::Choice?"Choose the interval between clears, in seconds.":"Periodically clear the displayed messages.";}
  else help="Enable or disable "+title+". Saved settings are preserved.";

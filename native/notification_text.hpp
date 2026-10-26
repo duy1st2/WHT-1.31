@@ -34,8 +34,48 @@ inline std::string NotificationText(const std::string& text){
             plain="[WHT]"+(next<plain.size()?" "+plain.substr(next):std::string{});
         }
     }
-    if(plain.compare(0,5,"[WHT]")!=0)plain="[WHT] "+plain;
     const auto word=[](unsigned char c){return c>=128||(c>='a'&&c<='z')||(c>='A'&&c<='Z')||(c>='0'&&c<='9')||c=='_';};
+    // Keep command syntax out of player-facing notifications.
+    std::string normalized;
+    for(size_t i=0;i<plain.size();){
+        if(plain[i]=='#'&&i+1<plain.size()&&word(plain[i+1])){
+            ++i;while(i<plain.size()&&word(plain[i]))++i;
+            continue;
+        }
+        size_t end=i;while(end<plain.size()&&word(plain[end]))++end;
+        if(end==i){normalized+=plain[i++];continue;}
+        auto token=plain.substr(i,end-i),upper=token;
+        for(auto& c:upper)if(c>='a'&&c<='z')c-=32;
+        normalized+=(upper=="ENABLE"||upper=="ENABLED")?"ON":
+            (upper=="DISABLE"||upper=="DISABLED")?"OFF":token;
+        i=end;
+    }
+    // Remove empty command annotations, then tidy their surrounding spaces.
+    for(size_t i=0;i<normalized.size();){
+        if(normalized[i]=='('){
+            size_t end=i+1;while(end<normalized.size()&&(normalized[end]==' '||normalized[end]=='\t'))++end;
+            if(end<normalized.size()&&normalized[end]==')'){normalized.erase(i,end-i+1);continue;}
+        }
+        ++i;
+    }
+    plain.clear();
+    for(char c:normalized){
+        if(c==' '||c=='\t'){
+            if(!plain.empty()&&plain.back()!=' '&&plain.back()!='\n')plain+=' ';
+        }else plain+=c;
+    }
+    while(!plain.empty()&&plain.back()==' ')plain.pop_back();
+    // Toggle notifications end in a status; separate it from the feature name.
+    const auto statusSpace=plain.find_last_of(' ');
+    if(statusSpace!=std::string::npos){
+        auto status=plain.substr(statusSpace+1);
+        for(auto& c:status)if(c>='a'&&c<='z')c-=32;
+        if(status=="ON"||status=="OFF"){
+            size_t nameEnd=statusSpace;
+            while(nameEnd>0&&plain[nameEnd-1]==' ')--nameEnd;
+            if(nameEnd>0&&word(plain[nameEnd-1]))plain.insert(nameEnd,":");
+        }
+    }
     size_t valueAt=std::string::npos;
     const size_t prefix=plain.compare(0,6,"[WHT] ")==0?6:0;
     if(plain.compare(prefix,4,"Set ")==0){

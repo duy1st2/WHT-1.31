@@ -1,6 +1,11 @@
-#pragma once
+﻿#pragma once
 #include "repeat_message131.hpp"
 inline void CheckRepeatMessage131(){
+ wht::RepeatMessage131 notices;std::vector<std::string> feedback;auto notify=[&](const std::string& text){feedback.push_back(text);};
+ check(notices.Command(L"3 hello",notify)&&feedback.size()==1&&feedback.back()=="Repeat queued: 3 messages","repeat queue feedback matches latest 1.29 exactly");
+ check(notices.Command(L"stop",notify)&&feedback.size()==2&&feedback.back()=="Repeat stopped"&&!notices.queue.remaining,"repeat stop feedback matches reference");
+ check(!notices.Command(L"0 hello",notify)&&feedback.size()==3&&feedback.back()=="Usage: #repeat <1..10000> <text>; #repeat stop","repeat syntax error reports reference usage once");
+ check(!notices.Command(L"1 "+std::wstring(129,L'x'),notify)&&feedback.size()==4&&feedback.back()=="Repeat text: 1..128 UTF-8 bytes; no hash commands or line breaks","repeat rejected text reports reference limit once");
  wht::RepeatMessage131 r;unsigned sends=0;auto send=[&](const std::string& text){check(text=="hello","repeat preserves text");++sends;return true;};
  check(r.Command(L"3 hello"),"repeat accepts count and message");
  check(!r.Tick(true,false,1000,send)&&!sends,"typing/menu/focus gate pauses repeat");

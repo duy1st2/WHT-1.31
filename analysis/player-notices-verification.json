@@ -1,0 +1,111 @@
+{
+  "preserved": [
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86\\TS-Banned.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.update.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\cef\\logs\\browser\\cef_debug.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86\\TS-Banned.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.update.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\cef\\logs\\browser\\cef_debug.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    }
+  ],
+  "installed": [
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.mix",
+      "sha256": "ef94ce427efd0a9c24b8b976965b48cc1b18d249df69358b09e41cc359871456"
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT131Launcher.exe",
+      "sha256": "240c77c959de888c7ed51e7868f11bd501169c75cd9645ae82976b5f714c9a63"
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.mix",
+      "sha256": "ef94ce427efd0a9c24b8b976965b48cc1b18d249df69358b09e41cc359871456"
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT131Launcher.exe",
+      "sha256": "240c77c959de888c7ed51e7868f11bd501169c75cd9645ae82976b5f714c9a63"
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.mix",
+      "sha256": "89d0434de771400d20a9cd7f2b83063e3b43aa23781017c0ec48758e7e739244"
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT131Launcher.exe",
+      "sha256": "c2735e888776ed08fccf23396f03f9739befa0edd7a48920d1dc34d7592dbf42"
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.mix",
+      "sha256": "89d0434de771400d20a9cd7f2b83063e3b43aa23781017c0ec48758e7e739244"
+    },
+    {
+      "path": "runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT131Launcher.exe",
+      "sha256": "c2735e888776ed08fccf23396f03f9739befa0edd7a48920d1dc34d7592dbf42"
+    }
+  ],
+  "x86_tests": "2/2 passed",
+  "x64_tests": "1/1 passed",
+  "native_ui_live_tested": false
+}

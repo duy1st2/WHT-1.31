@@ -1,0 +1,737 @@
+{
+  "preservation": [
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\TS-Banned.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\WHT.update.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-auto-update-20261010-61059ac8\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-color-ellipsis-fix-20261011-8bd28bb0\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-color-game-name-fix-20261011-1c287888\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-file-metadata-20261010-8876c588\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-fullscreen-native-chain-20261011-793d133c\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-fullscreen-shutdown-fix-20261011-c9495206\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-fullscreen-stale-proc-fix-20261011-c823ec96\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-lobby-color-20261011-4a373122\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-menu-mana-value-20261006-114431\\ETSRebuild.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-menu-options-20261008-cb14adae\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-mongodb-folder-id-20261010-22c552ea\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-nfe-ets-20261008-69b9f3a3\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-nfe-fix-20261008-9d0be246\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-ok-release-20261010-8802e3a2\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-session-close-on-ok-20261010-3fe3d43c\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-session-disconnect-20261010-12f10a36\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-session-gcm-20261010-3f381261\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-session-login-20261010-89fe6845\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-session-map-load-20261010-0aaa837d\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-session-singlefile-20261010-421a626d\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-session-transient-fix-20261010-44fcb0c0\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-startup-update-before-login-20261010-264d6334\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-startup-update-only-20261010-047e0ff1\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-stats-tooltip-20261008-451623c6\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-stats-tooltip-20261008-cb0231d3\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-tab-tooltip-en-20261008-d2da2387\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-update-parent-inherit-20261024-1afca684\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-update-progress-20261011-e3b26910\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-update-progress-center-v1-0-4-20261011-227b2d33\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-update-progress-separate-v1-0-4-20261011-235df853\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-update-query-timeout-20261024-7ee57d22\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-updater-install-fix-20261024-cf1e1731\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-updater-mongo-logs-final-20261024-c895e320\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-updater-timeseries-logs-20261024-48e3e222\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-1-0-0-20261010-5c71d892\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-1-0-1-20261010-46213d03\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-1-0-2-20261010-f31b9567\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-1-0-3-20261011-36d89eea\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-1-0-5-20261011-0b5ccdb2\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-106-20261011-36f48639\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-107-20261011-3383efd0\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-108-20261012-89a52aa7\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-109-20261013-6e965fe9\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-110-20261014-9fdb35ef\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-111-20261016-ef83ef3b\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-112-20261016-8732ccbb\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-113-20261017-687524c6\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-version-114-20261024-60d2994b\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-WHT-rename-20261006-224137\\ETSRebuild.example.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-WHT-rename-20261006-224137\\ETSRebuild.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\backup-WHT-rename-20261006-224137\\ETSRebuild.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\ETS-show-level-backup-20261002-212012-3bc9eb18\\ETSRebuild.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-auto-update-20261010-d9214753\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-color-ellipsis-fix-20261011-740e575f\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-color-game-name-fix-20261011-a875b934\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-file-metadata-20261010-dd323815\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-fullscreen-native-chain-20261011-e1a17d7a\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-fullscreen-shutdown-fix-20261011-85dd88d5\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-fullscreen-stale-proc-fix-20261011-154f622c\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-lobby-color-20261011-622be38c\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-menu-mana-value-20261006-114431\\ETSRebuild.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-menu-options-20261008-23f6ddb3\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-mongodb-folder-id-20261010-e83fe7f3\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-nfe-ets-20261008-9f231c26\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-nfe-fix-20261008-ed5e14ed\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-ok-release-20261010-f5a7ae51\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-session-close-on-ok-20261010-c6969395\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-session-disconnect-20261010-0ebf84cd\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-session-gcm-20261010-48091170\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-session-login-20261010-87429d0f\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-session-map-load-20261010-b0f09f29\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-session-singlefile-20261010-1017d900\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-session-transient-fix-20261010-081e55d4\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-startup-update-before-login-20261010-17cdd6a2\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-startup-update-only-20261010-4c601ac1\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-stats-tooltip-20261008-97684d8b\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-stats-tooltip-20261008-d10ef194\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-tab-tooltip-en-20261008-b30d8967\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-update-parent-inherit-20261024-e9d6ed51\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-update-progress-20261011-ee60550d\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-update-progress-center-v1-0-4-20261011-632313d3\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-update-progress-separate-v1-0-4-20261011-a11247b7\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-update-query-timeout-20261024-cb13ea71\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-updater-install-fix-20261024-bae23645\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-updater-mongo-logs-final-20261024-22d8f570\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-updater-timeseries-logs-20261024-0d91435a\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-1-0-0-20261010-ee8a1721\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-1-0-1-20261010-32d4fb87\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-1-0-2-20261010-37005ec7\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-1-0-3-20261011-5158568c\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-1-0-5-20261011-da3b6a11\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-106-20261011-db362ee0\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-107-20261011-ddedfe3b\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-108-20261012-40ab0036\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-109-20261013-f06994de\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-110-20261014-7b454ebc\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-111-20261016-c51738e5\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-112-20261016-c9978430\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-113-20261017-bc52883b\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-version-114-20261024-7a9e9fd7\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-WHT-rename-20261006-224137\\ETSRebuild.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\backup-WHT-rename-20261006-224137\\ETSRebuild.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\ETS-show-level-backup-20261002-211942-a0ae23f8\\ETSRebuild.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.29\\runtime-test\\Warcraft3-129\\version.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.29\\runtime-test\\Warcraft3-129\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.29\\runtime-test\\Warcraft3-129\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.29\\runtime-test\\Warcraft3-129\\WHT.update.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\TS-Banned.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.update.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\cef\\logs\\browser\\cef_debug.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\TS-Banned.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.update.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\cef\\logs\\browser\\cef_debug.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "E:\\Warcraft III\\Warcraft3-129\\version.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "E:\\Warcraft III\\Warcraft3-129\\WHT.ini",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "E:\\Warcraft III\\Warcraft3-129\\WHT.log",
+      "unchanged": true,
+      "original_bytes_preserved": true
+    }
+  ],
+  "installed": [
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\WHT.mix",
+      "sha256": "f40c3d84c23ab3c65bac4ba7a5cb2ca49185cb4d606bdb13216be4819901b6d2"
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-124\\ijl15.dll",
+      "sha256": "63ba1b3a951e843a38a7409c04161c7273501b4e0005551e2e5ef1f6681b088e"
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\WHT.mix",
+      "sha256": "f40c3d84c23ab3c65bac4ba7a5cb2ca49185cb4d606bdb13216be4819901b6d2"
+    },
+    {
+      "path": "WHT\\runtime-test\\Warcraft3-126\\ijl15.dll",
+      "sha256": "63ba1b3a951e843a38a7409c04161c7273501b4e0005551e2e5ef1f6681b088e"
+    },
+    {
+      "path": "WHT-1.29\\runtime-test\\Warcraft3-129\\WHT.mix",
+      "sha256": "8e99d1d3cdc56da3165bea4664c4c3e300d02962ed594c843f5ae386a31e10e7"
+    },
+    {
+      "path": "WHT-1.29\\runtime-test\\Warcraft3-129\\mss32.dll",
+      "sha256": "1a4905bc6a219459f8184fc412b9ff21a14fec8f5b799d3931640911db302b90"
+    },
+    {
+      "path": "WHT-1.29\\runtime-test\\Warcraft3-129\\WHT.ExternalHud.exe",
+      "sha256": "92e018e154c974606f8cc4aeab3e2f62b8d3ea67e13787beeaf440c281b45bbc"
+    },
+    {
+      "path": "E:\\Warcraft III\\Warcraft3-129\\WHT.mix",
+      "sha256": "8e99d1d3cdc56da3165bea4664c4c3e300d02962ed594c843f5ae386a31e10e7"
+    },
+    {
+      "path": "E:\\Warcraft III\\Warcraft3-129\\mss32.dll",
+      "sha256": "1a4905bc6a219459f8184fc412b9ff21a14fec8f5b799d3931640911db302b90"
+    },
+    {
+      "path": "E:\\Warcraft III\\Warcraft3-129\\WHT.ExternalHud.exe",
+      "sha256": "92e018e154c974606f8cc4aeab3e2f62b8d3ea67e13787beeaf440c281b45bbc"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.mix",
+      "sha256": "fba6d2ad63c1e6579726cf11f4d6e599168dd5660d1a51f3ba5bfe1884214962"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT131Launcher.exe",
+      "sha256": "240c77c959de888c7ed51e7868f11bd501169c75cd9645ae82976b5f714c9a63"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.mix",
+      "sha256": "fba6d2ad63c1e6579726cf11f4d6e599168dd5660d1a51f3ba5bfe1884214962"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT131Launcher.exe",
+      "sha256": "240c77c959de888c7ed51e7868f11bd501169c75cd9645ae82976b5f714c9a63"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.mix",
+      "sha256": "ed7268514728030b8b499a0a7b406b5205df356d3554e13d6c241e07495f6733"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT131Launcher.exe",
+      "sha256": "c2735e888776ed08fccf23396f03f9739befa0edd7a48920d1dc34d7592dbf42"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.mix",
+      "sha256": "ed7268514728030b8b499a0a7b406b5205df356d3554e13d6c241e07495f6733"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT131Launcher.exe",
+      "sha256": "c2735e888776ed08fccf23396f03f9739befa0edd7a48920d1dc34d7592dbf42"
+    }
+  ],
+  "tests": {
+    "WHT": "19/19",
+    "WHT-1.29": "9/9",
+    "WHT-1.31-x86": "2/2",
+    "WHT-1.31-x64": "1/1"
+  },
+  "native_source_profiles": 5,
+  "legacy_source": "echo max or non-loopback TCP max, explicitly labelled",
+  "in_match_visual_or_value_comparison_tested": false
+}

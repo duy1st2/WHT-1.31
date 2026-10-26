@@ -1,0 +1,4 @@
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\native\assets\tl_overlay.mpq" * source
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\native\assets\tl_overlay.mpq" UI\Widgets\EscMenu\Human\human-options-button-border-up.blp source
+extract "E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\native\assets\tl_overlay.mpq" UI\Widgets\EscMenu\Human\human-options-menu-background.blp source
+exit

@@ -1,0 +1,42 @@
+[
+    {
+        "matches":  true,
+        "sha256":  "AA6B3F9A06FA958601F480DD0533BE2AC0A43BF7423B7943F285113D5DEDCFCB",
+        "file":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.mix"
+    },
+    {
+        "matches":  true,
+        "sha256":  "080992D2097565A9FD4587A82A77B495337B4F6B5F6A891EC852F7B7A3CAF800",
+        "file":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT131Launcher.exe"
+    },
+    {
+        "matches":  true,
+        "sha256":  "9F0067CC4828BDF4149C3BBFEB7724C7274ED3AAA46829C5AFE8E6C4CB3233E7",
+        "file":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.mix"
+    },
+    {
+        "matches":  true,
+        "sha256":  "E2259EE4BED08C229448AEE26D5932257CE5C9B3B5406F30FF28D44325ED7D89",
+        "file":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT131Launcher.exe"
+    },
+    {
+        "matches":  true,
+        "sha256":  "AA6B3F9A06FA958601F480DD0533BE2AC0A43BF7423B7943F285113D5DEDCFCB",
+        "file":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.mix"
+    },
+    {
+        "matches":  true,
+        "sha256":  "080992D2097565A9FD4587A82A77B495337B4F6B5F6A891EC852F7B7A3CAF800",
+        "file":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT131Launcher.exe"
+    },
+    {
+        "matches":  true,
+        "sha256":  "9F0067CC4828BDF4149C3BBFEB7724C7274ED3AAA46829C5AFE8E6C4CB3233E7",
+        "file":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.mix"
+    },
+    {
+        "matches":  true,
+        "sha256":  "E2259EE4BED08C229448AEE26D5932257CE5C9B3B5406F30FF28D44325ED7D89",
+        "file":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT131Launcher.exe"
+    }
+]

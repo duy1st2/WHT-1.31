@@ -1,5 +1,6 @@
 #include "component_lookup131.hpp"
 #include "hp_player_color131.hpp"
+#include "hp_dimensions131.hpp"
 #include "invulnerable_bar131.hpp"
 #pragma once
 #include "world_present131.hpp"
@@ -32,12 +33,12 @@ inline float Seconds64(uintptr_t button,uintptr_t base,const Profile64& p){__try
  auto getter=*reinterpret_cast<uintptr_t*>(vt+0x5c0);if(getter<base||getter>=end)return 0;float value=0;reinterpret_cast<float*(*)(uintptr_t,float*,unsigned)>(getter)(ability,&value,*reinterpret_cast<unsigned*>(data+0xc));return std::isfinite(value)&&value>0&&value<86400?value:0;}__except(1){return 0;}}
 inline std::string SecondsText64(float value){if(!std::isfinite(value)||value<=0||value>=86400)return {};char text[32]{};int seconds=int(std::ceil(value));if(seconds>=60)std::snprintf(text,sizeof(text),"%d:%02d",seconds/60,seconds%60);else if(value<1)std::snprintf(text,sizeof(text),"%.1f",value);else std::snprintf(text,sizeof(text),"%d",seconds);return text;}
 struct Gameplay64 {
- HpPlayerColor131 hpColors;
+ HpPlayerColor131 hpColors;HpDimensions131 hpDimensions;
  InvulnerableBars131 invulnerable;
  struct World{void* host=nullptr;void* background=nullptr;std::array<void*,2> values{},levels{};std::array<std::string,2> valueText{};std::string levelText;bool placed=false;float backgroundWidth=0;std::array<float,2> fontSizes{};uint32_t color=0xffffffff;};
  struct Cooldown{uintptr_t button=0;std::array<void*,2> fonts{};std::string text;};
  std::unordered_map<uintptr_t,World> world;std::array<Cooldown,18> cooldown{};std::array<void*,2> rates{},rateFonts{};std::array<std::string,2> rateText{};unsigned reported=0,observedNative=0;
- void Reset(){ForgetStatPaint131();hpColors.Reset();invulnerable.Reset();world.clear();cooldown={};rates={};rateFonts={};rateText={};reported=observedNative=0;}
+ void Reset(){ForgetStatPaint131();hpColors.Reset();hpDimensions.Reset();invulnerable.Reset();world.clear();cooldown={};rates={};rateFonts={};rateText={};reported=observedNative=0;}
  unsigned Update(uintptr_t base,uintptr_t ui,const Profile64& p,const Config& c,bool allowed,ToolMenuOverlay& menu,const NativeFrameApi& raw){unsigned observed=0;
   auto selected=Selected64(ui,base,p);
   for(unsigned n=0;n<2;++n){float value=0,maximum=0,rate=0;bool enabled=allowed&&(n?c.showRegenMana:c.showRegenHP)&&State64(selected,base,p,n!=0,value,maximum,rate)&&rate!=0;
@@ -52,18 +53,18 @@ struct Gameplay64 {
   }
   std::unordered_set<uintptr_t> frames;if(!Frames64(menu.independentHost,frames))return observed;
   for(auto it=world.begin();it!=world.end();)if(!frames.count(it->first))it=world.erase(it);else ++it;
-  PruneStatPaint131(frames);hpColors.Prune(frames);
+  PruneStatPaint131(frames);hpColors.Prune(frames);hpDimensions.Prune(frames);
   invulnerable.Prune(frames);
   for(auto bar:frames){uintptr_t unit=0;bool visible=false;if(!Hp64(bar,base,p,unit,visible))continue;
    StatPaintRecord131 record;record.unit=unit;record.unitTable=base+p.unitVtable;
-   const bool enabled=allowed&&(c.colorPlayer||c.hideInvulnerableBars||c.stateTagEnable||c.stateTagShowLevel||(c.timeBoss&&(c.mth49Enable||c.g17Enable)));
+   const bool enabled=allowed&&(c.barWidthHp>0||c.barHeightHp>0||c.colorPlayer||c.hideInvulnerableBars||c.stateTagEnable||c.stateTagShowLevel||(c.timeBoss&&(c.mth49Enable||c.g17Enable)));
    if(!enabled){auto previous=statPaintRecords131.find(bar);if(previous!=statPaintRecords131.end()&&previous->second.presentation)WriteBar(bar,base,p,c,allowed,raw);}
    SetStatPaint131(base,p.statVtable,bar,false,record,enabled,true);
   }
   return observed|observedNative;
  }
  unsigned WriteBar(uintptr_t bar,uintptr_t base,const Profile64& p,const Config& c,bool allowed,const NativeFrameApi& raw){unsigned observed=0;
-uintptr_t unit=0;bool visible=false;if(!Hp64(bar,base,p,unit,visible))return observed;invulnerable.Update(base,p.build,bar,unit,allowed&&c.hideInvulnerableBars,visible);hpColors.Update(base,p.build,bar,unit,allowed&&c.colorPlayer,GetTickCount64());int level=Level64(unit,base,p);bool hero=level>0;
+uintptr_t unit=0;bool visible=false;if(!Hp64(bar,base,p,unit,visible))return observed;invulnerable.Update(base,p.build,bar,unit,allowed&&c.hideInvulnerableBars,visible);hpColors.Update(base,p.build,bar,unit,allowed&&c.colorPlayer,GetTickCount64());hpDimensions.Update(base,p.build,bar,allowed?c.barWidthHp:0.f,allowed?c.barHeightHp:0.f,raw);int level=Level64(unit,base,p);bool hero=level>0;
    const bool eligible=OverheadEligible131(allowed,c.hideInvulnerableBars,OverheadUnitFlags131(unit));
    bool stateEnabled=eligible&&c.stateTagEnable&&(hero?c.stateTagHero:c.stateTagNonHero);
    std::string levelText=eligible&&c.stateTagShowLevel&&hero?std::to_string(level):std::string{};auto found=world.find(bar);if(found==world.end()){if((!stateEnabled&&levelText.empty())||world.size()>=4096)return observed;found=world.emplace(bar,World{}).first;}auto& e=found->second;
@@ -73,7 +74,7 @@ uintptr_t unit=0;bool visible=false;if(!Hp64(bar,base,p,unit,visible))return obs
     if(e.host&&!NativeSetOwnedFrameLevel(e.host,base,p.simpleVtable,kToolFeatureFrameLevel)){NativeFrameHide(e.host);e.host=nullptr;}}if(!e.host)return observed;
    if(!e.placed){raw.setRelPoint(e.host,4,reinterpret_cast<void*>(bar),4,0,0,1);raw.setWidth(e.host,.08f);raw.setHeight(e.host,.03f);e.placed=true;}float size=(std::isfinite(c.stateTagFontSize)?std::clamp(c.stateTagFontSize,1.f,20.f):4.f)*.0015f;
    for(unsigned n=0;n<2;++n){std::string text;if(stateEnabled&&(n?c.stateTagManaValue:c.stateTagHpValue)&&State64(unit,base,p,n!=0,value,maximum,rate))text=StateText64(value,maximum,c.stateTagShowMax,n!=0,c.lifeManaCommas);
-    if(!e.values[n]&&!text.empty())e.values[n]=NativeCreateFontString(raw,e.host,size,"",2);if(e.values[n]){if(e.fontSizes[n]!=size){raw.setFont(e.values[n],"WHTUI_FRIZQT__.ttf",size,1);raw.setTextAlign(e.values[n],2);raw.setRelPoint(e.values[n],4,reinterpret_cast<void*>(bar),4,0,n?-(size+.004f):size+.002f,1);e.fontSizes[n]=size;}if(e.valueText[n]!=text){raw.setText(e.values[n],text.c_str());e.valueText[n]=text;}if(!text.empty())observed|=8;}}
+    if(!e.values[n]&&!text.empty())e.values[n]=NativeCreateFontString(raw,e.host,size,"",2);if(e.values[n]){if(e.fontSizes[n]!=size){raw.setFont(e.values[n],"FRIZQT__.ttf",size,1);raw.setTextAlign(e.values[n],2);raw.setRelPoint(e.values[n],4,reinterpret_cast<void*>(bar),4,0,n?-(size+.004f):size+.002f,1);e.fontSizes[n]=size;}if(e.valueText[n]!=text){raw.setText(e.values[n],text.c_str());e.valueText[n]=text;}if(!text.empty())observed|=8;}}
    if(!e.background&&!levelText.empty()){auto memory=raw.alloc(0x150,"WHTLevel64",1,0);if(memory)e.background=raw.textureCtor(memory,e.host,2,1);}
    for(unsigned n=0;n<2;++n){bool created=false;if(!e.levels[n]&&!levelText.empty()){e.levels[n]=NativeCreateFontString(raw,e.host,.010546875f,"",2);created=e.levels[n]!=nullptr;if(created){raw.setTextAlign(e.levels[n],2);float shadow=n?0.f:.0006f;raw.setRelPoint(e.levels[n],8,reinterpret_cast<void*>(bar),6,-.0025f+shadow,-.005f-shadow,1);}}if(e.levels[n]&&(created||e.levelText!=levelText)){auto text=levelText.empty()?std::string{}:std::string(n?"|cffffffff":"|cff000000")+levelText+"|r";raw.setText(e.levels[n],text.c_str());}}
    if(e.background){float width=e.levels[1]&&!levelText.empty()?reinterpret_cast<float(*)(void*)>(base+p.textWidth)(e.levels[1]):0.f,scale=*reinterpret_cast<float*>(reinterpret_cast<uintptr_t>(e.background)+0xa4);bool show=!levelText.empty()&&std::isfinite(width)&&width>0&&width<.8f&&std::isfinite(scale)&&scale>0;uint32_t color=show?0xc0000000:0;if(e.color!=color){reinterpret_cast<bool(*)(void*,const uint32_t*)>(base+p.solid)(e.background,&color);e.color=color;}if(show&&e.backgroundWidth!=width/scale+.002f){e.backgroundWidth=width/scale+.002f;raw.setWidth(e.background,e.backgroundWidth);raw.setHeight(e.background,.012546875f);raw.setRelPoint(e.background,4,e.levels[1],4,0,0,1);}}

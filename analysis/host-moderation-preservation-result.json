@@ -1,0 +1,42 @@
+[
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini",
+    "same": true,
+    "original_log_prefix_preserved": false
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log",
+    "same": false,
+    "original_log_prefix_preserved": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini",
+    "same": true,
+    "original_log_prefix_preserved": false
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log",
+    "same": true,
+    "original_log_prefix_preserved": false
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini",
+    "same": true,
+    "original_log_prefix_preserved": false
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log",
+    "same": true,
+    "original_log_prefix_preserved": false
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini",
+    "same": true,
+    "original_log_prefix_preserved": false
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log",
+    "same": true,
+    "original_log_prefix_preserved": false
+  }
+]

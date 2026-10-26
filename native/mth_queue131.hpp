@@ -45,4 +45,13 @@ inline bool SubmitCourierRoute131(const SelectionRoster131& original,uintptr_t c
   for(int i=0;i<count;++i){api.point(ui,0xd0012,0,r.x1,r.y1,0,0xffffffffu,1);api.point(ui,0xd0012,0,r.x2,r.y2,0,0xffffffffu,1);}ok=true;
  }__finally{if(changed){select(&one,2);if(saved.count)select(&saved,1);}}}__except(1){return false;}return ok;
 }
+inline bool StopCourierNative131(const SelectionRoster131& original,uintptr_t courier,NativeSelect131 select,const MthQueueApi131& api,uintptr_t ui){
+ if(!courier||!select||!api.stop||!ui||original.count>12)return false;
+ const NativeUnitList131 saved{original.count,original.units.data()},one{1,&courier};bool changed=false,ok=false;
+ __try {__try {
+  if(original.count!=1||original.units[0]!=courier){changed=true;if(saved.count)select(&saved,2);select(&one,1);}
+  api.stop(ui,0xd0004,0,1,4);ok=true;
+ }__finally{if(changed){select(&one,2);if(saved.count)select(&saved,1);}}}__except(1){return false;}return ok;
+}
+
 }

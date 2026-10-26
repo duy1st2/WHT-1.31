@@ -184,10 +184,8 @@ inline void* NativeCreateFontString(
 
         if (api.setFont) {
             const char* fontCandidates[] = {
-                "WHTUI_FRIZQT__.ttf",
                 "FRIZQT__.ttf",
                 "fonts_VN.ttf",
-                "AARDV.ttf",
                 "Fonts\\FRIZQT__.TTF"
             };
             for (const char* candidate : fontCandidates) {

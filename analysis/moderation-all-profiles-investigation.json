@@ -1,0 +1,46 @@
+{
+  "enabled_profiles": [
+    {
+      "build": 12164,
+      "arch": "x86"
+    },
+    {
+      "build": 12164,
+      "arch": "x64"
+    },
+    {
+      "build": 12173,
+      "arch": "x86"
+    },
+    {
+      "build": 12173,
+      "arch": "x64"
+    }
+  ],
+  "implementation": "Shared independent standard Winsock transport; no inherited game RVA. Architecture-specific existing Resource profiles supply native identity when available.",
+  "requirements": [
+    "validated executable profile",
+    "authorized Local mode",
+    "actual incoming join on recorded accepted socket",
+    "outgoing slot-recipient assignment on same socket",
+    "unique local host identity with locally sent PLAYERINFO",
+    "occupied human row matching selected peer ID and exact name",
+    "no self, ambiguous, closed or already pending target"
+  ],
+  "regressions": [
+    "staged SLOTINFOJOIN then occupied SLOTINFO update",
+    "native-width SOCKET dispatch on x64",
+    "actual TCP/AcceptEx/socket ReadFile/IOCP",
+    "synchronous completion and duplicate suppression",
+    "ban schema persistence",
+    "unsupported builds remain disabled"
+  ],
+  "actual_x86_12164_evidence": {
+    "time": "2026-10-26 16:13:07",
+    "host_proof": true,
+    "ban_saved_and_disconnect_requested": true,
+    "peer_records_cleared_after_request": true
+  },
+  "other_profiles_live_multiplayer_tested": false,
+  "host_bot_admin_support": false
+}

@@ -1,0 +1,32 @@
+{
+  "references": [
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp",
+      "sha256": "855d05af0142d9ba571e2478a60c28e775e3ead6fafdefb428148ccce8874388"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\notification_text.hpp",
+      "sha256": "a7074341d1a1a694f66397a29200002d16a8593376185ca0734727fa08ba0b43"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\version129.cpp",
+      "sha256": "13830cebe0e5c560c63b0de5501e09dadaea9277772e87b5bfce56d6c1eae813"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\notification129.hpp",
+      "sha256": "80803edb339e67abe4e21ce3b1f3ebb21c5df10bca96bae7c8ceffa41c912b7a"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\notification_text.hpp",
+      "sha256": "a7074341d1a1a694f66397a29200002d16a8593376185ca0734727fa08ba0b43"
+    }
+  ],
+  "finding": "Latest 1.29 LegacySettingNotice129 adds [WHT] to SettingFeedback; ToolCommand uses per-dispatch-thread successful notification sequence to suppress duplicate generic output. 1.31 previously lacked this producer-side wrapper despite identical notification_text.hpp.",
+  "examples": [
+    "[WHT] Set Camera: 2500",
+    "[WHT] Set ShowCooldown: ON",
+    "[WHT] Set Fast Menu: OFF",
+    "[WHT] Set Keyboard Scroll Speed: 100"
+  ],
+  "limits": "Keep 1.31 live VSync behavior and report native FPS restoration accurately rather than claiming an unverified default 60 FPS or requiring a restart for a live setting."
+}

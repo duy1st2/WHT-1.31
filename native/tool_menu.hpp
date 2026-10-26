@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "tool_version.hpp"
 #ifdef _WIN64
 #include "overlay_frames.hpp"
@@ -34,6 +34,8 @@ inline std::string MenuKeyName(const std::wstring& code){auto vk=EngineKeyToVirt
  wchar_t name[64]{};auto scan=MapVirtualKeyW(vk,MAPVK_VK_TO_VSC);if(vk>=VK_PRIOR&&vk<=VK_DELETE)scan|=0x100;
  return GetKeyNameTextW(LONG(scan<<16),name,64)?Utf8(name):std::to_string(vk);}
 inline bool ValidMenuValue(const ToolMenuControl& d,const std::wstring& value){
+ if((!wcscmp(d.section,L"AutoHeal")||!wcscmp(d.section,L"AutoMana"))&&!wcscmp(d.key,L"Percent")){wchar_t* end=nullptr;const double number=wcstod(value.c_str(),&end);if(end==value.c_str()||*end||!std::isfinite(number)||number!=std::floor(number))return false;}
+
  if(d.kind==MenuControlKind::Text||d.kind==MenuControlKind::Clear)return value.empty()||!QuickChatText(value).empty();
  if(d.kind==MenuControlKind::Key){if(value==L"-1")return true;if(value.empty()||value.size()>4||value.find_first_not_of(L"0123456789")!=std::wstring::npos)return false;
  auto code=wcstol(value.c_str(),nullptr,10);return code<=0x30b&&EngineKeyToVirtualKey(int(code))&&EngineKeyToVirtualKey(int(code))!=VK_ESCAPE;}
@@ -51,7 +53,7 @@ class ToolMenuOverlay{public:
   if(hit==-2)return toolEnglish.load()?"Close menu\nClose the tools menu and return to the match.":Utf8(L"Đóng menu\nĐóng bảng công cụ và quay lại trận.");
   if(hit>=500&&hit<508){static const wchar_t* tabs[]={L"T\u1ed5ng qu\u00e1t\nCh\u1ec9nh hi\u1ec3n th\u1ecb v\u00e0 c\u00e1c thao t\u00e1c h\u1ed7 tr\u1ee3 trong tr\u1eadn.",L"Chat nhanh\nG\u00e1n ph\u00edm v\u00e0 n\u1ed9i dung tin nh\u1eafn g\u1eedi nhanh.",L"Ph\u00edm t\u1eaft\nG\u00e1n ph\u00edm k\u1ef9 n\u0103ng, v\u1eadt ph\u1ea9m v\u00e0 ch\u1ecdn t\u01b0\u1edbng.",L"Ph\u00edm t\u1eaft kh\u00e1c\nG\u00e1n ph\u00edm m\u1edf menu, thu g\u1ecdn b\u1ea3ng v\u00e0 t\u1ea1m t\u1eaft thi\u1ebft l\u1eadp.",L"\u0110\u1ed3 h\u1ecda\nCh\u1ec9nh hi\u1ec3n th\u1ecb giao di\u1ec7n, m\u00e0u s\u1eafc v\u00e0 \u0111\u1ed3ng b\u1ed9 khung h\u00ecnh.",L"MTH\nCh\u1ecdn ch\u1ebf \u0111\u1ed9 v\u00e0 g\u00e1n thao t\u00e1c h\u1ed7 tr\u1ee3 MTH.",L"T\u1ef1 \u0111\u1ed9ng k\u1ef9 n\u0103ng\nCh\u1ec9nh ph\u00edm ch\u1ea1y/d\u1eebng, \u0111\u1ed9 tr\u1ec5 v\u00e0 ph\u1ea1m vi t\u00ecm m\u1ee5c ti\u00eau."};return toolEnglish.load()?EnglishTabHelp(size_t(hit-500)):hit==507?Utf8(L"Ng\u00f4n ng\u1eef\nCh\u1ecdn ng\u00f4n ng\u1eef cho giao di\u1ec7n c\u00f4ng c\u1ee5."):Utf8(tabs[hit-500]);}
   if(hit>=0&&hit<int(controls.size()))return ControlHint(kToolMenuControls[hit])+(Enabled(c,size_t(hit))||!kToolMenuControls[hit].supported?"":(toolEnglish.load()?"\nDisabled: enable the parent group first.":Utf8(L"\nĐang bị khóa: bật nhóm tùy chọn cha trước.")));
-  if(visible&&open&&dropdown<0)for(size_t i=0;i<controls.size();++i){const auto& d=kToolMenuControls[i];if(d.page==page&&d.kind!=MenuControlKind::Label&&*d.label&&FromPixels(d.labelRect).Hit(p,w,h))return ControlHint(d);}
+  if(visible&&open&&dropdown<0)for(size_t i=0;i<controls.size();++i){const auto& d=kToolMenuControls[i];if(d.page==page&&d.kind!=MenuControlKind::Label&&*d.label&&FromPixels(d.labelRect).Hit(p,w,h))return ControlHint(d)+(Enabled(c,i)||!d.supported?"":(toolEnglish.load()?"\nDisabled: enable the parent group first.":Utf8(L"\n\u0110ang b\u1ecb kh\u00f3a: b\u1eadt nh\u00f3m t\u00f9y ch\u1ecdn cha tr\u01b0\u1edbc.")));}
   return {};
  }
 
@@ -143,7 +145,7 @@ class ToolMenuOverlay{public:
  void MenuPressVisual(bool down){if(menuPressedVisual==down)return;menuPressedVisual=down;if(!button||!menuIcon||!api.setWidth||!api.setHeight||!api.setRelPoint)return;
  float size=down?.0198f:.022f;api.setWidth(menuIcon,size);api.setHeight(menuIcon,size);api.setRelPoint(menuIcon,4,button,4,down?.001f:0.f,down?-.001f:0.f,1);}
  void* Font(void* owner,float height,const char* text){auto font=NativeCreateFontString(api,owner,height,"",kNativeOverlayLayer);if(!font)return nullptr;
- if(!api.setFont(font,"fonts_VN.ttf",height,1))api.setFont(font,"WHTUI_FRIZQT__.ttf",height,1);api.setText(font,text);return font;}
+ if(!api.setFont(font,"fonts_VN.ttf",height,1))api.setFont(font,"FRIZQT__.ttf",height,1);api.setText(font,text);return font;}
  void* Texture(void* owner,const char* path,float w,float h,int layer=kNativeOverlayLayer){auto memory=api.alloc(nativeFrameLayout.textureSize,"CSimpleTexture",1,0);if(!memory)return nullptr;
  auto texture=api.textureCtor(memory,owner,layer,1);if(!texture)return nullptr;api.setWidth(texture,w);api.setHeight(texture,h);api.setTexture(texture,path,0);return texture;}
 private:
@@ -226,7 +228,7 @@ public:
    if(on)return true;if(end==std::wstring::npos)break;start=end+2;}while(true);return false;
  }
  static std::string ChoiceName(const ToolMenuControl& d,int n){
-  if(!wcscmp(d.key,L"ModeCast")){static const char* names[]={"Quick Cast","Smart Cast","Quick Cast Old"};return n>=0&&n<3?names[n]:names[0];}
+  if(!wcscmp(d.key,L"ModeCast")){static const char* names[]={"Normal","Quick Cast"};return n>=0&&n<2?names[n]:names[0];}
   return std::to_string(n);
  }
  static std::string Display(const ToolMenuControl& d,const std::wstring& value){if(d.kind==MenuControlKind::Key)return MenuKeyName(value);
@@ -261,7 +263,7 @@ public:
  if((editing>=0&&!Enabled(c,size_t(editing))) || (dropdown>=0&&!Enabled(c,size_t(dropdown))))CancelEdit();
  MenuPressVisual(visible&&(pressed==-1||GetTickCount64()<menuPressedUntil));bool show=visible&&open;
  if(c.english!=appliedEnglish){appliedEnglish=c.english;appliedPage=-1;helpApplied.clear();nextRefresh=0;} if(show!=appliedOpen||page!=appliedPage){if(show){NativeFrameShow(panel);NativeFrameShow(close);for(auto tab:tabs)NativeFrameShow(tab);}else{for(auto tab:tabs)NativeFrameHide(tab);NativeFrameHide(close);NativeFrameHide(panel);}
- for(size_t i=0;i<controls.size();++i){if(show&&kToolMenuControls[i].page==page)NativeFrameShow(controls[i].frame);else NativeFrameHide(controls[i].frame);}for(auto grid:grids){if(show&&page==2)NativeFrameShow(grid);else NativeFrameHide(grid);}
+ for(auto grid:grids){if(show&&page==2)NativeFrameShow(grid);else NativeFrameHide(grid);}for(size_t i=0;i<controls.size();++i){if(show&&kToolMenuControls[i].page==page)NativeFrameShow(controls[i].frame);else NativeFrameHide(controls[i].frame);}
  for(size_t i=0;i<tabs.size();++i){api.setTexture(tabGlows[i],int(i)==page?"UI\\Widgets\\EscMenu\\Human\\human-options-menu-background.blp":"Transparent.tga",0);
  auto title=std::string(int(i)==page?"|cffffffff":"|cffffcc00")+ToolTabName(i)+"|r";api.setText(tabLabels[i],title.c_str());}
  appliedOpen=show;appliedPage=page;nextRefresh=0;}

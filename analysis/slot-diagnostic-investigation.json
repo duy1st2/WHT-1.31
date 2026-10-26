@@ -1,0 +1,18 @@
+{
+  "reported_test": {
+    "build": 12164,
+    "architecture": "x86",
+    "time": "2026-10-26 13:48-13:49",
+    "received_joins": 2,
+    "accepted_outgoing_slotjoins": 0,
+    "accepted_outgoing_playerinfo": 2,
+    "final_rejected_frames": 83,
+    "unsupported_io": 0,
+    "identity_resets": 1,
+    "remaining_peers": 0,
+    "host_proof": false
+  },
+  "conclusion": "Observer captures join traffic. It never accepts an outgoing slot-join; rejection/reset happens before a usable slot/socket mapping exists. Aggregate counters do not establish the slot layout or exact rejection reason. Do not enable disconnect based on this log.",
+  "new_evidence": "Up to 16 slot packet schemas and 16 parser rejection events per process, no names/endpoints/chat or packet contents; identity-reset event. Schema logs include type,direction,packet length,slot-info length,row count,expected-nine-byte layout length,peer-record existence and client flag.",
+  "next_test": "Fresh authorized host room, one human joins; issue #kick 2 once in lobby; no match required for first schema capture. Runtime action remains disabled."
+}

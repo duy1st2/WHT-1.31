@@ -1,0 +1,488 @@
+﻿[
+    {
+        "File":  "native/ability_button129.hpp",
+        "Bytes":  1637,
+        "SHA256":  "AEF85AE80EBAECDD16BC550F92243B11BAB385DB2548C0C40DA78F8B4903808D",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/add_ability129.hpp",
+        "Bytes":  6697,
+        "SHA256":  "0B7470A9BE3C72FE4FBA975EB5B6D17DCF973A67B764F415275C27E76185AE52",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/armor129.hpp",
+        "Bytes":  3208,
+        "SHA256":  "876D3FEFA51F0C76B7CD85D99D9513CB2A878C82079B481293913B9EC102FCDB",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/attack_cooldown129.hpp",
+        "Bytes":  3369,
+        "SHA256":  "ECE101AB904D5F820FE073DD7D6B2FD9446578F1CB8E02E4C43BE22A482744F3",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/attack_speed129.hpp",
+        "Bytes":  4159,
+        "SHA256":  "78C801F9EAD31C8CD5734F446623F2679923626E2C9420B3E5A58AECCF910937",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/auto_skills.hpp",
+        "Bytes":  1085,
+        "SHA256":  "D1942A2C9833A95C2818A66E1956CCA0CD219E253EDD1C9DD690741FA9147994",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/auto_skills129.hpp",
+        "Bytes":  3669,
+        "SHA256":  "2844CF49908C5CD90F3631A4A3E54C007AE9C92670FA24BB0D644A1912B9AA34",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/base_damage129.hpp",
+        "Bytes":  3864,
+        "SHA256":  "909490FA21C2DB91D6DA48109384012A631DE513237EF18C03C5F17844F53647",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/black_bar129.hpp",
+        "Bytes":  1294,
+        "SHA256":  "1823CF67AA498363C5AF8E28A1782D3C764F0EA473F3955A9827E2946CBAB459",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/cooldown129.hpp",
+        "Bytes":  3545,
+        "SHA256":  "B9CF62DAFA22DC7B10ED77353B3EF281A73736BC67E308AFF3F8E74F7A42A06D",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/copy_unit129.hpp",
+        "Bytes":  1981,
+        "SHA256":  "A1B3DD93D7D15F5DE1FB23F5A3D63F905285F930F5A0281EE1AB306FF55298EB",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/create_item129.hpp",
+        "Bytes":  1900,
+        "SHA256":  "A058B739A7104862DD0C79555DEA818E922348AB6D5A4FF79C7521BC4F49A013",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/create_unit129.hpp",
+        "Bytes":  2385,
+        "SHA256":  "41CA32DACC643B9F9CA4409C39B306199A5771292A8AA632C311995CDDEC8AB8",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/drop_items129.hpp",
+        "Bytes":  4508,
+        "SHA256":  "F47FCAA5DFCAEA64D5EE72C79C305973D2C44B620D9669AE1019A6F2F622A633",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/fast_menu129.hpp",
+        "Bytes":  1983,
+        "SHA256":  "8945E4C391F127D25D72E34A6979E19A7240E681C0FB78E73BB1EACFFEDA288B",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/fog_click129.hpp",
+        "Bytes":  4116,
+        "SHA256":  "ED79E47D66C92CAF54172BFBD0F19FFD060528D071242F5D8C266BA45CA5E57D",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/fog_effect129.hpp",
+        "Bytes":  2864,
+        "SHA256":  "F641364B996FDA722E3C91AA5B8A6AADE7CE72CAC8F55013B37C3FE130DBA943",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/fps_limit129.hpp",
+        "Bytes":  1163,
+        "SHA256":  "9D588B279FECB37D33F18A4C810F2DF44D4233B666BAF247E0A7E1316D36CB8D",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/fps_timer.hpp",
+        "Bytes":  583,
+        "SHA256":  "296C63B560B8FA09472766DE31274DA1A0189D6ABA9CB85D29A0D8D54E767D79",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/game_speed129.hpp",
+        "Bytes":  1873,
+        "SHA256":  "2426B46C1CA861415B6485B11472B2DFAC1BBA61D880CC43A7C7399E2584DBF0",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/hero_attributes129.hpp",
+        "Bytes":  5020,
+        "SHA256":  "F3BFEF316B4D5F5558504D91C1B16F103A756BB844F5C37E4363473CD2B0878C",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/hero_level129.hpp",
+        "Bytes":  5020,
+        "SHA256":  "89078DD8779C811A253F14B4200DAD72EE225ABDCA8DD59DF154966C455D1C47",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/hero_skill_points129.hpp",
+        "Bytes":  4257,
+        "SHA256":  "AF0F82B4DDC3F85E54BAB4F317FB9C74BA57722425DF5D6EEC4960EE29E93590",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/hotkey_labels129.hpp",
+        "Bytes":  4201,
+        "SHA256":  "0FA70B91F704E43D961FE42AA2469AD3F30E8B44F0B06D6D167F525E7DB8BB3E",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/hp_color129.hpp",
+        "Bytes":  3421,
+        "SHA256":  "AA74B4AB3825B66788337E6A2D0A7592DED3CE4AD415C9AF988AF7AE33D013DA",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/hp_dimensions129.hpp",
+        "Bytes":  1765,
+        "SHA256":  "AD29D4BC2AA1CE9802AE598A45170A1F17F4CC1A04BDBBB9842C676B7898BE8E",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/inventory_actions129.hpp",
+        "Bytes":  8500,
+        "SHA256":  "C164CAC9980319ACB6F85EE9344289BA48BAD4E4D51D83375697F11B810A72E8",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/inventory_info129.hpp",
+        "Bytes":  2040,
+        "SHA256":  "D521EA60826D23CE85222A885611F6F017FF651DD8217711019C87AE4D62C047",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/invulnerable_bar129.hpp",
+        "Bytes":  1508,
+        "SHA256":  "106D1ACD6A4D5A04CB03AEE344C1359FD16A422FE66FA78CAEF1B1652FC279A1",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/kick_player129.hpp",
+        "Bytes":  3606,
+        "SHA256":  "AA33AE0775FC6A08B1E48ABE6F147A31D88D06479EEE2B82D2D23E865FADB6C8",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/kill_unit129.hpp",
+        "Bytes":  3020,
+        "SHA256":  "51BEF6B48895E64F26A9B6D14A848B4978CBA32E2ADB6DBBCA1909907066452E",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/life_mana129.hpp",
+        "Bytes":  2769,
+        "SHA256":  "320D74C6F195BB019F4551D35586726EE6EF6748B45B120037E9A9FBE53CD8D9",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/lobby_color.hpp",
+        "Bytes":  2671,
+        "SHA256":  "E711048EC86E7C1E24613315D9219210299C9BA1D5FBBBB93C61BB4DB617566E",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/lobby_color_measure.hpp",
+        "Bytes":  3017,
+        "SHA256":  "5912E2EE9D069580E18CF52822F51C5F6E3A716409889A0BA6A1E4DC68218A95",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/local_files129.hpp",
+        "Bytes":  859,
+        "SHA256":  "B9D776CCDE8673272B67A2D9BEA7CF8EC156AD8613202ACA72C28A7FDCDE20AE",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/mana_bar129.hpp",
+        "Bytes":  4165,
+        "SHA256":  "6E09484341E6830C0F8CA88561C82B961DB60820C34F25F9041BB45061939F52",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/match_timer.hpp",
+        "Bytes":  7118,
+        "SHA256":  "EEBDBE54415A10C72573925A7D08AA265F36540FB72DCC4EC89398BF15850DA7",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/mouse_position129.hpp",
+        "Bytes":  1473,
+        "SHA256":  "458A0A1A3A7557C62E8D0B9EE31BE24FF0D5E22FEDE1D2E6B021A08C23D5C59D",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/mouse_tooltip129.hpp",
+        "Bytes":  2714,
+        "SHA256":  "90B547AC591F1F465838082DA7B132647F735B2A98DD68AE25B75FD44FEF3594",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/move_speed129.hpp",
+        "Bytes":  3089,
+        "SHA256":  "1D0836DEFF85CA73330C5A360CCAF310CDF50D5FE4026406E60D9525396C67AC",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/mth129.hpp",
+        "Bytes":  21396,
+        "SHA256":  "4EC8C0A189D2FEFCDBCEC6387A635EA61C2489A5B8DCF83A4CCFABFC4AB4EFAF",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/mute129.hpp",
+        "Bytes":  498,
+        "SHA256":  "4EACA88CEF6AEC27F30C8CA31011A6EE00AA785074CCD10EC459E73155B4BE13",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/native_ui129.hpp",
+        "Bytes":  4735,
+        "SHA256":  "CC4DCF874CA82402D9597997BB3C3A1E175BF10D67701C12C3E5FCC1118C56EF",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/network_hooks129.hpp",
+        "Bytes":  4769,
+        "SHA256":  "8F2EE2431BEB988CE0512EE60FEADBD23788C3E4E17074F8C94D04055ACC1120",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/notification129.hpp",
+        "Bytes":  905,
+        "SHA256":  "9763CCFAD52B9F46747F4C90A94E03DC67FBE2A600F9C2C7FE0BFE925DF1925A",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/no_cooldown129.hpp",
+        "Bytes":  2257,
+        "SHA256":  "A08F7DA35E95F971815775DC0256B1563AC35CF74FD48E953997AF0D5922DBD0",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/pan_camera129.hpp",
+        "Bytes":  938,
+        "SHA256":  "EE45353E5C9A7FEFC4DCEB6F52996875D0B78722996CA57090F4E65FB3AF580D",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/parity129.hpp",
+        "Bytes":  7944,
+        "SHA256":  "EBAC34C838608CAC37559AD9B69EDEF5BEC569243A1E8A6C1A9800221B9F825B",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/parity_commands129.inl",
+        "Bytes":  20374,
+        "SHA256":  "20AA590FC0961B88E21CC8F7CCDF9E69470B4944D31244430FA8F443D9E6457D",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/parity_hooks129.inl",
+        "Bytes":  14612,
+        "SHA256":  "6DB0F62E0077D8B22B69203486FB17BCD94EB2C1D8D293D2AD2437AEFB2BFD5F",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/parity_patches129.hpp",
+        "Bytes":  1633,
+        "SHA256":  "283B8693C12982892C1A5C0E8988C8C6E79EBC28B18A562EAB1C1103991359AF",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/parity_script129.hpp",
+        "Bytes":  2357,
+        "SHA256":  "8BF8A8DFE2EA26B8836034EFEF25411BC1078D9A307DA93E791B3082D8B3BB72",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/player_network129.hpp",
+        "Bytes":  6521,
+        "SHA256":  "EAF463982B7A947BA5C8AB121C63C3F7EF98129AC47D4F5D4D7B75B6879A13C9",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/presentation129.hpp",
+        "Bytes":  593,
+        "SHA256":  "40891C96F1A624EA0D0FA8CF2376D1BA1DF03A5517CF025DD68EF344BBB10197",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/quickcast129.hpp",
+        "Bytes":  2592,
+        "SHA256":  "9FDE4A49459DAFC29A6D15BE0EDB4BAB9A86D46FC429312D4DC2C830D4E3E0B8",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/quick_drop129.hpp",
+        "Bytes":  1320,
+        "SHA256":  "E9332EC9B6F80AC0A310F2C9F8E20D5FD209A0309F005F96AC9FDBF9D11D1DD4",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/random_seed129.hpp",
+        "Bytes":  1909,
+        "SHA256":  "098D969C7270C76002DC5325508F20F1ABC8B93989DC402E9684A0035C87499C",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/regen129.hpp",
+        "Bytes":  2052,
+        "SHA256":  "DF8B870E69CEE47AEC737253BC3B027BB82AD25CD2F18B747BEB59D4650862A5",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/remove_ability129.hpp",
+        "Bytes":  4743,
+        "SHA256":  "3E1B6E0829DF14DAE8B0E6B7C39EB96C2A71EAF5CDA7CD9A49002532B88FCEC8",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/remove_unit129.hpp",
+        "Bytes":  3389,
+        "SHA256":  "020842FB31925004B599CAF9E9BC40102B8FC49FB2A249783C58A5C379B317A3",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/repeat_chat129.hpp",
+        "Bytes":  921,
+        "SHA256":  "6B143BE032DA0F712F32AF71091008F014A7B7BE9EB6AF65BEA8137E2EC38F7B",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/reselect129.hpp",
+        "Bytes":  3876,
+        "SHA256":  "75A2837D7825C44A4CFD7B583895A2BC1CB0FA184A1009D2E9561D5C655231AD",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/resource_commands129.hpp",
+        "Bytes":  5047,
+        "SHA256":  "9E404FEEF286FE0A6E4D4C3B560110F022048F6E320D59926B4E983F12FFB49C",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/save_game129.hpp",
+        "Bytes":  1963,
+        "SHA256":  "BC47A3DC3CE8275CD5A5B033E48B8B4C2C571A62F07988C9E91252CFEBEF2392",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/scroll129.hpp",
+        "Bytes":  1142,
+        "SHA256":  "73B1D9C1AC0F57069EA91F1B6F3D24A807D26B38FC2C53A66F3A67D26878DDBE",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/self_cast129.hpp",
+        "Bytes":  3655,
+        "SHA256":  "5B3C338F5E209D64B36EC7E958521AED2A14717272888165B16FF2C1E4A68DB9",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/services129.hpp",
+        "Bytes":  14378,
+        "SHA256":  "2F3F95883942111CB53BF9D3E3F95DBE067C215755081465E9D0A3A1A861C029",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/share_control129.hpp",
+        "Bytes":  2385,
+        "SHA256":  "76CB6AF5D8A8E0A59EF5E088EA74B376C5C17BFA6DB39C3B81E9DD4B16176BD2",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/show_level129.hpp",
+        "Bytes":  3180,
+        "SHA256":  "6E76BDF557C0AECCB4DBE201B221EE33F50EBC8CA56F9DB617CB38F6CCAAD561",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/skills129.hpp",
+        "Bytes":  4646,
+        "SHA256":  "E5C3929152CFFD98AE1282489D69C62EF6DA1BDFCC6E96CB5588AAB4ECBFC7D6",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/state_values129.hpp",
+        "Bytes":  4394,
+        "SHA256":  "32E9C1A9CF041BBF9B95A89341D0E081B754DDD72104E40E09519BFE3CFCB60A",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/stats129.hpp",
+        "Bytes":  2948,
+        "SHA256":  "C4F457741C15A832828DF5EB3A6E1795751D1AC2DD756FD0033F0CF8FBAFBF31",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/teleport129.hpp",
+        "Bytes":  4241,
+        "SHA256":  "36831FFD84470882C5E2CBCB2A294E5FE91158A7CF07187E06BBDEF32E8566B4",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/time_boss129.hpp",
+        "Bytes":  2100,
+        "SHA256":  "F8DB16AE529BBCB61E91BEDC8C4839E49C03F4375AFA54CE20A8BE26C52E7C43",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/unit_damage129.hpp",
+        "Bytes":  2902,
+        "SHA256":  "20325DFBAFCBA0B9F7A24F3BFB3D577B6717816BBF0B2BFF115BF806329AB50C",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/unit_info129.hpp",
+        "Bytes":  2407,
+        "SHA256":  "BA064C14E3B7CC84E9A91D3AD53090A463C1EBFA5AF578B70596DDDEEE9C1410",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/unit_invulnerability129.hpp",
+        "Bytes":  4191,
+        "SHA256":  "6D5A839393A0CFF7E6D51D10B4F5F85F9E0ECEAC2711702C2807AA862B29C26B",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/unit_scale129.hpp",
+        "Bytes":  2791,
+        "SHA256":  "607DA89F0A68655E602DB38DBBBE023B1C80DBBC3689760D8EC39CB97D4AC10C",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/unlock_fps129.hpp",
+        "Bytes":  1078,
+        "SHA256":  "753167BEBCA319120C5EB0A3278F7545122775BD068620E8122948FD4FDB2993",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/update_progress_overlay.hpp",
+        "Bytes":  3998,
+        "SHA256":  "006564FF429A0E2EDB392F40AAAA8F111354AAF693CC350DFB4A037F90F8787D",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    },
+    {
+        "File":  "native/vertex_color129.hpp",
+        "Bytes":  867,
+        "SHA256":  "B55222AD2DA4CC2EF29CF24DFC9293794E06372B1A33DFC06DA66AB3EAB2E1DF",
+        "Backup":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\dist\\unused-source-backup-20261024-162836.zip"
+    }
+]

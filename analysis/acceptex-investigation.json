@@ -1,0 +1,27 @@
+{
+  "observed_room": {
+    "build": 12164,
+    "arch": "x86",
+    "time": "2026-10-26 14:04:14",
+    "slot_join_packet_bytes": 111,
+    "slot_info_bytes": 88,
+    "slot_count": 9,
+    "nine_byte_layout_valid": true,
+    "recorded_peer": false,
+    "incoming_joins": 0
+  },
+  "findings": [
+    "Actual slot schema matches existing independent parser; rejection is missing accepted peer, not evidence of a changed slot stride.",
+    "AcceptEx initial receive was absent from the observer. Real loopback AcceptEx/IOCP now verifies capture on the accepted socket, actual completion bytes and no duplicate replay. This does not yet prove Warcraft uses this path.",
+    "HKCU Warcraft III userlocal is absent on this machine; local identity can first become available in the match. First identity now preserves captured host handshake; subsequent changes reset it.",
+    "Two local Warcraft processes share the same log. New moderation lines include PID."
+  ],
+  "tests": [
+    "Real AcceptEx initial receive plus IOCP completion",
+    "Late first identity preserves peer and resolves host identity",
+    "Changed identity clears old room",
+    "Existing ban/kick parser, self-protection, actual loopback shutdown and persistence, stale completions and chat handling checks"
+  ],
+  "runtime_actions_enabled": false,
+  "next": "Close both runtime-test x86 12164 clients, relaunch through Run-WHT-1.31.cmd, create fresh LAN room, join with second client, issue #kick 2 in lobby and match. Inspect per-PID AcceptEx, join and host proof counters."
+}

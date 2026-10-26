@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "auto_pick131.hpp"
 #include "goku_pick131.hpp"
 #include "quick_drop_network131.hpp"
@@ -84,7 +84,7 @@ template<class Selected,class Alive> bool SendPick131(uintptr_t base,unsigned bu
  }__except(1){return false;}
 }
 struct AutoPickIcon131:DropIcon131 {
- AutoPickIcon131(){area={.558f,.096f,.012f,.016f};upAsset="BTNAutoPick.blp";downAsset="BTNAutoPickDow.blp";}
+ AutoPickIcon131(){greenWhenLatched=true;area={.558f,.096f,.012f,.016f};upAsset="BTNAutoPick.blp";downAsset="BTNAutoPickDow.blp";}
  void Reset(){*this=AutoPickIcon131{};}
 };
 }

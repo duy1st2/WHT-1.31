@@ -1,0 +1,38 @@
+{
+  "formatter_equivalent": true,
+  "references": [
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\notification_text.hpp",
+      "sha256": "a7074341d1a1a694f66397a29200002d16a8593376185ca0734727fa08ba0b43"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\notification_text.hpp",
+      "sha256": "a7074341d1a1a694f66397a29200002d16a8593376185ca0734727fa08ba0b43"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\notification_text.hpp",
+      "sha256": "a7074341d1a1a694f66397a29200002d16a8593376185ca0734727fa08ba0b43"
+    }
+  ],
+  "policy": "WHT and WHT-1.29 common formatter; latest 1.29 native command feedback; retain 1.31 verified native display API.",
+  "command_sources": [
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp",
+      "sha256": "855d05af0142d9ba571e2478a60c28e775e3ead6fafdefb428148ccce8874388"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp",
+      "sha256": "e6e195e06d5e323f0d6d7299713c1b69f120f9bfeb67f48be3900211441bffd5"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\version129.cpp",
+      "sha256": "d3ff6b7f644f6cb73707253c3e23a99fe6e075f2dcd9fe8bb3d1e4cbd5a42094"
+    }
+  ],
+  "changes": [
+    "Repeat queue/stop/invalid-input feedback matches native 1.29 and common WHT success messages.",
+    "Potion invalid-input feedback matches both references.",
+    "Courier assignment/base/return acknowledgement matches native 1.29.",
+    "Remove duplicate generic acknowledgements for Repeat and MTH crafting."
+  ]
+}

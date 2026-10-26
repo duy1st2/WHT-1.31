@@ -1,7 +1,5 @@
 # Resource UI assets
 
-GreyBackground.tga and FRIZQT__.ttf are byte-identical assets extracted from the user's ETS.mix in analysis/assets. No raster editing or font conversion was performed. They are packaged under unique WHTUI_* names in ../tl_overlay.mpq, so mounting the archive does not replace stock Warcraft assets.
+GreyBackground.tga and FRIZQT__.ttf are unchanged source assets extracted from the user's ETS.mix. The archive stores them as WHTUI_GreyBackground.tga and FRIZQT__.ttf. All runtime font references use the canonical FRIZQT__.ttf; fonts_VN.ttf remains for Vietnamese text. The duplicate WHTUI_FRIZQT__.ttf and redundant AARDV.ttf fallback were removed.
 
-Rebuild the archive with tests/build-resource-assets.ps1 and an existing MPQEditor installation. The script requires a new output (preserve an existing archive first) and verifies both embedded files after extraction. The default CMake build uses the included archive, not MPQEditor. If regenerating it changes archive bytes, update the expected archive hash in runtime.cpp after verifying the extracted content.
-
-Backdrop borders and dropdown arrow are stock game paths, not copied from user map archives. Runtime mounts this archive as data through Storm SFileOpenArchive; it never loads ETS.mix as executable code.
+Rebuild with build-tl-overlay.ps1. native/assets/overlay-files.txt lists the archive payload. The script backs up the existing MPQ, rebuilds it, extracts every retained entry and verifies SHA256 and the exact list before replacing the archive. Default CMake builds use the included archive.

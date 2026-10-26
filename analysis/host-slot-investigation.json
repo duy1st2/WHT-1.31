@@ -1,0 +1,37 @@
+{
+  "evidence": {
+    "source": "read-only inspection of actual running PID 10056, 2026-10-26",
+    "packet_type": 4,
+    "packet_length": 111,
+    "slot_info_length": 88,
+    "rows": 9,
+    "recipient_id": 2,
+    "occupied_human_ids": [
+      1
+    ],
+    "computer_row": 9,
+    "recipient_present_in_initial_rows": false,
+    "log_recorded_peer": true
+  },
+  "root_cause": "Parser rejected assigned recipient ID 2 because initial slot list did not yet contain its occupied row. It then invalidated the captured connection before later SLOTINFO update.",
+  "fix": "Accept a nonzero unique recipient assignment on an already observed incoming-join socket, retain the binding, and require an occupied human row with matching ID/name/socket before Act or automatic ban enforcement.",
+  "host_identity": "When no external local name exists, infer only the unique human row without an accepted peer and require PLAYERINFO sent by this process for that ID; ambiguous rows refuse inference. A later differing native identity clears all proof.",
+  "enabled_profile": {
+    "build": 12164,
+    "architecture": "x86",
+    "requires_authorized_local_mode": true,
+    "requires_complete_runtime_host_proof": true
+  },
+  "disabled_profiles": [
+    "x86 12173",
+    "all x64"
+  ],
+  "tests": [
+    "Assigned recipient absent from initial rows is accepted",
+    "No disconnect before occupied row update",
+    "One exact accepted socket selected after slot update",
+    "Ambiguous host identity is refused",
+    "Self protection, duplicate IDs, stale socket epochs, real TCP/IOCP, AcceptEx/ReadFile, synchronous completion and ban persistence regression suites"
+  ],
+  "actual_multiplayer_disconnect_confirmed": false
+}

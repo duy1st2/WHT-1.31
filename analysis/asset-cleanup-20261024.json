@@ -1,0 +1,43 @@
+{
+  "removed_loose_assets": [
+    {
+      "name": "WHTMacroRecord.tga",
+      "bytes": 262188,
+      "sha256": "d197861c05f9a2752803cd32b9df84ffc5808b238896bb060eef1d841e90e738",
+      "reason": "No source/build/install references to this native/assets copy; active game JPEG originals are retained."
+    },
+    {
+      "name": "WHT_IJL15_Original.dll",
+      "bytes": 372736,
+      "sha256": "334aa12f7dee453d1c6cb1b661a3bb3494d3e4cc9c2ff3f9002064c78404e43a",
+      "reason": "No source/build/install references to this native/assets copy; active game JPEG originals are retained."
+    }
+  ],
+  "removed_archive_entries": [
+    "AARDV.ttf",
+    "WHTUI_FRIZQT__.ttf"
+  ],
+  "retained_archive_entries": [
+    "BTNAllSkills.blp",
+    "BTNAllSkillsDow.blp",
+    "BTNAutoPick.blp",
+    "BTNAutoPickDow.blp",
+    "BTNDropItem.blp",
+    "BTNDropItemDow.blp",
+    "BTNSellItem.blp",
+    "BTNSellItemDow.blp",
+    "BTNWHT_Menu.blp",
+    "BTNWHT_Rec.blp",
+    "CommandCardHuman.tga",
+    "fonts_VN.ttf",
+    "FRIZQT__.ttf",
+    "InventoryHuman.tga",
+    "Transparent.tga",
+    "UI\\Widgets\\EscMenu\\Human\\human-options-button-border-up.blp",
+    "UI\\Widgets\\EscMenu\\Human\\human-options-menu-background.blp",
+    "WHTUI_GreyBackground.tga"
+  ],
+  "font_canonical": "FRIZQT__.ttf",
+  "before_archive_bytes": 797210,
+  "after_archive_bytes": 733192
+}

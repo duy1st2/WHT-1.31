@@ -1,0 +1,32 @@
+{
+  "features": [
+    "confirmed incoming peer joined event",
+    "deduplicated leave packet or socket EOF/close event",
+    "successful automatic ban-list disconnect request event",
+    "persistent #hn [0|1] automatic-notification preference"
+  ],
+  "delivery": "bounded queue from network observers; drain/log/native notification on UI tick",
+  "notification_limit": 64,
+  "deduplication": "join requires first assigned peer ID; departure removes peer before later EOF/close",
+  "gates": [
+    "authorized Local mode",
+    "noticesEnabled",
+    "clear pending events on notification disable, authorization loss or identity change"
+  ],
+  "unchanged": [
+    "explicit kick/ban command outcome feedback",
+    "supported build policy",
+    "frame priority",
+    "original WHT and WHT-1.29 sources"
+  ],
+  "tests": [
+    "temporary INI #hn off/toggle persistence",
+    "no notice for unconfirmed join",
+    "one confirmed join and no duplicate slot notice",
+    "one departure across leave packet plus close",
+    "disabled preference suppresses automatic events",
+    "bounded queue and authorization-loss cleanup"
+  ],
+  "actual_in_game_display_tested": false,
+  "lobby_display": "log only when CGameUI is absent"
+}

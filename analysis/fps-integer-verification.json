@@ -1,0 +1,96 @@
+{
+  "tests": {
+    "WHT": "19/19",
+    "129": "9/9",
+    "131_x86": "2/2",
+    "131_x64": "1/1"
+  },
+  "artifacts": [
+    {
+      "file": "WHT\\runtime-test\\Warcraft3-124\\WHT.mix",
+      "sha256": "5B379C99448841B5F408E9271E5CCB6E48370320CF8047E033D42E2D1AC325CE"
+    },
+    {
+      "file": "WHT\\runtime-test\\Warcraft3-124\\ijl15.dll",
+      "sha256": "CEF27A7708220B980D779D1B2F733FA667B5C8C7962F0ACD7C26F12C1513A0EB"
+    },
+    {
+      "file": "WHT\\runtime-test\\Warcraft3-126\\WHT.mix",
+      "sha256": "5B379C99448841B5F408E9271E5CCB6E48370320CF8047E033D42E2D1AC325CE"
+    },
+    {
+      "file": "WHT\\runtime-test\\Warcraft3-126\\ijl15.dll",
+      "sha256": "CEF27A7708220B980D779D1B2F733FA667B5C8C7962F0ACD7C26F12C1513A0EB"
+    },
+    {
+      "file": "WHT-1.29\\runtime-test\\Warcraft3-129\\WHT.mix",
+      "sha256": "6B28EE37747D056576EE87677BF9AE453150A276155B82778058A0C4CB568441"
+    },
+    {
+      "file": "WHT-1.29\\runtime-test\\Warcraft3-129\\mss32.dll",
+      "sha256": "1A4905BC6A219459F8184FC412B9FF21A14FEC8F5B799D3931640911DB302B90"
+    },
+    {
+      "file": "WHT-1.29\\runtime-test\\Warcraft3-129\\WHT.ExternalHud.exe",
+      "sha256": "92E018E154C974606F8CC4AEAB3E2F62B8D3EA67E13787BEEAF440C281B45BBC"
+    },
+    {
+      "file": "E:\\Warcraft III\\Warcraft3-129\\WHT.mix",
+      "sha256": "6B28EE37747D056576EE87677BF9AE453150A276155B82778058A0C4CB568441"
+    },
+    {
+      "file": "E:\\Warcraft III\\Warcraft3-129\\mss32.dll",
+      "sha256": "1A4905BC6A219459F8184FC412B9FF21A14FEC8F5B799D3931640911DB302B90"
+    },
+    {
+      "file": "E:\\Warcraft III\\Warcraft3-129\\WHT.ExternalHud.exe",
+      "sha256": "92E018E154C974606F8CC4AEAB3E2F62B8D3EA67E13787BEEAF440C281B45BBC"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.mix",
+      "sha256": "E134838E665745D35D358B779651911821EB60DA7CAACCA35D1C4D4A5A32684A"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT131Launcher.exe",
+      "sha256": "FD9057FABE8791225E0A718442F8A549C913CBD518E98F6694072AEB4677E68B"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.mix",
+      "sha256": "E134838E665745D35D358B779651911821EB60DA7CAACCA35D1C4D4A5A32684A"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT131Launcher.exe",
+      "sha256": "FD9057FABE8791225E0A718442F8A549C913CBD518E98F6694072AEB4677E68B"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.mix",
+      "sha256": "E15B370F859CB3670E17C64D154FBFD7CFF8283B6CCC5D979147DA614291ABC3"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT131Launcher.exe",
+      "sha256": "32DA9E8244B89000C71694E094A11F2712E7DF8B7DC2B55C7D8B6312DBCD77A3"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.mix",
+      "sha256": "E15B370F859CB3670E17C64D154FBFD7CFF8283B6CCC5D979147DA614291ABC3"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT131Launcher.exe",
+      "sha256": "32DA9E8244B89000C71694E094A11F2712E7DF8B7DC2B55C7D8B6312DBCD77A3"
+    }
+  ],
+  "preserved_configuration": true,
+  "post_restart_visual_verified": false,
+  "ping_rectangle": {
+    "left": 0.435,
+    "right": 0.555,
+    "bottom": 0.548,
+    "height": 0.016,
+    "align": "left",
+    "placement": "right of time-of-day indicator"
+  },
+  "fps_text_interval_ms": 1000,
+  "native_rendering_and_measurement_unchanged": true,
+  "fps_format_verified_in_all_supplied_binaries": " FPS: %-4.1f",
+  "fps_text_format": "Integer part only; native FPS decimal suffix removed. Refresh interval remains 1000 ms."
+}

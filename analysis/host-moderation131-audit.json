@@ -1,0 +1,50 @@
+{
+  "references": [
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\player_network129.hpp",
+      "sha256": "eaf463982b7a947ba5c8ab121c63c3f7ef98129ac47d4f5d4d7b75b6879a13c9"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\kick_player129.hpp",
+      "sha256": "aa33ae0775fc6a08b1e48abe6f147a31d88d06479eee2b82d2d23e865fadb6c8"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\network_hooks129.hpp",
+      "sha256": "8f2ee2431beb988ce0512ee60feadbd23788c3e4e17074f8c94d04055acc1120"
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\parity_commands129.inl",
+      "sha256": "8a6781b570ff4cbd74d5854ed48b0b79746e5eb2757fb1efe89d55ce044b110d"
+    }
+  ],
+  "implementation": "Independent 1.31 host moderation; no 1.29 gameplay header or game RVA is enabled. Standard Winsock ABI observers are installed only after existing executable/profile validation and Local authorization. Existing independently verified 1.31 Resource profiles read the local player name when a world exists; registry userlocal is a lobby fallback.",
+  "runtime_protocol_profile": {
+    "framing": "F7 + type + uint16 size; bounded fragmented/coalesced TCP streams",
+    "host_evidence": [
+      "received REQJOIN with bounded valid UTF8 name",
+      "sent SLOTINFOJOIN on that same socket, exact nine-byte slot schema and matching recipient ID",
+      "sent PLAYERINFO matching local identity",
+      "current human slot list containing that local player ID"
+    ],
+    "revocations": [
+      "outgoing client join/received slot-join",
+      "authorization/identity change",
+      "malformed known-peer traffic or unobservable callback I/O",
+      "EOF/socket close/reuse; room and socket epochs reject stale completions"
+    ]
+  },
+  "commands": [
+    "#kick <1..24 or exact name>",
+    "#ban <1..24 or quoted exact name> [reason]",
+    "#openbl"
+  ],
+  "persistence": "TS-Banned.ini / [Banned List], name -> reason, same schema as 1.29",
+  "transport": "send, recv, closesocket, WSASend, WSARecv, GetQueuedCompletionStatus/Ex, WSAGetOverlappedResult; actual completed byte counts, no MSG_PEEK duplication, nested-call suppression, original return/error preservation",
+  "limits": [
+    "No fabricated host/bot privileges. Unrecognized/encrypted traffic never grants kick capability.",
+    "Callback-routine overlapped I/O revokes affected proof instead of guessing completion.",
+    "Only socket shutdown is requested; actual player departure is game-controlled.",
+    "No live two-client Warcraft room or Battle.net/host-bot session has been tested.",
+    "No native lobby message pane is ported: command outcomes always go to WHT.log and additionally to native game notification when CGameUI is available."
+  ]
+}

@@ -1,9 +1,11 @@
 #pragma once
 #include "mth_queue131.hpp"
+#include "courier_base131.hpp"
 #include <fstream>
 inline std::vector<unsigned> courierAbiEvents131;inline bool courierAbiThrow131=false;
 inline void __cdecl CourierSelectAbi131(const wht::NativeUnitList131* list,unsigned mode){courierAbiEvents131.push_back(mode*100+list->count);}
 inline void __cdecl CourierPointAbi131(unsigned order,uintptr_t aux,const float* x,const float* y,unsigned flags){check(order==0xd0012&&!aux&&*x==10&&*y==20&&!flags,"point sender ABI preserves move/auxiliary/coordinates/flags");courierAbiEvents131.push_back(999);if(courierAbiThrow131)RaiseException(0xe0000131,0,0,nullptr);}
+inline bool stopThrow131=false;
 inline unsigned queuePoints131=0;inline bool queueThrow131=false;
 #ifdef _WIN64
 #define QUEUE_ABI131 __fastcall
@@ -12,7 +14,7 @@ inline unsigned queuePoints131=0;inline bool queueThrow131=false;
 #define QUEUE_ABI131 __fastcall
 #define QUEUE_PAD131 uintptr_t,
 #endif
-inline void QUEUE_ABI131 QueueStopMock131(uintptr_t ui,QUEUE_PAD131 unsigned order,uintptr_t ability,unsigned flags,unsigned mode){check(ui==123&&order==0xd0004&&!ability&&flags==1&&mode==4,"native queue stop ABI matches reference");courierAbiEvents131.push_back(700);}
+inline void QUEUE_ABI131 QueueStopMock131(uintptr_t ui,QUEUE_PAD131 unsigned order,uintptr_t ability,unsigned flags,unsigned mode){check(ui==123&&order==0xd0004&&!ability&&flags==1&&mode==4,"native queue stop ABI matches reference");courierAbiEvents131.push_back(700);if(stopThrow131)RaiseException(0xe0000131,0,0,nullptr);}
 inline void QUEUE_ABI131 QueuePointMock131(uintptr_t ui,QUEUE_PAD131 unsigned order,uintptr_t ability,float x,float y,uintptr_t target,unsigned flags,unsigned queue){check(ui==123&&order==0xd0012&&!ability&&!target&&flags==0xffffffffu&&queue==1,"native queue move flags/ABI match reference");check(x==(queuePoints131%2?30.f:10.f)&&y==(queuePoints131%2?40.f:20.f),"all route endpoint pairs are enqueued in order");++queuePoints131;courierAbiEvents131.push_back(800);if(queueThrow131)RaiseException(0xe0000131,0,0,nullptr);}
 #undef QUEUE_PAD131
 #undef QUEUE_ABI131
@@ -46,6 +48,19 @@ inline void CheckCourierRoute131(){
  courierAbiEvents131.clear();queuePoints131=0;check(wht::SubmitCourierRoute131(roster,200,CourierSelectAbi131,queueApi,123,{10,20,30,40},20)&&queuePoints131==40,"twenty laps queue exactly forty moves in one submission");check(courierAbiEvents131.front()==202&&courierAbiEvents131[2]==700&&courierAbiEvents131[courierAbiEvents131.size()-2]==201&&courierAbiEvents131.back()==102,"queue stop before movement and restore complete selection after final move");
  courierAbiEvents131.clear();queuePoints131=0;queueThrow131=true;check(!wht::SubmitCourierRoute131(roster,200,CourierSelectAbi131,queueApi,123,{10,20,30,40},1)&&courierAbiEvents131.back()==102,"queue exception restores selection without replay");queueThrow131=false;
  courierAbiEvents131.clear();check(!wht::SubmitCourierRoute131(roster,200,CourierSelectAbi131,queueApi,123,{10,20,30,40},21)&&courierAbiEvents131.empty(),"invalid lap count sends no actions");
+ courierAbiEvents131.clear();queuePoints131=0;check(wht::StopCourierNative131(roster,200,CourierSelectAbi131,queueApi,123)&&courierAbiEvents131==std::vector<unsigned>({202,101,700,201,102})&&!queuePoints131,"courier Stop sends once with full selection restoration and no moves");
+ courierAbiEvents131.clear();stopThrow131=true;check(!wht::StopCourierNative131(roster,200,CourierSelectAbi131,queueApi,123)&&courierAbiEvents131==std::vector<unsigned>({202,101,700,201,102}),"Stop exception restores selection without retry");stopThrow131=false;
+ courierAbiEvents131.clear();check(!wht::StopCourierNative131(roster,0,CourierSelectAbi131,queueApi,123)&&courierAbiEvents131.empty(),"missing courier never sends Stop");
+ auto already=roster;already.count=1;already.units[0]=200;check(wht::StopCourierNative131(already,200,CourierSelectAbi131,queueApi,123)&&courierAbiEvents131==std::vector<unsigned>({700}),"selected courier avoids redundant selection changes");
+ wht::CourierBase131 savedBase;auto baseSource=source;baseSource.x=123.5f;baseSource.y=-456.f;
+ check(!savedBase.Queue(source),"courier return requires saved base");check(savedBase.Save(baseSource)&&savedBase.Queue(source),"same-match base and courier captured");unsigned returns=0;
+ savedBase.Cancel();check(!savedBase.pending&&savedBase.session==source.session&&savedBase.x==123.5f,"Stop cancellation preserves saved base");check(savedBase.Queue(source),"courier return can be requested again after cancellation");
+ auto readReturn=[&](uintptr_t unit,wht::SelfCastSource131& out){check(unit==source.unit,"return reads assigned courier independent of selected hero");out=source;return true;};
+ auto sendReturn=[&](const wht::SelfCastSource131& current,float x,float y){check(wht::SameSelfCastSource131(current,source)&&x==123.5f&&y==-456.f,"return preserves saved coordinates and assigned identity");++returns;return false;};
+ check(!savedBase.Tick(true,false,readReturn,sendReturn)&&returns==0&&savedBase.pending,"typing/menu/context gate delays return");check(savedBase.Tick(true,true,readReturn,sendReturn)&&returns==1&&!savedBase.pending,"return sends once even on native refusal");savedBase.Tick(true,true,readReturn,sendReturn);check(returns==1,"return refusal never retries");
+ auto changed=source;changed.session++;check(!savedBase.Queue(changed),"return refuses a different match");changed=source;changed.ui++;check(!savedBase.Queue(changed),"return refuses replaced UI");changed=baseSource;changed.x=NAN;check(!savedBase.Save(changed)&&savedBase.x==123.5f,"invalid base leaves previous position intact");
+ savedBase.Queue(source);savedBase.Tick(true,true,[&](uintptr_t,wht::SelfCastSource131& out){out=source;out.id.low++;return true;},sendReturn);check(returns==1&&!savedBase.pending,"reused courier identity cancels pending return");
+ savedBase.Queue(source);savedBase.Tick(false,true,readReturn,sendReturn);check(!savedBase.pending&&returns==1&&savedBase.session==source.session,"disabled master cancels request while retaining saved base");savedBase.Reset();check(!savedBase.session&&!savedBase.ui&&!savedBase.pending,"match teardown clears saved base and pending return");
  alignas(uintptr_t) unsigned char frame[0x200]{};auto bounds=reinterpret_cast<float*>(frame+(sizeof(void*)==8?0x88:0x44));bounds[0]=.142f;bounds[1]=.20f;bounds[2]=.166f;bounds[3]=.25f;float left=0,bottom=0,right=0,top=0;
  check(wht::MthResolvedRect131(reinterpret_cast<uintptr_t>(frame),left,bottom,right,top)&&left==.20f&&right==.25f,"toolbar reads actual native frame bounds for unscaled font placement");bounds[3]=bounds[1];check(!wht::MthResolvedRect131(reinterpret_cast<uintptr_t>(frame),left,bottom,right,top),"unresolved or empty frame bounds refused");
 }

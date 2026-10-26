@@ -29,6 +29,7 @@ struct Config {
     unsigned fpsLimit=0; // 0 leaves the engine setting alone; otherwise 60..1000.
     unsigned sceneLight=0; // 0 restores engine ownership; 1..255 ambient grayscale.
     bool showFps=false;
+    bool showPing=false;
     bool showResource=false;
     bool showHotkeyInPanel=false,showCooldown=true;
     bool showTimer=true,showRegenHP=true,showRegenMana=true;
@@ -39,7 +40,7 @@ struct Config {
     bool revealInvisible=true;
     bool showNotiKickBan=true;
     bool notiLogSaveGame=false;
-    int modeCast=0; // 0 = Quick Cast, 1 = Smart Cast, 2 = Quick Cast Old
+    int modeCast=0; // 0 = Normal, 1 = Quick Cast (reference 1.29)
     bool lifeManaCommas=false,lifeManaNoHide=false;
     bool statsCommas=false;
     bool statsTooltip=true;
@@ -95,6 +96,8 @@ struct Config {
     unsigned autoClickInterval=10;
     unsigned setIdTargetKey=0,sellFastKey=0;
     bool macroEnabled=true,macroShowButton=true;std::array<unsigned,4> macroKeys{};
+    bool autoManaEnabled=false;float autoManaPercent=35;std::vector<uint32_t> autoManaItems;
+    bool autoHealEnabled=false;float autoHealPercent=35;std::vector<uint32_t> autoHealItems;
     bool autoSkillsEnabled=false;
     float autoSkillsDelay=.5f,autoSkillsRange=1024;
     unsigned autoSkillsKey=0;

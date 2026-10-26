@@ -1,0 +1,13 @@
+{
+  "aliases": {
+    "#showcooldown": "#cooldown",
+    "#hotkeypanel": "#showhotkey",
+    "#showresource": "#res",
+    "#sell": "#sellall",
+    "#quicksell": "#sellall"
+  },
+  "reference": "WHT-1.29/native/parity129.hpp:ParityAlias129",
+  "both_dispatchers_and_feedback_use_canonical_name": true,
+  "new_native_game_addresses": false,
+  "actual_in_match_tested": false
+}

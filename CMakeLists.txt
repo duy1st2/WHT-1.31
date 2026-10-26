@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+﻿cmake_minimum_required(VERSION 3.20)
 project(WHT131 VERSION 1.1.3 LANGUAGES C CXX)
 if(NOT WIN32)
  message(FATAL_ERROR "Windows is required")
@@ -17,7 +17,7 @@ target_compile_definitions(wht_common PUBLIC UNICODE _UNICODE WIN32_LEAN_AND_MEA
 target_link_libraries(wht_common PUBLIC bcrypt winhttp advapi32)
 add_subdirectory(third_party/minhook EXCLUDE_FROM_ALL)
 add_library(WHT131 SHARED ${WHT_RUNTIME} native/resources.rc)
-target_link_libraries(WHT131 PRIVATE wht_common minhook user32 gdi32 winmm comctl32 shell32)
+target_link_libraries(WHT131 PRIVATE wht_common minhook ws2_32 user32 gdi32 winmm comctl32 shell32)
 set_target_properties(WHT131 PROPERTIES OUTPUT_NAME WHT)
 add_custom_command(TARGET WHT131 POST_BUILD
  COMMAND powershell -NoProfile -ExecutionPolicy Bypass -File "${CMAKE_CURRENT_SOURCE_DIR}/package-mix.ps1"
@@ -41,7 +41,7 @@ if(BUILD_TESTING)
  else()
  add_executable(WHT131Tests tests/runtime131-tests.cpp)
  endif()
- target_link_libraries(WHT131Tests PRIVATE wht_common user32 gdi32 comctl32 shell32)
+ target_link_libraries(WHT131Tests PRIVATE wht_common minhook ws2_32 user32 gdi32 comctl32 shell32)
  target_compile_options(WHT131Tests PRIVATE /W4 /utf-8 /permissive-)
  add_test(NAME runtime131-contracts COMMAND WHT131Tests)
  if(CMAKE_SIZEOF_VOID_P EQUAL 4)
