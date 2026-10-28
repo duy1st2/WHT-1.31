@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "tool_version.hpp"
 #ifdef _WIN64
 #include "overlay_frames.hpp"
@@ -47,8 +47,8 @@ class ToolMenuOverlay{public:
  std::string ControlHint(const ToolMenuControl& d)const{return ControlHelp(d)+(controlAvailable&&!controlAvailable(d)?(toolEnglish.load()?"\nNot available on this game version yet.":Utf8(L"\nCh\u01b0a h\u1ed7 tr\u1ee3 tr\u00ean phi\u00ean b\u1ea3n game n\u00e0y.")):"");}
  std::string HelpAt(POINT p,int w,int h,const Config& c)const{
   int hit=Hit(p,w,h);
-  if(hit==-5)return toolEnglish.load()?"Macro recorder\nShow or hide Record, Stop, Run and Script buttons.":Utf8(L"Ghi macro\nM\u1edf ho\u1eb7c \u0111\u00f3ng c\u00e1c n\u00fat Ghi, D\u1eebng, Ch\u1ea1y v\u00e0 Script.");
-  if(hit<=-6&&hit>=-9){static const wchar_t* keys[]={L"play",L"stop",L"record",L"edit"};ToolMenuControl d{};d.kind=MenuControlKind::Clear;d.section=L"Macro";d.key=keys[-hit-6];d.label="Macro";return ControlHint(d);}
+  if(hit==-5)return toolEnglish.load()?"Macro recorder\nShow or hide Run/Stop, Record and Script buttons.":Utf8(L"Ghi macro\nM\u1edf ho\u1eb7c \u0111\u00f3ng c\u00e1c n\u00fat Ghi, D\u1eebng, Ch\u1ea1y v\u00e0 Script.");
+  if(hit<=-6&&hit>=-8){const wchar_t* keys[]={macroPlaying?L"stop":L"play",L"record",L"edit"};ToolMenuControl d{};d.kind=MenuControlKind::Clear;d.section=L"Macro";d.key=keys[-hit-6];d.label="Macro";return ControlHint(d);}
   if(hit==-1)return toolEnglish.load()?"Tools menu\nOpen or close the in-game tools menu.":Utf8(L"Menu công cụ\nMở hoặc đóng menu công cụ trong trận.");
   if(hit==-2)return toolEnglish.load()?"Close menu\nClose the tools menu and return to the match.":Utf8(L"Đóng menu\nĐóng bảng công cụ và quay lại trận.");
   if(hit>=500&&hit<508){static const wchar_t* tabs[]={L"T\u1ed5ng qu\u00e1t\nCh\u1ec9nh hi\u1ec3n th\u1ecb v\u00e0 c\u00e1c thao t\u00e1c h\u1ed7 tr\u1ee3 trong tr\u1eadn.",L"Chat nhanh\nG\u00e1n ph\u00edm v\u00e0 n\u1ed9i dung tin nh\u1eafn g\u1eedi nhanh.",L"Ph\u00edm t\u1eaft\nG\u00e1n ph\u00edm k\u1ef9 n\u0103ng, v\u1eadt ph\u1ea9m v\u00e0 ch\u1ecdn t\u01b0\u1edbng.",L"Ph\u00edm t\u1eaft kh\u00e1c\nG\u00e1n ph\u00edm m\u1edf menu, thu g\u1ecdn b\u1ea3ng v\u00e0 t\u1ea1m t\u1eaft thi\u1ebft l\u1eadp.",L"\u0110\u1ed3 h\u1ecda\nCh\u1ec9nh hi\u1ec3n th\u1ecb giao di\u1ec7n, m\u00e0u s\u1eafc v\u00e0 \u0111\u1ed3ng b\u1ed9 khung h\u00ecnh.",L"MTH\nCh\u1ecdn ch\u1ebf \u0111\u1ed9 v\u00e0 g\u00e1n thao t\u00e1c h\u1ed7 tr\u1ee3 MTH.",L"T\u1ef1 \u0111\u1ed9ng k\u1ef9 n\u0103ng\nCh\u1ec9nh ph\u00edm ch\u1ea1y/d\u1eebng, \u0111\u1ed9 tr\u1ec5 v\u00e0 ph\u1ea1m vi t\u00ecm m\u1ee5c ti\u00eau."};return toolEnglish.load()?EnglishTabHelp(size_t(hit-500)):hit==507?Utf8(L"Ng\u00f4n ng\u1eef\nCh\u1ecdn ng\u00f4n ng\u1eef cho giao di\u1ec7n c\u00f4ng c\u1ee5."):Utf8(tabs[hit-500]);}
@@ -98,10 +98,15 @@ class ToolMenuOverlay{public:
 
  static constexpr ToolMenuRect buttonRect{.797f,.155f,.022f,.022f},panelRect{.700f,.1725f,.600f,.375f},closeRect{.690f,.526f,.012f,.012f};
  static constexpr ToolMenuRect macroRect{.797f,.182f,.022f,.022f};
- static ToolMenuRect MacroActionRect(size_t i){return {.770f-float(3-i)*.052f,.182f,.048f,.022f};}
+ static ToolMenuRect MacroActionRect(size_t i){return {.770f-float(2-i)*.052f,.182f,.048f,.022f};}
  static const wchar_t* MacroCommand(size_t i){static const wchar_t* commands[]={L"#macro play",L"#macro stop",L"#macro record",L"#macro edit"};return commands[i];}
+ static const wchar_t* MacroShortcutCommand(size_t i,bool playing){return MacroCommand(i==0&&playing?1:i);}
  static std::string MacroLabel(size_t i){static const wchar_t* vi[]={L"Ch\u1ea1y",L"D\u1eebng",L"Ghi",L"Script"};static const char* en[]={"Run","Stop","Record","Script"};return toolEnglish.load()?en[i]:Utf8(vi[i]);}
- void* macroButton=nullptr,*macroIcon=nullptr;std::array<void*,4> macroActions{},macroLabels{};std::array<bool,4> macroDown{};std::array<uint64_t,4> macroPressUntil{};
+ const wchar_t* MacroActionCommand(size_t i)const{return MacroCommand(i==0?(macroPlaying?1:0):i+1);}
+ std::string MacroActionLabel(size_t i)const{return MacroLabel(i==0?(macroPlaying?1:0):i+1);}
+ void* macroButton=nullptr,*macroIcon=nullptr;std::array<void*,3> macroActions{},macroLabels{};std::array<bool,3> macroDown{};std::array<uint64_t,3> macroPressUntil{};
+ struct MacroLabelState{void* frame=nullptr;int colour=-1,language=-1;};
+ std::array<MacroLabelState,3> macroLabelState{};bool macroPlaying=false;
  bool macroAvailable=false,macroOpen=false,appliedMacroOpen=true;int appliedMacroLanguage=-1;
  inline static LONG viewportWidth=0,viewportHeight=0;
  static void SetViewport(LONG w,LONG h){viewportWidth=w;viewportHeight=h;}
@@ -137,7 +142,7 @@ class ToolMenuOverlay{public:
  bool appliedEnglish=false;int pressed=-3,page=0,appliedPage=-1,editing=-1,dropdown=-1,appliedDropdown=-2;std::wstring editBuffer;
  LONG appliedViewportWidth=0,appliedViewportHeight=0;
  ULONGLONG menuPressedUntil=0,nextRefresh=0;const char* initStage="not started";
- void Reset(){macroButton=macroIcon=nullptr;macroActions={};macroLabels={};macroDown={};macroPressUntil={};macroAvailable=macroOpen=false;appliedMacroOpen=true;appliedMacroLanguage=-1;bossFrames={};bossFonts={};bossText={};bossShown={};independentHost=nullptr;helpFrame=helpText=nullptr;helpShown=false;helpCandidate.clear();helpApplied.clear();helpSince=0;helpX=helpY=-1;parent=0;button=menuIcon=panel=close=nullptr;tabs={};tabLabels={};tabGlows={};popupHost=popupTexture=nullptr;grids={};controls={};choices={};choiceLabels={};
+ void Reset(){macroLabelState={};macroPlaying=false;macroButton=macroIcon=nullptr;macroActions={};macroLabels={};macroDown={};macroPressUntil={};macroAvailable=macroOpen=false;appliedMacroOpen=true;appliedMacroLanguage=-1;bossFrames={};bossFonts={};bossText={};bossShown={};independentHost=nullptr;helpFrame=helpText=nullptr;helpShown=false;helpCandidate.clear();helpApplied.clear();helpSince=0;helpX=helpY=-1;parent=0;button=menuIcon=panel=close=nullptr;tabs={};tabLabels={};tabGlows={};popupHost=popupTexture=nullptr;grids={};controls={};choices={};choiceLabels={};
  initialized=failed=visible=open=menuPressedVisual=false;appliedOpen=true;pressed=-3;page=0;appliedPage=editing=dropdown=-1;appliedDropdown=-2;editBuffer.clear();menuPressedUntil=nextRefresh=0;initStage="not started";appliedViewportWidth=appliedViewportHeight=0;}
  void CancelEdit(){editing=dropdown=-1;editBuffer.clear();nextRefresh=0;}
  void Toggle(){open=!open;CancelEdit();if(open)page=0;}
@@ -161,7 +166,17 @@ public:
  // Feature modules cannot consume the menu's reserved buckets, even when
  // they request a higher level or create their frames after the menu opens.
  void* Frame(uintptr_t game,void* owner,ToolMenuRect r,uint32_t level=kToolFeatureFrameLevel,bool detached=false){return CreateFrame(game,owner,r,std::min(level,kToolFeatureFrameLevel),detached);}
- void PlaybackVisual(bool playing){if(macroLabels[0]&&api.setText){auto text=std::string(playing?"|cff00ff00":"|cffffcc00")+MacroLabel(0)+"|r";api.setText(macroLabels[0],text.c_str());}}
+ void RefreshMacroLabels(){
+  const int language=int(toolEnglish.load());
+  for(size_t i=0;i<macroLabels.size();++i){
+   const int colour=i==0&&macroPlaying?2:macroDown[i]?1:0;
+   auto& applied=macroLabelState[i];auto frame=macroLabels[i];
+   if(!frame||!api.setText||(applied.frame==frame&&applied.colour==colour&&applied.language==language))continue;
+   auto text=std::string(colour==2?"|cff00ff00":colour==1?"|cffff9900":"|cffffcc00")+MacroActionLabel(i)+"|r";
+   api.setText(frame,text.c_str());applied={frame,colour,language};
+  }
+ }
+ void PlaybackVisual(bool playing){macroPlaying=playing;RefreshMacroLabels();}
  void Style(void* frame,bool edit=false){NativeSetFrameBackdropEx(api,frame,"UI\\Widgets\\EscMenu\\Human\\human-options-menu-background.blp",
  edit?"UI\\Widgets\\EscMenu\\Human\\editbox-border.blp":"UI\\Widgets\\EscMenu\\Human\\human-options-button-border-up.blp",edit?.005f:.010f,.002f);}
  void* TextIn(void* owner,ToolMenuRect r,const char* text,bool centre=false,float height=.0115f){auto font=Font(owner,height,text);if(!font)return nullptr;
@@ -256,10 +271,10 @@ public:
  }
 
  if(macroShow!=appliedMacroOpen||appliedMacroLanguage!=int(c.english)){
-  for(size_t i=0;i<macroActions.size();++i){auto text="|cffffcc00"+MacroLabel(i)+"|r";api.setText(macroLabels[i],text.c_str());if(macroShow)NativeFrameShow(macroActions[i]);else NativeFrameHide(macroActions[i]);}
+  for(size_t i=0;i<macroActions.size();++i){if(macroShow)NativeFrameShow(macroActions[i]);else NativeFrameHide(macroActions[i]);}
   appliedMacroOpen=macroShow;appliedMacroLanguage=int(c.english);
  }
- for(size_t i=0;i<macroActions.size();++i){auto text=std::string(macroDown[i]?"|cffff9900":"|cffffcc00")+MacroLabel(i)+"|r";api.setText(macroLabels[i],text.c_str());}
+ RefreshMacroLabels();
  if((editing>=0&&!Enabled(c,size_t(editing))) || (dropdown>=0&&!Enabled(c,size_t(dropdown))))CancelEdit();
  MenuPressVisual(visible&&(pressed==-1||GetTickCount64()<menuPressedUntil));bool show=visible&&open;
  if(c.english!=appliedEnglish){appliedEnglish=c.english;appliedPage=-1;helpApplied.clear();nextRefresh=0;} if(show!=appliedOpen||page!=appliedPage){if(show){NativeFrameShow(panel);NativeFrameShow(close);for(auto tab:tabs)NativeFrameShow(tab);}else{for(auto tab:tabs)NativeFrameHide(tab);NativeFrameHide(close);NativeFrameHide(panel);}
@@ -281,16 +296,16 @@ public:
  for(size_t i=0;i<choices.size();++i){if(show&&dropdown>=0&&i<size_t(kToolMenuControls[dropdown].maximum-kToolMenuControls[dropdown].minimum+1)){auto r=ChoiceRect(i);
  api.setAbsPoint(choices[i],0,r.right-r.width,r.bottom+r.height,1);api.setWidth(choices[i],r.width);api.setAbsPoint(choiceLabels[i],0,r.right-r.width,r.bottom+r.height,1);api.setWidth(choiceLabels[i],r.width);
  auto text="|cffffcc00"+ChoiceName(kToolMenuControls[dropdown],int(kToolMenuControls[dropdown].minimum)+int(i))+"|r";api.setText(choiceLabels[i],text.c_str());NativeFrameShow(choices[i]);}else NativeFrameHide(choices[i]);}}}
- int Hit(POINT p,int w,int h)const{if(!visible)return -3;if(buttonRect.Hit(p,w,h))return -1;if(macroAvailable&&macroRect.Hit(p,w,h))return -5;if(macroAvailable&&macroOpen)for(size_t i=0;i<4;++i)if(MacroActionRect(i).Hit(p,w,h))return -6-int(i);if(!open)return -3;
+ int Hit(POINT p,int w,int h)const{if(!visible)return -3;if(buttonRect.Hit(p,w,h))return -1;if(macroAvailable&&macroRect.Hit(p,w,h))return -5;if(macroAvailable&&macroOpen)for(size_t i=0;i<macroActions.size();++i)if(MacroActionRect(i).Hit(p,w,h))return -6-int(i);if(!open)return -3;
  if(dropdown>=0)for(int i=0;i<=int(kToolMenuControls[dropdown].maximum-kToolMenuControls[dropdown].minimum);++i)if(ChoiceRect(i).Hit(p,w,h))return 1000+i;
  if(closeRect.Hit(p,w,h))return -2;for(size_t i=0;i<tabs.size();++i)if(TabRect(i).Hit(p,w,h))return 500+int(i);
  if(dropdown>=0)return panelRect.Hit(p,w,h)?-4:-3;
  for(size_t i=controls.size();i-->0;){const auto& d=kToolMenuControls[i];if(d.page==page&&d.kind!=MenuControlKind::Label&&RowRect(i).Hit(p,w,h))return int(i);}return panelRect.Hit(p,w,h)?-4:-3;}
  template<class Queue> static void QueueValue(Queue queue,size_t i,const wchar_t* op,const std::wstring& value=L""){auto cmd=L"#toolui "+std::to_wstring(i)+L" "+op+(value.empty()?L"":L" "+value);queue(cmd.c_str());}
  template<class Queue> bool Mouse(unsigned message,POINT p,int w,int h,Queue queue,const Config* c=nullptr){int hit=Hit(p,w,h);
- if(message==WM_LBUTTONDOWN||message==WM_LBUTTONDBLCLK){if(hit==-3&&(editing>=0||dropdown>=0))CancelEdit();pressed=hit;if(hit<=-6&&hit>=-9)macroPressUntil[size_t(-hit-6)]=GetTickCount64()+140;if(hit==-1)menuPressedUntil=GetTickCount64()+120;return hit!=-3;}if(message!=WM_LBUTTONUP)return false;
+ if(message==WM_LBUTTONDOWN||message==WM_LBUTTONDBLCLK){if(hit==-3&&(editing>=0||dropdown>=0))CancelEdit();pressed=hit;if(hit<=-6&&hit>=-8)macroPressUntil[size_t(-hit-6)]=GetTickCount64()+140;if(hit==-1)menuPressedUntil=GetTickCount64()+120;return hit!=-3;}if(message!=WM_LBUTTONUP)return false;
  int down=pressed;pressed=-3;if(down==-1&&hit!=-1)menuPressedUntil=0;if(down==-3)return hit!=-3;if(down!=hit)return true;
- if(hit==-5)macroOpen=!macroOpen;else if(hit<=-6&&hit>=-9){CancelEdit();open=false;queue(MacroCommand(size_t(-hit-6)));}else if(hit==-1)Toggle();else if(hit==-2){open=false;CancelEdit();}else if(hit>=1000){int selected=dropdown;CancelEdit();if(selected>=0)QueueValue(queue,size_t(selected),L"set",std::to_wstring(int(kToolMenuControls[selected].minimum)+hit-1000));}
+ if(hit==-5)macroOpen=!macroOpen;else if(hit<=-6&&hit>=-8){CancelEdit();open=false;queue(MacroActionCommand(size_t(-hit-6)));}else if(hit==-1)Toggle();else if(hit==-2){open=false;CancelEdit();}else if(hit>=1000){int selected=dropdown;CancelEdit();if(selected>=0)QueueValue(queue,size_t(selected),L"set",std::to_wstring(int(kToolMenuControls[selected].minimum)+hit-1000));}
  else if(hit>=500){page=hit-500;CancelEdit();}else if(hit>=0){const auto& d=kToolMenuControls[hit];if(!d.supported||(controlAvailable&&!controlAvailable(d))){QueueValue(queue,size_t(hit),L"unsupported");return true;}if(c&&!Enabled(*c,size_t(hit)))return true;
  if(d.kind==MenuControlKind::Check)QueueValue(queue,size_t(hit),L"toggle");else if(d.kind==MenuControlKind::Clear)QueueValue(queue,size_t(hit),L"clear");else if(d.kind==MenuControlKind::Choice){editing=-1;dropdown=dropdown==hit?-1:hit;nextRefresh=0;}
  else{CancelEdit();editing=hit;if(c)editBuffer=ReadValue(*c,size_t(hit));nextRefresh=0;}}else if(hit==-4)CancelEdit();return true;}

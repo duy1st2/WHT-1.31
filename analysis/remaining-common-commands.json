@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-28",
+  "scope": "Common literal gameplay commands; not a claim of complete behavioral or gameplay parity",
+  "remaining": [
+    "#findCP",
+    "#spam",
+    "#spamall",
+    "#wide"
+  ],
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "7eae4ca975ba7643cb8aa3509a8e50cc5fc3be5e36602d9eef93ca65dc899998"
+  },
+  "findings": {
+    "#findCP": "Both return a fixed None detected message without detection.",
+    "#spam": "WHT has a runtime sender. WHT-1.29 only assigns/resets spamSlot and nextSpam; no execution consumer found.",
+    "#spamall": "WHT has a runtime sender. WHT-1.29 only toggles/resets spamAll and nextSpam; no execution consumer found.",
+    "#wide": "WHT has a runtime graphics policy. WHT-1.29 toggles an otherwise unused widescreen field; config wide has no rendering consumer found."
+  },
+  "runtime_changed": false,
+  "next_validation": [
+    "In-match #mh enable/disable and teardown",
+    "Existing native gameplay features with explicitly pending live validation"
+  ],
+  "menu_inventory_evidence": "menu-disable-audit.json:239 interactive controls, zero capability-blocked after fix; parent dependencies can disable controls"
+}

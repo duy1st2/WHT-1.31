@@ -1,0 +1,144 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "d6cc5b018fdd53723c124f6132962c31ba71e766bba615ee0765713bc4f18197",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  },
+  "profiles": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "capture": 8740,
+      "producer": "0x9c9f00",
+      "native_sender_wrapper": "0x9c33d0",
+      "codec": "0xaa0cd0",
+      "float_bit_writer": "0xf45190",
+      "guard_spans": [
+        [
+          "0x9c9f2c",
+          27
+        ],
+        [
+          "0x9c3466",
+          65
+        ],
+        [
+          "0xaa0cd0",
+          50
+        ],
+        [
+          "0xf45190",
+          21
+        ]
+      ]
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "capture": 32116,
+      "producer": "0x98aa90",
+      "native_sender_wrapper": "0x984360",
+      "codec": "0xa5fc90",
+      "float_bit_writer": "0xf04160",
+      "guard_spans": [
+        [
+          "0x98aabc",
+          27
+        ],
+        [
+          "0x9843f6",
+          65
+        ],
+        [
+          "0xa5fc90",
+          50
+        ],
+        [
+          "0xf04160",
+          21
+        ]
+      ]
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "capture": 24984,
+      "producer": "0xaec0c0",
+      "native_sender_wrapper": "0xae56f0",
+      "codec": "0xbd8570",
+      "float_bit_writer": "0x1129a80",
+      "guard_spans": [
+        [
+          "0xaec0d3",
+          28
+        ],
+        [
+          "0xae576f",
+          39
+        ],
+        [
+          "0xbd8570",
+          63
+        ],
+        [
+          "0x1129a80",
+          25
+        ]
+      ]
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "capture": 27336,
+      "producer": "0xb34bc0",
+      "native_sender_wrapper": "0xb2e7d0",
+      "codec": "0xc1f040",
+      "float_bit_writer": "0x11664e0",
+      "guard_spans": [
+        [
+          "0xb34bd3",
+          28
+        ],
+        [
+          "0xb2e84f",
+          39
+        ],
+        [
+          "0xc1f040",
+          63
+        ],
+        [
+          "0x11664e0",
+          25
+        ]
+      ]
+    }
+  ],
+  "scope": "WHT SendAllianceSpam(includePings=true), ProcessChatAutomation; user permits WHT-only implementations.",
+  "rtti_proof": [
+    {
+      "capture": 8740,
+      "class": "CNetCommandAllyPing",
+      "producer_vtable": "0x180eab4",
+      "rtti_confirmed": true
+    },
+    {
+      "capture": 32116,
+      "class": "CNetCommandAllyPing",
+      "producer_vtable": "0x17c397c",
+      "rtti_confirmed": true
+    },
+    {
+      "capture": 24984,
+      "class": "CNetCommandAllyPing",
+      "producer_vtable": "0x1bd8218",
+      "rtti_confirmed": true
+    },
+    {
+      "capture": 27336,
+      "class": "CNetCommandAllyPing",
+      "producer_vtable": "0x1c07098",
+      "rtti_confirmed": true
+    }
+  ]
+}

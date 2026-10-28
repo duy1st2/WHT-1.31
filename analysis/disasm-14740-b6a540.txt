@@ -1,0 +1,107 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-b6a540.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D3A540: push        ebp
+  00D3A541: mov         ebp,esp
+  00D3A543: sub         esp,360h
+  00D3A549: mov         eax,dword ptr ds:[01C98574h]
+  00D3A54E: xor         eax,ebp
+  00D3A550: mov         dword ptr [ebp-4],eax
+  00D3A553: mov         eax,dword ptr [ebp+8]
+  00D3A556: mov         edx,dword ptr [ebp+0Ch]
+  00D3A559: mov         dword ptr [ebp+FFFFFCA0h],ecx
+  00D3A55F: mov         dword ptr [ebp+FFFFFCA8h],eax
+  00D3A565: mov         dword ptr [ebp+FFFFFCA4h],edx
+  00D3A56B: push        ebx
+  00D3A56C: push        esi
+  00D3A56D: push        edi
+  00D3A56E: cmp         eax,0FFFFFFFFh
+  00D3A571: je          00D3A6ED
+  00D3A577: stc
+  00D3A578: shl         bl,0
+  00D3A57B: jb          00D3A5DA
+  00D3A57D: add         ebp,0FFFFFF94h
+  00D3A580: sub         bh,16h
+  00D3A583: add         ebx,0FFFFFFA9h
+  00D3A586: add         ebp,0FFFFFFB3h
+  00D3A589: add         edx,0FFFFFF9Fh
+  00D3A58C: mov         bl,31h
+  00D3A58F: jle         00D3FFB1
+  00D3A595: add         esi,9BC72CFh
+  00D3A59B: add         al,59h
+  00D3A59E: mov         dh,0Dh
+  00D3A5A1: call        00D596A6
+  00D3A5A6: add         ebx,3D3653C9h
+  00D3A5AC: add         ebx,0FFFFFFA4h
+  00D3A5AF: add         ecx,0E6FA7C6Ah
+  00D3A5B5: rdtsc
+  00D3A5B7: mov         edi,6D563F5Ah
+  00D3A5BD: add         ebp,9D4AD04Bh
+  00D3A5C3: call        00D51251
+  00D3A5C8: mov         esi,0EA43CCF1h
+  00D3A5CE: pop         eax
+  00D3A5CF: mov         cl,0AFh
+  00D3A5D2: add         edx,833A61F5h
+  00D3A5D8: sub         dword ptr [edx+F2C06F75h],ecx
+  00D3A5DE: add         byte ptr [edx+ebp*2-80h],dh
+  00D3A5E2: C7
+  00D3A5E3: xlat        byte ptr [ebx]
+  00D3A5E4: sub         ebx,5602E57Bh
+  00D3A5EA: neg         al
+  00D3A5EC: push        ecx
+  00D3A5ED: sub         ch,2Ch
+  00D3A5F0: push        0D21EB296h
+  00D3A5F5: pop         edx
+  00D3A5F6: push        0F666F47Eh
+  00D3A5FB: add         eax,6C498EB6h
+  00D3A601: mov         esi,9EF6FE2Ah
+  00D3A607: push        0DCA39B7Bh
+  00D3A60C: mov         esi,0E299DE53h
+  00D3A612: call        00D4AC22
+  00D3A617: pop         edx
+  00D3A618: push        0FFFFFFA9h
+  00D3A61A: push        0FFFFFFD0h
+  00D3A61C: add         ecx,0BBD701C7h
+  00D3A622: sub         ebp,1AA3829Ah
+  00D3A628: sub         ecx,0C661390Dh
+  00D3A62E: push        0FA3D5113h
+  00D3A633: add         edi,0FFFFFFA9h
+  00D3A636: add         bl,12h
+  00D3A639: push        19h
+  00D3A63B: push        ebx
+  00D3A63C: add         dh,0D7h
+  00D3A63F: call        00D55F57
+  00D3A644: add         al,0EDh
+  00D3A647: mul         al,byte ptr [ecx+0D8B7DE5h]
+  00D3A64D: js          00D3A649
+  00D3A64F: mov         dword ptr [ecx],0CDDBF181h
+  00D3A655: xchg        eax,ebx
+  00D3A656: xor         edi,edi
+  00D3A658: mov         ch,0A8h
+  00D3A65A: cld
+  00D3A65B: FF
+  00D3A65C: jmp         rax
+  00D3A65E: into
+  00D3A65F: movs        dword ptr es:[edi],dword ptr [esi]
+  00D3A660: mov         bh,0FFh
+  00D3A662: push        1
+  00D3A664: mov         ecx,eax
+  00D3A666: call        00898490
+  00D3A66B: mov         ecx,dword ptr [ebp+10h]
+  00D3A66E: mov         esi,eax
+  00D3A670: sub         ecx,0
+  00D3A673: je          00D3A6A3
+  00D3A675: sub         ecx,1
+  00D3A678: je          00D3A69C
+  00D3A67A: sub         ecx,1
+  00D3A67D: je          00D3A686
+  00D3A67F: B9
+
+  Summary
+
+        1000 .text

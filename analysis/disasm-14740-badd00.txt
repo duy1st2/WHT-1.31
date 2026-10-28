@@ -1,0 +1,107 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-badd00.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D7DD00: push        ebp
+  00D7DD01: mov         ebp,esp
+  00D7DD03: push        esi
+  00D7DD04: mov         esi,ecx
+  00D7DD06: inc         dword ptr [esi+00000200h]
+  00D7DD0C: cmp         dword ptr [esi+00000200h],1
+  00D7DD13: jne         00D7DD38
+  00D7DD15: or          dword ptr [esi+20h],8
+  00D7DD19: cmp         byte ptr [ebp+8],0
+  00D7DD1D: je          00D7DD28
+  00D7DD1F: push        0FFFFFFFFh
+  00D7DD21: push        0FFFFFFFFh
+  00D7DD23: call        00DA5B10
+  00D7DD28: mov         ecx,esi
+  00D7DD2A: call        00DA0A10
+  00D7DD2F: push        1
+  00D7DD31: mov         ecx,esi
+  00D7DD33: call        00DA0A20
+  00D7DD38: pop         esi
+  00D7DD39: pop         ebp
+  00D7DD3A: ret         4
+  00D7DD3D: int         3
+  00D7DD3E: int         3
+  00D7DD3F: int         3
+  00D7DD40: push        ebp
+  00D7DD41: mov         ebp,esp
+  00D7DD43: push        ecx
+  00D7DD44: push        ebx
+  00D7DD45: mov         ebx,ecx
+  00D7DD47: mov         cl,byte ptr [ebp+8]
+  00D7DD4A: mov         dword ptr [ebp-4],ebx
+  00D7DD4D: inc         dword ptr [ebx+00000274h]
+  00D7DD53: mov         eax,dword ptr [ebx+00000274h]
+  00D7DD59: test        cl,cl
+  00D7DD5B: je          00D7DD63
+  00D7DD5D: inc         dword ptr [ebx+00000278h]
+  00D7DD63: cmp         eax,1
+  00D7DD66: je          00D7DD7D
+  00D7DD68: test        cl,cl
+  00D7DD6A: je          00D7DE8D
+  00D7DD70: cmp         dword ptr [ebx+00000278h],0
+  00D7DD77: je          00D7DE8D
+  00D7DD7D: push        0FFFFFFFFh
+  00D7DD7F: push        0FFFFFFFFh
+  00D7DD81: mov         ecx,ebx
+  00D7DD83: call        00DA5B10
+  00D7DD88: push        0
+  00D7DD8A: push        1
+  00D7DD8C: push        1
+  00D7DD8E: push        0
+  00D7DD90: push        0
+  00D7DD92: call        005658C0
+  00D7DD97: push        eax
+  00D7DD98: mov         ecx,ebx
+  00D7DD9A: call        00D7F150
+  00D7DD9F: test        eax,eax
+  00D7DDA1: je          00D7DDAB
+  00D7DDA3: push        eax
+  00D7DDA4: mov         ecx,ebx
+  00D7DDA6: call        00D815F0
+  00D7DDAB: mov         eax,dword ptr [ebx+0000040Ch]
+  00D7DDB1: add         ebx,408h
+  00D7DDB7: and         eax,dword ptr [ebx]
+  00D7DDB9: cmp         eax,0FFFFFFFFh
+  00D7DDBC: je          00D7DE8D
+  00D7DDC2: push        edi
+  00D7DDC3: mov         ecx,ebx
+  00D7DDC5: call        00F3B5A0
+  00D7DDCA: mov         edi,eax
+  00D7DDCC: test        edi,edi
+  00D7DDCE: je          00D7DE8C
+  00D7DDD4: push        esi
+  00D7DDD5: mov         eax,dword ptr [edi+28h]
+  00D7DDD8: lea         ecx,[edi+24h]
+  00D7DDDB: and         eax,dword ptr [ecx]
+  00D7DDDD: mov         esi,edi
+  00D7DDDF: cmp         eax,0FFFFFFFFh
+  00D7DDE2: jne         00D7DDE8
+  00D7DDE4: xor         edi,edi
+  00D7DDE6: jmp         00D7DDEF
+  00D7DDE8: call        00F3B5A0
+  00D7DDED: mov         edi,eax
+  00D7DDEF: test        esi,esi
+  00D7DDF1: je          00D7DE83
+  00D7DDF7: mov         eax,dword ptr [esi]
+  00D7DDF9: mov         ecx,esi
+  00D7DDFB: mov         eax,dword ptr [eax+000001E0h]
+  00D7DE01: call        eax
+  00D7DE03: test        al,al
+  00D7DE05: jne         00D7DE17
+  00D7DE07: mov         eax,dword ptr [esi]
+  00D7DE09: mov         ecx,esi
+  00D7DE0B: 8B
+  00D7DE0C: and         ah,1
+  00D7DE0F: 00
+
+  Summary
+
+        1000 .text

@@ -1,0 +1,17 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\overhead_cadence.hpp": "fddede7bb0ed32dabe3204b3ae40cbcb6d5cb852ada722e6952a3326d7ffeb5f",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\overhead_bars.hpp": "26216e5ab53e5e12166fed5015ceb3d35ee7d77e0388c90e5573786c252b0ee3",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\regen_overlay.hpp": "dc00a6fcda177749ca5618f0c566c98ed53d0bedbbcb2f286fabe8ad39e08436",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\cooldown_hotkey_overlay.hpp": "14662137218fe6c36b7b8ae4da969c194bf80852747d43ee3eced33047a234d7",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "3e4a8ab69152b94f9239bf0e74fd6a29b2ea7dfe0606e026c08ed020086ed804",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\memory_overlay.hpp": "4f20cdb8860352f43daa8ab63ab22343d57d1da26ebd77af27f58f3e4b9a562d",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\worker_placement.hpp": "288cc03443203d26516b91a72b6db3516e184218fa80446b6f7912e6f2e96380",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\fps_text_cadence.hpp": "f66342f5742d9578519eaca12b3b2faf938c49461c9e4daf91817bbacfef28f9"
+  },
+  "scope": "Port WHT sampling policies (200/400/800 ms with 200 ms selected/hero priority; 300 ms full sweep; 100 ms selected-panel sampling; cached empty text writes). No old native offsets or removed ManaBar backend. Adaptive FPS-driven LOD and incremental sweep implementation are not yet ported. Also port the WHT memory HUD 500 ms sampling and unchanged-text cache.",
+  "already_identical_helpers": {
+    "worker_placement.hpp": true,
+    "fps_text_cadence.hpp": true
+  }
+}

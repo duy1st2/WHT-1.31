@@ -1,0 +1,86 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-b6a6d0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D3A6D0: call        dword ptr [eax+68h]
+  00D3A6D3: je          00D3A65D
+  00D3A6D5: lahf
+  00D3A6D6: add         dword ptr [ebp+FFFEAC85h],ecx
+  00D3A6DC: jmp         fword ptr [eax+50h]
+  00D3A6DF: add         dword ptr [eax],eax
+  00D3A6E1: add         byte ptr [eax-18h],dl
+  00D3A6E4: clc
+  00D3A6E5: jne         00D3A759
+  00D3A6E7: inc         dword ptr [ebx+31EB24C4h]
+  00D3A6ED: mov         ecx,edx
+  00D3A6EF: lea         esi,[ecx+1]
+  00D3A6F2: mov         al,byte ptr [ecx]
+  00D3A6F4: inc         ecx
+  00D3A6F5: test        al,al
+  00D3A6F7: jne         00D3A6F2
+  00D3A6F9: sub         ecx,esi
+  00D3A6FB: lea         eax,[ebp+FFFFFEACh]
+  00D3A701: mov         esi,14Fh
+  00D3A706: cmp         ecx,esi
+  00D3A708: cmovb       esi,ecx
+  00D3A70B: push        esi
+  00D3A70C: push        edx
+  00D3A70D: push        eax
+  00D3A70E: call        01657E40
+  00D3A713: add         esp,0Ch
+  00D3A716: mov         byte ptr [ebp+esi+FFFFFEACh],0
+  00D3A71E: mov         ecx,dword ptr [ebp+FFFFFCA0h]
+  00D3A724: lea         eax,[ebp+FFFFFEACh]
+  00D3A72A: push        eax
+  00D3A72B: mov         ecx,dword ptr [ecx+000001FCh]
+  00D3A731: call        00FDB5D0
+  00D3A736: mov         ecx,dword ptr [ebp-4]
+  00D3A739: pop         edi
+  00D3A73A: pop         esi
+  00D3A73B: xor         ecx,ebp
+  00D3A73D: pop         ebx
+  00D3A73E: call        016532EA
+  00D3A743: mov         esp,ebp
+  00D3A745: pop         ebp
+  00D3A746: ret         0Ch
+  00D3A749: int         3
+  00D3A74A: int         3
+  00D3A74B: int         3
+  00D3A74C: int         3
+  00D3A74D: int         3
+  00D3A74E: int         3
+  00D3A74F: int         3
+  00D3A750: push        ebp
+  00D3A751: mov         ebp,esp
+  00D3A753: push        0
+  00D3A755: push        dword ptr [ebp+8]
+  00D3A758: push        0FFFFFFFFh
+  00D3A75A: call        00D3A540
+  00D3A75F: pop         ebp
+  00D3A760: ret         4
+  00D3A763: int         3
+  00D3A764: int         3
+  00D3A765: int         3
+  00D3A766: int         3
+  00D3A767: int         3
+  00D3A768: int         3
+  00D3A769: int         3
+  00D3A76A: int         3
+  00D3A76B: int         3
+  00D3A76C: int         3
+  00D3A76D: int         3
+  00D3A76E: int         3
+  00D3A76F: int         3
+  00D3A770: push        ebp
+  00D3A771: mov         ebp,esp
+  00D3A773: sub         esp,10Ch
+  00D3A779: mov         eax,dword ptr ds:[01C98574h]
+  00D3A77E: xor         eax,ebp
+
+  Summary
+
+        1000 .text

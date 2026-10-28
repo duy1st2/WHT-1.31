@@ -1,0 +1,139 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-4696b0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF7833C96B0: push        rsi
+  00007FF7833C96B2: push        rdi
+  00007FF7833C96B3: sub         rsp,58h
+  00007FF7833C96B7: mov         eax,edx
+  00007FF7833C96B9: mov         rdi,rcx
+  00007FF7833C96BC: mov         ecx,dword ptr [rcx+00000000000000E4h]
+  00007FF7833C96C2: neg         eax
+  00007FF7833C96C4: mov         esi,edx
+  00007FF7833C96C6: cmp         eax,ecx
+  00007FF7833C96C8: jle         00007FF7833C96CE
+  00007FF7833C96CA: mov         esi,ecx
+  00007FF7833C96CC: neg         esi
+  00007FF7833C96CE: test        esi,esi
+  00007FF7833C96D0: jne         00007FF7833C96DB
+  00007FF7833C96D2: xor         al,al
+  00007FF7833C96D4: add         rsp,58h
+  00007FF7833C96D8: pop         rdi
+  00007FF7833C96D9: pop         rsi
+  00007FF7833C96DA: ret
+  00007FF7833C96DB: mov         qword ptr [rsp+70h],rbx
+  00007FF7833C96E0: mov         qword ptr [rsp+78h],rbp
+  00007FF7833C96E5: mov         qword ptr [rsp+0000000000000080h],r12
+  00007FF7833C96ED: mov         qword ptr [rsp+50h],r13
+  00007FF7833C96F2: xor         r13d,r13d
+  00007FF7833C96F5: mov         qword ptr [rsp+48h],r14
+  00007FF7833C96FA: mov         ebp,r13d
+  00007FF7833C96FD: mov         qword ptr [rsp+40h],r15
+  00007FF7833C9702: lea         r14,[rdi+000000000000019Ch]
+  00007FF7833C9709: lea         r12d,[r13+5]
+  00007FF7833C970D: nop         dword ptr [rax]
+  00007FF7833C9710: mov         rax,qword ptr [rdi+50h]
+  00007FF7833C9714: mov         ebx,dword ptr [r14]
+  00007FF7833C9717: test        rax,rax
+  00007FF7833C971A: jne         00007FF7833C9724
+  00007FF7833C971C: mov         rcx,rdi
+  00007FF7833C971F: call        00007FF783E723C0
+  00007FF7833C9724: mov         byte ptr [rsp+30h],r13b
+  00007FF7833C9729: mov         r9b,1
+  00007FF7833C972C: mov         byte ptr [rsp+28h],r13b
+  00007FF7833C9731: xor         r8d,r8d
+  00007FF7833C9734: mov         edx,ebx
+  00007FF7833C9736: mov         byte ptr [rsp+20h],1
+  00007FF7833C973B: mov         rcx,rax
+  00007FF7833C973E: call        00007FF783C6D6D0
+  00007FF7833C9743: test        rax,rax
+  00007FF7833C9746: je          00007FF7833C974F
+  00007FF7833C9748: mov         edx,dword ptr [rax+74h]
+  00007FF7833C974B: inc         edx
+  00007FF7833C974D: jmp         00007FF7833C9752
+  00007FF7833C974F: mov         edx,r13d
+  00007FF7833C9752: mov         rax,r13
+  00007FF7833C9755: lea         rcx,[rdi+000000000000019Ch]
+  00007FF7833C975C: nop         dword ptr [rax]
+  00007FF7833C9760: cmp         dword ptr [rcx],ebx
+  00007FF7833C9762: je          00007FF7833C9778
+  00007FF7833C9764: inc         rax
+  00007FF7833C9767: add         rcx,4
+  00007FF7833C976B: cmp         rax,5
+  00007FF7833C976F: jl          00007FF7833C9760
+  00007FF7833C9771: mov         ecx,0FFFFFFFFh
+  00007FF7833C9776: jmp         00007FF7833C977F
+  00007FF7833C9778: mov         ecx,dword ptr [rdi+rax*4+00000000000001B4h]
+  00007FF7833C977F: mov         eax,ecx
+  00007FF7833C9781: sub         eax,edx
+  00007FF7833C9783: cmp         ecx,edx
+  00007FF7833C9785: cmovbe      eax,r13d
+  00007FF7833C9789: add         r14,4
+  00007FF7833C978D: add         ebp,eax
+  00007FF7833C978F: sub         r12,1
+  00007FF7833C9793: jne         00007FF7833C9710
+  00007FF7833C9799: mov         r15,qword ptr [rsp+40h]
+  00007FF7833C979E: cmp         esi,ebp
+  00007FF7833C97A0: mov         r14,qword ptr [rsp+48h]
+  00007FF7833C97A5: mov         r13,qword ptr [rsp+50h]
+  00007FF7833C97AA: cmovle      ebp,esi
+  00007FF7833C97AD: add         dword ptr [rdi+00000000000000E4h],ebp
+  00007FF7833C97B3: mov         rax,qword ptr [rdi+50h]
+  00007FF7833C97B7: mov         r12,qword ptr [rsp+0000000000000080h]
+  00007FF7833C97BF: mov         rbp,qword ptr [rsp+78h]
+  00007FF7833C97C4: mov         rbx,qword ptr [rsp+70h]
+  00007FF7833C97C9: test        rax,rax
+  00007FF7833C97CC: jne         00007FF7833C97D6
+  00007FF7833C97CE: mov         rcx,rdi
+  00007FF7833C97D1: call        00007FF783E723C0
+  00007FF7833C97D6: xor         edx,edx
+  00007FF7833C97D8: mov         rcx,rax
+  00007FF7833C97DB: call        00007FF783BC5B70
+  00007FF7833C97E0: xor         ecx,ecx
+  00007FF7833C97E2: call        00007FF783BC4D40
+  00007FF7833C97E7: mov         al,1
+  00007FF7833C97E9: add         rsp,58h
+  00007FF7833C97ED: pop         rdi
+  00007FF7833C97EE: pop         rsi
+  00007FF7833C97EF: ret
+  00007FF7833C97F0: push        rsi
+  00007FF7833C97F2: push        rdi
+  00007FF7833C97F3: push        r15
+  00007FF7833C97F5: sub         rsp,20h
+  00007FF7833C97F9: mov         rsi,qword ptr [rdx+18h]
+  00007FF7833C97FD: mov         rdi,rdx
+  00007FF7833C9800: mov         r15,rcx
+  00007FF7833C9803: mov         r8d,dword ptr [rsi+000000000000019Ch]
+  00007FF7833C980A: mov         eax,r8d
+  00007FF7833C980D: shr         eax,8
+  00007FF7833C9810: not         al
+  00007FF7833C9812: test        al,1
+  00007FF7833C9814: jne         00007FF7833C99BF
+  00007FF7833C981A: movzx       eax,byte ptr [rsi+5Bh]
+  00007FF7833C981E: sub         eax,41h
+  00007FF7833C9821: cmp         eax,19h
+  00007FF7833C9824: ja          00007FF7833C99BF
+  00007FF7833C982A: shr         r8d,1Eh
+  00007FF7833C982E: test        r8b,1
+  00007FF7833C9832: jne         00007FF7833C99BF
+  00007FF7833C9838: mov         qword ptr [rsp+40h],rbx
+  00007FF7833C983D: mov         qword ptr [rsp+48h],rbp
+  00007FF7833C9842: mov         qword ptr [rsp+50h],r14
+  00007FF7833C9847: nop         word ptr [rax+rax+0000000000000000h]
+  00007FF7833C9850: ja          00007FF7833C98BD
+  00007FF7833C9852: sal         bh,0
+  00007FF7833C9855: jbe         00007FF7833C98BD
+  00007FF7833C9857: neg         ch
+  00007FF7833C9859: mov         dl,0FDh
+  00007FF7833C985C: C7
+  00007FF7833C985D: C5
+  00007FF7833C985E: 27
+  00007FF7833C985F: 33
+
+  Summary
+
+        1000 .text

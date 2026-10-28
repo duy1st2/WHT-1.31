@@ -1,0 +1,52 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-3bd420.exe
+
+File Type: EXECUTABLE IMAGE
+
+  0058D420: push        ebp
+  0058D421: mov         ebp,esp
+  0058D423: push        ecx
+  0058D424: cmp         dword ptr [ecx+00000080h],0
+  0058D42B: jne         0058D443
+  0058D42D: lea         eax,[ebp-4]
+  0058D430: push        eax
+  0058D431: call        0058D490
+  0058D436: mov         ecx,dword ptr [eax]
+  0058D438: mov         eax,dword ptr [ebp+8]
+  0058D43B: mov         dword ptr [eax],ecx
+  0058D43D: mov         esp,ebp
+  0058D43F: pop         ebp
+  0058D440: ret         4
+  0058D443: mov         eax,dword ptr ds:[01D4C888h]
+  0058D448: mov         dword ptr [ebp-4],eax
+  0058D44B: lea         eax,[ebp-4]
+  0058D44E: mov         ecx,dword ptr [eax]
+  0058D450: mov         eax,dword ptr [ebp+8]
+  0058D453: mov         dword ptr [eax],ecx
+  0058D455: mov         esp,ebp
+  0058D457: pop         ebp
+  0058D458: ret         4
+  0058D45B: int         3
+  0058D45C: int         3
+  0058D45D: int         3
+  0058D45E: int         3
+  0058D45F: int         3
+  0058D460: push        ebp
+  0058D461: mov         ebp,esp
+  0058D463: push        ecx
+  0058D464: mov         dword ptr [ebp-4],416D6127h
+  0058D46B: mov         eax,dword ptr [ebp-4]
+  0058D46E: xor         eax,0CEBh
+  0058D473: mov         dword ptr [ebp-4],eax
+  0058D476: mov         eax,dword ptr [ebp-4]
+  0058D479: add         eax,1AAh
+  0058D47E: mov         dword ptr [ebp-4],eax
+  0058D481: mov         eax,dword ptr [ebp-4]
+  0058D484: 8B
+
+  Summary
+
+        1000 .text

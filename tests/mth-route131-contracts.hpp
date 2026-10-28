@@ -2,6 +2,19 @@
 #include "mth_route131.hpp"
 #include <fstream>
 inline void CheckMthRoute131(){
+ int parsed=-1;
+ for(const auto* name:{L"#chayga",L"#chaysoi",L"#caysoi"}){
+  const int offset=std::wstring(name)==L"#chayga"?0:3;
+  check(wht::IsRouteCommand131(name)&&wht::ParseRouteCommand131(name,L"",parsed)&&parsed==offset,"legacy courier command default route1");
+  for(int i=1;i<=3;++i)check(wht::ParseRouteCommand131(name,std::to_wstring(i),parsed)&&parsed==offset+i-1,"legacy aliases map each native route exactly");
+  for(const auto* value:{L"0",L"-1",L"4"})check(wht::ParseRouteCommand131(name,value,parsed)&&parsed==offset,"reference out of range index defaults1");
+  for(const auto* bad:{L"abc",L"1 extra",L"1x",L"2\n",L"99999999999999999999"})check(!wht::ParseRouteCommand131(name,bad,parsed)&&parsed==-1,"invalid route alias cannot start a worker");
+ }
+ check(!wht::ParseRouteCommand131(L"#chayga",std::wstring(L"1\0x",3),parsed),"embedded NUL refused");
+ const wchar_t* canonical[]={L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};
+ for(int i=0;i<6;++i)check(wht::ParseRouteCommand131(canonical[i],L"",parsed)&&parsed==i&&!wht::ParseRouteCommand131(canonical[i],L"1",parsed),"existing button/hotkey route grammar retained");
+ check(!wht::IsRouteCommand131(L"#soi")&&!wht::ParseRouteCommand131(L"#other",L"",parsed),"unrelated existing command not intercepted");
+
  for(const auto& p:wht::pointProfiles131){
 #ifdef _WIN64
   const char* file=p.build==12164?"../analysis/memory-6688.bin":"../analysis/memory-29928.bin";

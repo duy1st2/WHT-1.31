@@ -1,0 +1,122 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-3cde80.exe
+
+File Type: EXECUTABLE IMAGE
+
+  0059DE80: pop         ebp
+  0059DE81: ret         4
+  0059DE84: int         3
+  0059DE85: int         3
+  0059DE86: int         3
+  0059DE87: int         3
+  0059DE88: int         3
+  0059DE89: int         3
+  0059DE8A: int         3
+  0059DE8B: int         3
+  0059DE8C: int         3
+  0059DE8D: int         3
+  0059DE8E: int         3
+  0059DE8F: int         3
+  0059DE90: push        ebp
+  0059DE91: mov         ebp,esp
+  0059DE93: mov         eax,dword ptr [ecx+00000244h]
+  0059DE99: add         ecx,244h
+  0059DE9F: push        1
+  0059DEA1: push        dword ptr [ebp+8]
+  0059DEA4: call        dword ptr [eax]
+  0059DEA6: pop         ebp
+  0059DEA7: ret         4
+  0059DEAA: int         3
+  0059DEAB: int         3
+  0059DEAC: int         3
+  0059DEAD: int         3
+  0059DEAE: int         3
+  0059DEAF: int         3
+  0059DEB0: push        ebp
+  0059DEB1: mov         ebp,esp
+  0059DEB3: sub         esp,8
+  0059DEB6: push        esi
+  0059DEB7: push        edi
+  0059DEB8: mov         edi,ecx
+  0059DEBA: mov         eax,dword ptr [edi+000002BCh]
+  0059DEC0: cmp         eax,0FFFFFFFFh
+  0059DEC3: je          0059DEDF
+  0059DEC5: mov         eax,dword ptr [edi+eax*4+0000021Ch]
+  0059DECC: cmp         eax,80h
+  0059DED1: ja          0059DF01
+  0059DED3: je          0059DF08
+  0059DED5: sub         eax,1
+  0059DED8: je          0059DF08
+  0059DEDA: sub         eax,3Fh
+  0059DEDD: je          0059DF08
+  0059DEDF: mov         eax,dword ptr [edi+000001B4h]
+  0059DEE5: movss       xmm0,dword ptr ds:[01CF699Ch]
+  0059DEED: mov         dword ptr [ebp-4],eax
+  0059DEF0: movss       xmm1,dword ptr [ebp-4]
+  0059DEF5: comiss      xmm0,xmm1
+  0059DEF8: jbe         0059DF0F
+  0059DEFA: mov         eax,1CF699Ch
+  0059DEFF: jmp         0059DF21
+  0059DF01: cmp         eax,100h
+  0059DF06: jne         0059DEDF
+  0059DF08: mov         eax,dword ptr ds:[01D4C804h]
+  0059DF0D: jmp         0059DF23
+  0059DF0F: comiss      xmm1,dword ptr ds:[01CF6944h]
+  0059DF16: mov         eax,1CF6944h
+  0059DF1B: lea         ecx,[ebp-4]
+  0059DF1E: cmovbe      eax,ecx
+  0059DF21: mov         eax,dword ptr [eax]
+  0059DF23: mov         esi,dword ptr [ebp+8]
+  0059DF26: mov         dword ptr [ebp-8],eax
+  0059DF29: movss       xmm0,dword ptr [ebp-8]
+  0059DF2E: push        ecx
+  0059DF2F: mov         ecx,esi
+  0059DF31: movss       dword ptr [esp],xmm0
+  0059DF36: call        00D90F20
+  0059DF3B: push        eax
+  0059DF3C: call        010D7DA0
+  0059DF41: mov         eax,dword ptr [esi]
+  0059DF43: add         esp,8
+  0059DF46: mov         ecx,esi
+  0059DF48: mov         eax,dword ptr [eax+00000084h]
+  0059DF4E: push        1
+  0059DF50: push        0
+  0059DF52: push        6
+  0059DF54: call        eax
+  0059DF56: fstp        st(0)
+  0059DF58: mov         ecx,esi
+  0059DF5A: push        13h
+  0059DF5C: call        00D98E50
+  0059DF61: mov         eax,dword ptr [esi]
+  0059DF63: mov         ecx,esi
+  0059DF65: push        1
+  0059DF67: push        0
+  0059DF69: push        4
+  0059DF6B: mov         eax,dword ptr [eax+00000088h]
+  0059DF71: call        eax
+  0059DF73: or          dword ptr [edi+20h],100h
+  0059DF7A: fstp        st(0)
+  0059DF7C: pop         edi
+  0059DF7D: pop         esi
+  0059DF7E: mov         esp,ebp
+  0059DF80: pop         ebp
+  0059DF81: ret         4
+  0059DF84: int         3
+  0059DF85: int         3
+  0059DF86: int         3
+  0059DF87: int         3
+  0059DF88: int         3
+  0059DF89: int         3
+  0059DF8A: int         3
+  0059DF8B: int         3
+  0059DF8C: int         3
+  0059DF8D: int         3
+  0059DF8E: int         3
+  0059DF8F: int         3
+
+  Summary
+
+        1000 .text

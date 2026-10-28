@@ -1,0 +1,69 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "d6cc5b018fdd53723c124f6132962c31ba71e766bba615ee0765713bc4f18197",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  },
+  "profiles": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "capture": 8740,
+      "projection": "0xd53360",
+      "length": 327,
+      "caller": "0xf1634f",
+      "constants": {
+        "0x1823a0c": "db0f4940",
+        "0x1721140": "0000803f",
+        "0x1721138": "0000003f",
+        "0x1849114": "000000c0"
+      },
+      "signature": "cdecl(float fov,float aspect,float near,float far,float* output); Win64 standard five arguments"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "capture": 32116,
+      "projection": "0xd0e360",
+      "length": 327,
+      "caller": "0xed532f",
+      "constants": {
+        "0x17d88ec": "db0f4940",
+        "0x16d6150": "0000803f",
+        "0x16d6148": "0000003f",
+        "0x17fe034": "000000c0"
+      },
+      "signature": "cdecl(float fov,float aspect,float near,float far,float* output); Win64 standard five arguments"
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "capture": 24984,
+      "projection": "0xef7e50",
+      "length": 318,
+      "caller": "0x10f6399",
+      "constants": {
+        "0x1bffa94": "db0f4940",
+        "0x19c6a28": "0000803f",
+        "0x19c7be0": "0000003f",
+        "0x1c4603c": "000000c0"
+      },
+      "signature": "cdecl(float fov,float aspect,float near,float far,float* output); Win64 standard five arguments"
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "capture": 27336,
+      "projection": "0xf33c40",
+      "length": 318,
+      "caller": "0x1132df9",
+      "constants": {
+        "0x1c2e924": "db0f4940",
+        "0x19f5a38": "0000803f",
+        "0x19f6bf0": "0000003f",
+        "0x1c74f4c": "000000c0"
+      },
+      "signature": "cdecl(float fov,float aspect,float near,float far,float* output); Win64 standard five arguments"
+    }
+  ],
+  "scope": "WHT PerspectiveHook: call original, divide matrix[0] by (client width/client height)/(4/3). WHT-1.29 only toggles unused state."
+}

@@ -1,0 +1,53 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-3cb6e0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  0059B6E0: or          byte ptr [eax],al
+  0059B6E2: int         3
+  0059B6E3: int         3
+  0059B6E4: int         3
+  0059B6E5: int         3
+  0059B6E6: int         3
+  0059B6E7: int         3
+  0059B6E8: int         3
+  0059B6E9: int         3
+  0059B6EA: int         3
+  0059B6EB: int         3
+  0059B6EC: int         3
+  0059B6ED: int         3
+  0059B6EE: int         3
+  0059B6EF: int         3
+  0059B6F0: push        ebp
+  0059B6F1: mov         ebp,esp
+  0059B6F3: mov         eax,dword ptr [ebp+8]
+  0059B6F6: cmp         eax,2
+  0059B6F9: jb          0059B708
+  0059B6FB: push        57h
+  0059B6FD: call        00460CE0
+  0059B702: xor         eax,eax
+  0059B704: pop         ebp
+  0059B705: ret         4
+  0059B708: mov         eax,dword ptr [ecx+eax*4+000000A4h]
+  0059B70F: pop         ebp
+  0059B710: ret         4
+  0059B713: int         3
+  0059B714: int         3
+  0059B715: int         3
+  0059B716: int         3
+  0059B717: int         3
+  0059B718: int         3
+  0059B719: int         3
+  0059B71A: int         3
+  0059B71B: int         3
+  0059B71C: int         3
+  0059B71D: int         3
+  0059B71E: int         3
+  0059B71F: int         3
+
+  Summary
+
+        1000 .text

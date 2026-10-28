@@ -1,4 +1,4 @@
-#include "stat_paint131.hpp"
+﻿#include "stat_paint131.hpp"
 #pragma once
 #include "resource131.hpp"
 #include "player_colors129.hpp"
@@ -45,6 +45,37 @@ inline bool UnitPlayerColor131(uintptr_t base,const HpColorProfile131& p,uintptr
   return ResourceIdentity131(player,base,r->playerTable)&&PlayerColor129(*reinterpret_cast<unsigned*>(player+r->colorOffset),color);
  }__except(1){return false;}
 }
+// Reference 1.29 uses normal color for self, allies, observers and neutral slots.
+// Unknown alliance data must retain the native color instead of guessing enemy.
+inline bool HpEnemyPolicy131(unsigned owner,unsigned physical,unsigned local,bool observer,bool allianceKnown,uint32_t alliances,bool& enemy){
+ if(owner>=28||local>=24)return false;
+ if(owner==local||owner>=24||observer){enemy=false;return true;}
+ if(physical>=24||!allianceKnown)return false;
+ enemy=(alliances&(1u<<physical))==0;return true;
+}
+inline bool UnitConfiguredHpColor131(uintptr_t base,const HpColorProfile131& p,uintptr_t unit,const Config& config,uint32_t& color){
+ if(config.colorPlayer)return UnitPlayerColor131(base,p,unit,color);
+ const auto* r=ResourceProfileFor131(p.build);if(!r)return false;
+ __try{
+  unsigned local=24;const auto world=ResourceWorld131(base,*r,local);
+  if(!world||!unit||*reinterpret_cast<uintptr_t*>(unit)!=base+p.unit)return false;
+  const unsigned owner=reinterpret_cast<unsigned(__thiscall*)(uintptr_t)>(base+p.owner)(unit);if(owner>=28)return false;
+  const auto playerFn=reinterpret_cast<uintptr_t(__thiscall*)(uintptr_t,unsigned)>(base+r->playerFn);
+  const auto integer=reinterpret_cast<int(__thiscall*)(uintptr_t)>(base+r->integerFn);
+  const auto own=playerFn(world,local);if(!ResourceIdentity131(own,base,r->playerTable))return false;
+  const bool observer=integer(own+r->stateBase+11*r->stateStride)!=0;
+  unsigned physical=owner;bool known=false;uint32_t mask=0;
+  if(owner!=local&&owner<24&&!observer){
+   const auto other=playerFn(world,owner);if(!ResourceIdentity131(other,base,r->playerTable))return false;
+   physical=*reinterpret_cast<unsigned char*>(other+r->idOffset);
+   const auto alliances=*reinterpret_cast<uintptr_t*>(own+r->allianceOffset);
+   known=ResourceIdentity131(alliances,base,r->allianceTable);
+   if(known)mask=uint32_t(integer(alliances+r->allianceMask));
+  }
+  bool enemy=false;if(!HpEnemyPolicy131(owner,physical,local,observer,known,mask,enemy))return false;
+  color=enemy?config.hpBarColorEnemy:config.hpBarColor;return true;
+ }__except(1){return false;}
+}
 inline bool SetHpTexture131(uintptr_t base,const HpColorProfile131& p,uintptr_t bar,uintptr_t unit,uintptr_t texture,uint32_t color){
  uintptr_t current=0;uint32_t before=0;if(!ReadHpTexture131(base,p,bar,unit,current,before)||current!=texture)return false;
  __try{
@@ -54,7 +85,7 @@ inline bool SetHpTexture131(uintptr_t base,const HpColorProfile131& p,uintptr_t 
 }
 struct HpPlayerColor131 {
  struct TintState {uintptr_t texture=0;uint32_t original=0,written=0;bool active=false;};
- struct Entry {TintState tint;uintptr_t unit=0;uint64_t due=0;bool known=false;uint32_t desired=0;};
+ struct Entry {TintState tint;uintptr_t unit=0;uint64_t due=0;bool known=false,playerMode=false;uint32_t desired=0,normal=0,enemy=0;};
  std::unordered_map<uintptr_t,Entry> entries;uintptr_t checkedBase=0;unsigned checkedBuild=0;bool ready=false;
  void Reset(){entries.clear();checkedBase=0;checkedBuild=0;ready=false;}
  void Prune(const std::unordered_set<uintptr_t>& frames){for(auto i=entries.begin();i!=entries.end();)if(!frames.count(i->first))i=entries.erase(i);else ++i;}
@@ -65,14 +96,14 @@ struct HpPlayerColor131 {
   else if(state.active){if(native==state.written&&native!=state.original&&!set(texture,state.original))return false;state.active=false;}
   return true;
  }
- void Update(uintptr_t base,unsigned build,uintptr_t bar,uintptr_t unit,bool enabled,uint64_t now){
+ void Update(uintptr_t base,unsigned build,uintptr_t bar,uintptr_t unit,bool enabled,uint64_t now,const Config& config){
   auto found=entries.find(bar);if(!enabled&&found==entries.end())return;
   const auto* p=HpColorProfileFor131(build);if(!p)return;
   if(checkedBase!=base||checkedBuild!=build){checkedBase=base;checkedBuild=build;ready=HpColorCode131(base,*p);}if(!ready)return;
   uintptr_t texture=0;uint32_t native=0;if(!ReadHpTexture131(base,*p,bar,unit,texture,native))return;
   if(found==entries.end()){if(entries.size()>=4096)return;found=entries.emplace(bar,Entry{}).first;}
   auto& e=found->second;
-  if(enabled&&(e.unit!=unit||e.tint.texture!=texture||now>=e.due)){e.unit=unit;e.due=now+200;e.known=UnitPlayerColor131(base,*p,unit,e.desired);}
+  if(enabled&&(e.unit!=unit||e.tint.texture!=texture||e.playerMode!=config.colorPlayer||e.normal!=config.hpBarColor||e.enemy!=config.hpBarColorEnemy||now>=e.due)){e.unit=unit;e.due=now+200;e.playerMode=config.colorPlayer;e.normal=config.hpBarColor;e.enemy=config.hpBarColorEnemy;e.known=UnitConfiguredHpColor131(base,*p,unit,config,e.desired);}
   StatPaintRecord131 record;record.unit=unit;record.unitTable=base+p->unit;record.texture=texture;record.textureTable=base+p->texture;record.tint=base+p->tint;record.desired=e.desired;SetStatPaint131(base,p->bar,bar,true,record,enabled&&e.known);
   Tint(e.tint,texture,native,enabled&&e.known,e.desired,[&](uintptr_t t,uint32_t color){return SetHpTexture131(base,*p,bar,unit,t,color);});
   if(!enabled&&!e.tint.active)entries.erase(found);

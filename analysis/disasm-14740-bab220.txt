@@ -1,0 +1,54 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-bab220.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D7B220: push        ebp
+  00D7B221: mov         ebp,esp
+  00D7B223: mov         ecx,dword ptr [ecx+00000454h]
+  00D7B229: test        ecx,ecx
+  00D7B22B: je          00D7B233
+  00D7B22D: pop         ebp
+  00D7B22E: jmp         0058E850
+  00D7B233: pop         ebp
+  00D7B234: ret         4
+  00D7B237: int         3
+  00D7B238: int         3
+  00D7B239: int         3
+  00D7B23A: int         3
+  00D7B23B: int         3
+  00D7B23C: int         3
+  00D7B23D: int         3
+  00D7B23E: int         3
+  00D7B23F: int         3
+  00D7B240: push        ebp
+  00D7B241: mov         ebp,esp
+  00D7B243: push        esi
+  00D7B244: push        0
+  00D7B246: push        1
+  00D7B248: push        1
+  00D7B24A: push        0
+  00D7B24C: push        1
+  00D7B24E: mov         esi,ecx
+  00D7B250: call        0067B100
+  00D7B255: push        eax
+  00D7B256: mov         ecx,esi
+  00D7B258: call        00D7F150
+  00D7B25D: test        eax,eax
+  00D7B25F: je          00D7B26E
+  00D7B261: mov         ecx,dword ptr [ebp+8]
+  00D7B264: mov         dword ptr [eax+70h],ecx
+  00D7B267: mov         ecx,esi
+  00D7B269: call        00DA0A10
+  00D7B26E: pop         esi
+  00D7B26F: pop         ebp
+  00D7B270: ret         4
+  00D7B273: int         3
+  00D7B274: int         3
+
+  Summary
+
+        1000 .text

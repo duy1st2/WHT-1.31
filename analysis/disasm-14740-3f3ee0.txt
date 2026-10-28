@@ -1,0 +1,162 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-3f3ee0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  005C3EE0: push        ebp
+  005C3EE1: mov         ebp,esp
+  005C3EE3: mov         eax,dword ptr [ebp+8]
+  005C3EE6: sub         esp,8
+  005C3EE9: neg         eax
+  005C3EEB: push        edi
+  005C3EEC: mov         edi,ecx
+  005C3EEE: mov         ecx,dword ptr [edi+00000094h]
+  005C3EF4: cmp         eax,ecx
+  005C3EF6: jle         005C3F01
+  005C3EF8: mov         eax,ecx
+  005C3EFA: neg         eax
+  005C3EFC: mov         dword ptr [ebp+8],eax
+  005C3EFF: jmp         005C3F04
+  005C3F01: mov         eax,dword ptr [ebp+8]
+  005C3F04: test        eax,eax
+  005C3F06: jne         005C3F11
+  005C3F08: xor         al,al
+  005C3F0A: pop         edi
+  005C3F0B: mov         esp,ebp
+  005C3F0D: pop         ebp
+  005C3F0E: ret         4
+  005C3F11: push        ebx
+  005C3F12: push        esi
+  005C3F13: mov         dword ptr [ebp-4],0
+  005C3F1A: lea         ebx,[edi+000000F8h]
+  005C3F20: mov         dword ptr [ebp-8],5
+  005C3F27: mov         eax,dword ptr [edi+30h]
+  005C3F2A: mov         esi,dword ptr [ebx]
+  005C3F2C: test        eax,eax
+  005C3F2E: jne         005C3F37
+  005C3F30: mov         ecx,edi
+  005C3F32: call        00F39150
+  005C3F37: push        0
+  005C3F39: push        0
+  005C3F3B: push        1
+  005C3F3D: push        1
+  005C3F3F: push        0
+  005C3F41: push        esi
+  005C3F42: mov         ecx,eax
+  005C3F44: call        00D7F150
+  005C3F49: test        eax,eax
+  005C3F4B: je          005C3F53
+  005C3F4D: mov         edx,dword ptr [eax+50h]
+  005C3F50: inc         edx
+  005C3F51: jmp         005C3F55
+  005C3F53: xor         edx,edx
+  005C3F55: xor         eax,eax
+  005C3F57: lea         ecx,[edi+000000F8h]
+  005C3F5D: nop         dword ptr [eax]
+  005C3F60: cmp         dword ptr [ecx],esi
+  005C3F62: je          005C3F72
+  005C3F64: inc         eax
+  005C3F65: add         ecx,4
+  005C3F68: cmp         eax,5
+  005C3F6B: jl          005C3F60
+  005C3F6D: or          eax,0FFFFFFFFh
+  005C3F70: jmp         005C3F79
+  005C3F72: mov         eax,dword ptr [edi+eax*4+00000110h]
+  005C3F79: mov         ecx,eax
+  005C3F7B: sub         ecx,edx
+  005C3F7D: cmp         edx,eax
+  005C3F7F: sbb         eax,eax
+  005C3F81: add         ebx,4
+  005C3F84: and         eax,ecx
+  005C3F86: mov         ecx,dword ptr [ebp-4]
+  005C3F89: add         ecx,eax
+  005C3F8B: sub         dword ptr [ebp-8],1
+  005C3F8F: mov         dword ptr [ebp-4],ecx
+  005C3F92: jne         005C3F27
+  005C3F94: cmp         dword ptr [ebp+8],ecx
+  005C3F97: pop         esi
+  005C3F98: cmovle      ecx,dword ptr [ebp+8]
+  005C3F9C: add         dword ptr [edi+00000094h],ecx
+  005C3FA2: mov         eax,dword ptr [edi+30h]
+  005C3FA5: pop         ebx
+  005C3FA6: test        eax,eax
+  005C3FA8: jne         005C3FB1
+  005C3FAA: mov         ecx,edi
+  005C3FAC: call        00F39150
+  005C3FB1: push        0
+  005C3FB3: push        eax
+  005C3FB4: call        00CE7D30
+  005C3FB9: push        0
+  005C3FBB: call        00CE7340
+  005C3FC0: add         esp,0Ch
+  005C3FC3: mov         al,1
+  005C3FC5: pop         edi
+  005C3FC6: mov         esp,ebp
+  005C3FC8: pop         ebp
+  005C3FC9: ret         4
+  005C3FCC: int         3
+  005C3FCD: int         3
+  005C3FCE: int         3
+  005C3FCF: int         3
+  005C3FD0: push        ebp
+  005C3FD1: mov         ebp,esp
+  005C3FD3: sub         esp,8
+  005C3FD6: mov         dword ptr [ebp-8],ecx
+  005C3FD9: mov         ecx,dword ptr [ebp+8]
+  005C3FDC: push        ebx
+  005C3FDD: push        esi
+  005C3FDE: push        edi
+  005C3FDF: mov         ecx,dword ptr [ecx+0Ch]
+  005C3FE2: mov         dword ptr [ebp-4],ecx
+  005C3FE5: mov         edx,dword ptr [ecx+00000168h]
+  005C3FEB: mov         eax,edx
+  005C3FED: shr         eax,8
+  005C3FF0: not         al
+  005C3FF2: test        al,1
+  005C3FF4: jne         005C4165
+  005C3FFA: movzx       eax,byte ptr [ecx+37h]
+  005C3FFE: cmp         eax,41h
+  005C4001: jb          005C4165
+  005C4007: cmp         eax,5Ah
+  005C400A: ja          005C4165
+  005C4010: shr         edx,1Eh
+  005C4013: test        dl,1
+  005C4016: jne         005C4165
+  005C401C: test        ch,0
+  005C401F: mov         bl,bl
+  005C4021: jae         005C407F
+  005C4023: jb          005C4084
+  005C4025: mov         bl,4Dh
+  005C4028: sub         dh,7Eh
+  005C402B: sub         cl,0CEh
+  005C402E: add         edx,0Dh
+  005C4031: mov         edx,43D521F1h
+  005C4037: mov         edi,0C01CDF33h
+  005C403D: jge         005E3F47
+  005C4043: sub         cl,0F2h
+  005C4046: jle         005C4066
+  005C4048: mov         dl,5Ah
+  005C404B: add         dl,0F3h
+  005C404E: add         bh,3Ch
+  005C4051: add         dl,0D6h
+  005C4054: add         cl,0A5h
+  005C4057: mov         eax,97166A4h
+  005C405D: add         eax,0FFFFFFC1h
+  005C4060: pop         edx
+  005C4061: neg         cl
+  005C4063: push        33FAF45Ch
+  005C4068: jl          005C4B50
+  005C406E: sub         ebx,7863AEFBh
+  005C4074: mov         eax,0B2EE40A1h
+  005C407A: C0
+  005C407B: mov         bl,42h
+  005C407D: sahf
+  005C407E: xchg        eax,ebx
+  005C407F: clc
+
+  Summary
+
+        1000 .text

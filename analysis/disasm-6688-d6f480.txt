@@ -1,0 +1,49 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-d6f480.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF783CCF480: mov         word ptr [rbp+1Ah],ss
+  00007FF783CCF483: add         byte ptr [rax-75h],cl
+  00007FF783CCF486: fmul        dword ptr [rax-7Bh]
+  00007FF783CCF489: sal         byte ptr [rbp+rcx*2+0Fh],1Fh
+  00007FF783CCF48E: add         byte ptr [rbx+FFFFFFFF8D484443h],cl
+  00007FF783CCF495: 4B
+  00007FF783CCF496: and         eax,dword ptr [rcx]
+  00007FF783CCF499: cmp         eax,0FFFFFFFFh
+  00007FF783CCF49C: jne         00007FF783CCF4A2
+  00007FF783CCF49E: xor         edi,edi
+  00007FF783CCF4A0: jmp         00007FF783CCF4AA
+  00007FF783CCF4A2: call        00007FF783E74A10
+  00007FF783CCF4A7: mov         rdi,rax
+  00007FF783CCF4AA: mov         rdx,qword ptr [rbx]
+  00007FF783CCF4AD: mov         rcx,rbx
+  00007FF783CCF4B0: call        qword ptr [rdx+0000000000000270h]
+  00007FF783CCF4B6: cmp         eax,esi
+  00007FF783CCF4B8: jne         00007FF783CCF4D1
+  00007FF783CCF4BA: mov         r9,qword ptr [rbx]
+  00007FF783CCF4BD: mov         r8,rbp
+  00007FF783CCF4C0: mov         rdx,r15
+  00007FF783CCF4C3: mov         rcx,rbx
+  00007FF783CCF4C6: call        qword ptr [r9+0000000000000288h]
+  00007FF783CCF4CD: test        al,al
+  00007FF783CCF4CF: jne         00007FF783CCF4FB
+  00007FF783CCF4D1: mov         rbx,rdi
+  00007FF783CCF4D4: test        rdi,rdi
+  00007FF783CCF4D7: jne         00007FF783CCF490
+  00007FF783CCF4D9: inc         esi
+  00007FF783CCF4DB: cmp         esi,29h
+  00007FF783CCF4DE: jle         00007FF783CCF470
+  00007FF783CCF4E0: xor         al,al
+  00007FF783CCF4E2: mov         rbx,qword ptr [rsp+40h]
+  00007FF783CCF4E7: mov         rbp,qword ptr [rsp+48h]
+  00007FF783CCF4EC: 48
+  00007FF783CCF4ED: 8B
+  00007FF783CCF4EE: je          00007FF783CCF514
+
+  Summary
+
+        1000 .text

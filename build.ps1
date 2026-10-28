@@ -1,4 +1,4 @@
-param([ValidateSet("x86","x64")][string]$Architecture="x86",[string]$BuildDir='build-wht',[string]$Generator='Visual Studio 18 2026',[switch]$WithTests,[switch]$Install)
+﻿param([ValidateSet("x86","x64")][string]$Architecture="x86",[string]$BuildDir='build-wht',[string]$Generator='Visual Studio 18 2026',[switch]$WithTests,[switch]$Install)
 $ErrorActionPreference='Stop'
 if($Architecture -eq 'x64' -and $BuildDir -eq 'build-wht'){$BuildDir='build-wht-x64'}
 $platform=if($Architecture -eq 'x64'){'x64'}else{'Win32'}
@@ -16,7 +16,7 @@ if($Architecture -eq 'x86'){& (Join-Path $build 'Release\WHT131ExtractAssets.exe
 if($WithTests){& (Join-Path (Split-Path $cmake) 'ctest.exe') --test-dir $build -C Release --output-on-failure;CheckExit}
 $dist=Join-Path $root ('dist\client-'+$Architecture)
 New-Item -ItemType Directory -Path $dist -Force | Out-Null
-foreach($name in @('WHT.mix','WHT131Launcher.exe')){Copy-Item -LiteralPath (Join-Path $build "Release\$name") -Destination (Join-Path $dist $name) -Force}
+foreach($name in @('WHT.mix','WHT131Launcher.exe','WHT.ExternalHud.exe')){Copy-Item -LiteralPath (Join-Path $build "Release\$name") -Destination (Join-Path $dist $name) -Force}
 Copy-Item -LiteralPath (Join-Path $root 'WHT.ini') -Destination (Join-Path $dist 'WHT.example.ini') -Force
 if($Install){& (Join-Path $root 'install-runtime.ps1') -BuildDir $build -Architecture $Architecture}
 Write-Host "WHT 1.31 $Architecture build complete: $build\Release"

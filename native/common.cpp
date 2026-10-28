@@ -1,4 +1,4 @@
-#include "common.hpp"
+﻿#include "common.hpp"
 #include "auto_heal.hpp"
 #include <bcrypt.h>
 #include <fstream>
@@ -149,6 +149,8 @@ Config LoadConfig(const std::wstring& ini) {
     ParseFpsLimit(Read(ini,L"Graphics",L"Fps Limit",L"0"),c.fpsLimit);
     ParseSceneLight(Read(ini,L"Event",L"Light",L"0"),c.sceneLight);
     c.showFps=Read(ini,L"Event",L"Show FPS",L"0")==L"1";
+    c.externalHud=Read(ini,L"Performance",L"External HUD",L"0")==L"1";
+    c.workerCorePreference=Read(ini,L"Performance",L"Worker Core Preference",L"1")==L"1";
     c.showPing=Read(ini,L"Event",L"Show Ping",L"0")==L"1";
     c.showResource=Read(ini,L"Event",L"Show Resource",L"0")==L"1";
     c.showHotkeyInPanel=Read(ini,L"Event",L"Show Hotkey In Panel",L"0")==L"1";

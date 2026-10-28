@@ -1,0 +1,25 @@
+{
+  "note": "String presence only; live resource lookup has not been verified. No game offsets or inherited native calls used.",
+  "clients": [
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\Warcraft III.exe",
+      "sha256": "9feab92f0d8898904122e25ac0ece42c2070ebd443e4716a62b4767b0f6d0d72",
+      "allowLocalFilesAsciiOffset": 25405640
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\Warcraft III.exe",
+      "sha256": "0f82359f25b0c25fed3bd379c482bdd695636f16e064526c2943e453ff4e9aaf",
+      "allowLocalFilesAsciiOffset": 29562848
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\Warcraft III.exe",
+      "sha256": "93e3d7b38952d6649383c636af4f766aa599ca25e10a150774f221f1cb4c3ea1",
+      "allowLocalFilesAsciiOffset": 25098672
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\Warcraft III.exe",
+      "sha256": "ba77193d0c5a94f3edcfd4933987764c6faf8ab97cb93d6256b645bbac8939e1",
+      "allowLocalFilesAsciiOffset": 29755600
+    }
+  ]
+}

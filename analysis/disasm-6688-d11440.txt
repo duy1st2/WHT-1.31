@@ -1,0 +1,113 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-d11440.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF783C71440: mov         esi,dword ptr [rsi+0000000000000570h]
+  00007FF783C71446: jmp         00007FF783C7144F
+  00007FF783C71448: mov         rsi,qword ptr [r14+0000000000000578h]
+  00007FF783C7144F: mov         r8d,ebx
+  00007FF783C71452: test        rsi,rsi
+  00007FF783C71455: sete        r8b
+  00007FF783C71459: movzx       eax,r15b
+  00007FF783C7145D: xor         eax,1
+  00007FF783C71460: cmp         r8d,eax
+  00007FF783C71463: je          00007FF783C7156E
+  00007FF783C71469: test        rsi,rsi
+  00007FF783C7146C: je          00007FF783C7147E
+  00007FF783C7146E: mov         rdx,rsi
+  00007FF783C71471: mov         rcx,r14
+  00007FF783C71474: call        00007FF783C70810
+  00007FF783C71479: jmp         00007FF783C7156E
+  00007FF783C7147E: call        00007FF7834FA5D0
+  00007FF783C71483: mov         dword ptr [rsp+20h],eax
+  00007FF783C71487: xorps       xmm0,xmm0
+  00007FF783C7148A: movdqu      xmmword ptr [rsp+28h],xmm0
+  00007FF783C71490: mov         edx,eax
+  00007FF783C71492: lea         rcx,[rsp+20h]
+  00007FF783C71497: call        00007FF7832CA580
+  00007FF783C7149C: nop
+  00007FF783C7149D: mov         qword ptr [rsp+48h],rbx
+  00007FF783C714A2: call        00007FF7834FA5D0
+  00007FF783C714A7: mov         ecx,eax
+  00007FF783C714A9: call        00007FF78321C210
+  00007FF783C714AE: mov         rdi,rax
+  00007FF783C714B1: call        00007FF7834FA5D0
+  00007FF783C714B6: mov         edx,eax
+  00007FF783C714B8: mov         r8,qword ptr [rdi+00000000000000E0h]
+  00007FF783C714BF: lea         rcx,[rsp+50h]
+  00007FF783C714C4: call        00007FF783E72440
+  00007FF783C714C9: mov         qword ptr [rsp+0000000000000090h],r12
+  00007FF783C714D1: mov         r8b,1
+  00007FF783C714D4: movzx       edx,r8b
+  00007FF783C714D8: lea         rcx,[rsp+50h]
+  00007FF783C714DD: call        00007FF783F52220
+  00007FF783C714E2: test        rax,rax
+  00007FF783C714E5: jne         00007FF783C714F1
+  00007FF783C714E7: lea         ecx,[rax+57h]
+  00007FF783C714EA: call        00007FF78323DBD0
+  00007FF783C714EF: jmp         00007FF783C71530
+  00007FF783C714F1: mov         rsi,qword ptr [rax+0000000000000090h]
+  00007FF783C714F8: test        rsi,rsi
+  00007FF783C714FB: je          00007FF783C7151D
+  00007FF783C714FD: call        00007FF7834FA5D0
+  00007FF783C71502: mov         edi,eax
+  00007FF783C71504: mov         rdx,qword ptr [rsi]
+  00007FF783C71507: mov         rcx,rsi
+  00007FF783C7150A: call        qword ptr [rdx+38h]
+  00007FF783C7150D: mov         ecx,eax
+  00007FF783C7150F: mov         edx,edi
+  00007FF783C71511: call        00007FF783E693C0
+  00007FF783C71516: test        al,al
+  00007FF783C71518: mov         rax,rsi
+  00007FF783C7151B: jne         00007FF783C71520
+  00007FF783C7151D: mov         rax,rbx
+  00007FF783C71520: test        rax,rax
+  00007FF783C71523: je          00007FF783C71530
+  00007FF783C71525: test        rsi,rsi
+  00007FF783C71528: je          00007FF783C7152D
+  00007FF783C7152A: inc         dword ptr [rsi+8]
+  00007FF783C7152D: mov         rbx,rax
+  00007FF783C71530: test        rbx,rbx
+  00007FF783C71533: je          00007FF783C71544
+  00007FF783C71535: add         dword ptr [rbx+8],r12d
+  00007FF783C71539: jne         00007FF783C71544
+  00007FF783C7153B: mov         rax,qword ptr [rbx]
+  00007FF783C7153E: mov         rcx,rbx
+  00007FF783C71541: call        qword ptr [rax]
+  00007FF783C71543: nop
+  00007FF783C71544: mov         rax,qword ptr [rbx]
+  00007FF783C71547: lea         r8,[rsp+20h]
+  00007FF783C7154C: mov         rdx,r14
+  00007FF783C7154F: mov         rcx,rbx
+  00007FF783C71552: call        qword ptr [rax+0000000000000100h]
+  00007FF783C71558: mov         rdx,rbx
+  00007FF783C7155B: mov         rcx,r14
+  00007FF783C7155E: call        00007FF783C6B4E0
+  00007FF783C71563: nop
+  00007FF783C71564: lea         rcx,[rsp+20h]
+  00007FF783C71569: call        00007FF7832C9FC0
+  00007FF783C7156E: mov         rcx,qword ptr [rsp+00000000000000A0h]
+  00007FF783C71576: xor         rcx,rsp
+  00007FF783C71579: call        00007FF784689460
+  00007FF783C7157E: lea         r11,[rsp+00000000000000B0h]
+  00007FF783C71586: mov         rbx,qword ptr [r11+38h]
+  00007FF783C7158A: mov         rbp,qword ptr [r11+40h]
+  00007FF783C7158E: mov         rsp,r11
+  00007FF783C71591: pop         r15
+  00007FF783C71593: pop         r14
+  00007FF783C71595: pop         r12
+  00007FF783C71597: pop         rdi
+  00007FF783C71598: pop         rsi
+  00007FF783C71599: ret
+  00007FF783C7159A: pop         rbp
+  00007FF783C7159B: xor         al,79h
+  00007FF783C7159D: fcmovbe     st,st(6)
+  00007FF783C7159F: 7B
+
+  Summary
+
+        1000 .text

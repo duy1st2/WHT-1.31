@@ -1,0 +1,68 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-b22ac0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00CF2AC0: push        ebp
+  00CF2AC1: mov         ebp,esp
+  00CF2AC3: sub         esp,18h
+  00CF2AC6: push        ebx
+  00CF2AC7: mov         ebx,dword ptr [ebp+10h]
+  00CF2ACA: push        esi
+  00CF2ACB: mov         esi,ecx
+  00CF2ACD: cmp         dword ptr [ebx],0
+  00CF2AD0: jne         00CF2AE3
+  00CF2AD2: push        57h
+  00CF2AD4: call        00460CE0
+  00CF2AD9: pop         esi
+  00CF2ADA: xor         eax,eax
+  00CF2ADC: pop         ebx
+  00CF2ADD: mov         esp,ebp
+  00CF2ADF: pop         ebp
+  00CF2AE0: ret         14h
+  00CF2AE3: push        edi
+  00CF2AE4: push        0
+  00CF2AE6: push        1
+  00CF2AE8: mov         dword ptr [ebp-18h],0
+  00CF2AEF: mov         dword ptr [ebp-14h],0
+  00CF2AF6: mov         dword ptr [ebp-10h],0
+  00CF2AFD: mov         dword ptr [ebp-0Ch],0
+  00CF2B04: mov         dword ptr [ebp-8],0
+  00CF2B0B: mov         dword ptr [ebp-4],0
+  00CF2B12: call        00CCA860
+  00CF2B17: add         esp,8
+  00CF2B1A: mov         edi,eax
+  00CF2B1C: call        00F09090
+  00CF2B21: test        al,al
+  00CF2B23: je          00CF2BD5
+  00CF2B29: test        edi,edi
+  00CF2B2B: je          00CF2BD5
+  00CF2B31: mov         ecx,edi
+  00CF2B33: call        00CCCF50
+  00CF2B38: test        al,al
+  00CF2B3A: je          00CF2BD5
+  00CF2B40: cmp         byte ptr [esi+00000110h],0
+  00CF2B47: je          00CF2BD5
+  00CF2B4D: movss       xmm0,dword ptr [esi+00000214h]
+  00CF2B55: xorps       xmm1,xmm1
+  00CF2B58: subss       xmm0,dword ptr [esi+0000020Ch]
+  00CF2B60: ucomiss     xmm0,xmm1
+  00CF2B63: lahf
+  00CF2B64: test        ah,44h
+  00CF2B67: jnp         00CF2BD5
+  00CF2B69: movss       xmm0,dword ptr [esi+00000210h]
+  00CF2B71: subss       xmm0,dword ptr [esi+00000208h]
+  00CF2B79: ucomiss     xmm0,xmm1
+  00CF2B7C: lahf
+  00CF2B7D: test        ah,44h
+  00CF2B80: jnp         00CF2BD5
+  00CF2B82: movss       xmm0,dword ptr [ebp+0Ch]
+  00CF2B87: comiss      xmm0,dword ptr ds:[019F5AF4h]
+  00CF2B8E: jae         00CF2BD5
+
+  Summary
+
+        1000 .text

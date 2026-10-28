@@ -1,0 +1,50 @@
+{
+  "pid": 33740,
+  "build": 12164,
+  "bits": 32,
+  "read_only": true,
+  "matches": 8,
+  "total": 8,
+  "blocks": [
+    {
+      "rva": "0x8d13f0",
+      "size": 30,
+      "matches": true
+    },
+    {
+      "rva": "0x8dd8b0",
+      "size": 25,
+      "matches": true
+    },
+    {
+      "rva": "0x6ff780",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x6ff900",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x6ffa80",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0xbb6940",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0xbb6ac0",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0xbb6c40",
+      "size": 256,
+      "matches": true
+    }
+  ]
+}

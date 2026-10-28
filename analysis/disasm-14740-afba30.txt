@@ -1,0 +1,167 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-afba30.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00CCBA30: push        ebp
+  00CCBA31: mov         ebp,esp
+  00CCBA33: sub         esp,294h
+  00CCBA39: mov         eax,dword ptr ds:[01C98574h]
+  00CCBA3E: xor         eax,ebp
+  00CCBA40: mov         dword ptr [ebp-4],eax
+  00CCBA43: cmp         byte ptr [ecx+000001C0h],0
+  00CCBA4A: mov         eax,dword ptr [ebp+8]
+  00CCBA4D: push        ebx
+  00CCBA4E: push        esi
+  00CCBA4F: push        edi
+  00CCBA50: mov         dword ptr [ebp+FFFFFD6Ch],ecx
+  00CCBA56: mov         dword ptr [ebp+FFFFFD78h],eax
+  00CCBA5C: je          00CCBCF3
+  00CCBA62: push        eax
+  00CCBA63: push        dword ptr [eax+34h]
+  00CCBA66: call        00CA5E80
+  00CCBA6B: add         esp,8
+  00CCBA6E: test        al,al
+  00CCBA70: jne         00CCBCF3
+  00CCBA76: jnp         00CCBAD9
+  00CCBA78: mov         ah,ah
+  00CCBA7A: jp          00CCBAD9
+  00CCBA7C: push        0Ch
+  00CCBA7E: add         edx,0FFFFFFD9h
+  00CCBA81: jl          00CD07BA
+  00CCBA87: neg         cl
+  00CCBA89: jae         00CD240D
+  00CCBA8F: add         al,0F6h
+  00CCBA92: add         eax,0A1C6898Bh
+  00CCBA98: jae         00CCBA58
+  00CCBA9A: call        00CDE6BE
+  00CCBA9F: sub         cl,78h
+  00CCBAA2: add         edi,80F11F1Fh
+  00CCBAA8: jno         00CE4870
+  00CCBAAE: push        esi
+  00CCBAAF: push        0D3B245C4h
+  00CCBAB4: add         esi,0FFFFFF87h
+  00CCBAB7: sub         ebx,1EAEC5DEh
+  00CCBABD: neg         ch
+  00CCBABF: mov         ebx,0B9D54A32h
+  00CCBAC5: sub         ecx,0C591AE61h
+  00CCBACB: rdtsc
+  00CCBACD: add         edx,38h
+  00CCBAD0: add         bl,52h
+  00CCBAD3: not         byte ptr [eax+A8864D0Eh]
+  00CCBAD9: js          00CCBAE1
+  00CCBADB: shr         dh,0
+  00CCBADE: jns         00CCBAE7
+  00CCBAE0: call        00CE225D
+  00CCBAE5: mov         ebp,65077990h
+  00CCBAEB: add         dl,0FAh
+  00CCBAEE: add         ebp,56799089h
+  00CCBAF4: call        00CD9155
+  00CCBAF9: sub         cl,0A8h
+  00CCBAFC: neg         bh
+  00CCBAFE: mov         ebp,3903255Ch
+  00CCBB04: push        0C1AA123h
+  00CCBB09: rdtsc
+  00CCBB0B: add         ebp,41h
+  00CCBB0E: ja          00CD82EE
+  00CCBB14: add         dh,55h
+  00CCBB17: mov         ebp,5AEA3339h
+  00CCBB1D: call        00CE120C
+  00CCBB22: sub         bh,0D0h
+  00CCBB25: sub         cl,94h
+  00CCBB28: add         edx,10h
+  00CCBB2B: ja          00CD1626
+  00CCBB31: mov         ebx,40914055h
+  00CCBB37: jnp         00CCBB04
+  00CCBB39: call        00CD12F3
+  00CCBB3E: ja          00CCBB68
+  00CCBB40: add         esi,29F6D022h
+  00CCBB46: cmp         byte ptr [ecx+3D8BBD77h],78h
+  00CCBB4D: cli
+  00CCBB4E: mov         dword ptr [ecx],0F781C033h
+  00CCBB54: fcmovne     st,st(5)
+  00CCBB56: xchg        eax,ebx
+  00CCBB57: xor         ecx,dword ptr [ecx+FFFD7485h]
+  00CCBB5D: dec         dword ptr [ebx+87B70FCFh]
+  00CCBB63: xchg        eax,esp
+  00CCBB64: add         byte ptr [eax],al
+  00CCBB66: add         byte ptr [eax-18h],dl
+  00CCBB69: ret
+  00CCBB6A: nop
+  00CCBB6B: mov         esi,789D8BFFh
+  00CCBB70: std
+  00CCBB71: FF
+  00CCBB72: dec         dword ptr [ebx+F4808BCBh]
+  00CCBB78: add         al,byte ptr [eax]
+  00CCBB7A: add         byte ptr [ecx+FFFD7085h],cl
+  00CCBB80: jmp         rax
+  00CCBB82: jmp         74C0:84000D38
+  00CCBB89: or          eax,9F442CB8h
+  00CCBB8E: add         dword ptr [ecx+FFFD7485h],ecx
+  00CCBB94: jmp         rbx
+  00CCBB96: imul        ecx,dword ptr [ebx+0FCB8B03h],0FFFFFFB7h
+  00CCBB9D: mov         bh,94h
+  00CCBB9F: add         byte ptr [eax],al
+  00CCBBA1: add         bh,bh
+  00CCBBA3: nop
+  00CCBBA4: in          al,dx
+  00CCBBA5: add         byte ptr [eax],al
+  00CCBBA7: add         byte ptr [eax+56h],dl
+  00CCBBAA: mov         ecx,edi
+  00CCBBAC: call        008C3A00
+  00CCBBB1: test        al,al
+  00CCBBB3: je          00CCBBE0
+  00CCBBB5: movzx       eax,word ptr [edi+00000094h]
+  00CCBBBC: mov         ecx,ebx
+  00CCBBBE: push        eax
+  00CCBBBF: mov         eax,dword ptr [ebx]
+  00CCBBC1: call        dword ptr [eax+000000ECh]
+  00CCBBC7: push        eax
+  00CCBBC8: mov         ecx,edi
+  00CCBBCA: call        008C3A00
+  00CCBBCF: test        al,al
+  00CCBBD1: je          00CCBBE0
+  00CCBBD3: mov         eax,19F443Ch
+  00CCBBD8: mov         dword ptr [ebp+FFFFFD74h],eax
+  00CCBBDE: jmp         00CCBC02
+  00CCBBE0: movzx       eax,word ptr [edi+00000094h]
+  00CCBBE7: mov         ecx,edi
+  00CCBBE9: push        eax
+  00CCBBEA: call        008B4C30
+  00CCBBEF: lea         ecx,[eax+00000100h]
+  00CCBBF5: call        00F38150
+  00CCBBFA: test        eax,eax
+  00CCBBFC: je          00CCBCF3
+  00CCBC02: push        ebx
+  00CCBC03: push        0
+  00CCBC05: push        dword ptr [ebx+34h]
+  00CCBC08: call        00CA4D70
+  00CCBC0D: mov         edx,dword ptr [ebx]
+  00CCBC0F: add         esp,0Ch
+  00CCBC12: mov         ecx,ebx
+  00CCBC14: mov         edi,eax
+  00CCBC16: call        dword ptr [edx+000000ECh]
+  00CCBC1C: push        eax
+  00CCBC1D: call        00CE8460
+  00CCBC22: mov         ecx,dword ptr [ebp+FFFFFD78h]
+  00CCBC28: add         esp,4
+  00CCBC2B: mov         ebx,dword ptr [eax]
+  00CCBC2D: lea         eax,[ebp+FFFFFF7Ch]
+  00CCBC33: push        80h
+  00CCBC38: push        eax
+  00CCBC39: call        00D7C0E0
+  00CCBC3E: lea         eax,[ebp+FFFFFF7Ch]
+  00CCBC44: push        eax
+  00CCBC45: movzx       eax,bl
+  00CCBC48: push        eax
+  00CCBC49: mov         eax,ebx
+  00CCBC4B: shr         eax,8
+  00CCBC4E: 0F
+  00CCBC4F: B6
+
+  Summary
+
+        1000 .text

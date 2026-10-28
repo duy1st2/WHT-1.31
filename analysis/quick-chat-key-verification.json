@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-27",
+  "command": "#qchatkey <1..9> <key|NONE>",
+  "tests": {
+    "x86": "2/2",
+    "x64": "1/1"
+  },
+  "artifacts": [
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.mix",
+      "sha256": "7E9ED725E8C060D8DD3E295ADE8AC6546CB753DFD712D1A0A38601FBACEFD822"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT131Launcher.exe",
+      "sha256": "FD9057FABE8791225E0A718442F8A549C913CBD518E98F6694072AEB4677E68B"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.mix",
+      "sha256": "02267ACA15092B792AB647BE0C0035CB0580790954A35B330823AD5D9E91F96F"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT131Launcher.exe",
+      "sha256": "32DA9E8244B89000C71694E094A11F2712E7DF8B7DC2B55C7D8B6312DBCD77A3"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.mix",
+      "sha256": "7E9ED725E8C060D8DD3E295ADE8AC6546CB753DFD712D1A0A38601FBACEFD822"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT131Launcher.exe",
+      "sha256": "FD9057FABE8791225E0A718442F8A549C913CBD518E98F6694072AEB4677E68B"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.mix",
+      "sha256": "02267ACA15092B792AB647BE0C0035CB0580790954A35B330823AD5D9E91F96F"
+    },
+    {
+      "path": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT131Launcher.exe",
+      "sha256": "32DA9E8244B89000C71694E094A11F2712E7DF8B7DC2B55C7D8B6312DBCD77A3"
+    }
+  ],
+  "configuration_preserved": true,
+  "live_shortcut_verified": false,
+  "automated_messages_sent": 0
+}

@@ -1,0 +1,180 @@
+{
+  "pid": 20036,
+  "build": 12164,
+  "bits": 64,
+  "read_only": true,
+  "matches": 34,
+  "total": 34,
+  "blocks": [
+    {
+      "rva": "0x7b8130",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x7b82b0",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x7b8430",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0x7b9880",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x7b9a00",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x7b9b80",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0x7b9ee0",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x7ba060",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x7ba1e0",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0x9e3680",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x9e3800",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x9e3980",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0x9e63a0",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x9e6520",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x9e66a0",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0x9ea800",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x9ea980",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x9eab00",
+      "size": 288,
+      "matches": true
+    },
+    {
+      "rva": "0x9f2870",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x9f29f0",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x9f2b70",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0x9fa950",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x9faad0",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0x9fac50",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0xa065a0",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0xa06720",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0xa068a0",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0xa60a10",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0xa60b90",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0xa60d10",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0xf11db0",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0xf11f30",
+      "size": 384,
+      "matches": true
+    },
+    {
+      "rva": "0xf120b0",
+      "size": 256,
+      "matches": true
+    },
+    {
+      "rva": "0x782560",
+      "size": 5,
+      "matches": true
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "profiles": [
+    {
+      "pid": 8740,
+      "build": 12164,
+      "bits": 32,
+      "model_table": "0x18614bc",
+      "string_table": "0x186197c",
+      "factory": "0xf1dd10",
+      "ranges": [
+        [
+          15847856,
+          4
+        ],
+        [
+          12324640,
+          4
+        ],
+        [
+          15759402,
+          9
+        ],
+        [
+          15850768,
+          119
+        ]
+      ]
+    },
+    {
+      "pid": 32116,
+      "build": 12173,
+      "bits": 32,
+      "model_table": "0x18163dc",
+      "string_table": "0x181689c",
+      "factory": "0xedcce0",
+      "ranges": [
+        [
+          15581568,
+          4
+        ],
+        [
+          12059152,
+          4
+        ],
+        [
+          15493130,
+          9
+        ],
+        [
+          15584480,
+          119
+        ]
+      ]
+    },
+    {
+      "pid": 24984,
+      "build": 12164,
+      "bits": 64,
+      "model_table": "0x1c720a0",
+      "string_table": "0x1c736d8",
+      "factory": "0x10ff3a0",
+      "ranges": [
+        [
+          17818752,
+          5
+        ],
+        [
+          13774704,
+          5
+        ],
+        [
+          17717917,
+          15
+        ],
+        [
+          17822624,
+          308
+        ]
+      ]
+    },
+    {
+      "pid": 27336,
+      "build": 12173,
+      "bits": 64,
+      "model_table": "0x1ca0fb0",
+      "string_table": "0x1ca25e8",
+      "factory": "0x113be00",
+      "ranges": [
+        [
+          18067168,
+          5
+        ],
+        [
+          14031040,
+          5
+        ],
+        [
+          17966333,
+          15
+        ],
+        [
+          18071040,
+          308
+        ]
+      ]
+    }
+  ],
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  }
+}

@@ -1,0 +1,453 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file WHT-1.31\analysis\chat-reference129.exe
+
+File Type: EXECUTABLE IMAGE
+
+  005F3020: push        ebp
+  005F3021: mov         ebp,esp
+  005F3023: sub         esp,2ACh
+  005F3029: mov         eax,dword ptr ds:[010E9FE4h]
+  005F302E: xor         eax,ebp
+  005F3030: mov         dword ptr [ebp-4],eax
+  005F3033: mov         eax,dword ptr [ebp+0Ch]
+  005F3036: push        esi
+  005F3037: mov         esi,ecx
+  005F3039: mov         dword ptr [ebp+FFFFFD54h],eax
+  005F303F: push        edi
+  005F3040: mov         edi,dword ptr [ebp+8]
+  005F3043: cmp         dword ptr [esi+000001BCh],0
+  005F304A: je          005F317C
+  005F3050: cmp         dword ptr [esi+0000042Ch],0
+  005F3057: je          005F317C
+  005F305D: mov         eax,dword ptr [ebp+10h]
+  005F3060: sub         eax,0
+  005F3063: je          005F30B8
+  005F3065: sub         eax,1
+  005F3068: je          005F30A5
+  005F306A: sub         eax,1
+  005F306D: je          005F3082
+  005F306F: push        200h
+  005F3074: lea         eax,[ebp+FFFFFD5Ch]
+  005F307A: push        eax
+  005F307B: push        0E93C3Ch
+  005F3080: jmp         005F30C9
+  005F3082: call        005EDB10
+  005F3087: test        eax,eax
+  005F3089: lea         eax,[ebp+FFFFFD5Ch]
+  005F308F: push        200h
+  005F3094: push        eax
+  005F3095: je          005F309E
+  005F3097: push        0E93C08h
+  005F309C: jmp         005F30C9
+  005F309E: push        0E93C20h
+  005F30A3: jmp         005F30C9
+  005F30A5: push        200h
+  005F30AA: lea         eax,[ebp+FFFFFD5Ch]
+  005F30B0: push        eax
+  005F30B1: push        0E93BF0h
+  005F30B6: jmp         005F30C9
+  005F30B8: push        200h
+  005F30BD: lea         eax,[ebp+FFFFFD5Ch]
+  005F30C3: push        eax
+  005F30C4: push        0E93BDCh
+  005F30C9: call        00895A00
+  005F30CE: add         esp,0Ch
+  005F30D1: lea         eax,[ebp+FFFFFD58h]
+  005F30D7: push        ebx
+  005F30D8: push        edi
+  005F30D9: push        eax
+  005F30DA: call        005EC780
+  005F30DF: mov         ecx,dword ptr ds:[0113B6F4h]
+  005F30E5: add         esp,8
+  005F30E8: mov         ebx,0E68B80h
+  005F30ED: test        ecx,ecx
+  005F30EF: je          005F3106
+  005F30F1: push        edi
+  005F30F2: call        004777D0
+  005F30F7: test        eax,eax
+  005F30F9: je          005F3106
+  005F30FB: push        1
+  005F30FD: mov         ecx,eax
+  005F30FF: call        004BF430
+  005F3104: mov         ebx,eax
+  005F3106: push        dword ptr [ebp+FFFFFD54h]
+  005F310C: mov         eax,dword ptr [ebp+FFFFFD58h]
+  005F3112: push        ebx
+  005F3113: movzx       ecx,al
+  005F3116: push        ecx
+  005F3117: movzx       eax,ah
+  005F311A: push        eax
+  005F311B: movzx       eax,byte ptr [ebp+FFFFFD5Ah]
+  005F3122: push        eax
+  005F3123: movzx       eax,byte ptr [ebp+FFFFFD5Bh]
+  005F312A: push        eax
+  005F312B: lea         eax,[ebp+FFFFFD5Ch]
+  005F3131: push        eax
+  005F3132: push        0E93C54h
+  005F3137: lea         eax,[ebp+FFFFFF5Ch]
+  005F313D: push        9Fh
+  005F3142: push        eax
+  005F3143: call        00433BB0
+  005F3148: mov         ecx,dword ptr [esi+0000042Ch]
+  005F314E: lea         edx,[ebp+FFFFFD54h]
+  005F3154: movss       xmm0,dword ptr [ebp+14h]
+  005F3159: add         esp,28h
+  005F315C: mov         dword ptr [ebp+FFFFFD54h],0FFFFFFFFh
+  005F3166: mov         eax,dword ptr [ecx]
+  005F3168: push        0
+  005F316A: push        ecx
+  005F316B: movss       dword ptr [esp],xmm0
+  005F3170: push        edx
+  005F3171: lea         edx,[ebp+FFFFFF5Ch]
+  005F3177: push        edx
+  005F3178: call        dword ptr [eax+70h]
+  005F317B: pop         ebx
+  005F317C: mov         ecx,dword ptr [ebp-4]
+  005F317F: pop         edi
+  005F3180: xor         ecx,ebp
+  005F3182: pop         esi
+  005F3183: call        00A56BD8
+  005F3188: mov         esp,ebp
+  005F318A: pop         ebp
+  005F318B: ret         10h
+  005F318E: int         3
+  005F318F: int         3
+  005F3190: push        ebp
+  005F3191: mov         ebp,esp
+  005F3193: sub         esp,0ACh
+  005F3199: mov         eax,dword ptr ds:[010E9FE4h]
+  005F319E: xor         eax,ebp
+  005F31A0: mov         dword ptr [ebp-4],eax
+  005F31A3: mov         eax,dword ptr [ebp+0Ch]
+  005F31A6: push        esi
+  005F31A7: mov         esi,ecx
+  005F31A9: mov         dword ptr [ebp+FFFFFF54h],eax
+  005F31AF: push        edi
+  005F31B0: mov         edi,dword ptr [ebp+8]
+  005F31B3: cmp         dword ptr [esi+000001BCh],0
+  005F31BA: je          005F3271
+  005F31C0: cmp         dword ptr [esi+0000042Ch],0
+  005F31C7: je          005F3271
+  005F31CD: push        ebx
+  005F31CE: lea         eax,[ebp+FFFFFF58h]
+  005F31D4: push        edi
+  005F31D5: push        eax
+  005F31D6: call        005EC780
+  005F31DB: mov         ecx,dword ptr ds:[0113B6F4h]
+  005F31E1: add         esp,8
+  005F31E4: mov         ebx,0E68B80h
+  005F31E9: test        ecx,ecx
+  005F31EB: je          005F3202
+  005F31ED: push        edi
+  005F31EE: call        004777D0
+  005F31F3: test        eax,eax
+  005F31F5: je          005F3202
+  005F31F7: push        1
+  005F31F9: mov         ecx,eax
+  005F31FB: call        004BF430
+  005F3200: mov         ebx,eax
+  005F3202: push        dword ptr [ebp+FFFFFF54h]
+  005F3208: mov         eax,dword ptr [ebp+FFFFFF58h]
+  005F320E: push        ebx
+  005F320F: movzx       ecx,al
+  005F3212: push        ecx
+  005F3213: movzx       eax,ah
+  005F3216: push        eax
+  005F3217: movzx       eax,byte ptr [ebp+FFFFFF5Ah]
+  005F321E: push        eax
+  005F321F: movzx       eax,byte ptr [ebp+FFFFFF5Bh]
+  005F3226: push        eax
+  005F3227: push        0E93C78h
+  005F322C: lea         eax,[ebp+FFFFFF5Ch]
+  005F3232: push        9Fh
+  005F3237: push        eax
+  005F3238: call        00433BB0
+  005F323D: mov         ecx,dword ptr [esi+0000042Ch]
+  005F3243: lea         edx,[ebp+FFFFFF54h]
+  005F3249: movss       xmm0,dword ptr [ebp+10h]
+  005F324E: add         esp,24h
+  005F3251: mov         dword ptr [ebp+FFFFFF54h],0FFFFFFFFh
+  005F325B: mov         eax,dword ptr [ecx]
+  005F325D: push        0
+  005F325F: push        ecx
+  005F3260: movss       dword ptr [esp],xmm0
+  005F3265: push        edx
+  005F3266: lea         edx,[ebp+FFFFFF5Ch]
+  005F326C: push        edx
+  005F326D: call        dword ptr [eax+70h]
+  005F3270: pop         ebx
+  005F3271: mov         ecx,dword ptr [ebp-4]
+  005F3274: pop         edi
+  005F3275: xor         ecx,ebp
+  005F3277: pop         esi
+  005F3278: call        00A56BD8
+  005F327D: mov         esp,ebp
+  005F327F: pop         ebp
+  005F3280: ret         0Ch
+  005F3283: int         3
+  005F3284: int         3
+  005F3285: int         3
+  005F3286: int         3
+  005F3287: int         3
+  005F3288: int         3
+  005F3289: int         3
+  005F328A: int         3
+  005F328B: int         3
+  005F328C: int         3
+  005F328D: int         3
+  005F328E: int         3
+  005F328F: int         3
+  005F3290: push        ebp
+  005F3291: mov         ebp,esp
+  005F3293: push        esi
+  005F3294: mov         esi,ecx
+  005F3296: mov         eax,dword ptr [esi+0000018Ch]
+  005F329C: cmp         eax,1
+  005F329F: je          005F331E
+  005F32A1: cmp         eax,3
+  005F32A4: je          005F331E
+  005F32A6: mov         eax,dword ptr [ebp+8]
+  005F32A9: test        eax,eax
+  005F32AB: je          005F32D4
+  005F32AD: movss       xmm0,dword ptr [ebp+1Ch]
+  005F32B2: sub         esp,8
+  005F32B5: mov         ecx,dword ptr [esi+00000434h]
+  005F32BB: movss       dword ptr [esp+4],xmm0
+  005F32C1: movss       xmm0,dword ptr [ebp+18h]
+  005F32C6: movss       dword ptr [esp],xmm0
+  005F32CB: push        dword ptr [ebp+0Ch]
+  005F32CE: push        eax
+  005F32CF: call        0064DA40
+  005F32D4: mov         eax,dword ptr [esi+000002CCh]
+  005F32DA: mov         dword ptr [ebp+1Ch],eax
+  005F32DD: test        eax,eax
+  005F32DF: jne         005F32F3
+  005F32E1: call        0042B550
+  005F32E6: lea         ecx,[ebp+1Ch]
+  005F32E9: push        ecx
+  005F32EA: push        22h
+  005F32EC: mov         ecx,eax
+  005F32EE: call        0042B5F0
+  005F32F3: movss       xmm0,dword ptr [ebp+18h]
+  005F32F8: push        ecx
+  005F32F9: mov         eax,esp
+  005F32FB: mov         dword ptr [eax],0FFFFFFFFh
+  005F3301: push        dword ptr [ebp+1Ch]
+  005F3304: push        1
+  005F3306: push        ecx
+  005F3307: movss       dword ptr [esp],xmm0
+  005F330C: mov         ecx,esi
+  005F330E: push        dword ptr [ebp+14h]
+  005F3311: push        dword ptr [ebp+10h]
+  005F3314: call        005F4930
+  005F3319: pop         esi
+  005F331A: pop         ebp
+  005F331B: ret         18h
+  005F331E: movss       xmm0,dword ptr [ebp+1Ch]
+  005F3323: sub         esp,0Ch
+  005F3326: mov         ecx,dword ptr [esi+00000440h]
+  005F332C: mov         dword ptr [esp+8],0
+  005F3334: movss       dword ptr [esp+4],xmm0
+  005F333A: movss       xmm0,dword ptr [ebp+18h]
+  005F333F: movss       dword ptr [esp],xmm0
+  005F3344: push        dword ptr [ebp+14h]
+  005F3347: push        dword ptr [ebp+10h]
+  005F334A: push        dword ptr [ebp+0Ch]
+  005F334D: push        dword ptr [ebp+8]
+  005F3350: call        00651190
+  005F3355: pop         esi
+  005F3356: pop         ebp
+  005F3357: ret         18h
+  005F335A: int         3
+  005F335B: int         3
+  005F335C: int         3
+  005F335D: int         3
+  005F335E: int         3
+  005F335F: int         3
+  005F3360: push        ebp
+  005F3361: mov         ebp,esp
+  005F3363: push        0FFFFFFFFh
+  005F3365: push        0DD6608h
+  005F336A: mov         eax,dword ptr fs:[00000000h]
+  005F3370: push        eax
+  005F3371: push        ecx
+  005F3372: push        esi
+  005F3373: push        edi
+  005F3374: mov         eax,dword ptr ds:[010E9FE4h]
+  005F3379: xor         eax,ebp
+  005F337B: push        eax
+  005F337C: lea         eax,[ebp-0Ch]
+  005F337F: mov         dword ptr fs:[00000000h],eax
+  005F3385: mov         esi,ecx
+  005F3387: mov         dword ptr [ebp-10h],esi
+  005F338A: mov         edi,dword ptr [ebp+8]
+  005F338D: cmp         edi,dword ptr [esi]
+  005F338F: je          005F3405
+  005F3391: test        edi,edi
+  005F3393: jne         005F33B5
+  005F3395: call        005E9490
+  005F339A: mov         dword ptr [esi+8],edi
+  005F339D: mov         dword ptr [esi],edi
+  005F339F: mov         dword ptr [esi+4],edi
+  005F33A2: mov         ecx,dword ptr [ebp-0Ch]
+  005F33A5: mov         dword ptr fs:[00000000h],ecx
+  005F33AC: pop         ecx
+  005F33AD: pop         edi
+  005F33AE: pop         esi
+  005F33AF: mov         esp,ebp
+  005F33B1: pop         ebp
+  005F33B2: ret         4
+  005F33B5: push        edi
+  005F33B6: call        005F2090
+  005F33BB: mov         edx,dword ptr [esi]
+  005F33BD: mov         dword ptr [ebp+8],edx
+  005F33C0: cmp         edx,edi
+  005F33C2: jae         005F3403
+  005F33C4: mov         eax,dword ptr [esi+4]
+  005F33C7: lea         ecx,[edx+edx*4]
+  005F33CA: lea         ecx,[eax+ecx*4]
+  005F33CD: mov         dword ptr [ebp+8],ecx
+  005F33D0: test        ecx,ecx
+  005F33D2: je          005F33FB
+  005F33D4: mov         dword ptr [ecx+4],0
+  005F33DB: lea         eax,[ecx+8]
+  005F33DE: mov         dword ptr [ecx],0E6E238h
+  005F33E4: mov         dword ptr [ebp+8],eax
+  005F33E7: mov         dword ptr [eax],0
+  005F33ED: mov         dword ptr [ecx+0Ch],0
+  005F33F4: mov         dword ptr [ecx+10h],0
+  005F33FB: inc         edx
+  005F33FC: mov         dword ptr [ebp+8],edx
+  005F33FF: cmp         edx,edi
+  005F3401: jb          005F33C4
+  005F3403: mov         dword ptr [esi],edi
+  005F3405: mov         ecx,dword ptr [ebp-0Ch]
+  005F3408: mov         dword ptr fs:[00000000h],ecx
+  005F340F: pop         ecx
+  005F3410: pop         edi
+  005F3411: pop         esi
+  005F3412: mov         esp,ebp
+  005F3414: pop         ebp
+  005F3415: ret         4
+  005F3418: int         3
+  005F3419: int         3
+  005F341A: int         3
+  005F341B: int         3
+  005F341C: int         3
+  005F341D: int         3
+  005F341E: int         3
+  005F341F: int         3
+  005F3420: push        ebp
+  005F3421: mov         ebp,esp
+  005F3423: push        0FFFFFFFFh
+  005F3425: push        0DD6636h
+  005F342A: mov         eax,dword ptr fs:[00000000h]
+  005F3430: push        eax
+  005F3431: push        ecx
+  005F3432: push        ebx
+  005F3433: push        esi
+  005F3434: push        edi
+  005F3435: mov         eax,dword ptr ds:[010E9FE4h]
+  005F343A: xor         eax,ebp
+  005F343C: push        eax
+  005F343D: lea         eax,[ebp-0Ch]
+  005F3440: mov         dword ptr fs:[00000000h],eax
+  005F3446: mov         esi,ecx
+  005F3448: mov         dword ptr [ebp-10h],esi
+  005F344B: mov         eax,dword ptr [esi]
+  005F344D: mov         edi,dword ptr [ebp+8]
+  005F3450: cmp         edi,eax
+  005F3452: jbe         005F34AD
+  005F3454: cmp         edi,dword ptr [esi+8]
+  005F3457: jbe         005F3482
+  005F3459: mov         ebx,dword ptr [esi+0Ch]
+  005F345C: test        ebx,ebx
+  005F345E: jne         005F3468
+  005F3460: push        edi
+  005F3461: call        005EACA0
+  005F3466: mov         ebx,eax
+  005F3468: xor         edx,edx
+  005F346A: mov         eax,edi
+  005F346C: div         eax,ebx
+  005F346E: mov         ecx,edi
+  005F3470: test        edx,edx
+  005F3472: je          005F347A
+  005F3474: mov         ecx,ebx
+  005F3476: sub         ecx,edx
+  005F3478: add         ecx,edi
+  005F347A: push        ecx
+  005F347B: mov         ecx,esi
+  005F347D: call        005F1DF0
+  005F3482: mov         ecx,dword ptr [esi]
+  005F3484: mov         dword ptr [ebp+8],ecx
+  005F3487: cmp         ecx,edi
+  005F3489: jae         005F34D8
+  005F348B: nop         dword ptr [eax+eax]
+  005F3490: mov         eax,dword ptr [esi+4]
+  005F3493: lea         eax,[eax+ecx*4]
+  005F3496: mov         dword ptr [ebp+8],eax
+  005F3499: test        eax,eax
+  005F349B: je          005F34A3
+  005F349D: mov         dword ptr [eax],0
+  005F34A3: inc         ecx
+  005F34A4: mov         dword ptr [ebp+8],ecx
+  005F34A7: cmp         ecx,edi
+  005F34A9: jb          005F3490
+  005F34AB: jmp         005F34D8
+  005F34AD: jae         005F34D8
+  005F34AF: mov         ebx,edi
+  005F34B1: mov         eax,dword ptr [esi+4]
+  005F34B4: mov         ecx,dword ptr [eax+ebx*4]
+  005F34B7: mov         dword ptr [ebp-4],0
+  005F34BE: test        ecx,ecx
+  005F34C0: je          005F34CC
+  005F34C2: add         dword ptr [ecx+4],0FFFFFFFFh
+  005F34C6: jne         005F34CC
+  005F34C8: mov         eax,dword ptr [ecx]
+  005F34CA: call        dword ptr [eax]
+  005F34CC: inc         ebx
+  005F34CD: mov         dword ptr [ebp-4],0FFFFFFFFh
+  005F34D4: cmp         ebx,dword ptr [esi]
+  005F34D6: jb          005F34B1
+  005F34D8: mov         dword ptr [esi],edi
+  005F34DA: mov         ecx,dword ptr [ebp-0Ch]
+  005F34DD: mov         dword ptr fs:[00000000h],ecx
+  005F34E4: pop         ecx
+  005F34E5: pop         edi
+  005F34E6: pop         esi
+  005F34E7: pop         ebx
+  005F34E8: mov         esp,ebp
+  005F34EA: pop         ebp
+  005F34EB: ret         4
+  005F34EE: int         3
+  005F34EF: int         3
+  005F34F0: push        ebp
+  005F34F1: mov         ebp,esp
+  005F34F3: sub         esp,8
+  005F34F6: push        ebx
+  005F34F7: mov         ebx,dword ptr [ebp+8]
+  005F34FA: push        esi
+  005F34FB: push        edi
+  005F34FC: mov         edi,ecx
+  005F34FE: mov         dword ptr [ebp-8],edi
+  005F3501: mov         eax,dword ptr [edi]
+  005F3503: cmp         ebx,eax
+  005F3505: jbe         005F3582
+  005F3507: cmp         ebx,dword ptr [edi+8]
+  005F350A: jbe         005F3535
+  005F350C: mov         esi,dword ptr [edi+0Ch]
+  005F350F: test        esi,esi
+  005F3511: jne         005F351B
+  005F3513: push        ebx
+  005F3514: call        005EACE0
+  005F3519: mov         esi,eax
+  005F351B: xor         edx,edx
+  005F351D: mov         eax,ebx
+  005F351F: F7
+
+  Summary
+
+        1000 .text

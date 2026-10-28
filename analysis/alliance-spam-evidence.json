@@ -1,0 +1,42 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "d6cc5b018fdd53723c124f6132962c31ba71e766bba615ee0765713bc4f18197",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  },
+  "scope": "User permits WHT-only functionality when WHT-1.29 has no implementation. Port #spam single target; #spamall pings and #wide separate.",
+  "profiles": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "constructor": "0xa8099d",
+      "serializer": "0xaa1b00",
+      "capture_pid": 8740,
+      "wire": "50, uint8 target, uint32 LE flags; 6 bytes"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "constructor": "0xa4112d",
+      "serializer": "0xa60ac0",
+      "capture_pid": 32116,
+      "wire": "50, uint8 target, uint32 LE flags; 6 bytes"
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "constructor": "0xbb52c0",
+      "serializer": "0xbd9610",
+      "capture_pid": 24984,
+      "wire": "50, uint8 target, uint32 LE flags; 6 bytes"
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "constructor": "0xbfd290",
+      "serializer": "0xc200e0",
+      "capture_pid": 27336,
+      "wire": "50, uint8 target, uint32 LE flags; 6 bytes"
+    }
+  ]
+}

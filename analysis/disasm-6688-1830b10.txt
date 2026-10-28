@@ -1,0 +1,54 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-1830b10.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF784790B10: movsxd      esi,esi
+  00007FF784790B12: dec         byte ptr [rax-75h]
+  00007FF784790B15: enter       8D4Ch,0Dh
+  00007FF784790B19: mov         dword ptr [3DCC058D4C0053CDh],eax
+  00007FF784790B22: push        rsp
+  00007FF784790B23: add         byte ptr [rax-73h],cl
+  00007FF784790B26: adc         eax,9A25h
+  00007FF784790B2B: call        00007FF78476A730
+  00007FF784790B30: stc
+  00007FF784790B31: jb          00007FF784790B85
+  00007FF784790B33: jno         00007FF7847AC41F
+  00007FF784790B39: push        rcx
+  00007FF784790B3A: sub         ebx,0F7827EEFh
+  00007FF784790B40: push        76F3344Ch
+  00007FF784790B45: pop         rsi
+  00007FF784790B46: mov         al,44h
+  00007FF784790B49: mov         eax,14B0236Fh
+  00007FF784790B4F: add         ebp,0DF439531h
+  00007FF784790B55: sub         al,0B0h
+  00007FF784790B58: add         ch,0Bh
+  00007FF784790B5B: jp          00007FF7847B0511
+  00007FF784790B61: push        112319F2h
+  00007FF784790B66: push        0FFFFFFFFFFFFFFD9h
+  00007FF784790B68: call        00007FF78479A36A
+  00007FF784790B6D: push        rcx
+  00007FF784790B6E: call        00007FF784798ACA
+  00007FF784790B73: mov         bh,7Ah
+  00007FF784790B76: add         edx,0FFFFFFFFh
+  00007FF784790B79: add         cl,0AFh
+  00007FF784790B7C: ja          00007FF78479197B
+  00007FF784790B82: add         r12,qword ptr [r8+FFFFFFFFF66316E8h]
+  00007FF784790B89: dec         byte ptr [rax-75h]
+  00007FF784790B8C: enter       8D4Ch,0Dh
+  00007FF784790B90: mov         esp,4C0053CEh
+  00007FF784790B95: lea         eax,[00007FF784CD4900h]
+  00007FF784790B9B: lea         rdx,[00007FF78479A550h]
+  00007FF784790BA2: call        00007FF78476A730
+  00007FF784790BA7: nop         word ptr [rax+rax+0000000000000000h]
+  00007FF784790BB0: jns         00007FF784790BB6
+  00007FF784790BB2: js          00007FF784790BBE
+  00007FF784790BB4: jno         00007FF784792D33
+  00007FF784790BBA: add         edx,19781244h
+
+  Summary
+
+        1000 .text

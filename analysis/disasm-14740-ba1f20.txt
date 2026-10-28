@@ -1,0 +1,80 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-ba1f20.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D71F20: xor         al,al
+  00D71F22: ret
+  00D71F23: into
+  00D71F24: inc         edi
+  00D71F25: ins         dword ptr es:[edi],dx
+  00D71F26: push        eax
+  00D71F27: cmc
+  00D71F28: int         3
+  00D71F29: add         ch,31h
+  00D71F2C: jmp         2041:8B8BF5DD
+  00D71F33: shr         eax,4
+  00D71F36: and         al,1
+  00D71F38: ret
+  00D71F39: adc         eax,582E1CEAh
+  00D71F3F: and         edi,edi
+  00D71F41: jno         00D71F77
+  00D71F43: call        00D96BE0
+  00D71F48: add         esp,4
+  00D71F4B: ret
+  00D71F4C: int         3
+  00D71F4D: int         3
+  00D71F4E: int         3
+  00D71F4F: int         3
+  00D71F50: push        dword ptr [ecx+34h]
+  00D71F53: call        00D96BB0
+  00D71F58: add         esp,4
+  00D71F5B: ret
+  00D71F5C: int         3
+  00D71F5D: int         3
+  00D71F5E: int         3
+  00D71F5F: int         3
+  00D71F60: mov         eax,dword ptr [ecx+000004D8h]
+  00D71F66: ret
+  00D71F67: mov         al,81h
+  00D71F69: sbb         eax,90D6F2A8h
+  00D71F6E: xor         eax,0EC8B55F8h
+  00D71F73: push        dword ptr [ecx+34h]
+  00D71F76: push        dword ptr [ebp+8]
+  00D71F79: call        00D954D0
+  00D71F7E: mov         eax,dword ptr [ebp+8]
+  00D71F81: add         esp,8
+  00D71F84: pop         ebp
+  00D71F85: ret         4
+  00D71F88: int         3
+  00D71F89: int         3
+  00D71F8A: int         3
+  00D71F8B: int         3
+  00D71F8C: int         3
+  00D71F8D: int         3
+  00D71F8E: int         3
+  00D71F8F: int         3
+  00D71F90: push        ebp
+  00D71F91: mov         ebp,esp
+  00D71F93: push        dword ptr [ecx+34h]
+  00D71F96: push        dword ptr [ebp+8]
+  00D71F99: call        00D97140
+  00D71F9E: mov         eax,dword ptr [ebp+8]
+  00D71FA1: add         esp,8
+  00D71FA4: pop         ebp
+  00D71FA5: ret         4
+  00D71FA8: int         3
+  00D71FA9: int         3
+  00D71FAA: int         3
+  00D71FAB: int         3
+  00D71FAC: int         3
+  00D71FAD: int         3
+  00D71FAE: int         3
+  00D71FAF: int         3
+
+  Summary
+
+        1000 .text

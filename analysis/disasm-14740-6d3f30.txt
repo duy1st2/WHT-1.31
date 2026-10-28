@@ -1,0 +1,83 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-6d3f30.exe
+
+File Type: EXECUTABLE IMAGE
+
+  008A3F30: push        ebp
+  008A3F31: mov         ebp,esp
+  008A3F33: sub         esp,2ACh
+  008A3F39: mov         eax,dword ptr ds:[01CE5D23h]
+  008A3F3E: rol         eax,2
+  008A3F41: xor         eax,dword ptr [ecx+000000A0h]
+  008A3F47: mov         dword ptr [ebp-24h],ecx
+  008A3F4A: push        ebx
+  008A3F4B: push        esi
+  008A3F4C: push        edi
+  008A3F4D: cmp         eax,59548AC4h
+  008A3F52: je          008A5C51
+  008A3F58: mov         ebx,dword ptr [ebp+14h]
+  008A3F5B: cmp         dword ptr [ebx],18h
+  008A3F5E: jb          008A5C51
+  008A3F64: mov         edi,dword ptr [ebp+0Ch]
+  008A3F67: mov         eax,dword ptr [ebp+10h]
+  008A3F6A: mov         dword ptr [ebp+FFFFFF78h],0
+  008A3F74: mov         dword ptr [ebp+FFFFFF7Ch],0
+  008A3F7E: mov         dword ptr [edi],0
+  008A3F84: mov         dword ptr [eax],0
+  008A3F8A: lea         eax,[ebp+FFFFFF7Ch]
+  008A3F90: mov         esi,dword ptr ds:[01CE5D23h]
+  008A3F96: rol         esi,2
+  008A3F99: xor         esi,dword ptr [ecx+000000A0h]
+  008A3F9F: mov         ecx,dword ptr [ebp+8]
+  008A3FA2: xor         esi,59548AC4h
+  008A3FA8: push        eax
+  008A3FA9: lea         eax,[ebp+FFFFFF78h]
+  008A3FAF: push        eax
+  008A3FB0: lea         eax,[ecx+4]
+  008A3FB3: push        eax
+  008A3FB4: push        ecx
+  008A3FB5: mov         ecx,esi
+  008A3FB7: call        008C9DD0
+  008A3FBC: mov         ecx,dword ptr [esi+00000090h]
+  008A3FC2: mov         eax,dword ptr [ebp+FFFFFF7Ch]
+  008A3FC8: shl         eax,cl
+  008A3FCA: add         eax,dword ptr [ebp+FFFFFF78h]
+  008A3FD0: lea         ecx,[eax*4+00000000h]
+  008A3FD7: mov         eax,dword ptr [esi+3Ch]
+  008A3FDA: mov         eax,dword ptr [eax+ecx]
+  008A3FDD: or          eax,0F000000h
+  008A3FE2: mov         dword ptr [ebp-4],eax
+  008A3FE5: mov         eax,dword ptr [esi+30h]
+  008A3FE8: mov         esi,1
+  008A3FED: mov         eax,dword ptr [ecx+eax]
+  008A3FF0: mov         ecx,18h
+  008A3FF5: and         eax,0F0FFFFFFh
+  008A3FFA: mov         dword ptr [ebp+0Ch],ecx
+  008A3FFD: mov         dword ptr [ebp+8],eax
+  008A4000: add         ebx,4
+  008A4003: mov         eax,dword ptr [ebx]
+  008A4005: test        eax,eax
+  008A4007: je          008A405B
+  008A4009: test        dword ptr [edi],eax
+  008A400B: jne         008A4154
+  008A4011: mov         edx,dword ptr [ebp-24h]
+  008A4014: mov         ecx,dword ptr ds:[01CE5D23h]
+  008A401A: push        eax
+  008A401B: push        dword ptr [ebp+8]
+  008A401E: rol         ecx,2
+  008A4021: xor         ecx,dword ptr [edx+000000A0h]
+  008A4027: push        dword ptr [ebp-4]
+  008A402A: xor         ecx,59548AC4h
+  008A4030: call        008B4820
+  008A4035: mov         ecx,eax
+  008A4037: shr         ecx,2
+  008A403A: and         cl,1
+  008A403D: 0F
+  008A403E: test        dword ptr [esi],ecx
+
+  Summary
+
+        1000 .text

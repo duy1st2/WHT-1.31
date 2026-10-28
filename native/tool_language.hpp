@@ -31,7 +31,7 @@ inline std::string EnglishControlLabel(const ToolMenuControl& d){
  if(key==L"Fast Menu")return "Faster game menu transitions";
  if(section==L"StateTag"&&key==L"ShowHpValue")return "Show overhead HP value";
  if(section==L"StateTag"&&key==L"FontSize")return "Overhead HP/Mana font size";
- if(section==L"MacroRecorder")return key==L"Enabled"?"Enable Macro Recorder":key==L"ShowButton"?"Show Macro button":key==L"PlayKey"?"Run hotkey":key==L"StopKey"?"Stop hotkey":key==L"RecordKey"?"Record hotkey":"Script hotkey";
+ if(section==L"MacroRecorder")return key==L"Enabled"?"Enable Macro Recorder":key==L"ShowButton"?"Show Macro button":key==L"PlayKey"?"Run/Stop hotkey":key==L"StopKey"?"Stop hotkey":key==L"RecordKey"?"Record hotkey":"Script hotkey";
  if(section==L"Macro")return key==L"record"?"Record / Stop recording":key==L"play"?"Play macro":key==L"stop"?"Stop macro":"Edit script";
  if(key==L"Vietnamese")return "Vietnamese";if(key==L"English")return "English";
  if(d.kind==MenuControlKind::Label&&std::string(d.label).find("BackSpace")!=std::string::npos)return "(Press Backspace to clear)";

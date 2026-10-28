@@ -1,0 +1,51 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-d0d350.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF783C6D350: mov         rcx,qword ptr [rcx+0000000000000560h]
+  00007FF783C6D357: test        rcx,rcx
+  00007FF783C6D35A: je          00007FF783C6D368
+  00007FF783C6D35C: xor         r9d,r9d
+  00007FF783C6D35F: lea         r8d,[r9+1]
+  00007FF783C6D363: jmp         00007FF7832B0800
+  00007FF783C6D368: ret
+  00007FF783C6D369: out         86h,al
+  00007FF783C6D36B: stc
+  00007FF783C6D36C: mov         edx,48CABF75h
+  00007FF783C6D371: mov         ecx,dword ptr [rcx+0000000000000570h]
+  00007FF783C6D377: test        rcx,rcx
+  00007FF783C6D37A: je          00007FF783C6D388
+  00007FF783C6D37C: xor         r9d,r9d
+  00007FF783C6D37F: lea         r8d,[r9+1]
+  00007FF783C6D383: jmp         00007FF7832B10B0
+  00007FF783C6D388: ret
+  00007FF783C6D389: retf        0BEDh
+  00007FF783C6D38C: loope       00007FF783C6D315
+  00007FF783C6D38F: pop         rdi
+  00007FF783C6D390: mov         rcx,qword ptr [rcx+0000000000000560h]
+  00007FF783C6D397: test        rcx,rcx
+  00007FF783C6D39A: je          00007FF783C6D3A8
+  00007FF783C6D39C: xor         r9d,r9d
+  00007FF783C6D39F: lea         r8d,[r9+1]
+  00007FF783C6D3A3: jmp         00007FF7832B10B0
+  00007FF783C6D3A8: ret
+  00007FF783C6D3A9: outs        dx,byte ptr [rsi]
+  00007FF783C6D3AA: loop        00007FF783C6D3B7
+  00007FF783C6D3AC: push        rdx
+  00007FF783C6D3AD: 1E
+  00007FF783C6D3AE: jmp         00007FF7DB1D13FE
+  00007FF783C6D3B3: push        r14
+  00007FF783C6D3B5: sub         rsp,30h
+  00007FF783C6D3B9: mov         qword ptr [rsp+20h],0FFFFFFFFFFFFFFFEh
+  00007FF783C6D3C2: mov         qword ptr [rsp+50h],rbx
+  00007FF783C6D3C7: mov         qword ptr [rsp+58h],rbp
+  00007FF783C6D3CC: mov         r14d,edx
+  00007FF783C6D3CF: 33
+
+  Summary
+
+        1000 .text

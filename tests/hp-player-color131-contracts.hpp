@@ -1,5 +1,13 @@
-#pragma once
+﻿#pragma once
 inline void CheckHpPlayerColor131(){
+ bool enemy=true;
+ check(wht::HpEnemyPolicy131(0,0,0,false,false,0,enemy)&&!enemy,"own units use configured normal HP color");
+ check(wht::HpEnemyPolicy131(1,3,0,false,true,1u<<3,enemy)&&!enemy,"alliance uses physical player id rather than slot");
+ check(wht::HpEnemyPolicy131(1,3,0,false,true,0,enemy)&&enemy,"known non-ally uses enemy HP color");
+ check(wht::HpEnemyPolicy131(1,3,0,true,false,0,enemy)&&!enemy,"observer keeps normal HP color as 1.29");
+ for(unsigned owner=24;owner<28;++owner)check(wht::HpEnemyPolicy131(owner,owner,0,false,false,0,enemy)&&!enemy,"neutral slots keep reference normal HP color");
+ check(!wht::HpEnemyPolicy131(1,3,0,false,false,0,enemy)&&!wht::HpEnemyPolicy131(1,24,0,false,true,0,enemy)&&!wht::HpEnemyPolicy131(28,0,0,false,true,0,enemy)&&!wht::HpEnemyPolicy131(1,1,24,false,true,0,enemy),"unknown alliance or invalid player never guesses enemy");
+
  check(!wht::HpColorProfileFor131(129),"unprofiled HP color build refused");uint32_t palette=0;
  check(wht::PlayerColor129(0,palette)&&palette==0xffff0303&&wht::PlayerColor129(23,palette)&&palette==0xffa46f33&&!wht::PlayerColor129(24,palette),"reference 24-color palette and bounds");
  for(const auto& p:wht::hpColorProfiles131){

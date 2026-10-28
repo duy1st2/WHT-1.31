@@ -1,0 +1,101 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-afe110.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00CCE110: push        ebp
+  00CCE111: mov         ebp,esp
+  00CCE113: push        0FFFFFFFFh
+  00CCE115: push        17D78BBh
+  00CCE11A: mov         eax,dword ptr fs:[00000000h]
+  00CCE120: push        eax
+  00CCE121: sub         esp,320h
+  00CCE127: mov         eax,dword ptr ds:[01C98574h]
+  00CCE12C: xor         eax,ebp
+  00CCE12E: mov         dword ptr [ebp-10h],eax
+  00CCE131: push        ebx
+  00CCE132: push        esi
+  00CCE133: push        edi
+  00CCE134: push        eax
+  00CCE135: lea         eax,[ebp-0Ch]
+  00CCE138: mov         dword ptr fs:[00000000h],eax
+  00CCE13E: mov         esi,ecx
+  00CCE140: mov         dword ptr [ebp+FFFFFCF4h],esi
+  00CCE146: mov         ecx,dword ptr [esi+00000444h]
+  00CCE14C: call        00D3B860
+  00CCE151: mov         edi,eax
+  00CCE153: mov         dword ptr [ebp+FFFFFCD8h],6
+  00CCE15D: lea         eax,[ebp+FFFFFCD8h]
+  00CCE163: mov         byte ptr [ebp+FFFFFCDCh],0
+  00CCE16A: push        eax
+  00CCE16B: mov         dword ptr [ebp+FFFFFCE0h],edi
+  00CCE171: mov         dword ptr [ebp+FFFFFCE4h],0
+  00CCE17B: mov         dword ptr [ebp+FFFFFCE8h],0
+  00CCE185: call        004517B0
+  00CCE18A: mov         ecx,eax
+  00CCE18C: call        004BCBB0
+  00CCE191: test        al,al
+  00CCE193: je          00CCE1A3
+  00CCE195: cmp         byte ptr [ebp+FFFFFCDCh],0
+  00CCE19C: cmovne      edi,dword ptr [ebp+FFFFFCE4h]
+  00CCE1A3: test        edi,edi
+  00CCE1A5: je          00CCE7DB
+  00CCE1AB: cmp         byte ptr [edi],0
+  00CCE1AE: je          00CCE7DB
+  00CCE1B4: call        00C68490
+  00CCE1B9: test        al,al
+  00CCE1BB: jne         00CCE1D0
+  00CCE1BD: push        1
+  00CCE1BF: push        edi
+  00CCE1C0: call        010CB180
+  00CCE1C5: add         esp,8
+  00CCE1C8: test        al,al
+  00CCE1CA: jne         00CCE7DB
+  00CCE1D0: push        edi
+  00CCE1D1: mov         ecx,esi
+  00CCE1D3: call        00CD6210
+  00CCE1D8: test        al,al
+  00CCE1DA: jne         00CCE7DB
+  00CCE1E0: cmp         byte ptr [edi],2Fh
+  00CCE1E3: jne         00CCE26D
+  00CCE1E9: call        00C67860
+  00CCE1EE: cmp         eax,424E4554h
+  00CCE1F3: jne         00CCE26D
+  00CCE1F5: call        00CCD0B0
+  00CCE1FA: test        al,al
+  00CCE1FC: jne         00CCE7DB
+  00CCE202: call        00C67860
+  00CCE207: cmp         eax,424E4554h
+  00CCE20C: jne         00CCE7DB
+  00CCE212: cmp         byte ptr [edi],0
+  00CCE215: je          00CCE7DB
+  00CCE21B: mov         ecx,edi
+  00CCE21D: lea         edx,[ecx+1]
+  00CCE220: mov         al,byte ptr [ecx]
+  00CCE222: inc         ecx
+  00CCE223: test        al,al
+  00CCE225: jne         00CCE220
+  00CCE227: sub         ecx,edx
+  00CCE229: lea         eax,[ebp+FFFFFD98h]
+  00CCE22F: mov         esi,0FFh
+  00CCE234: cmp         ecx,esi
+  00CCE236: cmovb       esi,ecx
+  00CCE239: push        esi
+  00CCE23A: push        edi
+  00CCE23B: push        eax
+  00CCE23C: call        01657E40
+  00CCE241: lea         eax,[ebp+FFFFFCECh]
+  00CCE247: mov         byte ptr [ebp+esi+FFFFFD98h],0
+  00CCE24F: push        eax
+  00CCE250: call        00C66A90
+  00CCE255: push        0
+  00CCE257: lea         ecx,[ebp+FFFFFD98h]
+  00CCE25D: push        ecx
+  00CCE25E: push        dword ptr [eax]
+
+  Summary
+
+        1000 .text

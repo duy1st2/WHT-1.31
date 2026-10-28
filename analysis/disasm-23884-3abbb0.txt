@@ -1,0 +1,93 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-23884-3abbb0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  0061BBB0: push        ebp
+  0061BBB1: mov         ebp,esp
+  0061BBB3: sub         esp,8
+  0061BBB6: push        esi
+  0061BBB7: push        edi
+  0061BBB8: mov         edi,ecx
+  0061BBBA: mov         eax,dword ptr [edi+000002BCh]
+  0061BBC0: cmp         eax,0FFFFFFFFh
+  0061BBC3: je          0061BBDF
+  0061BBC5: mov         eax,dword ptr [edi+eax*4+0000021Ch]
+  0061BBCC: cmp         eax,80h
+  0061BBD1: ja          0061BC01
+  0061BBD3: je          0061BC08
+  0061BBD5: sub         eax,1
+  0061BBD8: je          0061BC08
+  0061BBDA: sub         eax,3Fh
+  0061BBDD: je          0061BC08
+  0061BBDF: mov         eax,dword ptr [edi+000001B4h]
+  0061BBE5: movss       xmm0,dword ptr ds:[01D4E994h]
+  0061BBED: mov         dword ptr [ebp-4],eax
+  0061BBF0: movss       xmm1,dword ptr [ebp-4]
+  0061BBF5: comiss      xmm0,xmm1
+  0061BBF8: jbe         0061BC0F
+  0061BBFA: mov         eax,1D4E994h
+  0061BBFF: jmp         0061BC21
+  0061BC01: cmp         eax,100h
+  0061BC06: jne         0061BBDF
+  0061BC08: mov         eax,dword ptr ds:[01DA4804h]
+  0061BC0D: jmp         0061BC23
+  0061BC0F: comiss      xmm1,dword ptr ds:[01D4E93Ch]
+  0061BC16: mov         eax,1D4E93Ch
+  0061BC1B: lea         ecx,[ebp-4]
+  0061BC1E: cmovbe      eax,ecx
+  0061BC21: mov         eax,dword ptr [eax]
+  0061BC23: mov         esi,dword ptr [ebp+8]
+  0061BC26: mov         dword ptr [ebp-8],eax
+  0061BC29: movss       xmm0,dword ptr [ebp-8]
+  0061BC2E: push        ecx
+  0061BC2F: mov         ecx,esi
+  0061BC31: movss       dword ptr [esp],xmm0
+  0061BC36: call        00DF0210
+  0061BC3B: push        eax
+  0061BC3C: call        01136D80
+  0061BC41: mov         eax,dword ptr [esi]
+  0061BC43: add         esp,8
+  0061BC46: mov         ecx,esi
+  0061BC48: mov         eax,dword ptr [eax+00000084h]
+  0061BC4E: push        1
+  0061BC50: push        0
+  0061BC52: push        6
+  0061BC54: call        eax
+  0061BC56: fstp        st(0)
+  0061BC58: mov         ecx,esi
+  0061BC5A: push        13h
+  0061BC5C: call        00DF80C0
+  0061BC61: mov         eax,dword ptr [esi]
+  0061BC63: mov         ecx,esi
+  0061BC65: push        1
+  0061BC67: push        0
+  0061BC69: push        4
+  0061BC6B: mov         eax,dword ptr [eax+00000088h]
+  0061BC71: call        eax
+  0061BC73: or          dword ptr [edi+20h],100h
+  0061BC7A: fstp        st(0)
+  0061BC7C: pop         edi
+  0061BC7D: pop         esi
+  0061BC7E: mov         esp,ebp
+  0061BC80: pop         ebp
+  0061BC81: ret         4
+  0061BC84: int         3
+  0061BC85: int         3
+  0061BC86: int         3
+  0061BC87: int         3
+  0061BC88: int         3
+  0061BC89: int         3
+  0061BC8A: int         3
+  0061BC8B: int         3
+  0061BC8C: int         3
+  0061BC8D: int         3
+  0061BC8E: int         3
+  0061BC8F: int         3
+
+  Summary
+
+        1000 .text

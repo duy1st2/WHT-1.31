@@ -1,0 +1,137 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-bb15f0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D815F0: push        ebp
+  00D815F1: mov         ebp,esp
+  00D815F3: push        ebx
+  00D815F4: push        edi
+  00D815F5: mov         edi,dword ptr [ebp+8]
+  00D815F8: mov         ebx,ecx
+  00D815FA: test        edi,edi
+  00D815FC: je          00D817BF
+  00D81602: mov         ecx,dword ptr [edi+20h]
+  00D81605: mov         eax,ecx
+  00D81607: shr         eax,3
+  00D8160A: push        esi
+  00D8160B: test        al,1
+  00D8160D: jne         00D81662
+  00D8160F: or          ecx,8
+  00D81612: mov         dword ptr [edi+20h],ecx
+  00D81615: lea         ecx,[ebx+00000408h]
+  00D8161B: mov         eax,dword ptr [ecx+4]
+  00D8161E: and         eax,dword ptr [ecx]
+  00D81620: cmp         eax,0FFFFFFFFh
+  00D81623: je          00D81657
+  00D81625: call        00F3B5A0
+  00D8162A: mov         esi,eax
+  00D8162C: test        esi,esi
+  00D8162E: je          00D81657
+  00D81630: cmp         esi,edi
+  00D81632: je          00D8163F
+  00D81634: mov         edx,dword ptr [esi]
+  00D81636: mov         ecx,esi
+  00D81638: push        edi
+  00D81639: call        dword ptr [edx+000001A8h]
+  00D8163F: mov         eax,dword ptr [esi+28h]
+  00D81642: lea         ecx,[esi+24h]
+  00D81645: and         eax,dword ptr [ecx]
+  00D81647: cmp         eax,0FFFFFFFFh
+  00D8164A: je          00D81657
+  00D8164C: call        00F3B5A0
+  00D81651: mov         esi,eax
+  00D81653: test        esi,esi
+  00D81655: jne         00D81630
+  00D81657: mov         eax,dword ptr [edi]
+  00D81659: mov         ecx,edi
+  00D8165B: push        edi
+  00D8165C: call        dword ptr [eax+000001A8h]
+  00D81662: mov         eax,dword ptr [ebx+0000040Ch]
+  00D81668: lea         ecx,[ebx+00000408h]
+  00D8166E: and         eax,dword ptr [ecx]
+  00D81670: cmp         eax,0FFFFFFFFh
+  00D81673: je          00D817BE
+  00D81679: call        00F3B5A0
+  00D8167E: xor         esi,esi
+  00D81680: test        eax,eax
+  00D81682: je          00D817BE
+  00D81688: lea         ecx,[eax+24h]
+  00D8168B: cmp         eax,edi
+  00D8168D: je          00D816AF
+  00D8168F: mov         esi,eax
+  00D81691: mov         eax,dword ptr [ecx+4]
+  00D81694: and         eax,dword ptr [ecx]
+  00D81696: cmp         eax,0FFFFFFFFh
+  00D81699: je          00D817BE
+  00D8169F: call        00F3B5A0
+  00D816A4: test        eax,eax
+  00D816A6: jne         00D81688
+  00D816A8: pop         esi
+  00D816A9: pop         edi
+  00D816AA: pop         ebx
+  00D816AB: pop         ebp
+  00D816AC: ret         4
+  00D816AF: mov         eax,dword ptr [ecx+4]
+  00D816B2: and         eax,dword ptr [ecx]
+  00D816B4: test        esi,esi
+  00D816B6: je          00D816CE
+  00D816B8: cmp         eax,0FFFFFFFFh
+  00D816BB: jne         00D816C4
+  00D816BD: xor         eax,eax
+  00D816BF: lea         ecx,[esi+24h]
+  00D816C2: jmp         00D816E2
+  00D816C4: call        00F3B5A0
+  00D816C9: lea         ecx,[esi+24h]
+  00D816CC: jmp         00D816E2
+  00D816CE: cmp         eax,0FFFFFFFFh
+  00D816D1: jne         00D816D7
+  00D816D3: xor         eax,eax
+  00D816D5: jmp         00D816DC
+  00D816D7: call        00F3B5A0
+  00D816DC: lea         ecx,[ebx+00000408h]
+  00D816E2: push        eax
+  00D816E3: call        004D16F0
+  00D816E8: mov         eax,dword ptr [edi]
+  00D816EA: mov         ecx,edi
+  00D816EC: call        dword ptr [eax+1Ch]
+  00D816EF: cmp         eax,414E6275h
+  00D816F4: jg          00D8175F
+  00D816F6: je          00D81776
+  00D816F8: cmp         eax,41486275h
+  00D816FD: jg          00D8171D
+  00D816FF: je          00D81776
+  00D81701: cmp         eax,41456275h
+  00D81706: je          00D81776
+  00D81708: cmp         eax,41476275h
+  00D8170D: je          00D81776
+  00D8170F: mov         ecx,edi
+  00D81711: call        004C77B0
+  00D81716: pop         esi
+  00D81717: pop         edi
+  00D81718: pop         ebx
+  00D81719: pop         ebp
+  00D8171A: ret         4
+  00D8171D: cmp         eax,41486572h
+  00D81722: je          00D81747
+  00D81724: cmp         eax,41496E76h
+  00D81729: jne         00D817B7
+  00D8172F: mov         ecx,edi
+  00D81731: mov         dword ptr [ebx+0000044Ch],0
+  00D8173B: call        004C77B0
+  00D81740: pop         esi
+  00D81741: pop         edi
+  00D81742: pop         ebx
+  00D81743: pop         ebp
+  00D81744: ret         4
+  00D81747: mov         ecx,edi
+  00D81749: C7
+  00D8174A: adc         dword ptr [eax+4],0
+  00D8174E: add         byte ptr [eax],al
+
+  Summary
+
+        1000 .text

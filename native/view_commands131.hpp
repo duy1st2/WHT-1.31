@@ -5,6 +5,11 @@ namespace wht {
 // Only already ported display/settings features; no gameplay dispatch here.
 struct ViewCommand131 {const wchar_t* command;const wchar_t* section;const wchar_t* key;bool Config::* field;};
 inline constexpr ViewCommand131 viewCommands131[]={
+ {L"#externalhud",L"Performance",L"External HUD",&Config::externalHud},
+ {L"#workercores",L"Performance",L"Worker Core Preference",&Config::workerCorePreference},
+ {L"#quickchat",L"Quick Chat",L"Enable",&Config::quickChatEnabled},
+ {L"#autocleartext",L"DelayClear",L"Enable Delay Clear Text Screen",&Config::clearTextEnabled},
+ {L"#autoclearchat",L"DelayClear",L"Enable Delay Clear Chat Screen",&Config::clearChatEnabled},
  {L"#showfps",L"Event",L"Show FPS",&Config::showFps},
  {L"#showping",L"Event",L"Show Ping",&Config::showPing},
  {L"#hideclock",L"Graphics",L"timeOfDayUI",&Config::hideTimeOfDay},
@@ -58,6 +63,20 @@ template<class Save,class Reload> bool ApplyViewCommand131(const ViewCommand131&
  if(!save(target.section,target.key,next?L"1":L"0"))return false;
  reload();return true;
 }
+inline const wchar_t* ClearDelayKey131(const std::wstring& name){
+ if(name==L"#cleartextdelay")return L"Delay Clear Text Screen";
+ if(name==L"#clearchatdelay")return L"Delay Clear Chat Screen";
+ return nullptr;
+}
+template<class Save,class Reload> bool ApplyClearDelay131(const std::wstring& name,const std::wstring& args,Save save,Reload reload){
+ const auto* key=ClearDelayKey131(name);if(!key||args.find_first_of(L"\r\n")!=std::wstring::npos||args.find(L'\0')!=std::wstring::npos)return false;
+ std::wistringstream in(args);std::wstring token,extra;
+ if(!(in>>token)||(in>>extra)||token.size()>2||token.find_first_not_of(L"0123456789")!=std::wstring::npos)return false;
+ unsigned seconds=0;for(auto digit:token)seconds=seconds*10+unsigned(digit-L'0');
+ if(seconds<1||seconds>17||!save(L"DelayClear",key,std::to_wstring(seconds)))return false;
+ reload();return true;
+}
+
 template<class Toggle> bool ToolMenuCommand131(const std::wstring& name,const std::wstring& args,Toggle toggle){
  if(name!=L"#tools"&&name!=L"#tool"&&name!=L"#menu")return false;
  if(args.find(L'\0')!=std::wstring::npos||args.find_first_not_of(L" \t")!=std::wstring::npos)return false;

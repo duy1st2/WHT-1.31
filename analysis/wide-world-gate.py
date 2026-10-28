@@ -1,0 +1,8 @@
+﻿from pathlib import Path
+p=Path('WHT-1.31/native/wide_screen131.hpp');s=p.read_text();marker='inline bool UpdateWideScreen131('
+helper='''// Graphics eligibility depends on the live world/player, not resource balances.
+inline bool WideScreenWorld131(uintptr_t base,unsigned build){const auto* p=ResourceProfileFor131(build);if(!p||!ResourceCode131(base,*p))return false;__try{unsigned local=24;const auto world=ResourceWorld131(base,*p,local);if(!world||local>=24)return false;const auto getPlayer=reinterpret_cast<uintptr_t(__thiscall*)(uintptr_t,unsigned)>(base+p->playerFn);const auto player=getPlayer(world,local);if(!ResourceIdentity131(player,base,p->playerTable)||*reinterpret_cast<int*>(player+p->statusOffset)!=1||*reinterpret_cast<unsigned char*>(player+p->idOffset)>=24)return false;unsigned check=24;return ResourceWorld131(base,*p,check)==world&&check==local&&getPlayer(world,local)==player&&*reinterpret_cast<int*>(player+p->statusOffset)==1;}__except(1){return false;}}
+'''
+s=s.replace(marker,helper+marker,1);s=s.replace('ResourceCommandSource131 source;if(!ReadResourceCommand131(base,build,source))','if(!WideScreenWorld131(base,build))');p.write_text(s)
+p=Path('WHT-1.31/tests/wide-screen-tests.cpp');s=p.read_text(encoding='utf-8-sig');s=s.replace(' bool desired=false;',' Check(!wht::WideScreenWorld131(0,12164),"missing world refuses");\n bool desired=false;',1);p.write_text(s,encoding='utf-8-sig')
+p=Path('WHT-1.31/analysis/wide-screen-port.md');s=p.read_text();s=s.replace('requires the existing checked active local-player/world source.','requires the checked active local-player/world identity, independently of gold,\nlumber or food values.');p.write_text(s)

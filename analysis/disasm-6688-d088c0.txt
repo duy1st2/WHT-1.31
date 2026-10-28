@@ -1,0 +1,36 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-d088c0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF783C688C0: mov         rcx,qword ptr [rcx+0000000000000560h]
+  00007FF783C688C7: test        rcx,rcx
+  00007FF783C688CA: jne         00007FF78338F810
+  00007FF783C688D0: ret
+  00007FF783C688D1: fdiv        st(5),st
+  00007FF783C688D3: imul        edx,dword ptr [rdi-2Fh],0FFFFFFB6h
+  00007FF783C688D7: add         esi,esp
+  00007FF783C688D9: movsxd      ebx,dword ptr es:[rcx]
+  00007FF783C688DC: sbb         al,3
+  00007FF783C688DE: sub         edi,dword ptr [rsi+00000000245C8948h]
+  00007FF783C688E4: or          byte ptr [rdi+48h],dl
+  00007FF783C688E7: sub         esp,40h
+  00007FF783C688EA: mov         edi,edx
+  00007FF783C688EC: mov         rbx,rcx
+  00007FF783C688EF: call        00007FF783492900
+  00007FF783C688F4: mov         byte ptr [rsp+30h],0
+  00007FF783C688F9: mov         edx,eax
+  00007FF783C688FB: mov         byte ptr [rsp+28h],1
+  00007FF783C68900: xor         r9d,r9d
+  00007FF783C68903: mov         r8b,1
+  00007FF783C68906: mov         byte ptr [rsp+20h],1
+  00007FF783C6890B: mov         rcx,rbx
+  00007FF783C6890E: E8
+  00007FF783C6890F: BD
+
+  Summary
+
+        1000 .text

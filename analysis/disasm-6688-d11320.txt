@@ -1,0 +1,90 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-d11320.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF783C71320: mov         rax,rsp
+  00007FF783C71323: push        rsi
+  00007FF783C71324: push        rdi
+  00007FF783C71325: push        r12
+  00007FF783C71327: push        r14
+  00007FF783C71329: push        r15
+  00007FF783C7132B: sub         rsp,0B0h
+  00007FF783C71332: mov         qword ptr [rsp+40h],0FFFFFFFFFFFFFFFEh
+  00007FF783C7133B: mov         qword ptr [rax+10h],rbx
+  00007FF783C7133F: mov         qword ptr [rax+18h],rbp
+  00007FF783C71343: mov         rax,qword ptr [00007FF785038118h]
+  00007FF783C7134A: xor         rax,rsp
+  00007FF783C7134D: mov         qword ptr [rsp+00000000000000A0h],rax
+  00007FF783C71355: movzx       r15d,dl
+  00007FF783C71359: mov         r14,rcx
+  00007FF783C7135C: call        00007FF7834FA5D0
+  00007FF783C71361: mov         ebp,eax
+  00007FF783C71363: xor         ebx,ebx
+  00007FF783C71365: mov         r12d,0FFFFFFFFh
+  00007FF783C7136B: cmp         eax,414E6275h
+  00007FF783C71370: jg          00007FF783C713BF
+  00007FF783C71372: je          00007FF783C71448
+  00007FF783C71378: cmp         eax,41456275h
+  00007FF783C7137D: je          00007FF783C71448
+  00007FF783C71383: cmp         eax,41476275h
+  00007FF783C71388: je          00007FF783C71448
+  00007FF783C7138E: cmp         eax,41486275h
+  00007FF783C71393: je          00007FF783C71448
+  00007FF783C71399: cmp         eax,41486572h
+  00007FF783C7139E: je          00007FF783C713B3
+  00007FF783C713A0: cmp         eax,41496E76h
+  00007FF783C713A5: jne         00007FF783C713E3
+  00007FF783C713A7: mov         rsi,qword ptr [r14+0000000000000550h]
+  00007FF783C713AE: jmp         00007FF783C7144F
+  00007FF783C713B3: mov         rsi,qword ptr [r14+0000000000000558h]
+  00007FF783C713BA: jmp         00007FF783C7144F
+  00007FF783C713BF: cmp         ebp,414F6275h
+  00007FF783C713C5: je          00007FF783C71448
+  00007FF783C713CB: cmp         ebp,41556275h
+  00007FF783C713D1: je          00007FF783C71448
+  00007FF783C713D3: cmp         ebp,4161746Bh
+  00007FF783C713D9: je          00007FF783C7143F
+  00007FF783C713DB: cmp         ebp,416D6F76h
+  00007FF783C713E1: je          00007FF783C71436
+  00007FF783C713E3: lea         rcx,[r14+0000000000000510h]
+  00007FF783C713EA: mov         eax,dword ptr [rcx+4]
+  00007FF783C713ED: and         eax,dword ptr [rcx]
+  00007FF783C713EF: cmp         eax,r12d
+  00007FF783C713F2: je          00007FF783C71431
+  00007FF783C713F4: call        00007FF783E74A10
+  00007FF783C713F9: mov         rdi,rax
+  00007FF783C713FC: test        rax,rax
+  00007FF783C713FF: je          00007FF783C71431
+  00007FF783C71401: mov         rsi,rdi
+  00007FF783C71404: lea         rcx,[rdi+40h]
+  00007FF783C71408: mov         eax,dword ptr [rcx+4]
+  00007FF783C7140B: and         eax,dword ptr [rcx]
+  00007FF783C7140D: cmp         eax,r12d
+  00007FF783C71410: jne         00007FF783C71417
+  00007FF783C71412: mov         rdi,rbx
+  00007FF783C71415: jmp         00007FF783C7141F
+  00007FF783C71417: call        00007FF783E74A10
+  00007FF783C7141C: mov         rdi,rax
+  00007FF783C7141F: mov         rax,qword ptr [rsi]
+  00007FF783C71422: mov         rcx,rsi
+  00007FF783C71425: call        qword ptr [rax+38h]
+  00007FF783C71428: cmp         eax,ebp
+  00007FF783C7142A: je          00007FF783C7144F
+  00007FF783C7142C: test        rdi,rdi
+  00007FF783C7142F: jne         00007FF783C71401
+  00007FF783C71431: mov         rsi,rbx
+  00007FF783C71434: jmp         00007FF783C7144F
+  00007FF783C71436: mov         rsi,qword ptr [r14+0000000000000560h]
+  00007FF783C7143D: jmp         00007FF783C7144F
+  00007FF783C7143F: mov         rsi,qword ptr [r14+0000000000000570h]
+  00007FF783C71446: jmp         00007FF783C7144F
+  00007FF783C71448: mov         rsi,qword ptr [r14+0000000000000578h]
+  00007FF783C7144F: 44
+
+  Summary
+
+        1000 .text

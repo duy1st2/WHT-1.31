@@ -1,6 +1,7 @@
 #pragma once
 #include "self_cast131.hpp"
 #include "time_boss131.hpp"
+#include <sstream>
 namespace wht {
 struct Route131 {float x1,y1,x2,y2;};
 inline constexpr Route131 routes131[]={{-1160,-358,-1125,-398},{-1119,-81,-1163,-125},{-882,-375,-934,-388},{1158,-397,1206,-357},{1160,-82,1212,-138},{948,-399,897,-330}};
@@ -34,6 +35,16 @@ inline bool RouteNonHero131(uintptr_t base,unsigned build,uintptr_t unit){
  __try{const auto code=*reinterpret_cast<uint32_t*>(unit+bossCodeOffset131);const auto first=code>>24;return code&&!(first>='A'&&first<='Z');}__except(1){return false;}
 }
 inline int RouteCommand131(const std::wstring& name){const wchar_t* names[]={L"#chicken1",L"#chicken2",L"#chicken3",L"#wolf1",L"#wolf2",L"#wolf3"};for(int i=0;i<6;++i)if(name==names[i])return i;return -1;}
+inline bool RouteAlias131(const std::wstring& name){return name==L"#chayga"||name==L"#chaysoi"||name==L"#caysoi";}
+inline bool IsRouteCommand131(const std::wstring& name){return RouteCommand131(name)>=0||RouteAlias131(name);}
+inline bool ParseRouteCommand131(const std::wstring& name,const std::wstring& args,int& route){
+ route=-1;if(args.find(L'\0')!=std::wstring::npos||args.find_first_of(L"\r\n")!=std::wstring::npos)return false;
+ std::wistringstream in(args);std::wstring extra;const int canonical=RouteCommand131(name);
+ if(canonical>=0){if(in>>extra)return false;route=canonical;return true;}
+ if(!RouteAlias131(name))return false;
+ int index=1;if(args.find_first_not_of(L" \t")!=std::wstring::npos&&(!(in>>index)||in>>extra))return false;
+ if(index<1||index>3)index=1;route=(name==L"#chayga"?0:3)+index-1;return true;
+}
 struct MthRoute131 {
  SelfCastSource131 owner;int route=-1,remaining=0;bool second=false,sent=false;uint64_t due=0,deadline=0;
  void Reset(){*this={};}

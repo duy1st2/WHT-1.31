@@ -1,0 +1,105 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "3e4a8ab69152b94f9239bf0e74fd6a29b2ea7dfe0606e026c08ed020086ed804",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\version129.cpp": "f8da5b5ffce2a1082f00a0e5652374f480784cb4d8ff402ffefdc6b8188d79e9"
+  },
+  "reference_lines": "WHT runtime.cpp:3355-3430 #n/#name,2690-2704 native network name;1.31 adapts to verified engine managed player name, match only, no global registry writes.",
+  "profiles": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "capture": 8740,
+      "live_binding_pid": 14320,
+      "public": "0x91bb50",
+      "worker": "0x2c08a0",
+      "nameOffset": "0x2c",
+      "blocks": [
+        [
+          9550672,
+          44
+        ],
+        [
+          2885792,
+          177
+        ],
+        [
+          2886544,
+          14
+        ]
+      ],
+      "signature": "void thiscall(managed string field, const char* utf8); standard Win64 RCX/RDX; public SetPlayerName resolves CPlayer then field+offset then worker"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "capture": 32116,
+      "live_binding_pid": 15612,
+      "public": "0x8e91c0",
+      "worker": "0x2aa6d0",
+      "nameOffset": "0x34",
+      "blocks": [
+        [
+          9343424,
+          44
+        ],
+        [
+          2795216,
+          177
+        ],
+        [
+          2795968,
+          14
+        ]
+      ],
+      "signature": "void thiscall(managed string field, const char* utf8); standard Win64 RCX/RDX; public SetPlayerName resolves CPlayer then field+offset then worker"
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "capture": 24984,
+      "live_binding_pid": 35488,
+      "public": "0xa32b20",
+      "worker": "0x316170",
+      "nameOffset": "0x58",
+      "blocks": [
+        [
+          10693408,
+          57
+        ],
+        [
+          3236208,
+          245
+        ],
+        [
+          3237216,
+          15
+        ]
+      ],
+      "signature": "void thiscall(managed string field, const char* utf8); standard Win64 RCX/RDX; public SetPlayerName resolves CPlayer then field+offset then worker"
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "capture": 27336,
+      "live_binding_pid": 3680,
+      "public": "0xa7e960",
+      "worker": "0x383bf0",
+      "nameOffset": "0x48",
+      "blocks": [
+        [
+          11004256,
+          57
+        ],
+        [
+          3685360,
+          245
+        ],
+        [
+          3686368,
+          15
+        ]
+      ],
+      "signature": "void thiscall(managed string field, const char* utf8); standard Win64 RCX/RDX; public SetPlayerName resolves CPlayer then field+offset then worker"
+    }
+  ]
+}

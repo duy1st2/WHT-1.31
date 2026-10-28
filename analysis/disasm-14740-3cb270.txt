@@ -1,0 +1,120 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-3cb270.exe
+
+File Type: EXECUTABLE IMAGE
+
+  0059B270: mov         es,sp
+  0059B272: add         dword ptr [eax],eax
+  0059B274: add         byte ptr [ecx+0FF30C45h],cl
+  0059B27A: adc         byte ptr [ebp+0Ch],al
+  0059B27D: mov         dword ptr [ebp-4],ecx
+  0059B280: comiss      xmm0,dword ptr [ebp-4]
+  0059B284: jbe         0059B2DA
+  0059B286: mov         dword ptr [ebp+0Ch],eax
+  0059B289: lea         eax,[ebp+0Ch]
+  0059B28C: push        eax
+  0059B28D: lea         eax,[ebp-4]
+  0059B290: mov         dword ptr [ebp-4],ecx
+  0059B293: push        eax
+  0059B294: lea         eax,[ebp-8]
+  0059B297: push        eax
+  0059B298: call        01115280
+  0059B29D: movss       xmm0,dword ptr ds:[01C89AC4h]
+  0059B2A5: add         esp,0Ch
+  0059B2A8: mov         eax,dword ptr [eax]
+  0059B2AA: and         eax,7FFFFFFFh
+  0059B2AF: mov         dword ptr [ebp+0Ch],eax
+  0059B2B2: comiss      xmm0,dword ptr [ebp+0Ch]
+  0059B2B6: ja          0059B2DA
+  0059B2B8: mov         eax,dword ptr [esi+000001C4h]
+  0059B2BE: mov         dword ptr [ebp+0Ch],eax
+  0059B2C1: lea         eax,[ebp+0Ch]
+  0059B2C4: push        eax
+  0059B2C5: lea         eax,[ebp+10h]
+  0059B2C8: push        eax
+  0059B2C9: lea         eax,[ebp-8]
+  0059B2CC: push        eax
+  0059B2CD: call        01115390
+  0059B2D2: add         esp,0Ch
+  0059B2D5: mov         eax,dword ptr [eax]
+  0059B2D7: mov         dword ptr [ebp+10h],eax
+  0059B2DA: movss       xmm0,dword ptr ds:[01CF699Ch]
+  0059B2E2: movss       xmm1,dword ptr [ebp+10h]
+  0059B2E7: comiss      xmm0,xmm1
+  0059B2EA: jbe         0059B31C
+  0059B2EC: mov         eax,dword ptr [ebp+8]
+  0059B2EF: mov         ecx,1CF699Ch
+  0059B2F4: pop         esi
+  0059B2F5: mov         ecx,dword ptr [ecx]
+  0059B2F7: mov         dword ptr [eax],ecx
+  0059B2F9: mov         esp,ebp
+  0059B2FB: pop         ebp
+  0059B2FC: ret         0Ch
+  0059B2FF: cmp         eax,100h
+  0059B304: jne         0059B25B
+  0059B30A: mov         eax,dword ptr [ebp+8]
+  0059B30D: mov         ecx,dword ptr ds:[01D4C804h]
+  0059B313: pop         esi
+  0059B314: mov         dword ptr [eax],ecx
+  0059B316: mov         esp,ebp
+  0059B318: pop         ebp
+  0059B319: ret         0Ch
+  0059B31C: comiss      xmm1,dword ptr ds:[01CF6944h]
+  0059B323: lea         eax,[ebp+10h]
+  0059B326: mov         ecx,1CF6944h
+  0059B32B: pop         esi
+  0059B32C: cmovbe      ecx,eax
+  0059B32F: mov         eax,dword ptr [ebp+8]
+  0059B332: mov         ecx,dword ptr [ecx]
+  0059B334: mov         dword ptr [eax],ecx
+  0059B336: mov         esp,ebp
+  0059B338: pop         ebp
+  0059B339: ret         0Ch
+  0059B33C: int         3
+  0059B33D: int         3
+  0059B33E: int         3
+  0059B33F: int         3
+  0059B340: push        ebp
+  0059B341: mov         ebp,esp
+  0059B343: sub         esp,0Ch
+  0059B346: push        ebx
+  0059B347: push        esi
+  0059B348: mov         esi,ecx
+  0059B34A: xor         dl,dl
+  0059B34C: mov         eax,dword ptr [esi+000002C4h]
+  0059B352: lea         ecx,[esi+000002C0h]
+  0059B358: and         eax,dword ptr [ecx]
+  0059B35A: push        edi
+  0059B35B: xor         edi,edi
+  0059B35D: mov         dword ptr [ebp-0Ch],esi
+  0059B360: mov         byte ptr [ebp-1],dl
+  0059B363: cmp         eax,0FFFFFFFFh
+  0059B366: jne         0059B36C
+  0059B368: xor         ebx,ebx
+  0059B36A: jmp         0059B376
+  0059B36C: call        00F3B5A0
+  0059B371: mov         dl,byte ptr [ebp-1]
+  0059B374: mov         ebx,eax
+  0059B376: mov         eax,dword ptr [esi+20h]
+  0059B379: xor         ecx,ecx
+  0059B37B: mov         dword ptr [ebp-8],eax
+  0059B37E: nop
+  0059B380: mov         esi,dword ptr [ebp-0Ch]
+  0059B383: mov         eax,80000h
+  0059B388: shl         eax,cl
+  0059B38A: test        dword ptr [ebp-8],eax
+  0059B38D: je          0059B3C7
+  0059B38F: cmp         dword ptr [esi+00000228h],0
+  0059B396: jle         0059B3EC
+  0059B398: cmp         ecx,0FFFFFFFFh
+  0059B39B: je          0059B3EC
+  0059B39D: 8B
+  0059B39E: 84
+  0059B39F: 8E
+
+  Summary
+
+        1000 .text

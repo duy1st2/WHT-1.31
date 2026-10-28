@@ -1,0 +1,196 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file WHT-1.31\analysis\mpq-open-12164-x86.exe
+
+File Type: EXECUTABLE IMAGE
+
+  004A7EE0: push        ebp
+  004A7EE1: mov         ebp,esp
+  004A7EE3: sub         esp,0Ch
+  004A7EE6: cmp         dword ptr [ebp+0Ch],0
+  004A7EEA: push        ebx
+  004A7EEB: push        esi
+  004A7EEC: push        edi
+  004A7EED: jne         004A7EF8
+  004A7EEF: xor         eax,eax
+  004A7EF1: pop         edi
+  004A7EF2: pop         esi
+  004A7EF3: pop         ebx
+  004A7EF4: mov         esp,ebp
+  004A7EF6: pop         ebp
+  004A7EF7: ret
+  004A7EF8: mov         edi,dword ptr [ebp+1Ch]
+  004A7EFB: mov         esi,dword ptr [ebp+18h]
+  004A7EFE: test        edi,edi
+  004A7F00: jne         004A7F74
+  004A7F02: mov         ebx,dword ptr [ebp+14h]
+  004A7F05: test        bl,1
+  004A7F08: je          004A7F6D
+  004A7F0A: push        dword ptr [ebp+8]
+  004A7F0D: call        015CFC60
+  004A7F12: add         esp,4
+  004A7F15: test        al,al
+  004A7F17: je          004A7F6D
+  004A7F19: mov         eax,dword ptr ds:[01C7F89Ch]
+  004A7F1E: and         ebx,0FFFFFFFEh
+  004A7F21: mov         dword ptr [ebp-4],eax
+  004A7F24: cmp         eax,1C7F898h
+  004A7F29: je          004A7F6D
+  004A7F2B: nop         dword ptr [eax+eax]
+  004A7F30: push        dword ptr [ebp+20h]
+  004A7F33: push        dword ptr [eax+10h]
+  004A7F36: mov         eax,dword ptr [ebp+8]
+  004A7F39: push        esi
+  004A7F3A: push        ebx
+  004A7F3B: push        dword ptr [ebp+10h]
+  004A7F3E: sub         esp,8
+  004A7F41: mov         ecx,esp
+  004A7F43: mov         dword ptr [ecx],eax
+  004A7F45: mov         eax,dword ptr [ebp+0Ch]
+  004A7F48: mov         dword ptr [ecx+4],eax
+  004A7F4B: call        004A7EE0
+  004A7F50: add         esp,1Ch
+  004A7F53: test        eax,eax
+  004A7F55: jne         004A80FF
+  004A7F5B: lea         ecx,[ebp-4]
+  004A7F5E: call        004A6EB0
+  004A7F63: mov         eax,dword ptr [ebp-4]
+  004A7F66: cmp         eax,1C7F898h
+  004A7F6B: jne         004A7F30
+  004A7F6D: mov         ebx,0FFh
+  004A7F72: jmp         004A7F91
+  004A7F74: mov         eax,dword ptr [edi]
+  004A7F76: mov         ecx,edi
+  004A7F78: call        dword ptr [eax+8]
+  004A7F7B: mov         ebx,eax
+  004A7F7D: sub         eax,1
+  004A7F80: je          004A7F8C
+  004A7F82: sub         eax,3
+  004A7F85: jne         004A7F91
+  004A7F87: lea         ebx,[eax+6]
+  004A7F8A: jmp         004A7F91
+  004A7F8C: mov         ebx,3
+  004A7F91: and         ebx,dword ptr [ebp+10h]
+  004A7F94: xor         esi,esi
+  004A7F96: and         ebx,dword ptr ds:[01CF5740h]
+  004A7F9C: test        bl,1
+  004A7F9F: je          004A7FDB
+  004A7FA1: mov         eax,dword ptr [ebp+8]
+  004A7FA4: push        edi
+  004A7FA5: push        dword ptr [ebp+18h]
+  004A7FA8: sub         esp,8
+  004A7FAB: mov         ecx,esp
+  004A7FAD: sub         esp,8
+  004A7FB0: mov         edx,esp
+  004A7FB2: mov         dword ptr [ecx],eax
+  004A7FB4: mov         eax,dword ptr [ebp+0Ch]
+  004A7FB7: mov         dword ptr [ecx+4],eax
+  004A7FBA: mov         ecx,dword ptr ds:[01C7F844h]
+  004A7FC0: mov         eax,dword ptr ds:[01C7F840h]
+  004A7FC5: mov         dword ptr [edx],eax
+  004A7FC7: mov         dword ptr [edx+4],ecx
+  004A7FCA: call        004AEB50
+  004A7FCF: mov         esi,eax
+  004A7FD1: add         esp,18h
+  004A7FD4: mov         dword ptr [ebp-4],esi
+  004A7FD7: test        esi,esi
+  004A7FD9: jne         004A8043
+  004A7FDB: test        bl,2
+  004A7FDE: je          004A8008
+  004A7FE0: push        dword ptr [ebp+20h]
+  004A7FE3: mov         eax,dword ptr [ebp+8]
+  004A7FE6: push        edi
+  004A7FE7: push        dword ptr [ebp+18h]
+  004A7FEA: sub         esp,8
+  004A7FED: mov         ecx,esp
+  004A7FEF: mov         dword ptr [ecx],eax
+  004A7FF1: mov         eax,dword ptr [ebp+0Ch]
+  004A7FF4: mov         dword ptr [ecx+4],eax
+  004A7FF7: call        004ACBF0
+  004A7FFC: mov         esi,eax
+  004A7FFE: add         esp,14h
+  004A8001: mov         dword ptr [ebp-4],esi
+  004A8004: test        esi,esi
+  004A8006: jne         004A8043
+  004A8008: test        bl,4
+  004A800B: je          004A80FD
+  004A8011: push        dword ptr [ebp+20h]
+  004A8014: mov         eax,dword ptr [ebp+8]
+  004A8017: push        edi
+  004A8018: push        dword ptr [ebp+18h]
+  004A801B: sub         esp,8
+  004A801E: mov         ecx,esp
+  004A8020: push        dword ptr ds:[01CF573Ch]
+  004A8026: mov         dword ptr [ecx],eax
+  004A8028: mov         eax,dword ptr [ebp+0Ch]
+  004A802B: mov         dword ptr [ecx+4],eax
+  004A802E: call        004AD5C0
+  004A8033: mov         esi,eax
+  004A8035: add         esp,18h
+  004A8038: mov         dword ptr [ebp-4],esi
+  004A803B: test        esi,esi
+  004A803D: je          004A80FD
+  004A8043: lea         eax,[ebp-4]
+  004A8046: mov         ecx,1C7F898h
+  004A804B: push        eax
+  004A804C: lea         eax,[ebp-0Ch]
+  004A804F: push        eax
+  004A8050: call        004AB320
+  004A8055: mov         edi,dword ptr [ebp-8]
+  004A8058: test        edi,edi
+  004A805A: je          004A80FD
+  004A8060: push        0
+  004A8062: push        0
+  004A8064: push        18F0378h
+  004A8069: push        14h
+  004A806B: call        0045C130
+  004A8070: mov         edx,dword ptr [ebp-0Ch]
+  004A8073: mov         ecx,eax
+  004A8075: mov         dword ptr [ecx+10h],esi
+  004A8078: inc         dword ptr ds:[01C7F8A8h]
+  004A807E: mov         dword ptr [ecx],edx
+  004A8080: mov         dword ptr [ecx+4],0
+  004A8087: mov         dword ptr [ecx+8],0
+  004A808E: mov         byte ptr [ecx+0Ch],0
+  004A8092: cmp         edx,1C7F898h
+  004A8098: jne         004A80C0
+  004A809A: mov         dword ptr ds:[01C7F898h],ecx
+  004A80A0: mov         dword ptr ds:[01C7F89Ch],ecx
+  004A80A6: mov         dword ptr ds:[01C7F8A0h],ecx
+  004A80AC: push        ecx
+  004A80AD: mov         ecx,1C7F898h
+  004A80B2: call        004AB180
+  004A80B7: mov         eax,esi
+  004A80B9: pop         edi
+  004A80BA: pop         esi
+  004A80BB: pop         ebx
+  004A80BC: mov         esp,ebp
+  004A80BE: pop         ebp
+  004A80BF: ret
+  004A80C0: mov         dword ptr [edi],ecx
+  004A80C2: mov         ebx,dword ptr ds:[01C7F89Ch]
+  004A80C8: cmp         edx,ebx
+  004A80CA: jne         004A80DA
+  004A80CC: lea         eax,[edx+4]
+  004A80CF: cmp         edi,eax
+  004A80D1: cmove       ebx,ecx
+  004A80D4: mov         dword ptr ds:[01C7F89Ch],ebx
+  004A80DA: mov         ebx,dword ptr ds:[01C7F8A0h]
+  004A80E0: cmp         edx,ebx
+  004A80E2: jne         004A80F2
+  004A80E4: lea         eax,[edx+8]
+  004A80E7: cmp         edi,eax
+  004A80E9: cmove       ebx,ecx
+  004A80EC: mov         dword ptr ds:[01C7F8A0h],ebx
+  004A80F2: push        ecx
+  004A80F3: mov         ecx,1C7F898h
+  004A80F8: call        004AB180
+  004A80FD: mov         eax,esi
+  004A80FF: pop         edi
+  004A8100: pop         esi
+
+  Summary
+
+        1000 .text

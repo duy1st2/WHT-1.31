@@ -1,0 +1,118 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-bb1e50.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D81E50: push        ebp
+  00D81E51: mov         ebp,esp
+  00D81E53: push        0FFFFFFFFh
+  00D81E55: push        17DFCB8h
+  00D81E5A: mov         eax,dword ptr fs:[00000000h]
+  00D81E60: push        eax
+  00D81E61: sub         esp,44h
+  00D81E64: mov         eax,dword ptr ds:[01C98574h]
+  00D81E69: xor         eax,ebp
+  00D81E6B: mov         dword ptr [ebp-10h],eax
+  00D81E6E: push        ebx
+  00D81E6F: push        esi
+  00D81E70: push        edi
+  00D81E71: push        eax
+  00D81E72: lea         eax,[ebp-0Ch]
+  00D81E75: mov         dword ptr fs:[00000000h],eax
+  00D81E7B: mov         ebx,ecx
+  00D81E7D: push        0
+  00D81E7F: push        1
+  00D81E81: push        1
+  00D81E83: push        0
+  00D81E85: push        0
+  00D81E87: call        006D81F0
+  00D81E8C: push        eax
+  00D81E8D: mov         ecx,ebx
+  00D81E8F: call        00D7F150
+  00D81E94: movzx       edx,byte ptr [ebp+8]
+  00D81E98: mov         esi,eax
+  00D81E9A: xor         eax,eax
+  00D81E9C: test        esi,esi
+  00D81E9E: sete        al
+  00D81EA1: xor         edx,1
+  00D81EA4: cmp         eax,edx
+  00D81EA6: je          00D81F9F
+  00D81EAC: test        esi,esi
+  00D81EAE: je          00D81EBD
+  00D81EB0: push        esi
+  00D81EB1: mov         ecx,ebx
+  00D81EB3: call        00D815F0
+  00D81EB8: jmp         00D81F9F
+  00D81EBD: call        006D81F0
+  00D81EC2: push        eax
+  00D81EC3: lea         ecx,[ebp-4Ch]
+  00D81EC6: mov         dword ptr [ebp-4Ch],eax
+  00D81EC9: mov         dword ptr [ebp-48h],0
+  00D81ED0: mov         dword ptr [ebp-44h],0
+  00D81ED7: call        004DF330
+  00D81EDC: mov         dword ptr [ebp-4],0
+  00D81EE3: xor         esi,esi
+  00D81EE5: mov         dword ptr [ebp-50h],0
+  00D81EEC: mov         byte ptr [ebp-4],2
+  00D81EF0: call        006D81F0
+  00D81EF5: push        eax
+  00D81EF6: call        004F17E0
+  00D81EFB: add         esp,4
+  00D81EFE: push        dword ptr [eax+78h]
+  00D81F01: call        006D81F0
+  00D81F06: push        eax
+  00D81F07: lea         eax,[ebp-3Ch]
+  00D81F0A: push        eax
+  00D81F0B: call        00F391B0
+  00D81F10: push        1
+  00D81F12: lea         eax,[ebp-3Ch]
+  00D81F15: mov         dword ptr [ebp-18h],0FFFFFFFFh
+  00D81F1C: push        1
+  00D81F1E: push        eax
+  00D81F1F: call        010002F0
+  00D81F24: add         esp,18h
+  00D81F27: test        eax,eax
+  00D81F29: jne         00D81F34
+  00D81F2B: push        57h
+  00D81F2D: call        00460CE0
+  00D81F32: jmp         00D81F68
+  00D81F34: mov         edi,dword ptr [eax+54h]
+  00D81F37: test        edi,edi
+  00D81F39: je          00D81F59
+  00D81F3B: call        006D81F0
+  00D81F40: push        eax
+  00D81F41: mov         eax,dword ptr [edi]
+  00D81F43: mov         ecx,edi
+  00D81F45: call        dword ptr [eax+1Ch]
+  00D81F48: push        eax
+  00D81F49: call        00F31AF0
+  00D81F4E: add         esp,8
+  00D81F51: test        al,al
+  00D81F53: je          00D81F59
+  00D81F55: mov         eax,edi
+  00D81F57: jmp         00D81F5B
+  00D81F59: xor         eax,eax
+  00D81F5B: test        eax,eax
+  00D81F5D: je          00D81F68
+  00D81F5F: test        edi,edi
+  00D81F61: je          00D81F66
+  00D81F63: inc         dword ptr [edi+4]
+  00D81F66: mov         esi,eax
+  00D81F68: mov         byte ptr [ebp-4],3
+  00D81F6C: test        esi,esi
+  00D81F6E: je          00D81F7C
+  00D81F70: add         dword ptr [esi+4],0FFFFFFFFh
+  00D81F74: jne         00D81F7C
+  00D81F76: mov         eax,dword ptr [esi]
+  00D81F78: mov         ecx,esi
+  00D81F7A: call        dword ptr [eax]
+  00D81F7C: mov         eax,dword ptr [esi]
+  00D81F7E: 8D
+  00D81F7F: dec         ebp
+
+  Summary
+
+        1000 .text

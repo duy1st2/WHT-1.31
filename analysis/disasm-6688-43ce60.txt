@@ -1,0 +1,99 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-43ce60.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF78339CE60: and         bl,dh
+  00007FF78339CE62: movups      xmm0,xmmword ptr [rsp+20h]
+  00007FF78339CE67: mov         dword ptr [rsp+24h],ecx
+  00007FF78339CE6B: comiss      xmm0,dword ptr [rsp+24h]
+  00007FF78339CE70: jbe         00007FF78339CECB
+  00007FF78339CE72: mov         dword ptr [rsp+20h],ecx
+  00007FF78339CE76: lea         r8,[rsp+24h]
+  00007FF78339CE7B: lea         rcx,[rsp+28h]
+  00007FF78339CE80: mov         dword ptr [rsp+24h],eax
+  00007FF78339CE84: lea         rdx,[rsp+20h]
+  00007FF78339CE89: call        00007FF784089B90
+  00007FF78339CE8E: movss       xmm0,dword ptr [00007FF785028AB8h]
+  00007FF78339CE96: mov         ecx,dword ptr [rax]
+  00007FF78339CE98: btr         ecx,1Fh
+  00007FF78339CE9C: mov         dword ptr [rsp+24h],ecx
+  00007FF78339CEA0: comiss      xmm0,dword ptr [rsp+24h]
+  00007FF78339CEA5: ja          00007FF78339CECB
+  00007FF78339CEA7: mov         eax,dword ptr [rdi+0000000000000288h]
+  00007FF78339CEAD: lea         r8,[rsp+24h]
+  00007FF78339CEB2: lea         rdx,[rsp+58h]
+  00007FF78339CEB7: mov         dword ptr [rsp+24h],eax
+  00007FF78339CEBB: lea         rcx,[rsp+28h]
+  00007FF78339CEC0: call        00007FF784089CA0
+  00007FF78339CEC5: mov         ecx,dword ptr [rax]
+  00007FF78339CEC7: mov         dword ptr [rsp+58h],ecx
+  00007FF78339CECB: movss       xmm1,dword ptr [rsp+58h]
+  00007FF78339CED1: movss       xmm0,dword ptr [00007FF7850AD084h]
+  00007FF78339CED9: comiss      xmm0,xmm1
+  00007FF78339CEDC: jbe         00007FF78339CEF7
+  00007FF78339CEDE: lea         rax,[00007FF7850AD084h]
+  00007FF78339CEE5: mov         eax,dword ptr [rax]
+  00007FF78339CEE7: mov         dword ptr [rbx],eax
+  00007FF78339CEE9: mov         rax,rbx
+  00007FF78339CEEC: mov         rbx,qword ptr [rsp+40h]
+  00007FF78339CEF1: add         rsp,30h
+  00007FF78339CEF5: pop         rdi
+  00007FF78339CEF6: ret
+  00007FF78339CEF7: comiss      xmm1,dword ptr [00007FF7850AD024h]
+  00007FF78339CEFE: lea         rcx,[00007FF7850AD024h]
+  00007FF78339CF05: lea         rax,[rsp+58h]
+  00007FF78339CF0A: cmova       rax,rcx
+  00007FF78339CF0E: mov         eax,dword ptr [rax]
+  00007FF78339CF10: mov         dword ptr [rbx],eax
+  00007FF78339CF12: mov         rax,rbx
+  00007FF78339CF15: mov         rbx,qword ptr [rsp+40h]
+  00007FF78339CF1A: add         rsp,30h
+  00007FF78339CF1E: pop         rdi
+  00007FF78339CF1F: ret
+  00007FF78339CF20: push        rsi
+  00007FF78339CF22: sub         rsp,30h
+  00007FF78339CF26: mov         qword ptr [rsp+40h],rbx
+  00007FF78339CF2B: xor         esi,esi
+  00007FF78339CF2D: mov         qword ptr [rsp+48h],rbp
+  00007FF78339CF32: mov         qword ptr [rsp+50h],rdi
+  00007FF78339CF37: mov         qword ptr [rsp+28h],r14
+  00007FF78339CF3C: xor         r14b,r14b
+  00007FF78339CF3F: mov         qword ptr [rsp+20h],r15
+  00007FF78339CF44: mov         r15,rcx
+  00007FF78339CF47: add         rcx,45Ch
+  00007FF78339CF4E: mov         eax,dword ptr [rcx+4]
+  00007FF78339CF51: and         eax,dword ptr [rcx]
+  00007FF78339CF53: cmp         eax,0FFFFFFFFh
+  00007FF78339CF56: jne         00007FF78339CF5C
+  00007FF78339CF58: mov         ebp,esi
+  00007FF78339CF5A: jmp         00007FF78339CF64
+  00007FF78339CF5C: call        00007FF783E74A10
+  00007FF78339CF61: mov         rbp,rax
+  00007FF78339CF64: mov         ebx,esi
+  00007FF78339CF66: lea         rdi,[r15+0000000000000334h]
+  00007FF78339CF6D: nop         dword ptr [rax]
+  00007FF78339CF70: mov         edx,ebx
+  00007FF78339CF72: mov         rcx,r15
+  00007FF78339CF75: call        00007FF78339E280
+  00007FF78339CF7A: test        al,al
+  00007FF78339CF7C: je          00007FF78339CFBA
+  00007FF78339CF7E: test        rbp,rbp
+  00007FF78339CF81: je          00007FF78339CFAE
+  00007FF78339CF83: cmp         ebx,0FFFFFFFFh
+  00007FF78339CF86: je          00007FF78339CFBA
+  00007FF78339CF88: mov         ecx,dword ptr [rdi+FFFFFFFFFFFFFE00h]
+  00007FF78339CF8E: mov         eax,dword ptr [rdi]
+  00007FF78339CF90: add         ecx,0FFFFFFFEh
+  00007FF78339CF93: cmp         ecx,6
+  00007FF78339CF96: ja          00007FF78339CFBA
+  00007FF78339CF98: sub         eax,1
+  00007FF78339CF9B: je          00007FF78339CFBA
+  00007FF78339CF9D: sub         eax,3Fh
+
+  Summary
+
+        1000 .text

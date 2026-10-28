@@ -1,0 +1,10 @@
+{
+  "references": {
+    "WHT/native/gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "WHT-1.29/native/gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  },
+  "reference_call": "SetMapFlag(0x100,0)",
+  "old129_set_rva": "0xa9320",
+  "old129_get_rva": "0x99310",
+  "status": "1.31 native function unresolved; no dispatch enabled"
+}

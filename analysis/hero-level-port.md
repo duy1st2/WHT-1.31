@@ -1,0 +1,7 @@
+# Hero level port
+
+Source evidence recorded before edits: WHT/native/gameplay_commands.hpp TrySetHeroLevel uses SetHeroLevel for increases, UnitStripHeroLevel for decreases and GetHeroLevel readback. WHT-1.29/native/hero_level129.hpp implements #lvl default 10, range 1..10000 using required XP at requested-1 minus current XP, native integer-to-real conversion, AddHeroXP flags 1,0,0,0,0; decreases use native strip.
+
+Mapped 12164/12173 x86/x64 captures: follow native SetHeroLevel callers to the level, required XP, current XP, native real conversion and AddHeroXP wrappers; strip wrappers validate hero rawcode/illusion then invoke hero lifecycle. Profiles include complete wrapper and directly invoked hero implementation bodies; x86 absolute image operands are relocation-normalized. Runtime validates registered selected hero identity before calls and reads actual native level after callbacks. No live gameplay mutation is part of automated validation.
+
+Validation: x86 30/30 and x64 29/29 contracts passed. Tests compare every guarded block against captures, relocate into private fixtures and reject block tampering; execute only the self-contained native integer-to-real leaf privately (including 24-bit precision boundaries). Command tests cover default/increase/decrease/no-op, invalid input, callback identity changes and native refusal/map caps. Installed all four runtime-test variants; 12 artifact SHA256 matches, 12 existing settings/log/ban files unchanged, both reference files unchanged. Source ZIP refreshed. Live level changes remain untested.

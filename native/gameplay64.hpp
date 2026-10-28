@@ -4,6 +4,7 @@
 #include "invulnerable_bar131.hpp"
 #pragma once
 #include "world_present131.hpp"
+#include "overhead_sampling131.hpp"
 #include "profile64.hpp"
 #include "tool_menu.hpp"
 #include <unordered_map>
@@ -33,38 +34,56 @@ inline float Seconds64(uintptr_t button,uintptr_t base,const Profile64& p){__try
  auto getter=*reinterpret_cast<uintptr_t*>(vt+0x5c0);if(getter<base||getter>=end)return 0;float value=0;reinterpret_cast<float*(*)(uintptr_t,float*,unsigned)>(getter)(ability,&value,*reinterpret_cast<unsigned*>(data+0xc));return std::isfinite(value)&&value>0&&value<86400?value:0;}__except(1){return 0;}}
 inline std::string SecondsText64(float value){if(!std::isfinite(value)||value<=0||value>=86400)return {};char text[32]{};int seconds=int(std::ceil(value));if(seconds>=60)std::snprintf(text,sizeof(text),"%d:%02d",seconds/60,seconds%60);else if(value<1)std::snprintf(text,sizeof(text),"%.1f",value);else std::snprintf(text,sizeof(text),"%d",seconds);return text;}
 struct Gameplay64 {
+ OverheadSampling131 sampling;ButtonUpdateCadence regenCadence,cooldownCadence;
  HpPlayerColor131 hpColors;HpDimensions131 hpDimensions;
  InvulnerableBars131 invulnerable;
  struct World{void* host=nullptr;void* background=nullptr;std::array<void*,2> values{},levels{};std::array<std::string,2> valueText{};std::string levelText;bool placed=false;float backgroundWidth=0;std::array<float,2> fontSizes{};uint32_t color=0xffffffff;};
  struct Cooldown{uintptr_t button=0;std::array<void*,2> fonts{};std::string text;};
  std::unordered_map<uintptr_t,World> world;std::array<Cooldown,18> cooldown{};std::array<void*,2> rates{},rateFonts{};std::array<std::string,2> rateText{};unsigned reported=0,observedNative=0;
- void Reset(){ForgetStatPaint131();hpColors.Reset();hpDimensions.Reset();invulnerable.Reset();world.clear();cooldown={};rates={};rateFonts={};rateText={};reported=observedNative=0;}
+ void Reset(){sampling.Reset();regenCadence={};cooldownCadence={};ForgetStatPaint131();hpColors.Reset();hpDimensions.Reset();invulnerable.Reset();world.clear();cooldown={};rates={};rateFonts={};rateText={};reported=observedNative=0;}
  unsigned Update(uintptr_t base,uintptr_t ui,const Profile64& p,const Config& c,bool allowed,ToolMenuOverlay& menu,const NativeFrameApi& raw){unsigned observed=0;
-  auto selected=Selected64(ui,base,p);
+  auto selected=Selected64(ui,base,p);const auto now=GetTickCount64();
+  if(regenCadence.Due(now,ui,selected,nullptr,(allowed&&c.showRegenHP?1u:0u)|(allowed&&c.showRegenMana?2u:0u))){
   for(unsigned n=0;n<2;++n){float value=0,maximum=0,rate=0;bool enabled=allowed&&(n?c.showRegenMana:c.showRegenHP)&&State64(selected,base,p,n!=0,value,maximum,rate)&&rate!=0;
    ToolMenuRect rect{.510f,n?0.f:.009f,.08f,.009f};if(enabled&&!rates[n]){rates[n]=menu.Frame(base,menu.independentHost,rect);if(rates[n])rateFonts[n]=menu.TextIn(rates[n],rect,"",false,.009f);}if(!rates[n]||!rateFonts[n])continue;
    if(!enabled){NativeFrameHide(rates[n]);continue;}auto text=RateText64(n!=0,rate);if(text!=rateText[n]){menu.api.setText(rateFonts[n],text.c_str());rateText[n]=text;}NativeFrameShow(rates[n]);observed|=1;
   }
-  for(unsigned slot=0;slot<18;++slot){auto& e=cooldown[slot];auto button=Button64(ui,base,p,slot);auto value=button&&allowed&&c.showCooldown?Seconds64(button,base,p):0.f;auto text=SecondsText64(value);if(value>0)observed|=2;
+  }
+  if(cooldownCadence.Due(now,ui,selected,&p,allowed&&c.showCooldown?1u:0u)){
+  for(unsigned slot=0;slot<18;++slot){auto& e=cooldown[slot];auto button=allowed&&c.showCooldown?Button64(ui,base,p,slot):uintptr_t(0);auto value=button&&allowed&&c.showCooldown?Seconds64(button,base,p):0.f;auto text=SecondsText64(value);if(value>0)observed|=2;
    for(unsigned n=0;n<2;++n){bool created=false;if(!e.fonts[n]&&!text.empty()){e.fonts[n]=NativeCreateFontString(menu.api,menu.independentHost,.016f,"",4);created=e.fonts[n]!=nullptr;if(created){menu.api.setWidth(e.fonts[n],.030f);menu.api.setHeight(e.fonts[n],.024f);menu.api.setTextAlign(e.fonts[n],2);}}
     if(e.fonts[n]&&button&&(created||button!=e.button)){float shadow=n?0.f:.001f;menu.api.setRelPoint(e.fonts[n],4,reinterpret_cast<void*>(button),4,shadow,-shadow,1);}
     if(e.fonts[n]&&(created||e.text!=text)){auto label=text.empty()?std::string{}:std::string(n?"|cffffffff":"|cff000000")+text+"|r";menu.api.setText(e.fonts[n],label.c_str());}}
    e.button=button;e.text=text;
   }
+  }
+  sampling.Configure(ui,selected,c,allowed);if(!sampling.Full(now))return observed|observedNative;
   std::unordered_set<uintptr_t> frames;if(!Frames64(menu.independentHost,frames))return observed;
   for(auto it=world.begin();it!=world.end();)if(!frames.count(it->first))it=world.erase(it);else ++it;
   PruneStatPaint131(frames);hpColors.Prune(frames);hpDimensions.Prune(frames);
   invulnerable.Prune(frames);
-  for(auto bar:frames){uintptr_t unit=0;bool visible=false;if(!Hp64(bar,base,p,unit,visible))continue;
+  unsigned count=0;for(auto bar:frames){uintptr_t unit=0;bool visible=false;if(!Hp64(bar,base,p,unit,visible))continue;++count;
    StatPaintRecord131 record;record.unit=unit;record.unitTable=base+p.unitVtable;
-   const bool enabled=allowed&&(c.barWidthHp>0||c.barHeightHp>0||c.colorPlayer||c.hideInvulnerableBars||c.stateTagEnable||c.stateTagShowLevel||(c.timeBoss&&(c.mth49Enable||c.g17Enable)));
+   const bool enabled=allowed; // Apply reference custom HP colors in normal mode too.
    if(!enabled){auto previous=statPaintRecords131.find(bar);if(previous!=statPaintRecords131.end()&&previous->second.presentation)WriteBar(bar,base,p,c,allowed,raw);}
    SetStatPaint131(base,p.statVtable,bar,false,record,enabled,true);
   }
-  return observed|observedNative;
+  sampling.Load(count);return observed|observedNative;
  }
  unsigned WriteBar(uintptr_t bar,uintptr_t base,const Profile64& p,const Config& c,bool allowed,const NativeFrameApi& raw){unsigned observed=0;
-uintptr_t unit=0;bool visible=false;if(!Hp64(bar,base,p,unit,visible))return observed;invulnerable.Update(base,p.build,bar,unit,allowed&&c.hideInvulnerableBars,visible);hpColors.Update(base,p.build,bar,unit,allowed&&c.colorPlayer,GetTickCount64());hpDimensions.Update(base,p.build,bar,allowed?c.barWidthHp:0.f,allowed?c.barHeightHp:0.f,raw);int level=Level64(unit,base,p);bool hero=level>0;
+uintptr_t unit=0;bool visible=false;if(!Hp64(bar,base,p,unit,visible))return observed;invulnerable.Update(base,p.build,bar,unit,allowed&&c.hideInvulnerableBars,visible);
+   hpDimensions.Update(base,p.build,bar,allowed?c.barWidthHp:0.f,allowed?c.barHeightHp:0.f,raw);
+   const bool heroCandidate=Object64(ComponentLookup131::Slot(unit,0x558),base,p.heroVtable);
+   const bool eligibleNow=OverheadEligible131(allowed,c.hideInvulnerableBars,OverheadUnitFlags131(unit));
+   auto cached=world.find(bar);
+   if(cached!=world.end()&&cached->second.host&&!OwnedChild64(cached->second.host,bar,base,p.simpleVtable))sampling.Invalidate(unit);
+   uintptr_t bound=0;uint64_t identity=0;
+   if(StatPaintPresentationKey131(bar,base+p.unitVtable,bound,identity)&&bound==unit&&!sampling.Unit(unit,identity,bar,heroCandidate,sampling.Now(),c,allowed)){
+    if(cached!=world.end()&&cached->second.host){if(!eligibleNow)HideWorldHost131(cached->second.host);else if(!cached->second.valueText[0].empty()||!cached->second.valueText[1].empty()||!cached->second.levelText.empty())MaintainWorldHost131(cached->second.host,bar);}
+    return observed;
+   }
+   hpColors.Update(base,p.build,bar,unit,allowed,GetTickCount64(),c);const int level=heroCandidate?Level64(unit,base,p):0;const bool hero=level>0;
+
    const bool eligible=OverheadEligible131(allowed,c.hideInvulnerableBars,OverheadUnitFlags131(unit));
    bool stateEnabled=eligible&&c.stateTagEnable&&(hero?c.stateTagHero:c.stateTagNonHero);
    std::string levelText=eligible&&c.stateTagShowLevel&&hero?std::to_string(level):std::string{};auto found=world.find(bar);if(found==world.end()){if((!stateEnabled&&levelText.empty())||world.size()>=4096)return observed;found=world.emplace(bar,World{}).first;}auto& e=found->second;

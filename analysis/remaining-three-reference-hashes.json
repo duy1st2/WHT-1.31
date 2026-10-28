@@ -1,0 +1,7 @@
+{
+  "WHT/native/gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+  "WHT-1.29/native/version129.cpp": "844235baa04936193341581ef9eabec7541622e6d5386063a77bd5ab7b291872",
+  "WHT-1.29/native/add_ability129.hpp": "0b7470a9be3c72fe4fba975eb5b6d17dcf973a67b764f415275c27e76185ae52",
+  "WHT-1.29/native/share_control129.hpp": "76cb6af5d8a8e0a59ef5e088ea74b376c5c17bfa6db39c3b81e9dd4b16176bd2",
+  "WHT-1.29/native/save_game129.hpp": "bc47a3dc3ce8275cd5a5b033e48b8b4c2c571a62f07988c9e91252cfebef2392"
+}

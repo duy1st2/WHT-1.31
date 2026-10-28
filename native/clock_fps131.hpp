@@ -1,5 +1,6 @@
 #pragma once
 #include "tool_menu.hpp"
+#include "hud_style.hpp"
 #include <cmath>
 #include <cstdio>
 
@@ -38,7 +39,7 @@ inline bool SimulationSeconds131(uintptr_t base,const ClockFpsProfile131& p,uint
   if(total>=864000)return false;seconds=static_cast<uint32_t>(total);if(precise)*precise=total;return true;
  }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
-inline std::string TimerText131(uint32_t seconds){char text[96]{};std::snprintf(text,sizeof(text),"|cfffcd211%02u:%02u:%02u|r",seconds/3600,(seconds/60)%60,seconds%60);return text;}
+inline std::string TimerText131(uint32_t seconds){char text[96]{};std::snprintf(text,sizeof(text),"|cfffcd211%02u|cffffffff:|cfffcd211%02u|cffffffff:|cfffcd211%02u|r",seconds/3600,(seconds/60)%60,seconds%60);return text;}
 inline void ClockDiagnostic131(uintptr_t base,unsigned build,char* text,size_t size){
  const auto* p=ClockFpsProfile(build);if(!p)return;
  __try {
@@ -49,19 +50,20 @@ inline void ClockDiagnostic131(uintptr_t base,unsigned build,char* text,size_t s
  }__except(EXCEPTION_EXECUTE_HANDLER){std::snprintf(text,size,"clock native read exception");}
 }
 struct ClockOverlay131 {
- void* frame=nullptr;void* font=nullptr;bool reported=false;uint32_t last=~0u;uint64_t diagnosticDue=0;unsigned diagnosticCount=0;
+ void* frame=nullptr;void* font=nullptr;bool reported=false;uint32_t last=~0u;bool lastHide=false;uint64_t diagnosticDue=0;unsigned diagnosticCount=0;
  void Diagnose(uintptr_t base,unsigned build,bool enabled,const std::wstring& folder){
   const auto now=GetTickCount64();if(!enabled||reported||diagnosticCount>=4||now<diagnosticDue)return;
   diagnosticDue=now+5000;++diagnosticCount;char text[192]{};ClockDiagnostic131(base,build,text,sizeof(text));
   Log(folder,std::string("WHT timer: ")+text+" frame="+(frame?"yes":"no")+" font="+(font?"yes":"no"));
  }
  void Reset(){*this={};last=~0u;}
- bool Update(uintptr_t base,unsigned build,bool enabled,ToolMenuOverlay& menu){
+ bool Update(uintptr_t base,unsigned build,bool enabled,ToolMenuOverlay& menu,bool hideTime=false){
   const auto* p=ClockFpsProfile(build);uint32_t seconds=0;
   if(!enabled||!p||!SimulationSeconds131(base,*p,seconds)){if(frame)NativeFrameHide(frame);return false;}
   if(!menu.initialized)return false;
-  if(!frame){const ToolMenuRect rect{.34f,.526f,.12f,.025f};frame=menu.Frame(base,menu.independentHost,rect);if(frame)font=menu.TextIn(frame,rect,"",true,.016f);}
+  if(!frame){const ToolMenuRect rect{HudStyle::Center(hideTime)+.06f,HudStyle::timerY-.0125f,.12f,.025f};frame=menu.Frame(base,menu.independentHost,rect);if(frame){font=menu.TextIn(frame,rect,"",true,HudStyle::timerSize);if(font)menu.api.setRelPoint(font,0,frame,0,0,0,1);lastHide=hideTime;}}
   if(!frame||!font)return false;
+  if(lastHide!=hideTime){menu.api.setAbsPoint(frame,0,HudStyle::Center(hideTime)-.06f,HudStyle::timerY+.0125f,1);lastHide=hideTime;}
   if(last!=seconds){last=seconds;const auto text=TimerText131(seconds);menu.api.setText(font,text.c_str());}
   NativeFrameShow(frame);return true;
  }
@@ -77,7 +79,7 @@ inline uintptr_t FpsBar131(uintptr_t base,uintptr_t ui,const ClockFpsProfile131&
  }__except(EXCEPTION_EXECUTE_HANDLER){return 0;}
 }
 struct FpsState131 {
- uintptr_t owner=0;bool active=false,saved=false,reported=false;
+ uintptr_t owner=0,styledFont=0;LONG styledWidth=0,styledHeight=0;bool active=false,saved=false,reported=false;
  void Reset(){*this={};}
  bool Apply(uintptr_t bar,uintptr_t modeOffset,bool allowed,bool enabled,FpsSetter131 set){
   if(owner!=bar){owner=bar;active=false;}
@@ -88,7 +90,7 @@ struct FpsState131 {
    if(active){if((mode!=0)!=saved)set(bar,saved);active=false;}
   }__except(EXCEPTION_EXECUTE_HANDLER){}return false;
  }
- bool Update(uintptr_t base,uintptr_t ui,unsigned build,bool allowed,bool enabled){
+ bool Update(uintptr_t base,uintptr_t ui,unsigned build,bool allowed,bool enabled,NativeFrameApi* api=nullptr){
   const auto* p=ClockFpsProfile(build);if(!p)return false;
   __try {
 #ifdef _WIN64
@@ -97,7 +99,14 @@ struct FpsState131 {
    const unsigned char prefix[]={0x55,0x8b,0xec,0x53,0x8a,0x5d,0x08,0x56,0x8b,0xf1};
 #endif
    if(memcmp(reinterpret_cast<void*>(base+p->fpsSetter),prefix,sizeof(prefix)))return false;
-   return Apply(FpsBar131(base,ui,*p),p->fpsMode,allowed,enabled,reinterpret_cast<FpsSetter131>(base+p->fpsSetter));
+   const auto bar=FpsBar131(base,ui,*p);
+   const bool result=Apply(bar,p->fpsMode,allowed,enabled,reinterpret_cast<FpsSetter131>(base+p->fpsSetter));
+   if(result&&bar&&allowed&&enabled&&api){const auto font=*reinterpret_cast<uintptr_t*>(bar+p->fpsFont);
+    if((styledFont!=font||styledWidth!=ToolMenuOverlay::viewportWidth||styledHeight!=ToolMenuOverlay::viewportHeight)&&StyleNativeFps(reinterpret_cast<void*>(font),*api)){
+     styledFont=font;styledWidth=ToolMenuOverlay::viewportWidth;styledHeight=ToolMenuOverlay::viewportHeight;
+    }
+   }
+   return result;
   }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
  }
 };

@@ -1,0 +1,114 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-3be850.exe
+
+File Type: EXECUTABLE IMAGE
+
+  0058E850: push        ebp
+  0058E851: mov         ebp,esp
+  0058E853: push        esi
+  0058E854: mov         esi,ecx
+  0058E856: mov         eax,dword ptr [esi+70h]
+  0058E859: lea         ecx,[esi+70h]
+  0058E85C: push        1
+  0058E85E: push        dword ptr [ebp+8]
+  0058E861: call        dword ptr [eax]
+  0058E863: mov         ecx,esi
+  0058E865: call        00590200
+  0058E86A: pop         esi
+  0058E86B: pop         ebp
+  0058E86C: ret         4
+  0058E86F: int         3
+  0058E870: push        ebp
+  0058E871: mov         ebp,esp
+  0058E873: push        0FFFFFFFFh
+  0058E875: push        1771C98h
+  0058E87A: mov         eax,dword ptr fs:[00000000h]
+  0058E880: push        eax
+  0058E881: push        esi
+  0058E882: push        edi
+  0058E883: mov         eax,dword ptr ds:[01C98574h]
+  0058E888: xor         eax,ebp
+  0058E88A: push        eax
+  0058E88B: lea         eax,[ebp-0Ch]
+  0058E88E: mov         dword ptr fs:[00000000h],eax
+  0058E894: mov         esi,ecx
+  0058E896: mov         edi,dword ptr [ebp+8]
+  0058E899: lea         ecx,[esi+000000D0h]
+  0058E89F: push        edi
+  0058E8A0: call        004D16F0
+  0058E8A5: cmp         byte ptr [ebp+0Ch],0
+  0058E8A9: je          0058E8EC
+  0058E8AB: push        1
+  0058E8AD: push        esi
+  0058E8AE: mov         ecx,edi
+  0058E8B0: call        00DA7160
+  0058E8B5: push        edi
+  0058E8B6: lea         ecx,[ebp+8]
+  0058E8B9: call        004C7350
+  0058E8BE: mov         ecx,dword ptr [ebp+8]
+  0058E8C1: mov         dword ptr [ebp-4],0
+  0058E8C8: test        ecx,ecx
+  0058E8CA: je          0058E8D7
+  0058E8CC: push        1
+  0058E8CE: push        esi
+  0058E8CF: call        00DA2860
+  0058E8D4: mov         ecx,dword ptr [ebp+8]
+  0058E8D7: mov         dword ptr [ebp-4],1
+  0058E8DE: test        ecx,ecx
+  0058E8E0: je          0058E8EC
+  0058E8E2: add         dword ptr [ecx+4],0FFFFFFFFh
+  0058E8E6: jne         0058E8EC
+  0058E8E8: mov         eax,dword ptr [ecx]
+  0058E8EA: call        dword ptr [eax]
+  0058E8EC: mov         ecx,dword ptr [ebp-0Ch]
+  0058E8EF: mov         dword ptr fs:[00000000h],ecx
+  0058E8F6: pop         ecx
+  0058E8F7: pop         edi
+  0058E8F8: pop         esi
+  0058E8F9: mov         esp,ebp
+  0058E8FB: pop         ebp
+  0058E8FC: ret         8
+  0058E8FF: int         3
+  0058E900: push        ebp
+  0058E901: mov         ebp,esp
+  0058E903: push        esi
+  0058E904: mov         esi,ecx
+  0058E906: push        edi
+  0058E907: mov         edi,dword ptr [ebp+8]
+  0058E90A: push        edi
+  0058E90B: lea         ecx,[esi+000000DCh]
+  0058E911: call        004D16F0
+  0058E916: mov         ecx,edi
+  0058E918: call        00DF2AF0
+  0058E91D: test        al,al
+  0058E91F: je          0058E928
+  0058E921: mov         ecx,esi
+  0058E923: call        0058D9C0
+  0058E928: push        1
+  0058E92A: push        esi
+  0058E92B: mov         ecx,edi
+  0058E92D: call        00DF2BD0
+  0058E932: pop         edi
+  0058E933: pop         esi
+  0058E934: pop         ebp
+  0058E935: ret         4
+  0058E938: int         3
+  0058E939: int         3
+  0058E93A: int         3
+  0058E93B: int         3
+  0058E93C: int         3
+  0058E93D: int         3
+  0058E93E: int         3
+  0058E93F: int         3
+  0058E940: push        ebp
+  0058E941: mov         ebp,esp
+  0058E943: push        0FFFFFFFFh
+  0058E945: push        1771CC8h
+  0058E94A: mov         eax,dword ptr fs:[00000000h]
+
+  Summary
+
+        1000 .text

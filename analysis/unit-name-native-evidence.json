@@ -1,0 +1,93 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  },
+  "scope": "#ufinds reads active selected unit position in both references; those handlers never compare real name. Port compares native cached display name; no map enumeration, no success on arbitrary query.",
+  "profiles": [
+    {
+      "pid": 8740,
+      "bits": 32,
+      "build": 12164,
+      "nameOffset": 56,
+      "ranges": [
+        [
+          12239392,
+          12239414
+        ],
+        [
+          12416832,
+          12416901
+        ],
+        [
+          9322080,
+          9322116
+        ]
+      ],
+      "cache_capacity": 260
+    },
+    {
+      "pid": 32116,
+      "bits": 32,
+      "build": 12173,
+      "nameOffset": 56,
+      "ranges": [
+        [
+          11974288,
+          11974310
+        ],
+        [
+          12153328,
+          12153397
+        ],
+        [
+          9119088,
+          9119124
+        ]
+      ],
+      "cache_capacity": 260
+    },
+    {
+      "pid": 24984,
+      "bits": 64,
+      "build": 12164,
+      "nameOffset": 92,
+      "ranges": [
+        [
+          13671056,
+          13671090
+        ],
+        [
+          13886656,
+          13886740
+        ],
+        [
+          10458976,
+          10459015
+        ]
+      ],
+      "cache_capacity": 260
+    },
+    {
+      "pid": 27336,
+      "bits": 64,
+      "build": 12173,
+      "nameOffset": 92,
+      "ranges": [
+        [
+          13927760,
+          13927794
+        ],
+        [
+          14142400,
+          14142484
+        ],
+        [
+          10767824,
+          10767863
+        ]
+      ],
+      "cache_capacity": 260
+    }
+  ]
+}

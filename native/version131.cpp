@@ -1,4 +1,17 @@
-﻿#include "fps_text_cadence131.hpp"
+#include "hero_skill_points131.hpp"
+#include "mouse_world131.hpp"
+#include "cursor_flags131.hpp"
+#include "camera_focus131.hpp"
+#include "mpq_loader131.hpp"
+#include "dll_loader131.hpp"
+#include "hp_color_commands131.hpp"
+#include "external_hud131.hpp"
+#include "local_files131.hpp"
+#include "worker_placement.hpp"
+#include "menu_search131.hpp"
+#include "hotkey_diagnostics131.hpp"
+#include "quick_chat_settings131.hpp"
+#include "fps_text_cadence131.hpp"
 #include "player_network131.hpp"
 #include "ping_reading.hpp"
 #include "ping_overlay.hpp"
@@ -8,8 +21,15 @@
 #include "option_menu131.hpp"
 #include "window_services131.hpp"
 #include "scroll131.hpp"
+#include "wide_screen131.hpp"
 #include "inventory_info131.hpp"
 #include "unit_info131.hpp"
+#include "unit_find131.hpp"
+#include "unit_name131.hpp"
+#include "player_units131.hpp"
+#include "map_trade131.hpp"
+#include "fog_modifier131.hpp"
+#include "model_path131.hpp"
 #include "courier_base131.hpp"
 #include "mth_craft_buttons131.hpp"
 #include "auto_skills_native131.hpp"
@@ -29,6 +49,38 @@
 #include "manual_clear131.hpp"
 #include "time_boss131.hpp"
 #include "repeat_message131.hpp"
+#include "repeat_chat131.hpp"
+#include "reselect131.hpp"
+#include "move_speed131.hpp"
+#include "attack_speed131.hpp"
+#include "base_damage131.hpp"
+#include "armor131.hpp"
+#include "unit_invulnerability131.hpp"
+#include "kill_unit131.hpp"
+#include "unit_damage131.hpp"
+#include "remove_ability131.hpp"
+#include "add_ability131.hpp"
+#include "ability_button131.hpp"
+#include "random_seed131.hpp"
+#include "unit_scale131.hpp"
+#include "remove_unit131.hpp"
+#include "teleport131.hpp"
+#include "resource_commands131.hpp"
+#include "share_control131.hpp"
+#include "save_game131.hpp"
+#include "unit_model131.hpp"
+#include "no_cooldown131.hpp"
+#include "mute_chat131.hpp"
+#include "create_unit131.hpp"
+#include "create_item131.hpp"
+#include "resource_transfer_network131.hpp"
+#include "alliance_spam131.hpp"
+#include "alliance_spam_all131.hpp"
+#include "hero_strength131.hpp"
+#include "hero_agility131.hpp"
+#include "hero_intelligence131.hpp"
+#include "full_attributes131.hpp"
+#include "hero_level131.hpp"
 #include "quick_chat131.hpp"
 #include "ui_refresh131.hpp"
 #include "graphics_diagnostic131.hpp"
@@ -58,6 +110,7 @@
 #include "runtime131.hpp"
 #include "macro_recorder.hpp"
 #include "memory_overlay.hpp"
+#include "status_cache131.hpp"
 #include "session_auth.hpp"
 #include "cooldown131.hpp"
 #include "hotkey_labels131.hpp"
@@ -73,6 +126,7 @@
 #include <unordered_map>
 
 #include "command_feedback131.hpp"
+#include "player_name131.hpp"
 #include "menu_fog_vertex131.hpp"
 namespace {
 wht::OptionMenu131 optionMenu131;
@@ -94,6 +148,11 @@ wht::HotkeyLabels131 hotkeys131;
 wht::SlotRemap131 remap131;
 wht::QuickChatEcho131 quickChatEcho131;
 wht::RepeatMessage131 repeatMessage131;
+wht::AllianceSpam131 allianceSpam131;
+wht::AllianceSpamAll131 allianceSpamAll131;
+wht::NoCooldown131 noCooldown131;
+wht::FogModifierFeature131 fogModifier131;
+wht::ModelPath131 modelPath131;
 bool SendChat131(const std::string& text);
 wht::TimeOfDay131 timeOfDay131;
 wht::ConsoleUi131 consoleUi131;
@@ -101,6 +160,8 @@ wht::BlackBar131 blackBar131;
 wht::MouseTooltip131 mouseTooltip131;
 wht::AutoClick131 autoClick131;
 wht::SelfCastSource131 pinned131;
+wht::PlayerNamePolicy131 playerName131;
+wht::StatusCache131 statusCache131;
 wht::MessageTimers131 messageTimers131;
 wht::ManualClear131 manualClear131;
 wht::ResourceBoard131 resources131;
@@ -108,8 +169,12 @@ wht::GraphicsDiagnostic131 graphicsDiagnostic131;
 wht::MatchStart131 matchStart131;
 wht::TimeBoss131 timeBoss131;
 wht::DetailedTooltip131 detailTooltip131;
+wht::MpqLoader131 mpqLoader131;
+wht::DllLoader131 dllLoader131;
+wht::ExternalHudPublisher externalHud131;
 wht::ClockOverlay131 clock131;wht::FpsState131 fps131;
 wht::PingOverlay pingOverlay131;
+wht::MenuSearch131 menuSearch131;
 wht::QuickDropInput131 quickDrop131;wht::QuickDropFlow131 quickDropFlow131;
 wht::Reveal131 reveal131;
 wht::SellIcon131 sellIcon131;wht::SellAll131 sellAll131;
@@ -127,6 +192,9 @@ int SkillPoints131(uintptr_t unit){const auto* p=wht::SkillProfile(profile131->b
  return wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,current,maximum)&&current>.405f?wht::HeroPoints131(unit,base131,*p):-1;}
 wht::SkillButton131 SkillData131(unsigned slot){return cooldownProfile131?wht::SkillButtonData131(wht::CooldownButton131(currentUi131,base131,*cooldownProfile131,slot)):wht::SkillButton131{};}
 bool ReadPinned131(wht::SelfCastSource131& out){return wht::ReadCastTarget131(base131,profile131->build,currentUi131,pinned131.unit,[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},out)&&wht::SameSelfCastSource131(pinned131,out);}
+bool ReadName131(wht::PlayerNameSource131& out){return wht::ReadPlayerName131(base131,profile131->build,out);}
+bool ApplyName131(const wht::PlayerNameSource131& before,const std::string& name){return wht::SetPlayerName131(base131,profile131->build,before,name);}
+bool SaveName131(const wchar_t* key,const std::wstring& name){return wht::SaveSetting(ini131,L"Event",key,name);}
 bool PinTarget131(){pinned131={};return wht::ReadCastTarget131(base131,profile131->build,currentUi131,regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0,[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},pinned131);}
 unsigned InventoryMask131(bool usableOnly=false){if(!profile131)return 0;const auto* p=wht::InventoryProfile(profile131->build);if(!p)return 0;return wht::InventoryMask131(base131,*p,wht::InventoryNative131(base131,*p),(regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0),usableOnly);}
 bool AlternatePanel131(){return wht::AlternatePanel131([&](unsigned slot){const auto data=SkillData131(slot);return data.order?data.order:data.ability;});}
@@ -228,7 +296,7 @@ bool ToggleArgument131(std::wistringstream& in,bool old,bool& value){
  wht::FoldCommandName(arg);if(arg==L"1"||arg==L"on"||arg==L"true")value=true;
  else if(arg==L"0"||arg==L"off"||arg==L"false")value=false;else return false;return true;
 }
-void Reload131(){config131=wht::LoadConfig(ini131);wht::toolEnglish.store(config131.english);menu131.nextRefresh=0;ApplyCamera131();}
+void Reload131(){config131=wht::LoadConfig(ini131);wht::workerCorePreference.store(config131.workerCorePreference);wht::toolEnglish.store(config131.english);menu131.nextRefresh=0;ApplyCamera131();}
 bool ReadSelectedRoute131(wht::SelfCastSource131& out){return wht::ReadSelfCastSource131(base131,profile131->build,currentUi131,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},out)&&wht::RouteMovable131(base131,profile131->build,out.unit);}
 bool ReadCourier131(uintptr_t unit,wht::SelfCastSource131& out){return wht::ReadSelfCastSource131(base131,profile131->build,currentUi131,[&](){return unit;},[&](uintptr_t unit){float v=0,m=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,v,m)&&v>.405f;},out)&&wht::RouteMovable131(base131,profile131->build,unit);}
 bool ResolveRoute131(wht::SelfCastSource131& out){
@@ -291,15 +359,58 @@ bool CommandImpl131(const std::wstring& text){
  if(wht::ModerationCommandName131(command)){if(!authorized131||config131.mode!=wht::RunMode::Local)return false;std::wstring args;std::getline(in,args);const auto result=wht::ExecuteModeration131(gameWindow131,folder131,command,args);wht::Log(folder131,result);if(currentUi131)wht::ShowNotification131(base131,profile131->build,currentUi131,result);return true;}
  if(command==L"#tools"||command==L"#tool"||command==L"#menu"){std::wstring args;std::getline(in,args);return wht::ToolMenuCommand131(command,args,[&](){menu131.Toggle();});}
  if(!Allowed131()){wht::Log(folder131,"WHT 1.31: command requires Local mode, active match and LoadFileMapWar3 session.");return false;}
+ if(command==L"#n"||command==L"#name"){std::wstring args;std::getline(in,args);std::string report;const bool ok=wht::PlayerNameCommand131(command,args,config131,ReadName131,ApplyName131,SaveName131,Reload131,report);playerName131.Reset();wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#cs"){std::wstring extra;if(in>>extra)return false;pinned131={};return true;}
  if(command==L"#mth49"||command==L"#g17"){std::wstring args;std::getline(in,args);return wht::ApplyMthMode131(command,args,config131,[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
  if(command==L"#mc"||command==L"#modecast"){std::wstring args;std::getline(in,args);return wht::ApplyCastMode131(args,config131,[&](const wchar_t* section,const wchar_t* key,const wchar_t* saved){return wht::SaveSetting(ini131,section,key,saved);},[&](){Reload131();});}
+ if(command==L"#wide"){std::wstring args;std::getline(in,args);std::string report;const bool ok=wht::WideScreenSetting131(args,config131.wide,Allowed131()&&settings131,[&](){return wht::InstallWideScreen131(base131,profile131->build);},[&](bool value){return wht::SaveSetting(ini131,L"Event",L"WideScreen",value?L"1":L"0");},[&](){Reload131();},report);wht::UpdateWideScreen131(base131,profile131->build,gameWindow131,Allowed131()&&settings131,config131.wide);wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
  if(command==L"#reloadconfig"){std::wstring args;std::getline(in,args);return wht::ReloadConfigCommand131(args,[&](){Reload131();});}
  if(command==L"#pcam"||command==L"#pzoom"){std::wstring args;std::getline(in,args);return wht::ApplyPresetCamera131(args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
  if(command==L"#full"||command==L"#lock"){std::wstring args;std::getline(in,args);return wht::ApplyWindowToggle131(command,args,config131,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();windowServices131.Apply(gameWindow131,Allowed131()&&settings131&&config131.borderless,Allowed131()&&settings131&&config131.lockCursor,menu131.open);});}
  if(command==L"#whp"||command==L"#hhp"){std::wstring args;std::getline(in,args);const auto* p=wht::HpDimensionProfileFor131(profile131->build);if(!p||!wht::HpDimensionCode131(base131,*p))return false;const bool ok=wht::ApplyHpDimension131(command,args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});if(ok)wht::ShowNotification131(base131,profile131->build,currentUi131,std::string(command==L"#whp"?"HP bar width: ":"HP bar height: ")+std::to_string(command==L"#whp"?config131.barWidthHp:config131.barHeightHp)+" (0 = native)");return ok;}
  if(command==L"#wsize"){std::wstring args;std::getline(in,args);int width=0,height=0;return wht::ParseWindowSize131(args,width,height)&&wht::ResizeWindow131(gameWindow131,width,height);}
  if(command==L"#kscroll"||command==L"#mscroll"){std::wstring args;std::getline(in,args);if(!wht::ScrollCode131(base131,profile131->build))return false;return wht::ApplyScrollCommand131(command,args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(command==L"#hotkeycheck"){std::wstring args;std::getline(in,args);std::string report;if(!wht::HotkeyCheckText131(config131,args,report))return false;wht::ShowNotification131(base131,profile131->build,currentUi131,report);return true;}
+ if(command==L"#find"){std::wstring args;std::getline(in,args);std::string report;if(!menuSearch131.Run(args,menu131,wht::ControlAvailable131,report))return false;wht::ShowNotification131(base131,profile131->build,currentUi131,report);return true;}
  if(command==L"#ping"){std::wstring extra;if(in>>extra)return false;const auto status=wht::Utf8(wht::PingStatus(base131,wht::PingProfile131(profile131->build)));wht::Log(folder131,status);wht::ShowNotification131(base131,profile131->build,currentUi131,status);return true;}
+ if(wht::IsResourceTransfer131(command)){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::ResourceTransferNetworkCommand131(base131,profile131->build,command,args,report);if(report.empty())report="Transfer: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#lvl"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::HeroLevelCommand131(args,[&](wht::HeroLevelSource131& out){return wht::ReadHeroLevel131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](const wht::HeroLevelSource131& value,int requested){return wht::SetHeroLevelNative131(base131,profile131->build,value,requested);},report);if(report.empty())report="Hero Level: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#fullatt"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::FullAttributesCommand131(args,[&](wht::FullAttributesSource131& out){return wht::ReadFullAttributes131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](const wht::FullAttributesSource131& value,unsigned index,int requested){return wht::SetFullAttributeNative131(base131,profile131->build,value,index,requested);},report);if(report.empty())report="Hero Attributes: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#int"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::HeroIntelligenceCommand131(args,[&](wht::HeroIntelligenceSource131& out){return wht::ReadHeroIntelligence131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](const wht::HeroIntelligenceSource131& value,int requested){return wht::SetHeroIntelligenceNative131(base131,profile131->build,value,requested);},report);if(report.empty())report="Hero INT: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#agi"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::HeroAgilityCommand131(args,[&](wht::HeroAgilitySource131& out){return wht::ReadHeroAgility131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](const wht::HeroAgilitySource131& value,int requested){return wht::SetHeroAgilityNative131(base131,profile131->build,value,requested);},report);if(report.empty())report="Hero AGI: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#str"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::HeroStrengthCommand131(args,[&](wht::HeroStrengthSource131& out){return wht::ReadHeroStrength131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](const wht::HeroStrengthSource131& value,int requested){return wht::SetHeroStrengthNative131(base131,profile131->build,value,requested);},report);if(report.empty())report="Hero STR: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(wht::IsResourceCommand131(command)){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::ResourceCommandFlow131(wht::ResourceCommandName131(command),args,[&](wht::ResourceCommandSource131& out){return wht::ReadResourceCommand131(base131,profile131->build,out);},[&](const wht::ResourceCommandSource131& source,unsigned state,int value){return wht::SetResourceNative131(base131,profile131->build,source,state,value);},report);if(report.empty())report="Resources: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#item"||command==L"#copyitem"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&Allowed131()&&wht::CreateOrCopyItemCommand131(base131,profile131->build,command,args,[&](){return Allowed131()&&settings131;},[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](wht::MouseWorldPosition131& out){const auto* p=wht::MouseWorldProfileFor131(profile131->build);return p&&wht::ReadMouseWorld131(base131,profile131->build,wht::Component131(currentUi131,base131,p->world),out);},report);if(report.empty())report="Create/Copy Item: settings or session disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#create"||command==L"#copy"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&Allowed131()&&wht::CreateOrCopyUnitCommand131(base131,profile131->build,command,args,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](wht::MouseWorldPosition131& out){const auto* p=wht::MouseWorldProfileFor131(profile131->build);return p&&wht::ReadMouseWorld131(base131,profile131->build,wht::Component131(currentUi131,base131,p->world),out);},report);if(report.empty())report="Create/Copy Unit: settings or session disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#tele"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::TeleportCommand131(args,[&](wht::MouseWorldPosition131& out){const auto* p=wht::MouseWorldProfileFor131(profile131->build);return p&&wht::ReadMouseWorld131(base131,profile131->build,wht::Component131(currentUi131,base131,p->world),out);},[&](wht::RemoveUnitSource131& out){return wht::ReadRemoveUnit131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](const wht::RemoveUnitSource131& value){return wht::StopTeleportNative131(base131,profile131->build,value);},[&](const wht::RemoveUnitSource131& value,float x,float y){return wht::MoveTeleportNative131(base131,profile131->build,value,x,y);},[&](const wht::RemoveUnitSource131& value,wht::MouseWorldPosition131& out){return wht::ReadTeleportPosition131(base131,profile131->build,value,out);},report);if(report.empty())report="Teleport: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#udel"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::RemoveUnitCommand131(args,[&](wht::RemoveUnitSource131& out){return wht::ReadRemoveUnit131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](const wht::RemoveUnitSource131& value){return wht::ValidRemoveUnit131(base131,profile131->build,value);},[&](const wht::RemoveUnitSource131& value){return wht::PrepareSelectedRemoval131(base131,profile131->build,value);},[&](const wht::RemoveUnitSource131& value){return wht::RemoveSelectedUnitNative131(base131,profile131->build,value);},report);if(report.empty())report="RemoveUnit: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#size"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::UnitScaleCommand131(args,[&](wht::UnitScaleSource131& out){return wht::ReadUnitScale131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](float scale,const wht::UnitScaleSource131& expected){return wht::ApplyUnitScale131(base131,profile131->build,scale,expected);},report);if(report.empty())report="Unit Scale: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#srand"){std::wstring args;std::getline(in,args);std::string report;const auto* p=wht::RandomSeedProfileFor131(profile131->build);const bool ok=settings131&&p&&wht::RandomSeedCommand131(args,*p,[&](wht::RandomSeedSource131& out){return wht::ReadRandomSeed131(base131,profile131->build,out);},[&](uint32_t seed,const wht::RandomSeedSource131& expected){return wht::ApplyRandomSeed131(base131,profile131->build,seed,expected);},report);if(report.empty())report="Random Seed: settings disabled or unsupported build";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#hideb"||command==L"#showb"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::AbilityButtonCommand131(args,command==L"#hideb",[&](uint32_t code,wht::AbilityButtonSource131& out){return wht::ReadAbilityButton131(base131,profile131->build,code,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](uint32_t code,bool hide,const wht::AbilityButtonSource131& value){return wht::ApplyAbilityButton131(base131,profile131->build,code,hide,value);},[&](uintptr_t unit){return wht::RefreshRemovedAbilityNative131(base131,profile131->build,unit);},report);if(report.empty())report="Ability Button: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#save"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::SaveGameCommand131(base131,profile131->build,args,report);if(report.empty())report="Save: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#shareall"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::ShareControlCommand131(base131,profile131->build,args,report);if(report.empty())report="Shared Control: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#sabi"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::AddAbilityCommand131(base131,profile131->build,args,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},report);if(report.empty())report="Add Ability: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#rabi"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::RemoveAbilityCommand131(args,[&](uint32_t code,wht::RemoveAbilitySource131& out){return wht::ReadRemoveAbility131(base131,profile131->build,code,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](uintptr_t unit,uintptr_t ability){return wht::RemoveSelectedAbilityNative131(base131,profile131->build,unit,ability);},[&](uintptr_t unit){return wht::RefreshRemovedAbilityNative131(base131,profile131->build,unit);},report);if(report.empty())report="Remove Ability: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#udmg"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::UnitDamageCommand131(args,[&](wht::KillUnitSource131& out){return wht::ReadKillUnit131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit,float& value){float maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum);},out);},[&](uintptr_t unit,float life){return wht::SetDamagedLifeNative131(base131,profile131->build,unit,life);},report);if(report.empty())report="Unit Damage: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#kill"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::KillUnitCommand131(args,[&](wht::KillUnitSource131& out){return wht::ReadKillUnit131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit,float& value){float maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum);},out);},[&](uintptr_t unit){return wht::KillSelectedNative131(base131,profile131->build,unit);},report);if(report.empty())report="KillUnit: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#invul"||command==L"#vul"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::UnitInvulnerabilityCommand131(args,command==L"#invul",[&](wht::UnitInvulnerabilitySource131& out){return wht::ReadUnitInvulnerability131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](uintptr_t unit,bool enabled){return wht::SetUnitInvulnerabilityNative131(base131,profile131->build,unit,enabled);},report);if(report.empty())report="Unit Invulnerability: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#armor"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::ArmorCommand131(args,[&](wht::ArmorSource131& out){return wht::ReadArmor131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](uintptr_t unit,float delta){return wht::AddArmorNative131(base131,profile131->build,unit,delta);},report);if(report.empty())report="Unit Armor: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#udmgb"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::BaseDamageCommand131(args,[&](wht::BaseDamageSource131& out){return wht::ReadBaseDamage131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](uintptr_t attack,int delta){return wht::AddBaseDamageNative131(base131,profile131->build,attack,delta);},report);if(report.empty())report="Base Damage: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#as"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::AttackSpeedCommand131(args,[&](wht::AttackSpeedSource131& out){return wht::ReadAttackSpeed131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](uintptr_t attack,float factor){return wht::SetAttackSpeedNative131(base131,profile131->build,attack,factor);},[&](uintptr_t attack,uintptr_t unit){return wht::RefreshAttackSpeedNative131(base131,profile131->build,attack,unit);},report);if(report.empty())report="Attack Speed: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#ms"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::MoveSpeedCommand131(args,[&](wht::MoveSpeedSource131& out){return wht::ReadMoveSpeed131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](uintptr_t unit,float speed){return wht::SetMoveSpeedNative131(base131,profile131->build,unit,speed);},report);if(report.empty())report="Movement Speed: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#selc"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::ReselectCommand131(base131,profile131->build,currentUi131,args,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},report);if(report.empty())report="Reselect: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#sp"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::HeroSkillPointsCommand131(args,[&](wht::HeroSkillPointsSource131& out){return wht::ReadHeroSkillPoints131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},[&](uintptr_t unit,int amount){return wht::ModifyHeroPointsNative131(base131,profile131->build,unit,amount);},report);if(report.empty())report="Hero Skill Points: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#mpos"||command==L"#ppos"){std::wstring args;std::getline(in,args);RECT client{};GetClientRect(gameWindow131,&client);std::string report;const bool ok=settings131&&wht::MouseWorldCommand131(command,args,client.right,client.bottom,[&](wht::MouseWorldPosition131& out){const auto* p=wht::MouseWorldProfileFor131(profile131->build);return p&&wht::ReadMouseWorld131(base131,profile131->build,wht::Component131(currentUi131,base131,p->world),out);},[&]()->uintptr_t{if(!CameraLive131(currentUi131))FindCamera131();return CameraLive131(currentUi131)?camera131.owner:0;},[&](uintptr_t camera,float x,float y){return wht::PanCameraNative131(base131,profile131->build,camera,profile131->cameraVtable,x,y);},report);if(report.empty()&&!settings131)report="Mouse/Camera Position: settings disabled";if(!report.empty()){wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);}return ok;}
+ if(command==L"#uflag"){std::wstring args;std::getline(in,args);std::string report;const bool ok=wht::CursorFlagsCommand131(args,[&](POINT& screen,POINT& client){return wht::ReadCursorPoints131(gameWindow131,screen,client);},[&](uint32_t& flags){return wht::SelectedCursorFlags131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},flags);},report);if(!report.empty()){wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);}return ok;}
+ if(command==L"#focus"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::FocusSelected131(args,[&](float& x,float& y){wht::UnitInfo131 info;if(!wht::ReadUnitInfo131(base131,profile131->build,true,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},info))return false;x=info.x;y=info.y;return true;},[&]()->uintptr_t{if(!CameraLive131(currentUi131))FindCamera131();return CameraLive131(currentUi131)?camera131.owner:0;},[&](uintptr_t camera,float x,float y){return wht::PanCameraNative131(base131,profile131->build,camera,profile131->cameraVtable,x,y);},report);if(report.empty())report="Camera Focus: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#nocd"||command==L"#yescd"){std::wstring args;std::getline(in,args);std::string report;const bool ok=(command==L"#yescd"||(settings131&&Allowed131()))&&noCooldown131.Command(command,args,GetTickCount64(),[&](){return wht::ResetSelectedCooldown131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;});},report);if(report.empty())report="No Cooldown: settings or session disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#gmodel"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::UnitModelCommand131(args,[&](wht::UnitModelSource131& out){return wht::ReadUnitModel131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},report);if(report.empty())report="Get Model: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#emodel"||command==L"#smodel"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&modelPath131.Command(command,args,report);if(report.empty())report="Model Path: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#ufind"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::UnitFindCommand131(args,[&](wht::UnitFindSource131& out){return wht::ReadUnitFind131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},report);if(report.empty())report="Unit Find: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#ufinds"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::UnitNameCommand131(args,[&](wht::UnitNameSource131& out){return wht::ReadUnitName131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},out);},report);if(report.empty())report="Unit Find: settings disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#mtrade"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::MapTradeCommand131(args,[&](wht::MapTradeSource131& out){return wht::ReadMapTrade131(base131,profile131->build,out);},[&](const wht::MapTradeSource131& source){return wht::ClearMapTradeNative131(base131,profile131->build,source);},report);if(report.empty())report="Trade map flag: settings or session disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#mh"){std::wstring args;std::getline(in,args);std::string report;const bool ok=fogModifier131.Command(base131,profile131->build,currentUi131,Allowed131()&&settings131,args,report);wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#addall"||command==L"#raddall"){std::wstring args;std::getline(in,args);std::string report;const bool ok=settings131&&wht::PlayerAbilitiesCommand131(base131,profile131->build,command==L"#addall",args,report);if(report.empty())report="Player Abilities: settings or session disabled";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
  if(command==L"#upos"||command==L"#cname"){std::wstring args;std::getline(in,args);if(!wht::UnitInfoArgs131(args))return false;const bool position=command==L"#upos";wht::UnitInfo131 info;const bool ok=wht::ReadUnitInfo131(base131,profile131->build,position,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},info);const auto text=ok?wht::UnitInfoText131(info,position):std::string(position?"Unit Position: select a unit; position unavailable":"Unit ID: select a unit; type unavailable");localInfo131.Event(text,GetTickCount64());wht::Log(folder131,text);return ok;}
  if(command==L"#islot"){std::wstring extra;if(in>>extra)return false;wht::InventoryInfo131 info;const bool ok=wht::ReadInventoryInfo131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},info);auto text=ok?wht::InventoryInfoText131(info,true):std::string("Item Slots: select a unit; inventory could not be read");localInfo131.Event(text,GetTickCount64());wht::Log(folder131,text);return ok;}
  if(wht::DeliveryCommand131(command)){std::wstring extra;if(in>>extra)return false;auto api=CraftApi131();wht::DeliveryBag131 c,h;const bool ok=Allowed131()&&settings131&&(config131.mth49Enable||config131.g17Enable)&&!craft131.active&&!delivery131.active&&mthRoute131.route<0&&!courierBase131.pending&&!gokuEnabled131&&!sellAll131.active&&!dropAllNetwork131.active&&!allSkills131.active&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&wht::DeliveryRead131(api,courier131,false,c)&&wht::DeliveryFindHero131(api,c.source,h)&&delivery131.Start(c,h,GetTickCount64());if(ok&&(courierBase131.ui!=c.source.ui||courierBase131.session!=c.source.session))courierBase131.Save(c.source);const char* text=ok?"Courier Delivery: queued":"Courier Delivery: use #setga, give courier items, select your hero and stop other MTH actions";wht::Log(folder131,text);wht::ShowNotification131(base131,profile131->build,currentUi131,text);return ok;}
@@ -323,7 +434,7 @@ bool CommandImpl131(const std::wstring& text){
   delivery131.Reset();mthRoute131.Reset();mthNotice131.Event(wht::MthNoticeKind131::ReturnQueued,config131.mthNoti,GetTickCount64());wht::Log(folder131,"WHT: courier return queued.");return true;
  }
  if(command==L"#setga"){std::wstring extra;if(in>>extra||craft131.active||delivery131.active||mthRoute131.route>=0||courierBase131.pending)return false;wht::SelfCastSource131 source;if(!ReadSelectedRoute131(source)){mthNotice131.Event(wht::MthNoticeKind131::CourierRequired,config131.mthNoti,GetTickCount64());return false;}courier131=source;mthNotice131.Event(wht::MthNoticeKind131::CourierAssigned,config131.mthNoti,GetTickCount64());wht::Log(folder131,"WHT: selected courier assigned.");return true;}
- if(const int route=wht::RouteCommand131(command);route>=0){std::wstring extra;if(in>>extra)return false;if(craft131.active||delivery131.active||courierBase131.pending||!settings131||!(config131.mth49Enable||config131.g17Enable)||!wht::PointNative131(base131,profile131->build))return false;
+ if(wht::IsRouteCommand131(command)){std::wstring args;std::getline(in,args);int route=-1;if(!wht::ParseRouteCommand131(command,args,route)){wht::ShowNotification131(base131,profile131->build,currentUi131,"Route: #chayga [1..3], #chaysoi [1..3], #caysoi [1..3]");return false;}if(craft131.active||delivery131.active||courierBase131.pending||!settings131||!(config131.mth49Enable||config131.g17Enable)||!wht::PointNative131(base131,profile131->build))return false;
   const int counts[]={config131.chayGa1Count,config131.chayGa2Count,config131.chayGa3Count,config131.chaySoi1Count,config131.chaySoi2Count,config131.chaySoi3Count};wht::SelfCastSource131 source;const bool ok=ResolveRoute131(source)&&mthRoute131.Start(route,counts[route],source);mthNotice131.Event(ok?wht::MthNoticeKind131::RouteQueued:wht::MthNoticeKind131::CourierRequired,config131.mthNoti,GetTickCount64());wht::Log(folder131,ok?"WHT: MTH native queued route requested.":"WHT: no living owned moving courier found; select courier and use #setga.");return ok;}
  if(const auto* draw=wht::RouteDrawCommand131(command)){std::wstring args;std::getline(in,args);return wht::ApplyRouteDraw131(*draw,args,config131,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
  if(command==L"#gokudraw"){std::wstring args;std::getline(in,args);return wht::ApplyGokuDraw131(args,config131.pickGokuDraw,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
@@ -336,8 +447,18 @@ bool CommandImpl131(const std::wstring& text){
   wht::Log(folder131,ok?"WHT: drop all worker started.":"WHT: drop all command refused.");return ok;
  }
  if(wht::AutoClickCommand131(command)){std::wstring args;std::getline(in,args);if(!settings131)return false;const bool ok=wht::ApplyAutoClickCommand131(command,args,autoClick131,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});wht::Log(folder131,ok?"WHT: Auto Click Left="+std::to_string(autoClick131.left)+" Right="+std::to_string(autoClick131.right)+" interval="+std::to_string(config131.autoClickInterval)+"ms":"WHT: Usage #autol/#autor [0|1]; #clickdelay <5..1000>");return ok;}
- if(const auto* option=wht::ViewCommandFor131(command)){std::wstring args;std::getline(in,args);return wht::ApplyViewCommand131(*option,args,config131,[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(wht::ClearDelayKey131(command)){std::wstring args;std::getline(in,args);return wht::ApplyClearDelay131(command,args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(wht::QuickChatSettingCommand131(command)){std::wstring args;std::getline(in,args);return wht::ApplyQuickChatSetting131(command,args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(command==L"#loadmpq"){std::wstring args;std::getline(in,args);std::string report;const bool ok=mpqLoader131.Command(folder131,args,config131.loadMpq,[&](const std::wstring& path){return wht::OpenCustomMpq131(base131,profile131->build,path);},[&](const std::wstring& list){return wht::SaveSetting(ini131,L"Event",L"LoadMPQ",list);},[&](){Reload131();},report);wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#loaddll"){std::wstring args;std::getline(in,args);std::string report;const bool ok=dllLoader131.Command(folder131,args,config131.loadDll,[&](const std::wstring& list){return wht::SaveSetting(ini131,L"Event",L"LoadDll",list);},[&](){Reload131();},report);wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(wht::HpColorCommand131(command)){std::wstring args;std::getline(in,args);const auto* profile=wht::HpColorProfileFor131(profile131->build);if(!profile||!wht::HpColorCode131(base131,*profile))return false;return wht::ApplyHpColorCommand131(command,args,[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});}
+ if(wht::LocalFilesCommand131(command)){std::wstring args;std::getline(in,args);return wht::ApplyLocalFiles131(args,config131.allowLocalFiles,[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){return wht::SaveSetting(ini131,section,key,value);},wht::WriteLocalFiles131,[&](){Reload131();});}
+ if(const auto* option=wht::ViewCommandFor131(command)){std::wstring args;std::getline(in,args);const bool ok=wht::ApplyViewCommand131(*option,args,config131,[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){return wht::SaveSetting(ini131,section,key,value);},[&](){Reload131();});if(ok&&option->field==&wht::Config::showResource&&config131.showResource){resources131.expanded=true;resources131.next=0;}return ok;}
  if(const auto kind=wht::ManualClearKind131(command)){std::wstring extra;if(!settings131||(in>>extra))return false;return manualClear131.Queue(currentUi131,kind,GetTickCount64());}
+ if(command==L"#mute"||command==L"#unmute"){std::wstring args;std::getline(in,args);std::string report;const bool ok=wht::MuteChatCommand131(base131,profile131->build,Allowed131()&&settings131,command,args,report);wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#nhailai"){std::wstring args;std::getline(in,args);wht::PublishRepeatChat131(base131,profile131->build,Allowed131()&&settings131);const bool ready=wht::InstallRepeatChat131(base131,profile131->build);std::string report;const bool ok=wht::repeatChat131.Command(args,ready,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#spamall"){std::wstring args;std::getline(in,args);std::string report;const bool ok=allianceSpamAll131.Command(args,settings131,[&](wht::AllianceSpamAllContext131& out){return wht::ReadAllianceSpamAll131(base131,profile131->build,out);},report);wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
+ if(command==L"#spam"){std::wstring args;std::getline(in,args);std::string report;const bool ok=allianceSpam131.Command(args,settings131,[&](unsigned slot,wht::AllianceSpamContext131& out){return wht::ReadAllianceSpam131(base131,profile131->build,slot,out);},report);wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);return ok;}
  if(command==L"#repeat"){std::wstring args;std::getline(in,args);const bool ok=repeatMessage131.Command(args,[&](const std::string& text){wht::ShowNotification131(base131,profile131->build,currentUi131,text);});wht::Log(folder131,ok?"WHT: Repeat updated; #repeat stop cancels.":"WHT: Usage #repeat <1..10000> <text> (1..128 UTF-8 bytes); #repeat stop");return ok;}
  if(command==L"#speed"){std::wstring args;std::getline(in,args);const bool ok=wht::SetSpeed131(args);wht::Log(folder131,ok?"WHT: Game Speed "+std::to_string(wht::speedMultiplier131)+"x":"WHT: #speed requires 1..70; clock hooks unavailable or invalid argument.");return ok;}
  if(command==L"#tanghinh"||command==L"#invis"||command==L"#reveal"||command==L"#revealinvis"){std::wstring arg,extra;in>>arg;if(in>>extra)return false;wht::FoldCommandName(arg);bool next=!config131.revealInvisible;
@@ -408,7 +529,7 @@ bool DestroyHost131(){
   auto destructor=*reinterpret_cast<void(__thiscall**)(void*,unsigned)>(*reinterpret_cast<uintptr_t*>(host)+8);destructor(host,1);
  }return true;}__except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
-void DestroyUi131(){
+void DestroyUi131(){wht::ResetWideScreen131();externalHud131.Hide();
  optionMenu131.Reset();
 
  menuFogVertex131.ResetMatch();presentation131.Restore();windowServices131.Restore();
@@ -420,9 +541,9 @@ void DestroyUi131(){
  wht::ResetSpeed131();wht::ResetLifeMana131();menu131.Reset();memoryFont131=nullptr;camera131.Reset();cameraSlot131=0;cameraWrittenMask131=0;typed131=false;text131.clear();macro131.Stop();
  placements131.clear();
  cooldown131.Reset();
- hotkeys131.Reset();remap131.Reset();quickChatEcho131.Reset();repeatMessage131.Reset();timeOfDay131.Reset();consoleUi131.Reset();blackBar131.Reset();mouseTooltip131.Reset();autoClick131.Reset();pinned131={};
+ hotkeys131.Reset();remap131.Reset();quickChatEcho131.Reset();modelPath131.Reset();repeatMessage131.Reset();allianceSpam131.Reset();allianceSpamAll131.Reset();noCooldown131.Reset();wht::repeatChat131.Reset();wht::mutedChat131.Reset();timeOfDay131.Reset();consoleUi131.Reset();blackBar131.Reset();mouseTooltip131.Reset();autoClick131.Reset();pinned131={};playerName131.Reset();statusCache131.Reset();
  messageTimers131.Reset();manualClear131.Reset();
- resources131.Reset();clock131.Reset();matchStart131.Reset();timeBoss131.Reset();detailTooltip131.Reset();fps131.Reset();pingOverlay131.Reset();quickDrop131={};quickDropFlow131.Reset();dropIcon131.Reset();pickIcon131.Reset();gokuIcon131.Reset();craft131.Reset();delivery131.Reset();autoSkills131.Reset();autoHeal131.Reset();autoMana131.Reset();craftRoster131={};craftButtons131.Reset();mthNotice131.Reset();localInfo131.Reset();mthRoute131.Reset();courierBase131.Reset();routeButtons131.Reset();courier131={};routePinned131=false;gokuEnabled131=false;sellIcon131.Reset();reveal131.Reset();sellAll131.Reset();autoPick131.Reset();autoPickEnabled131=false;dropAllNetwork131.Reset();skillsIcon131.Reset();allSkills131.Reset();
+ resources131.Reset();clock131.Reset();matchStart131.Reset();timeBoss131.Reset();detailTooltip131.Reset();fps131.Reset();pingOverlay131.Reset();menuSearch131.Reset();quickDrop131={};quickDropFlow131.Reset();dropIcon131.Reset();pickIcon131.Reset();gokuIcon131.Reset();craft131.Reset();delivery131.Reset();autoSkills131.Reset();autoHeal131.Reset();autoMana131.Reset();craftRoster131={};craftButtons131.Reset();mthNotice131.Reset();localInfo131.Reset();mthRoute131.Reset();courierBase131.Reset();routeButtons131.Reset();courier131={};routePinned131=false;gokuEnabled131=false;sellIcon131.Reset();reveal131.Reset();sellAll131.Reset();autoPick131.Reset();autoPickEnabled131=false;dropAllNetwork131.Reset();skillsIcon131.Reset();allSkills131.Reset();
  regen131.Reset();
  stateBars131.Reset();
  menuReported131=cameraReported131=writeReported131=false;windowServices131.ReleaseClip();
@@ -435,6 +556,7 @@ void PresentGraphics131(){
   detailTooltip131.Update(base131,profile131->build,currentUi131,source,wht::Component131(currentUi131,base131,cooldownProfile131->infoBar),Allowed131()&&settings131&&config131.statsTooltip&&!menu131.open,GetTickCount64(),[&](uintptr_t table){return wht::Component131(currentUi131,base131,table);});}
 }
 void PresentBar131(uintptr_t bar){
+ wht::UiPerfScope131 barTiming(perf131,3);
  timeBoss131.RememberBar(bar);
  if(!currentUi131||!menu131.initialized||!regenProfile131||!stateBarProfile131)return;
  auto raw=frame131;raw.setWidth=reinterpret_cast<decltype(raw.setWidth)>(base131+profile131->width);
@@ -443,11 +565,15 @@ void PresentBar131(uintptr_t bar){
  stateBars131.WriteBar(bar,base131,*profile131,*regenProfile131,*stateBarProfile131,config131,Allowed131()&&settings131,raw);
 }
 void UpdateUi131(){
+ wht::ObserveGameProcessor();
  perf131.Report(folder131,Allowed131());wht::UiPerfScope131 updateTiming(perf131,0);
 
  const auto ui=CurrentUi131();
  if(currentUi131!=ui){DestroyUi131();currentUi131=ui;}
- if(!Allowed131()||!settings131)repeatMessage131.Reset();if(!Allowed131()||!settings131||!config131.timeBoss||!(config131.mth49Enable||config131.g17Enable))timeBoss131.active=false;
+ {std::string fogReport;if(!fogModifier131.Update(base131,profile131->build,currentUi131,Allowed131()&&settings131,fogReport)&&!fogReport.empty())wht::Log(folder131,fogReport);}
+ wht::UpdateWideScreen131(base131,profile131->build,gameWindow131,Allowed131()&&settings131,config131.wide);
+ {std::string report;playerName131.Update(GetTickCount64(),Allowed131()&&settings131,config131,ReadName131,ApplyName131,SaveName131,Reload131,report);if(!report.empty())wht::Log(folder131,report);}
+ if(!Allowed131()||!settings131){repeatMessage131.Reset();allianceSpam131.Reset();allianceSpamAll131.Reset();noCooldown131.Reset();wht::repeatChat131.Reset();wht::mutedChat131.Reset();}if(!Allowed131()||!settings131||!config131.timeBoss||!(config131.mth49Enable||config131.g17Enable))timeBoss131.active=false;
  if(!Allowed131())wht::ResetSpeed131();
  manualClear131.Update(base131,profile131->build,currentUi131,Allowed131()&&settings131,!typed131&&!menu131.open&&GetForegroundWindow()==gameWindow131,GetTickCount64());
 
@@ -455,6 +581,8 @@ void UpdateUi131(){
  menuFogVertex131.Update(base131,profile131->build,Allowed131()&&settings131,authorized131.load()&&settings131&&config131.mode==wht::RunMode::Local,ui,config131,folder131,[&](const std::string& text){wht::ShowNotification131(base131,profile131->build,ui,text);});
  presentation131.Update(base131,profile131->build,Allowed131()&&settings131&&ui!=0,config131.vsync,config131.unlockFps,folder131);
 windowServices131.Apply(gameWindow131,Allowed131()&&settings131&&config131.borderless,Allowed131()&&settings131&&config131.lockCursor,menu131.open);
+ const DWORD externalActive=wht::UpdateExternalHud131(externalHud131,base131,profile131->build,gameWindow131,currentUi131,config131,Allowed131()&&settings131,menu131.open);
+ if(authorized131&&settings131&&config131.mode==wht::RunMode::Local)dllLoader131.Start(folder131,config131.loadDll,[&](const std::string& report){wht::Log(folder131,report);});
  if(!ui){windowServices131.ReleaseClip();return;}
  wht::InstallUiRefresh131(base131,profile131->build,ui,PresentGraphics131);
  graphicsDiagnostic131.Update(base131,profile131->build,ui,config131,Allowed131(),folder131,consoleUi131,mouseTooltip131,[&](uintptr_t table){return wht::Component131(ui,base131,table);}); wht::UpdateMatchStart131(matchStart131,base131,profile131->build,ui,Allowed131()&&settings131&&config131.soundStartGame,module131,folder131);
@@ -471,6 +599,8 @@ windowServices131.Apply(gameWindow131,Allowed131()&&settings131&&config131.borde
   if(reveal131.Update(base131,profile131->build,wht::Component131(currentUi131,base131,p->worldTable),Allowed131()&&settings131&&config131.revealInvisible)&&!reveal131.reported){reveal131.reported=true;wht::Log(folder131,"WHT: native invisible-unit display enabled.");}
  }
  if(!MountAssets131())return;
+ if(authorized131&&settings131&&config131.mode==wht::RunMode::Local)mpqLoader131.Start(folder131,config131.loadMpq,[&](const std::wstring& path){return wht::OpenCustomMpq131(base131,profile131->build,path);},[&](const std::string& report){wht::Log(folder131,report);});
+
  RECT r{};if(!GetClientRect(gameWindow131,&r)||r.right<=0||r.bottom<=0)return;
  menu131.SetViewport(r.right,r.bottom);
  Viewport131(r.right,r.bottom);
@@ -479,7 +609,7 @@ windowServices131.Apply(gameWindow131,Allowed131()&&settings131&&config131.borde
  if(!menu131.tint){const auto* tintProfile=wht::HpColorProfileFor131(profile131->build);if(tintProfile&&wht::HpColorCode131(base131,*tintProfile))menu131.tint=reinterpret_cast<decltype(menu131.tint)>(base131+tintProfile->tint);}
  if(menu131.failed){if(!menuReported131){menuReported131=true;wht::Log(folder131,std::string("WHT 1.31: native menu unavailable at ")+menu131.initStage);}return;}
  if(menu131.initialized&&!menuReported131){menuReported131=true;wht::Log(folder131,"WHT 1.31: live native menu construction completed.");}
- if(menu131.initialized&&cooldownProfile131&&cooldown131.Update(base131,ui,*cooldownProfile131,Allowed131()&&settings131&&config131.showCooldown,menu131)&&!cooldown131.reported){
+ if(menu131.initialized&&cooldownProfile131&&cooldown131.Update(base131,ui,*cooldownProfile131,Allowed131()&&settings131&&config131.showCooldown,menu131,regenProfile131?wht::SelectedUnit131(ui,base131,*regenProfile131):0)&&!cooldown131.reported){
   cooldown131.reported=true;wht::Log(folder131,"WHT 1.31: live cooldown seconds queried from native CAbility virtual getter.");}
  if(menu131.initialized&&cooldownProfile131&&hotkeys131.Due(GetTickCount64(),Allowed131()&&settings131&&config131.showHotkeyInPanel)&&hotkeys131.Update(Allowed131()&&settings131&&config131.showHotkeyInPanel,menu131,[&](unsigned slot){return wht::CooldownButton131(ui,base131,*cooldownProfile131,slot);},&config131,(Allowed131()&&settings131&&config131.showHotkeyInPanel)?InventoryMask131(true):0,(Allowed131()&&settings131&&config131.showHotkeyInPanel)?AlternatePanel131():false)&&!hotkeys131.reported){
   hotkeys131.reported=true;wht::Log(folder131,"WHT 1.31: native panel hotkey labels displayed.");}
@@ -491,22 +621,25 @@ windowServices131.Apply(gameWindow131,Allowed131()&&settings131&&config131.borde
   raw.setAbsPoint=reinterpret_cast<decltype(raw.setAbsPoint)>(base131+profile131->absPoint);
   raw.setRelPoint=reinterpret_cast<decltype(raw.setRelPoint)>(base131+profile131->relPoint);
   wht::statPaintPresentation131=PresentBar131;
-  const auto observed=stateBars131.Update(base131,menu131.independentHost,*profile131,*regenProfile131,*stateBarProfile131,config131,Allowed131()&&settings131,raw);
+  const auto observed=stateBars131.Update(base131,menu131.independentHost,*profile131,*regenProfile131,*stateBarProfile131,config131,Allowed131()&&settings131,raw,wht::SelectedUnit131(ui,base131,*regenProfile131));
   if((observed&2)&&!stateBars131.stateReported){stateBars131.stateReported=true;wht::Log(folder131,"WHT 1.31: overhead HP/Mana native values displayed.");}
   if((observed&4)&&!stateBars131.levelReported){stateBars131.levelReported=true;wht::Log(folder131,"WHT 1.31: overhead hero level queried from native CAbilityHero and displayed.");}
  }
  if(menu131.initialized&&!memoryFont131){memoryFont131=wht::NativeCreateFontString(frame131,menu131.independentHost,.012f,"",4);
   if(memoryFont131){frame131.setWidth(memoryFont131,.36f);frame131.setHeight(memoryFont131,.018f);frame131.setAbsPoint(memoryFont131,0,.01f,.59f,1);}}
- if(memoryFont131){float mb=0,percent=0;std::string label="|cffffcc00WHT " WHT_VERSION_STRING " | 1.31.1."+std::to_string(profile131->build)+"|r";
-  if(!authorized131.load())label+=" |cffff4444Login LoadFileMapWar3|r";
-  else if(config131.showMem&&wht::GetCurrentProcessMemoryUsage(mb,percent))label+=" | "+std::to_string(int(mb))+" MB";
-  frame131.setText(memoryFont131,label.c_str());}
+ if(memoryFont131){const std::string prefix="|cffffcc00WHT " WHT_VERSION_STRING " | 1.31.1."+std::to_string(profile131->build)+"|r";
+  statusCache131.Update(GetTickCount64(),currentUi131,reinterpret_cast<uintptr_t>(memoryFont131),prefix,authorized131.load(),config131.showMem,(externalActive&wht::HudMemory)!=0,wht::GetCurrentProcessMemoryUsage,[&](const std::string& text){frame131.setText(memoryFont131,text.c_str());return true;});}
  timeBoss131.Update(base131,profile131->build,currentUi131,Allowed131()&&settings131&&config131.timeBoss&&(config131.mth49Enable||config131.g17Enable),GetTickCount64(),menu131,[&](uintptr_t unit,float& hp){float maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,hp,maximum);});
+ wht::PublishRepeatChat131(base131,profile131->build,Allowed131()&&settings131);
+ wht::repeatChat131.Tick(!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131,GetTickCount64(),SendChat131);
+ if(noCooldown131.Tick(Allowed131()&&settings131,!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131,GetTickCount64(),[&](){return wht::ResetSelectedCooldown131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;});})){const std::string report="No Cooldown: stopped; selection/session changed or native reset failed";wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);}
  repeatMessage131.Tick(Allowed131()&&settings131,!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131,GetTickCount64(),SendChat131);
+ {std::string report;if(!allianceSpam131.Tick(Allowed131()&&settings131,!allianceSpamAll131.active&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131,GetTickCount64(),[&](unsigned slot,wht::AllianceSpamContext131& out){return wht::ReadAllianceSpam131(base131,profile131->build,slot,out);},[&](unsigned slot,uint32_t flags){return wht::SendAllianceSpam131(base131,profile131->build,slot,flags);},report)&&!report.empty()){wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);}}
+ {std::string report;if(!allianceSpamAll131.Tick(Allowed131()&&settings131,!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&!allSkills131.active&&!craft131.active&&!delivery131.active&&GetForegroundWindow()==gameWindow131,GetTickCount64(),[&](wht::AllianceSpamAllContext131& out){return wht::ReadAllianceSpamAll131(base131,profile131->build,out);},[&](unsigned slot,uint32_t flags){return wht::SendAllianceSpam131(base131,profile131->build,slot,flags);},[&](float x,float y){return wht::SendSpamAllPing131(base131,profile131->build,x,y);},report)&&!report.empty()){wht::Log(folder131,report);wht::ShowNotification131(base131,profile131->build,currentUi131,report);}}
  menu131.PlaybackVisual(macro131.playing);macro131.Tick(Allowed131()&&!typed131&&!menu131.open);
  if(menu131.initialized&&resources131.Update(base131,profile131->build,Allowed131()&&settings131&&config131.showResource,GetTickCount64(),menu131,folder131)&&!resources131.reported){resources131.reported=true;wht::Log(folder131,"WHT 1.31: native resource table displayed.");}
- pingOverlay131.Update(base131,wht::PingProfile131(profile131->build),Allowed131()&&settings131&&config131.showPing,menu131);
- if(clock131.Update(base131,profile131->build,Allowed131()&&settings131&&config131.showTimer,menu131)&&!clock131.reported){clock131.reported=true;wht::Log(folder131,"WHT 1.31: native simulation timer displayed.");}
+ pingOverlay131.Update(base131,wht::PingProfile131(profile131->build),Allowed131()&&settings131&&config131.showPing,menu131,profile131->build);
+ if(clock131.Update(base131,profile131->build,Allowed131()&&settings131&&config131.showTimer&&!(externalActive&wht::HudTimer),menu131,config131.hideTimeOfDay)&&!clock131.reported){clock131.reported=true;wht::Log(folder131,"WHT 1.31: native simulation timer displayed.");}
  clock131.Diagnose(base131,profile131->build,Allowed131()&&settings131&&config131.showTimer,folder131);
  if(sellAll131.active){wht::SellView131 view;bool valid=Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131&&wht::ReadSellView131(base131,profile131->build,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;},view);
   if(valid&&sellAll131.scanning){auto p=wht::PickProfileFor131(profile131->build);valid=p&&wht::ScanSellShops131(base131,profile131->build,wht::Component131(currentUi131,base131,p->worldTable),sellAll131.scanCursor,view,[&](uintptr_t unit){float value=0,maximum=0;return regenProfile131&&stateBarProfile131&&wht::ReadState131(unit,base131,*regenProfile131,*profile131,*stateBarProfile131,false,value,maximum)&&value>.405f;});}
@@ -558,7 +691,7 @@ windowServices131.Apply(gameWindow131,Allowed131()&&settings131&&config131.borde
  }
  skillsIcon131.Update(base131,Allowed131()&&settings131&&config131.showInsAllSkills,menu131);
  if(allSkills131.Tick(GetTickCount64(),Allowed131()&&settings131&&!typed131&&!menu131.open&&!macro131.playing&&!macro131.recording&&GetForegroundWindow()==gameWindow131,[&](){return regenProfile131?wht::SelectedUnit131(currentUi131,base131,*regenProfile131):0;},SkillPoints131,SkillData131,ClickSkill131)){wht::Log(folder131,"WHT 1.31: all skills native sequence finished; submitted "+std::to_string(allSkills131.submitted));wht::ShowNotification131(base131,profile131->build,currentUi131,"All Skills: submitted "+std::to_string(allSkills131.submitted));}
- if(fps131.Update(base131,ui,profile131->build,Allowed131()&&settings131,config131.showFps)&&!fps131.reported){fps131.reported=true;wht::Log(folder131,"WHT 1.31: native FPS toggle installed.");}
+ if(fps131.Update(base131,ui,profile131->build,Allowed131()&&settings131,config131.showFps,&menu131.api)&&!fps131.reported){fps131.reported=true;wht::Log(folder131,"WHT 1.31: native FPS toggle installed.");}
  const auto cleared=messageTimers131.Update(base131,ui,profile131->build,config131,Allowed131()&&settings131&&!typed131,GetTickCount64());
  const auto fresh=cleared&~messageTimers131.reported;
  if(fresh&1)wht::Log(folder131,"WHT 1.31: periodic native text clear executed.");
@@ -645,7 +778,7 @@ bool Input131(MSG& msg){
  if(keyDown&&!repeat&&key==VK_TAB&&settings131&&config131.showResource&&!(GetKeyState(VK_CONTROL)&0x8000)&&!(GetKeyState(VK_SHIFT)&0x8000)&&!(GetKeyState(VK_MENU)&0x8000))return resources131.Toggle();
  if(keyDown&&!repeat&&config131.macroEnabled){
   const bool chord=(GetKeyState(VK_CONTROL)&0x8000)&&(GetKeyState(VK_SHIFT)&0x8000);
-  if((config131.macroKeys[0]&&key==config131.macroKeys[0])||(chord&&key==VK_F10)){macro131.Play();return true;}
+  if((config131.macroKeys[0]&&key==config131.macroKeys[0])||(chord&&key==VK_F10)){if(macro131.playing)macro131.Stop();else macro131.Play();return true;}
   if((config131.macroKeys[1]&&key==config131.macroKeys[1])||(chord&&key==VK_F12)){macro131.Stop();return true;}
   if((config131.macroKeys[2]&&key==config131.macroKeys[2])||(chord&&key==VK_F9)){macro131.Record();return true;}
   if((config131.macroKeys[3]&&key==config131.macroKeys[3])||(chord&&key==VK_F11)){macro131.Edit();return true;}
@@ -755,9 +888,10 @@ bool ProfileReady131(){
  }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
 DWORD WINAPI Auth131(void*){
+ wht::WorkerPlacement workerPlacement;
  wht::StartUpdateWatcher(folder131);
  bool first=true;
- while(true){wht::SessionCheck result;auto identity=wht::VerifySession(folder131,&result);
+ while(true){externalHud131.Maintain(true);workerPlacement.Refresh(wht::workerCorePreference.load(),wht::gameProcessorHint.load());wht::SessionCheck result;auto identity=wht::VerifySession(folder131,&result);
   {std::lock_guard<std::mutex> guard(wht::sessionMutex);wht::sessionIdentity=identity;}
   const bool ok=!identity.username.empty()&&wht::SessionReady()&&!wht::StartupUpdatePending();
   if(authorized131.exchange(ok)!=ok||first)wht::Log(folder131,ok?"WHT 1.31: session verified.":"WHT 1.31: session unavailable; gameplay suspended.");
@@ -772,7 +906,7 @@ DWORD WINAPI Install131(void* parameter){
  cooldownProfile131=&wht::cooldownProfiles131[profile131->build==12164?0:1];
  regenProfile131=&wht::regenProfiles131[profile131->build==12164?0:1];
  stateBarProfile131=&wht::stateBarProfiles131[profile131->build==12164?0:1];
- base131=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));config131=wht::LoadConfig(ini131);wht::toolEnglish.store(config131.english);
+ base131=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));config131=wht::LoadConfig(ini131);wht::workerCorePreference.store(config131.workerCorePreference);wht::toolEnglish.store(config131.english);
  for(unsigned attempt=0;attempt<900&&!ProfileReady131();++attempt)Sleep(100);
  if(!ProfileReady131()){wht::Log(folder131,"WHT 1.31: exact native profile validation failed; no hooks installed.");return 2;}
  wht::Log(folder131,"WHT 1.31.1."+std::to_string(profile131->build)+": exact x86 camera/UI profile validated.");
@@ -781,6 +915,7 @@ DWORD WINAPI Install131(void* parameter){
  originalCamera131=reinterpret_cast<wht::CameraSetter131>(base131+profile131->cameraSet);
  for(unsigned attempt=0;attempt<3000&&!gameWindow131;++attempt){EnumWindows(FindGame131,0);if(!gameWindow131)Sleep(100);}
  if(!gameWindow131){wht::Log(folder131,"WHT 1.31: no game window; native profile validated, input pending.");return 4;}
+ externalHud131.Initialize(folder131);
  macro131.Configure(gameWindow131,folder131);
  SetLastError(0);
  windowProc131=reinterpret_cast<WNDPROC>(SetWindowLongPtrW(gameWindow131,GWLP_WNDPROC,reinterpret_cast<LONG_PTR>(Window131)));

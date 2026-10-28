@@ -1,0 +1,100 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-bd8ac0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00DA8AC0: push        ebp
+  00DA8AC1: mov         ebp,esp
+  00DA8AC3: push        ebx
+  00DA8AC4: push        esi
+  00DA8AC5: push        edi
+  00DA8AC6: mov         ebx,ecx
+  00DA8AC8: push        1
+  00DA8ACA: push        dword ptr [ebp+8]
+  00DA8ACD: mov         esi,dword ptr [ebx+000001BCh]
+  00DA8AD3: lea         eax,[ebx+000001C0h]
+  00DA8AD9: push        eax
+  00DA8ADA: lea         eax,[ebp+8]
+  00DA8ADD: push        eax
+  00DA8ADE: call        01115390
+  00DA8AE3: add         esp,0Ch
+  00DA8AE6: lea         ecx,[ebx+000001BCh]
+  00DA8AEC: push        eax
+  00DA8AED: call        dword ptr [esi]
+  00DA8AEF: mov         ecx,ebx
+  00DA8AF1: call        00DA92A0
+  00DA8AF6: pop         edi
+  00DA8AF7: pop         esi
+  00DA8AF8: pop         ebx
+  00DA8AF9: pop         ebp
+  00DA8AFA: ret         4
+  00DA8AFD: int         3
+  00DA8AFE: int         3
+  00DA8AFF: int         3
+  00DA8B00: or          dword ptr [ecx+20h],80h
+  00DA8B07: jmp         00DA92A0
+  00DA8B0C: int         3
+  00DA8B0D: int         3
+  00DA8B0E: int         3
+  00DA8B0F: int         3
+  00DA8B10: and         dword ptr [ecx+20h],0FFFFFF7Fh
+  00DA8B17: jmp         00DA92A0
+  00DA8B1C: int         3
+  00DA8B1D: int         3
+  00DA8B1E: int         3
+  00DA8B1F: int         3
+  00DA8B20: push        ebp
+  00DA8B21: mov         ebp,esp
+  00DA8B23: sub         esp,0Ch
+  00DA8B26: push        ebx
+  00DA8B27: push        esi
+  00DA8B28: mov         esi,dword ptr [ebp+0Ch]
+  00DA8B2B: mov         ebx,44h
+  00DA8B30: push        edi
+  00DA8B31: mov         dword ptr [ebp-0Ch],ecx
+  00DA8B34: mov         eax,dword ptr [esi]
+  00DA8B36: mov         dword ptr [ebp-8],eax
+  00DA8B39: xor         al,al
+  00DA8B3B: mov         byte ptr [ebp-1],al
+  00DA8B3E: nop
+  00DA8B40: cmp         ebx,52h
+  00DA8B43: jg          00DA8BB3
+  00DA8B45: mov         eax,dword ptr [ecx+0000040Ch]
+  00DA8B4B: add         ecx,408h
+  00DA8B51: and         eax,dword ptr [ecx]
+  00DA8B53: cmp         eax,0FFFFFFFFh
+  00DA8B56: je          00DA8BA6
+  00DA8B58: call        00F3B5A0
+  00DA8B5D: mov         esi,eax
+  00DA8B5F: test        esi,esi
+  00DA8B61: je          00DA8BA6
+  00DA8B63: mov         eax,dword ptr [esi+28h]
+  00DA8B66: lea         ecx,[esi+24h]
+  00DA8B69: and         eax,dword ptr [ecx]
+  00DA8B6B: cmp         eax,0FFFFFFFFh
+  00DA8B6E: jne         00DA8B74
+  00DA8B70: xor         edi,edi
+  00DA8B72: jmp         00DA8B7B
+  00DA8B74: call        00F3B5A0
+  00DA8B79: mov         edi,eax
+  00DA8B7B: mov         edx,dword ptr [esi]
+  00DA8B7D: mov         ecx,esi
+  00DA8B7F: call        dword ptr [edx+0000010Ch]
+  00DA8B85: cmp         eax,ebx
+  00DA8B87: jne         00DA8BA0
+  00DA8B89: mov         eax,dword ptr [esi]
+  00DA8B8B: lea         ecx,[ebp-8]
+  00DA8B8E: push        ecx
+  00DA8B8F: mov         ecx,esi
+  00DA8B91: mov         eax,dword ptr [eax+00000110h]
+  00DA8B97: call        eax
+  00DA8B99: mov         byte ptr [ebp-1],al
+  00DA8B9C: test        al,al
+  00DA8B9E: jne         00DA8BA6
+
+  Summary
+
+        1000 .text

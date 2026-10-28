@@ -1,0 +1,28 @@
+{
+  "pid": 17372,
+  "bits": 32,
+  "read_only": true,
+  "bindings": {
+    "GetWorldBounds": [
+      "0x8b3430"
+    ],
+    "FogModifierStop": [
+      "0x8a5230"
+    ],
+    "RemoveRect": [
+      "0x8bf640"
+    ],
+    "GetLocalPlayer": [
+      "0x8ac7a0"
+    ],
+    "CreateFogModifierRect": [
+      "0x89f9a0"
+    ],
+    "FogModifierStart": [
+      "0x8a5210"
+    ],
+    "DestroyFogModifier": [
+      "0x8a1e30"
+    ]
+  }
+}

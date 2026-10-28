@@ -1,0 +1,54 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-c034c0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00DD34C0: push        ebp
+  00DD34C1: mov         ebp,esp
+  00DD34C3: push        ebx
+  00DD34C4: push        esi
+  00DD34C5: push        edi
+  00DD34C6: mov         ebx,ecx
+  00DD34C8: push        1
+  00DD34CA: push        dword ptr [ebp+8]
+  00DD34CD: mov         esi,dword ptr [ebx+000001E4h]
+  00DD34D3: lea         eax,[ebx+000001E8h]
+  00DD34D9: push        eax
+  00DD34DA: lea         eax,[ebp+8]
+  00DD34DD: push        eax
+  00DD34DE: call        01115390
+  00DD34E3: add         esp,0Ch
+  00DD34E6: lea         ecx,[ebx+000001E4h]
+  00DD34EC: push        eax
+  00DD34ED: call        dword ptr [esi]
+  00DD34EF: mov         ecx,ebx
+  00DD34F1: call        00DD3FB0
+  00DD34F6: pop         edi
+  00DD34F7: pop         esi
+  00DD34F8: pop         ebx
+  00DD34F9: pop         ebp
+  00DD34FA: ret         4
+  00DD34FD: int         3
+  00DD34FE: int         3
+  00DD34FF: int         3
+  00DD3500: push        ebp
+  00DD3501: mov         ebp,esp
+  00DD3503: push        0FFFFFFFFh
+  00DD3505: push        17E4C88h
+  00DD350A: mov         eax,dword ptr fs:[00000000h]
+  00DD3510: push        eax
+  00DD3511: sub         esp,34h
+  00DD3514: push        esi
+  00DD3515: push        edi
+  00DD3516: mov         eax,dword ptr ds:[01C98574h]
+  00DD351B: xor         eax,ebp
+  00DD351D: push        eax
+  00DD351E: 8D
+  00DD351F: inc         ebp
+
+  Summary
+
+        1000 .text

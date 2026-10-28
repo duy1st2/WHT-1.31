@@ -1,0 +1,35 @@
+{
+  "pid": 20644,
+  "base": "0x7ff774360000",
+  "build": 12164,
+  "bits": 64,
+  "read_only": true,
+  "game_native_invoked": false,
+  "blocks": [
+    {
+      "rva": "0xd20630",
+      "length": 384,
+      "matches_capture": true
+    },
+    {
+      "rva": "0xd207b0",
+      "length": 35,
+      "matches_capture": true
+    },
+    {
+      "rva": "0x9e54d0",
+      "length": 181,
+      "matches_capture": true
+    },
+    {
+      "rva": "0x782560",
+      "length": 5,
+      "matches_capture": true
+    },
+    {
+      "rva": "0x20c8b5c",
+      "length": 4,
+      "matches_capture": true
+    }
+  ]
+}

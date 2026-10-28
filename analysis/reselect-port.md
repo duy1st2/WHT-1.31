@@ -1,0 +1,13 @@
+# #selc: native selected-unit reselection for 1.31
+
+Reference source read: WHT/native/gameplay_commands.hpp TryReselectUnit (528) resolves ClearSelection/SelectUnit, and command (1518) checks selection and optional rawcode. WHT-1.29/native/reselect129.hpp resolves and guards local clear/select/update and verifies stable agent identity and final selected unit. WHT-1.29/native/version129.cpp (891) implements no-argument #selc with own notification. Recorded source hashes in reselect-reference-hashes.json. This port follows the common no-argument behavior. Reference projects are unchanged.
+
+Reuse verified 1.31 local group-selection API from craft_selection131.hpp, not the packet-only courier selector. Existing guarded entry/caller profiles: x86 12164 b46850, 12173 b064c0; x64 12164 c972c0, 12173 cda0c0. ABI: void thiscall(manager, NativeUnitList*, 0, 1, 0, 0, 0). UI manager member/table verified by existing native profile. NativeUnitList uses count at +0, pointer at +4 x86/+8 x64. Empty list clears, one-entry list selects the selected unit. Additional disassembly of x64 12164 c972c0 confirms zero count branches (c974e5 -> c9750a; c975e3 -> c9762f), per-unit selection c97620 and final update c97673/c97680. Existing profiles guard native prologue plus exact hero-bar group-selection caller flags.
+
+Preflight reads matching native player selection sets, captures primary selected unit and serial identity, validates world/local-player context. Flow clears through native empty list then reselects through native singleton list; checks same unit and serial after native selection before reporting success. Failures attempt restoration of still-valid members of original group only while original world/local context remains. No direct writes to game selection pointers, no input simulation, no saved settings, no new hooks or background workers.
+
+Meaningful isolated tests cover all four captured entry/caller profiles and relocation, tampered signature refusal, empty/singleton exact native ABI, malformed arguments with no mutation, clear/select order, refused native clear, failed final confirmation, stale source refusal and recovery callback. Real game visual behavior remains unverified. No live selection altered by this task.
+
+Final flow also confirms primary selection becomes empty after clear, rejecting native no-op clears before attempting reselection. Additional contract verifies that refusal and recovery.
+
+Final validation: x86 11/11 CTests, x64 10/10 CTests. Both 12164/12173 runtime-test variants installed with backups for both architectures. All 12 artifact SHA256 match build outputs; all 6 preexisting configuration/macro/ban files from snapshot unchanged. Source ZIP refreshed. No running game stopped and no live selection changed.

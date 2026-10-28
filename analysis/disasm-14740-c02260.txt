@@ -1,0 +1,58 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-c02260.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00DD2260: push        ebp
+  00DD2261: mov         ebp,esp
+  00DD2263: push        ebx
+  00DD2264: push        esi
+  00DD2265: push        edi
+  00DD2266: mov         ebx,ecx
+  00DD2268: push        1
+  00DD226A: push        dword ptr [ebp+8]
+  00DD226D: mov         esi,dword ptr [ebx+000001F4h]
+  00DD2273: lea         eax,[ebx+000001F8h]
+  00DD2279: push        eax
+  00DD227A: lea         eax,[ebp+8]
+  00DD227D: push        eax
+  00DD227E: call        01115390
+  00DD2283: add         esp,0Ch
+  00DD2286: lea         ecx,[ebx+000001F4h]
+  00DD228C: push        eax
+  00DD228D: call        dword ptr [esi]
+  00DD228F: mov         ecx,ebx
+  00DD2291: call        00DA0A10
+  00DD2296: pop         edi
+  00DD2297: pop         esi
+  00DD2298: pop         ebx
+  00DD2299: pop         ebp
+  00DD229A: ret         4
+  00DD229D: int         3
+  00DD229E: int         3
+  00DD229F: int         3
+  00DD22A0: push        ebp
+  00DD22A1: mov         ebp,esp
+  00DD22A3: push        0FFFFFFFFh
+  00DD22A5: push        ecx
+  00DD22A6: push        dword ptr [ebp+0Ch]
+  00DD22A9: push        dword ptr [ebp+8]
+  00DD22AC: call        00D8F6E0
+  00DD22B1: add         esp,10h
+  00DD22B4: pop         ebp
+  00DD22B5: ret         8
+  00DD22B8: int         3
+  00DD22B9: int         3
+  00DD22BA: int         3
+  00DD22BB: int         3
+  00DD22BC: int         3
+  00DD22BD: int         3
+  00DD22BE: int         3
+  00DD22BF: int         3
+
+  Summary
+
+        1000 .text

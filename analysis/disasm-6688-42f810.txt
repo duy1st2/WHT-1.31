@@ -1,0 +1,92 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-42f810.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF78338F810: push        rbx
+  00007FF78338F812: sub         rsp,20h
+  00007FF78338F816: mov         rbx,rcx
+  00007FF78338F819: mov         r8b,1
+  00007FF78338F81C: add         rcx,0B0h
+  00007FF78338F823: mov         rax,qword ptr [rcx]
+  00007FF78338F826: call        qword ptr [rax]
+  00007FF78338F828: mov         rcx,rbx
+  00007FF78338F82B: add         rsp,20h
+  00007FF78338F82F: pop         rbx
+  00007FF78338F830: jmp         00007FF7833912E0
+  00007FF78338F835: int         3
+  00007FF78338F836: int         3
+  00007FF78338F837: int         3
+  00007FF78338F838: int         3
+  00007FF78338F839: int         3
+  00007FF78338F83A: int         3
+  00007FF78338F83B: int         3
+  00007FF78338F83C: int         3
+  00007FF78338F83D: int         3
+  00007FF78338F83E: int         3
+  00007FF78338F83F: int         3
+  00007FF78338F840: push        rdi
+  00007FF78338F842: sub         rsp,30h
+  00007FF78338F846: mov         qword ptr [rsp+20h],0FFFFFFFFFFFFFFFEh
+  00007FF78338F84F: mov         qword ptr [rsp+48h],rbx
+  00007FF78338F854: mov         qword ptr [rsp+50h],rbp
+  00007FF78338F859: mov         qword ptr [rsp+58h],rsi
+  00007FF78338F85E: movzx       ebx,r8b
+  00007FF78338F862: mov         rsi,rdx
+  00007FF78338F865: mov         rbp,rcx
+  00007FF78338F868: add         rcx,15Ch
+  00007FF78338F86F: call        00007FF7832BB6D0
+  00007FF78338F874: test        bl,bl
+  00007FF78338F876: je          00007FF78338F8E2
+  00007FF78338F878: mov         r8b,1
+  00007FF78338F87B: mov         rdx,rbp
+  00007FF78338F87E: mov         rcx,rsi
+  00007FF78338F881: call        00007FF783C9DDE0
+  00007FF78338F886: xor         ebx,ebx
+  00007FF78338F888: mov         qword ptr [rsp+40h],rbx
+  00007FF78338F88D: test        rsi,rsi
+  00007FF78338F890: je          00007FF78338F8BA
+  00007FF78338F892: call        00007FF783C611A0
+  00007FF78338F897: mov         edi,eax
+  00007FF78338F899: mov         rdx,qword ptr [rsi]
+  00007FF78338F89C: mov         rcx,rsi
+  00007FF78338F89F: call        qword ptr [rdx+38h]
+  00007FF78338F8A2: mov         ecx,eax
+  00007FF78338F8A4: mov         edx,edi
+  00007FF78338F8A6: call        00007FF783E693C0
+  00007FF78338F8AB: test        al,al
+  00007FF78338F8AD: je          00007FF78338F8BA
+  00007FF78338F8AF: inc         dword ptr [rsi+8]
+  00007FF78338F8B2: mov         rbx,rsi
+  00007FF78338F8B5: mov         qword ptr [rsp+40h],rbx
+  00007FF78338F8BA: test        rbx,rbx
+  00007FF78338F8BD: je          00007FF78338F8CE
+  00007FF78338F8BF: mov         r8b,1
+  00007FF78338F8C2: mov         rdx,rbp
+  00007FF78338F8C5: mov         rcx,rbx
+  00007FF78338F8C8: call        00007FF783C99200
+  00007FF78338F8CD: nop
+  00007FF78338F8CE: test        rbx,rbx
+  00007FF78338F8D1: je          00007FF78338F8E2
+  00007FF78338F8D3: add         dword ptr [rbx+8],0FFFFFFFFh
+  00007FF78338F8D7: jne         00007FF78338F8E2
+  00007FF78338F8D9: mov         rax,qword ptr [rbx]
+  00007FF78338F8DC: mov         rcx,rbx
+  00007FF78338F8DF: call        qword ptr [rax]
+  00007FF78338F8E1: nop
+  00007FF78338F8E2: mov         rbx,qword ptr [rsp+48h]
+  00007FF78338F8E7: mov         rbp,qword ptr [rsp+50h]
+  00007FF78338F8EC: mov         rsi,qword ptr [rsp+58h]
+  00007FF78338F8F1: add         rsp,30h
+  00007FF78338F8F5: pop         rdi
+  00007FF78338F8F6: ret
+  00007FF78338F8F7: and         word ptr [rsi-9],0FD7Bh
+  00007FF78338F8FD: CE
+  00007FF78338F8FE: push        fs
+
+  Summary
+
+        1000 .text

@@ -1,0 +1,72 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-29928-4a70c0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF6269170C0: mov         qword ptr [rsp+18h],rbx
+  00007FF6269170C5: push        rdi
+  00007FF6269170C6: sub         rsp,20h
+  00007FF6269170CA: mov         eax,dword ptr [rcx+0000000000000458h]
+  00007FF6269170D0: mov         rdi,rdx
+  00007FF6269170D3: mov         rbx,rcx
+  00007FF6269170D6: cmp         eax,0FFFFFFFFh
+  00007FF6269170D9: je          00007FF626917106
+  00007FF6269170DB: mov         r9d,dword ptr [rcx+rax*4+0000000000000334h]
+  00007FF6269170E3: sub         r9d,1
+  00007FF6269170E7: je          00007FF6269170FE
+  00007FF6269170E9: sub         r9d,3Fh
+  00007FF6269170ED: je          00007FF6269170FE
+  00007FF6269170EF: sub         r9d,40h
+  00007FF6269170F3: je          00007FF6269170FE
+  00007FF6269170F5: cmp         r9d,80h
+  00007FF6269170FC: jne         00007FF626917106
+  00007FF6269170FE: mov         eax,dword ptr [00007FF628658AFCh]
+  00007FF626917104: jmp         00007FF626917145
+  00007FF626917106: mov         eax,dword ptr [rcx+0000000000000270h]
+  00007FF62691710C: movss       xmm0,dword ptr [00007FF6285EA084h]
+  00007FF626917114: mov         dword ptr [rsp+30h],eax
+  00007FF626917118: movss       xmm1,dword ptr [rsp+30h]
+  00007FF62691711E: comiss      xmm0,xmm1
+  00007FF626917121: jbe         00007FF62691712C
+  00007FF626917123: lea         rax,[00007FF6285EA084h]
+  00007FF62691712A: jmp         00007FF626917143
+  00007FF62691712C: comiss      xmm1,dword ptr [00007FF6285EA024h]
+  00007FF626917133: lea         rcx,[00007FF6285EA024h]
+  00007FF62691713A: lea         rax,[rsp+30h]
+  00007FF62691713F: cmova       rax,rcx
+  00007FF626917143: mov         eax,dword ptr [rax]
+  00007FF626917145: mov         rcx,rdi
+  00007FF626917148: mov         dword ptr [rsp+38h],eax
+  00007FF62691714C: call        00007FF6271D18C0
+  00007FF626917151: movss       xmm1,dword ptr [rsp+38h]
+  00007FF626917157: mov         rcx,rax
+  00007FF62691715A: call        00007FF627592AF0
+  00007FF62691715F: mov         rax,qword ptr [rdi]
+  00007FF626917162: xor         r8d,r8d
+  00007FF626917165: mov         r9b,1
+  00007FF626917168: mov         rcx,rdi
+  00007FF62691716B: lea         edx,[r8+6]
+  00007FF62691716F: call        qword ptr [rax+0000000000000108h]
+  00007FF626917175: mov         edx,13h
+  00007FF62691717A: mov         rcx,rdi
+  00007FF62691717D: call        00007FF6271DCC90
+  00007FF626917182: mov         rax,qword ptr [rdi]
+  00007FF626917185: xor         r8d,r8d
+  00007FF626917188: mov         r9b,1
+  00007FF62691718B: mov         rcx,rdi
+  00007FF62691718E: lea         edx,[r8+4]
+  00007FF626917192: call        qword ptr [rax+0000000000000110h]
+  00007FF626917198: or          dword ptr [rbx+38h],100h
+  00007FF62691719F: mov         rbx,qword ptr [rsp+40h]
+  00007FF6269171A4: add         rsp,20h
+  00007FF6269171A8: pop         rdi
+  00007FF6269171A9: ret
+  00007FF6269171AA: sbb         eax,0F5B54421h
+  00007FF6269171AF: E2
+
+  Summary
+
+        1000 .text

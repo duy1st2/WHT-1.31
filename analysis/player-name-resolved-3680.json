@@ -1,0 +1,13 @@
+{
+  "pid": 3680,
+  "bits": 64,
+  "read_only": true,
+  "bindings": {
+    "GetPlayerName": [
+      "0xa3f0c0"
+    ],
+    "SetPlayerName": [
+      "0xa7e960"
+    ]
+  }
+}

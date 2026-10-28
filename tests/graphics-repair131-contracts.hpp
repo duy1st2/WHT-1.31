@@ -1,6 +1,7 @@
 #pragma once
 #include "stats_poll131.hpp"
 #include "ui_refresh131.hpp"
+#include "ui_perf131.hpp"
 inline uintptr_t paintExpectedFrame131=0,paintExpectedUnit131=0;inline unsigned paintCalls131=0;
 #ifdef _WIN64
 inline uintptr_t PaintAbiFixture131(uintptr_t frame,uintptr_t unit){
@@ -14,6 +15,18 @@ inline void NativePresentationFixture131(uintptr_t frame){
  check(frame==paintExpectedFrame131&&*reinterpret_cast<uintptr_t*>(frame+(sizeof(void*)==8?0x210:0x154))==paintExpectedUnit131,"presentation follows the current native binding, including pooled unit changes");
  check(paintCalls131==presentationPaintCalls131+1,"bar presentation runs immediately after native bind/update");++presentationPaintCalls131;
  wht::NotifyStatPresentation131(frame);
+}
+inline unsigned coalescedPresentationCalls131=0,coalescedShowCalls131=0;
+inline void CoalescedPresentationFixture131(uintptr_t frame){
+ check(frame==paintExpectedFrame131&&*reinterpret_cast<uintptr_t*>(frame+(sizeof(void*)==8?0x210:0x154))==paintExpectedUnit131,"coalesced work follows current binding");
+ ++coalescedPresentationCalls131;wht::NotifyStatPresentation131(frame);
+}
+#ifdef _WIN64
+inline uintptr_t CoalescedShowFixture131(uintptr_t frame){
+#else
+inline uintptr_t __fastcall CoalescedShowFixture131(uintptr_t frame,void*){
+#endif
+ check(frame==paintExpectedFrame131,"original Show receiver preserved");++coalescedShowCalls131;return 0xabcdef;
 }
 inline unsigned worldHostShows131=0,worldHostHides131=0;
 #ifdef _WIN64
@@ -142,6 +155,33 @@ inline void CheckGraphicsRepair131(){
   check(presentationPaintCalls131==512,"every pooled native bind/update gets one bounded presentation without recursion");
   check(paintCalls131==512,"native paint callbacks executed once per call without stack drift");wht::ForgetStatPaint131();wht::statPaintBind131=wht::statPaintUpdate131=0;
   check(!wht::StatPaintCode131(0,0),"unknown native paint profile refused");
+ }
+
+ {alignas(uintptr_t) unsigned char frame[0x240]{},unit[0x60]{},other[0x60]{};const auto f=reinterpret_cast<uintptr_t>(frame),u=reinterpret_cast<uintptr_t>(unit),v=reinterpret_cast<uintptr_t>(other);
+  *reinterpret_cast<uintptr_t*>(unit)=*reinterpret_cast<uintptr_t*>(other)=12345;const unsigned offset=sizeof(void*)==8?0x18:0xc;
+  *reinterpret_cast<uint32_t*>(unit+offset)=1;*reinterpret_cast<uint32_t*>(other+offset)=2;
+  wht::StatPaintRecord131 record;record.unit=u;record.unitTable=12345;record.presentation=true;wht::statPaintRecords131[f]=record;
+  wht::statPaintPresentation131=CoalescedPresentationFixture131;wht::statPaintThread131=wht::uiRefreshThread131=GetCurrentThreadId();wht::uiRefreshOwner131=f;
+  wht::statPaintBind131=wht::statPaintUpdate131=reinterpret_cast<uintptr_t>(PaintAbiFixture131);wht::statPaintShow131=reinterpret_cast<uintptr_t>(CoalescedShowFixture131);
+  paintExpectedFrame131=f;paintExpectedUnit131=u;paintCalls131=coalescedPresentationCalls131=coalescedShowCalls131=0;const auto oldFrame=wht::uiRefreshCalls131,oldSkipped=wht::statPaintCoalesced131;
+  for(unsigned cycle=0;cycle<40;++cycle){wht::uiRefreshCalls131=oldFrame+cycle;
+#ifdef _WIN64
+   check(wht::StatPaintBindCall131(f,u)==0x12345678&&wht::StatPaintUpdateCall131(f,u)==0x12345678&&wht::StatPaintShowCall131(f)==0xabcdef,"original ABI and returns retained with coalescing");
+#else
+   check(wht::StatPaintBindCall131(f,nullptr,u)==0x12345678&&wht::StatPaintUpdateCall131(f,nullptr,u)==0x12345678&&wht::StatPaintShowCall131(f,nullptr)==0xabcdef,"original ABI and returns retained with coalescing");
+#endif
+  }
+  check(coalescedPresentationCalls131==40&&paintCalls131==80&&coalescedShowCalls131==40&&wht::statPaintCoalesced131-oldSkipped==80,"three native callbacks retained; expensive presentation once per frame");
+  paintExpectedUnit131=v;*reinterpret_cast<uintptr_t*>(frame+(sizeof(void*)==8?0x210:0x154))=v;wht::NotifyStatPresentation131(f);check(coalescedPresentationCalls131==41,"pooled bar rebind presents immediately in same frame");
+  ++*reinterpret_cast<uint32_t*>(other+offset);wht::NotifyStatPresentation131(f);check(coalescedPresentationCalls131==42,"same address with new native identity bypasses cache");
+  ++wht::uiRefreshCalls131;wht::NotifyStatPresentation131(f);check(coalescedPresentationCalls131==43,"next native frame remains fresh");
+  *reinterpret_cast<uint32_t*>(other+offset)=0xffffffff;wht::NotifyStatPresentation131(f);wht::NotifyStatPresentation131(f);check(coalescedPresentationCalls131==45,"unknown/deleted identity never suppresses work");
+  wht::uiRefreshOwner131=0;wht::NotifyStatPresentation131(f);wht::NotifyStatPresentation131(f);check(coalescedPresentationCalls131==47,"without active UI refresh hook retain original behavior");
+  wht::uiRefreshCalls131=oldFrame;wht::ForgetStatPaint131();wht::statPaintShow131=wht::statPaintBind131=wht::statPaintUpdate131=0;
+ }
+ {const auto frequency=wht::UiPerfFrequency131();check(frequency>0&&wht::UiPerfCounter131()>0,"high resolution clock available");
+  wht::UiPerf131 timing;timing.Record(3,frequency);timing.Record(3,frequency/2);check(timing.buckets[3].calls==2&&timing.buckets[3].Average()>749.9&&timing.buckets[3].Average()<750.1,"bar timing converted to milliseconds");
+  timing.reports=wht::UiPerf131::reportLimit;timing.Record(3,frequency);check(timing.buckets[3].calls==2,"bounded diagnostics stop recording");wht::UiPerfScope131 scope(timing,3);check(!scope.active,"completed diagnostics avoid hot-path QPC calls");
  }
 
 }

@@ -20,7 +20,7 @@ inline void CheckClockFps131(){
   *reinterpret_cast<uintptr_t*>(time+scheduler)=base+nativeSchedulerVT;
   *reinterpret_cast<float*>(time+value)=65.75f;*reinterpret_cast<unsigned*>(time+value+4)=2;*reinterpret_cast<float*>(time+value+8)=4096;
   uint32_t seconds=0;check(wht::SimulationSeconds131(base,p,seconds)&&seconds==8257,"simulation clock includes scheduler rollover");
-  check(wht::TimerText131(seconds)=="|cfffcd21102:17:37|r","timer hours minutes seconds");
+  check(wht::TimerText131(seconds)=="|cfffcd21102|cffffffff:|cfffcd21117|cffffffff:|cfffcd21137|r","timer hours minutes seconds");
   check(wht::SimulationSeconds131(base,p,seconds)&&seconds==8257,"paused clock stays unchanged without wall time");
   *reinterpret_cast<float*>(time+value)=66.25f;check(wht::SimulationSeconds131(base,p,seconds)&&seconds==8258,"simulation advancement follows native value");
   *reinterpret_cast<float*>(time+value)=std::numeric_limits<float>::quiet_NaN();check(!wht::SimulationSeconds131(base,p,seconds),"invalid clock hidden");

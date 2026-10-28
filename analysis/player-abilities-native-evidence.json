@@ -1,0 +1,189 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  },
+  "scope": "Both #addall/#raddall enumerate all units of local player via GroupEnumUnitsOfPlayer with null filter and add/remove requested rawcode. Do not substitute world-frame visible collection or selection fallback.",
+  "profiles": [
+    {
+      "pid": 8740,
+      "bits": 32,
+      "build": 12164,
+      "enumerate": 14028160,
+      "ranges": [
+        [
+          14028160,
+          14028324
+        ],
+        [
+          14028336,
+          14028720
+        ],
+        [
+          12206304,
+          12206355
+        ],
+        [
+          11667984,
+          11668042
+        ]
+      ],
+      "blocks": [
+        [
+          14028160,
+          164
+        ],
+        [
+          14028336,
+          384
+        ],
+        [
+          12206304,
+          51
+        ],
+        [
+          11667984,
+          58
+        ]
+      ]
+    },
+    {
+      "pid": 32116,
+      "bits": 32,
+      "build": 12173,
+      "enumerate": 13745456,
+      "ranges": [
+        [
+          13745456,
+          13745580
+        ],
+        [
+          13745584,
+          13746000
+        ],
+        [
+          11941680,
+          11941715
+        ],
+        [
+          11403808,
+          11403866
+        ]
+      ],
+      "blocks": [
+        [
+          13745456,
+          124
+        ],
+        [
+          13745584,
+          384
+        ],
+        [
+          13745968,
+          32
+        ],
+        [
+          11941680,
+          35
+        ],
+        [
+          11403808,
+          58
+        ]
+      ]
+    },
+    {
+      "pid": 24984,
+      "bits": 64,
+      "build": 12164,
+      "enumerate": 15762960,
+      "ranges": [
+        [
+          15762960,
+          15763179
+        ],
+        [
+          15763184,
+          15763696
+        ],
+        [
+          13636000,
+          13636031
+        ],
+        [
+          13036752,
+          13036844
+        ]
+      ],
+      "blocks": [
+        [
+          15762960,
+          219
+        ],
+        [
+          15763184,
+          384
+        ],
+        [
+          15763568,
+          128
+        ],
+        [
+          13636000,
+          31
+        ],
+        [
+          13036752,
+          92
+        ]
+      ]
+    },
+    {
+      "pid": 27336,
+      "bits": 64,
+      "build": 12173,
+      "enumerate": 16008192,
+      "ranges": [
+        [
+          16008192,
+          16008411
+        ],
+        [
+          16008416,
+          16008945
+        ],
+        [
+          13893136,
+          13893167
+        ],
+        [
+          13311040,
+          13311132
+        ]
+      ],
+      "blocks": [
+        [
+          16008192,
+          219
+        ],
+        [
+          16008416,
+          384
+        ],
+        [
+          16008800,
+          145
+        ],
+        [
+          13893136,
+          31
+        ],
+        [
+          13311040,
+          92
+        ]
+      ]
+    }
+  ]
+}

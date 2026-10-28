@@ -1,5 +1,16 @@
-﻿#include "casting_mode.hpp"
+﻿#include "../native/cursor_flags131.hpp"
+#include "../native/hp_color_commands131.hpp"
+#include "../native/external_hud131.hpp"
+#include "../native/local_files131.hpp"
+#include "casting_mode.hpp"
 #pragma once
+#include "worker_placement.hpp"
+#include <thread>
+#include <exception>
+#include "menu_capabilities131.hpp"
+#include "menu_search131.hpp"
+#include "hotkey_diagnostics131.hpp"
+#include "quick_chat_settings131.hpp"
 #include "view_commands131.hpp"
 #include "tool_menu.hpp"
 struct ViewIniTest131 {
@@ -8,6 +19,46 @@ struct ViewIniTest131 {
  ~ViewIniTest131(){if(file[0])DeleteFileW(file);}
 };
 inline void CheckViewCommands131(){
+ {using namespace wht;
+ InventoryInfoSource131 source;source.unit=123;source.id={1,2};uint32_t flags=0xdeadbeef;
+ check(CaptureCursorFlags131([&](){return source;},[](uintptr_t unit,uint32_t& out){out=0;return unit==123;},flags)&&flags==0,"zero unit flags are valid, not missing selection");
+ auto changed=source;changed.id={3,4};unsigned samples=0;flags=0xdeadbeef;
+ check(!CaptureCursorFlags131([&](){return ++samples==1?source:changed;},[](uintptr_t,uint32_t& out){out=8;return true;},flags)&&flags==0xdeadbeef,"recycled unit identity never publishes stale flags");
+ check(!CaptureCursorFlags131([](){return InventoryInfoSource131{};},[](uintptr_t,uint32_t&){return true;},flags),"missing selection refused");
+ const uintptr_t base=0x10000000,table=0x2000;alignas(uintptr_t) unsigned char unit[0x80]{};
+ *reinterpret_cast<uintptr_t*>(unit)=base+table;*reinterpret_cast<uint32_t*>(unit+cursorUnitFlagsOffset131)=0x80000008;
+ check(ReadCursorUnitFlags131(base,table,reinterpret_cast<uintptr_t>(unit),flags)&&flags==0x80000008,"profile-sized agent flags field read correctly");
+ ++*reinterpret_cast<uintptr_t*>(unit);check(!ReadCursorUnitFlags131(base,table,reinterpret_cast<uintptr_t>(unit),flags),"foreign unit class refused");
+ unsigned cursorReads=0,unitReads=0;std::string report;
+ auto cursor=[&](POINT& screen,POINT& client){++cursorReads;screen={-100,250};client={20,-30};return true;};
+ auto selected=[&](uint32_t& out){++unitReads;out=8;return true;};
+ check(CursorFlagsCommand131(L"",cursor,selected,report)&&report=="MouseXY: [-100, 250], ClientXY: [20, -30] | Unit Flags: 0x00000008","cursor diagnostics match reference formatting with signed screen/client coordinates");
+ check(CursorFlagsCommand131(L" ",cursor,[](uint32_t&){return false;},report)&&report.find("Unit Flags")==std::string::npos,"no selected unit still shows cursor position without fabricated flags");
+ const auto count=cursorReads;for(auto args:{L"extra",L"1",L"\n"})check(!CursorFlagsCommand131(args,cursor,selected,report)&&cursorReads==count,"bad cursor command arguments never query native state");
+ check(!CursorFlagsCommand131(std::wstring(L"\0x",2),cursor,selected,report)&&cursorReads==count,"embedded NUL refused");
+ check(!CursorFlagsCommand131(L"",[](POINT&,POINT&){return false;},selected,report)&&unitReads==1,"unavailable cursor never reads selection");
+ }
+
+ {wht::Config cfg;cfg.externalHud=true;cfg.showMem=true;cfg.showTimer=true;
+ auto flags=wht::ExternalHudFlags131(cfg,true,false,true,true);
+ check((flags&(wht::HudMemory|wht::HudTimer))==(wht::HudMemory|wht::HudTimer),"external HUD publishes requested displays");
+ check(!wht::ExternalHudFlags131(cfg,true,true,true,true),"F8 menu stays above external HUD");
+ check(!wht::ExternalHudFlags131(cfg,false,false,true,true)&&!wht::ExternalHudFlags131(cfg,true,false,false,true),"unauthorized and fullscreen retain native HUD");
+ check(!(wht::ExternalHudFlags131(cfg,true,false,true,false)&wht::HudTimer),"invalid native clock cannot suppress timer");
+ cfg.externalHud=false;check(!wht::ExternalHudFlags131(cfg,true,false,true,true),"external HUD disabled by default policy");
+ }
+
+ {bool stored=false;int writes=0,nativeWrites=0,reloads=0;
+ auto save=[&](const wchar_t*,const wchar_t*,const wchar_t* value){++writes;stored=std::wstring(value)==L"1";return true;};
+ auto writer=[&](bool value){++nativeWrites;return value;};
+ auto reload=[&](){++reloads;};
+ check(wht::LocalFilesCommand131(L"#alf")&&wht::LocalFilesCommand131(L"#allowlocal")&&wht::LocalFilesCommand131(L"#localfiles")&&!wht::LocalFilesCommand131(L"#other"),"reference local file aliases");
+ check(wht::ApplyLocalFiles131(L"",false,save,writer,reload)&&stored&&reloads==1&&nativeWrites==1,"local files toggle saves and publishes once");
+ check(!wht::ApplyLocalFiles131(L"0",true,save,writer,reload)&&stored&&reloads==1,"failed registry write restores prior INI setting");
+ const auto before=writes;for(auto args:{L"2",L"1 extra",L"1\n"})check(!wht::ApplyLocalFiles131(args,false,save,writer,reload)&&writes==before,"invalid local files input has no side effects");
+ check(!wht::ApplyLocalFiles131(L"1",false,[](const wchar_t*,const wchar_t*,const wchar_t*){return false;},writer,reload)&&nativeWrites==2,"failed persistence never invokes registry writer");
+ }
+
  wht::Config casting;auto nativeKey=[](bool inventory,int slot){return inventory?(slot==0?unsigned(VK_NUMPAD7):0u):(slot==2?unsigned('Q'):0u);};
  check(wht::FindNativeCastSlot(casting,false,'Q',nativeKey).slot<0,"normal mode preserves native targeting");casting.modeCast=1;
  check(wht::FindNativeCastSlot(casting,false,'Q',nativeKey).slot==2,"quick mode resolves original skill key");
@@ -16,10 +67,83 @@ inline void CheckViewCommands131(){
  casting.commandEnabled=true;casting.command[0].enabled=true;casting.command[0].vk='Q';check(wht::FindNativeCastSlot(casting,false,'Q',nativeKey).slot<0,"failed tool remap cannot fall through to another native skill");
  casting.commandEnabled=false;casting.inventoryEnabled=true;casting.inventory[0].enabled=true;casting.inventory[0].vk='Q';check(wht::FindNativeCastSlot(casting,false,'Q',nativeKey).slot<0,"inventory remap keeps priority over native skill");
  casting.inventoryEnabled=false;casting.shopEnabled=true;casting.shop[0].enabled=true;casting.shop[0].vk='Q';check(wht::FindNativeCastSlot(casting,true,'Q',nativeKey).slot<0,"shop remap keeps priority");
+
+ {wht::Config keys;keys.commandKey=0;keys.multiboardKey=0;keys.mth49Enable=false;keys.g17Enable=false;
+ std::string report;
+ check(wht::HotkeyCheckText131(keys,L"",report)&&report.find("no configured conflicts")!=std::string::npos,"empty hotkeys have no synthetic zero-key collisions");
+ keys.quickChatEnabled=true;keys.quickChat[0]={VK_F2,"first"};keys.quickChat[1]={VK_F2,"second"};
+ auto conflicts=wht::HotkeyConflicts131(keys);check(conflicts.size()==1&&conflicts[0].key==VK_F2,"duplicate enabled chat shortcuts detected once");
+ keys.quickChatEnabled=false;check(wht::HotkeyConflicts131(keys).empty(),"disabled quick chat cannot cause active conflict report");
+ keys.commandEnabled=keys.shopEnabled=true;keys.command[0].enabled=keys.shop[0].enabled=true;keys.command[0].vk=keys.shop[0].vk='Q';
+ check(wht::HotkeyConflicts131(keys).empty(),"normal and shop grids do not conflict across mutually exclusive contexts");
+ keys.inventoryEnabled=true;keys.inventory[0].enabled=true;keys.inventory[0].vk='Q';
+ check(wht::HotkeyConflicts131(keys).size()==2,"inventory overlaps each enabled grid context separately");
+ keys.quickChatEnabled=true;keys.quickChat[2]={VK_F2,"third"};keys.menuKey=VK_F2;keys.heroes[0]=VK_F2;
+ check(wht::HotkeyCheckText131(keys,L"1",report)&&report.find("next page")!=std::string::npos&&report.find("F2")!=std::string::npos,"conflict report includes named keys and pagination");
+ check(wht::HotkeyCheckText131(keys,L"2",report),"additional conflict page is readable");
+ const auto savedReport=report;for(auto args:{L"0",L"9999",L"-1",L"1 extra",L"1\n"})check(!wht::HotkeyCheckText131(keys,args,report)&&report==savedReport,"invalid diagnostics cannot publish partial result");
+ check(!wht::HotkeyCheckText131(keys,std::wstring(L"1\0x",3),report),"diagnostic command rejects NUL");
+ check(keys.inventory[0].vk=='Q'&&keys.quickChat[0].text=="first"&&keys.menuKey==VK_F2,"diagnostics leave bindings and text unchanged");
+ check(wht::DiagnosticKey131(VK_NUMPAD7)=="NUMPAD7"&&wht::DiagnosticKey131(VK_TAB)=="TAB","diagnostic key names are stable");}
+
+ {std::wstring query;check(wht::MenuSearchQuery131(L"  H\u1ed2I MANA  ",query)&&query==L"hoi mana","Vietnamese search removes accents and folds case");
+ const auto all=[](const wht::ToolMenuControl&){return true;};
+ check(wht::MenuSearchFold131(L"Hi\u1ec3n th\u1ecb t\u1ed1c \u0111\u1ed9 h\u1ed3i Mana/s Show mana regeneration Event ShowRegenMana").find(L"hoi mana")!=std::wstring::npos,"normalization retries when Windows size estimate is insufficient");
+ auto hits=wht::FindMenuControls131(query,all);check(!hits.empty(),"unaccented Vietnamese finds regeneration option");
+ check(wht::MenuSearchQuery131(L"ping",query)&&!wht::FindMenuControls131(query,all).empty(),"menu search finds new ping checkbox");
+ check(wht::MenuSearchQuery131(L"delay",query),"English/INI keyword query accepted");
+ hits=wht::FindMenuControls131(query,all);check(hits.size()>1,"multiple matching menu options can be navigated");
+ wht::ToolMenuOverlay menu;wht::MenuSearch131 search;std::string notice;
+ menu.editing=3;menu.dropdown=4;menu.editBuffer=L"old";
+ check(search.Run(L"delay",menu,all,notice)&&menu.open&&menu.page==hits[0].page&&menu.editing==-1&&menu.dropdown==-1&&menu.editBuffer.empty(),"search opens matching tab and cancels unsaved editor/dropdown");
+ check(search.Run(L"DELAY",menu,all,notice)&&search.cursor==1&&menu.page==hits[1].page,"same normalized search advances result");
+ for(size_t i=1;i<hits.size();++i)check(search.Run(L"delay",menu,all,notice),"all results can be cycled");
+ check(search.cursor==0,"result cycling wraps to first match");
+ const auto priorPage=menu.page;const auto priorNotice=notice;
+ for(auto bad:{L"",L" ",L"ping\n"})check(!search.Run(bad,menu,all,notice)&&menu.page==priorPage&&notice==priorNotice,"invalid query cannot change UI or publish partial result");
+ check(!search.Run(std::wstring(L"ping\0x",6),menu,all,notice),"search rejects NUL");
+ check(search.Run(L"unlikelymissingoption123",menu,all,notice)&&menu.page==priorPage&&notice.find("no matching")!=std::string::npos,"missing result leaves current menu tab unchanged");
+ check(wht::FindMenuControls131(L"ping",[](const wht::ToolMenuControl&){return false;}).empty(),"unavailable native controls are not offered by search");
+ search.Reset();check(search.query.empty()&&search.cursor==0,"match teardown resets search state");}
+
+ {size_t options=0;bool castFound=false;wht::Config defaults;
+ for(size_t i=0;i<wht::kToolMenuControls.size();++i){const auto& d=wht::kToolMenuControls[i];if(d.kind==wht::MenuControlKind::Label)continue;
+  ++options;check(d.supported&&wht::ControlAvailable131(d),"every current interactive menu option has an implemented capability on both architectures");
+  if(!wcscmp(d.section,L"Event")&&!wcscmp(d.key,L"ModeCast")){castFound=true;check(d.kind==wht::MenuControlKind::Choice&&wht::ToolMenuOverlay::Enabled(defaults,i),"casting mode dropdown is available without parent prerequisites");
+   check(wht::ValidMenuValue(d,L"0")&&wht::ValidMenuValue(d,L"1")&&!wht::ValidMenuValue(d,L"2"),"casting mode exposes only Normal and Quick Cast");}
+ }
+ check(options>200&&castFound,"complete menu inventory includes casting mode");
+ wht::ToolMenuControl foreign{};foreign.section=L"Event";foreign.key=L"UnknownNativeFeature";foreign.supported=true;
+ check(!wht::ControlAvailable131(foreign),"unknown native features remain locked");
+ auto profile=std::make_shared<wht::Config::Profile>();defaults.profile=profile;
+ size_t gated=0;for(size_t i=0;i<wht::kToolMenuControls.size();++i){const auto& d=wht::kToolMenuControls[i];if(std::wstring(d.section)==L"Quick Chat"&&std::wstring(d.key)==L"QuickChatHotkey1"){
+  (*profile)[L"quick chat"][L"enable"]=L"0";check(!wht::ToolMenuOverlay::Enabled(defaults,i),"chat shortcut stays disabled while its master is off");
+  (*profile)[L"quick chat"][L"enable"]=L"1";check(wht::ToolMenuOverlay::Enabled(defaults,i),"chat master unlocks shortcut without changing native capabilities");++gated;}}
+ check(gated==1,"parent dependency audit covers actual chat control");}
+
+ {const std::vector<uint64_t> cores{3,12,48};
+ check(wht::SelectWorkerProcessor(63,0,cores)==4,"ported worker placement selects another physical core");
+ check(wht::SelectWorkerProcessor(3,0,cores)==MAXDWORD,"SMT sibling alone is not a separate physical core");
+ check(wht::SelectWorkerProcessor(15,0,cores)==2,"worker preference respects available process CPUs");
+ check(wht::SelectWorkerProcessor(63,MAXDWORD,cores)==MAXDWORD,"unknown UI processor does not guess a destination");
+ PROCESSOR_NUMBER before{},after{};check(GetThreadIdealProcessorEx(GetCurrentThread(),&before)!=FALSE,"capture test main-thread hint");
+ const DWORD main=GetCurrentProcessorNumber();std::exception_ptr failure;
+ std::thread background([&](){try{PROCESSOR_NUMBER original{},observed{};check(GetThreadIdealProcessorEx(GetCurrentThread(),&original)!=FALSE,"capture worker hint");
+  const auto target=wht::FindWorkerProcessor(main);wht::WorkerPlacement placement;placement.Refresh(true,main);
+  if(target!=MAXDWORD)check(GetThreadIdealProcessorEx(GetCurrentThread(),&observed)&&observed.Group==0&&observed.Number==target,"native Windows ideal-processor preference applies to worker");
+  placement.Refresh(false,main);check(GetThreadIdealProcessorEx(GetCurrentThread(),&observed)&&observed.Group==original.Group&&observed.Number==original.Number,"turning off restores worker's previous hint");
+ }catch(...){failure=std::current_exception();}});background.join();if(failure)std::rethrow_exception(failure);
+ check(GetThreadIdealProcessorEx(GetCurrentThread(),&after)&&before.Group==after.Group&&before.Number==after.Number,"worker preference leaves main-thread hint unchanged");}
  ViewIniTest131 ini;wht::Config config=wht::LoadConfig(ini.file);unsigned writes=0,reloads=0;
  auto save=[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){++writes;return wht::SaveSetting(ini.file,section,key,value);};
  auto reload=[&](){++reloads;config=wht::LoadConfig(ini.file);};
  auto run=[&](const wchar_t* name,const wchar_t* args){const auto* target=wht::ViewCommandFor131(name);check(target!=nullptr,"reference display alias exists");return wht::ApplyViewCommand131(*target,args,config,save,reload);};
+ check(wht::ApplyHpColorCommand131(L"#chp",L" ff1234ab ",save,reload)&&config.hpBarColor==0xff1234ab,"HP normal ARGB command persists and reloads");
+ check(wht::ApplyHpColorCommand131(L"#chpe",L"0X80FF4242",save,reload)&&config.hpBarColorEnemy==0x80ff4242,"HP enemy ARGB command preserves alpha");
+ {const auto beforeWrites=writes,beforeReloads=reloads;std::wstring value=L"unchanged";
+ for(auto args:{L"",L"FF1234",L"GG123456",L"0xFF123456 extra",L"FF123456\n"})check(!wht::ApplyHpColorCommand131(L"#chp",args,save,reload),"invalid HP color refused without persistence");
+ check(!wht::HpColorValue131(std::wstring(L"FF123456\0x",10),value)&&value==L"unchanged","embedded NUL cannot alter parsed color");
+ check(!wht::ApplyHpColorCommand131(L"#chp",L"FFABCDEF",[](const wchar_t*,const wchar_t*,const wchar_t*){return false;},reload)&&writes==beforeWrites&&reloads==beforeReloads&&config.hpBarColor==0xff1234ab,"failed color persistence never reloads config");}
 
  check(run(L"#showfps",L"0")&&run(L"#showping",L"0")&&run(L"#hideclock",L"0"),"monitoring options initialize independently");
  check(run(L"#showfps",L"1")&&config.showFps&&!config.showPing&&!config.hideTimeOfDay,"FPS command does not enable ping or hide day/night");
@@ -38,6 +162,66 @@ inline void CheckViewCommands131(){
   check(writes==monitorWrites&&reloads==monitorReloads,"rejected monitoring command never writes or reloads");
  }
  check(!wht::ViewCommandFor131(L"#ping"),"one-shot ping remains separate from persistent display toggle");
+
+ check(run(L"#autocleartext",L"0")&&run(L"#autoclearchat",L"0"),"auto clear channels initialize separately");
+ auto delay=[&](const wchar_t* name,const std::wstring& args){return wht::ApplyClearDelay131(name,args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return save(section,key,value.c_str());},reload);};
+ check(delay(L"#cleartextdelay",L"1")&&config.clearTextSeconds==1&&!config.clearTextEnabled,"editing text interval does not enable auto clear");
+ check(delay(L"#clearchatdelay",L"17")&&config.clearChatSeconds==17&&config.clearTextSeconds==1&&!config.clearChatEnabled,"chat and text intervals stay independent");
+ check(wht::MenuRead(config,L"DelayClear",L"Delay Clear Chat Screen",L"0")==L"17","chat delay shares real menu seconds key");
+ check(run(L"#autocleartext",L"1")&&config.clearTextEnabled&&!config.clearChatEnabled,"text auto clear does not enable chat clear");
+ check(run(L"#autoclearchat",L"")&&config.clearChatEnabled&&config.clearTextEnabled,"chat auto clear supports independent bare toggle");
+ check(run(L"#autocleartext",L"0")&&!config.clearTextEnabled&&config.clearTextSeconds==1&&config.clearChatEnabled,"disabling text clear preserves both intervals and other channel");
+ const auto clearWrites=writes,clearReloads=reloads;
+ for(auto name:{L"#cleartextdelay",L"#clearchatdelay"}){
+  for(auto args:{L"",L"0",L"18",L"9999999999999",L"-1",L"+1",L"1.5",L"1 extra",L"1\n"})check(!delay(name,args),"invalid auto clear delay is refused without clamping");
+  check(!delay(name,std::wstring(L"1\0x",3)),"auto clear delay rejects embedded NUL");
+  check(!wht::ApplyClearDelay131(name,L"3",[](const wchar_t*,const wchar_t*,const std::wstring&){return false;},reload),"failed interval save does not reload");
+ }
+ for(auto name:{L"#autocleartext",L"#autoclearchat"})for(auto args:{L"2",L"1 extra",L"1\n"})check(!run(name,args),"invalid auto clear toggle is refused");
+ check(writes==clearWrites&&reloads==clearReloads,"invalid auto clear input cannot edit or publish config");
+ check(!delay(L"#clear",L"3")&&!wht::ViewCommandFor131(L"#clear"),"manual clear remains separate from automatic settings");
+
+ auto qedit=[&](const wchar_t* name,const std::wstring& args){return wht::ApplyQuickChatSetting131(name,args,[&](const wchar_t* section,const wchar_t* key,const std::wstring& value){return save(section,key,value.c_str());},reload);};
+ check(run(L"#quickchat",L"0")&&!config.quickChatEnabled,"quick chat command disables existing master checkbox");
+ const auto existingKey=config.quickChat[0].vk;
+ check(qedit(L"#qchat",L"1 defend mid")&&config.quickChat[0].text=="defend mid"&&config.quickChat[0].vk==existingKey&&!config.quickChatEnabled,"editing quick chat preserves master and binding");
+ check(qedit(L"#qchat",L"9 \"quoted text\"  ")&&config.quickChat[8].text=="\"quoted text\"  ","message quotes and trailing spaces round-trip through real INI");
+ check(run(L"#quickchat",L"1")&&config.quickChatEnabled&&wht::MenuRead(config,L"Quick Chat",L"Enable",L"0")==L"1","quick chat toggle and menu agree");
+ check(qedit(L"#qchatclear",L"1")&&config.quickChat[0].text.empty()&&config.quickChat[8].text=="\"quoted text\"  "&&config.quickChat[0].vk==existingKey&&config.quickChatEnabled,"clear affects only requested text slot");
+ check(run(L"#quickchat",L"")&&!config.quickChatEnabled,"bare quick chat command toggles");
+ const auto qWrites=writes,qReloads=reloads;
+ for(auto args:{L"0 text",L"10 text",L"-1 text",L"1",L"1 ",L"1 hello\nworld"})check(!qedit(L"#qchat",args),"invalid quick chat editing is refused");
+ check(!qedit(L"#qchat",L"1 "+std::wstring(129,L'a'))&&!qedit(L"#qchat",std::wstring(L"1 a\0b",5)),"oversize and NUL messages cannot save");
+ for(auto args:{L"0",L"10",L"1 extra",L"1\n"})check(!qedit(L"#qchatclear",args),"quick chat clear refuses bad slot or extra arguments");
+ check(!wht::ApplyQuickChatSetting131(L"#qchat",L"2 test",[](const wchar_t*,const wchar_t*,const std::wstring&){return false;},reload)&&writes==qWrites&&reloads==qReloads,"failed or invalid quick chat edits never reload settings");
+ wht::QuickChatSetting131 unicodeQuick;
+ check(wht::ParseQuickChatSetting131(L"#qchat",L"2 Ti\u1ebfng Vi\u1ec7t",unicodeQuick)&&unicodeQuick.text==L"Ti\u1ebfng Vi\u1ec7t","quick chat parser preserves Vietnamese text");
+ check(!wht::ParseQuickChatSetting131(L"#qchat",L"2 "+std::wstring(65,L'\u00e9'),unicodeQuick),"quick chat limit counts UTF-8 bytes");
+
+ const auto chat9Text=config.quickChat[8].text;const auto chatMaster=config.quickChatEnabled;
+ check(qedit(L"#qchatkey",L"1 F2")&&config.quickChat[0].vk==VK_F2&&wht::MenuRead(config,L"Quick Chat",L"QuickChatHotkey1",L"-1")==L"769","F2 binding persists the engine code, not the Windows virtual key");
+ check(qedit(L"#qchatkey",L"9 a")&&config.quickChat[8].vk=='A'&&config.quickChat[8].text==chat9Text&&config.quickChatEnabled==chatMaster&&config.quickChat[0].vk==VK_F2,"binding changes preserve text, master and other slots");
+ check(qedit(L"#qchatkey",L"2 NUMPAD7")&&config.quickChat[1].vk==VK_NUMPAD7,"numpad binding maps through existing engine translation");
+ check(qedit(L"#qchatkey",L"1 none")&&!config.quickChat[0].vk&&config.quickChat[8].vk=='A',"unbinding clears only requested shortcut");
+ int engineKey=0;for(unsigned i=1;i<=12;++i)check(wht::QuickChatKey131(L"F"+std::to_wstring(i),engineKey)&&wht::EngineKeyToVirtualKey(engineKey)==VK_F1+i-1,"all supported function keys round-trip");
+ check(wht::QuickChatKey131(L"SPACE",engineKey)&&wht::EngineKeyToVirtualKey(engineKey)==VK_SPACE&&wht::QuickChatKey131(L"TAB",engineKey)&&wht::EngineKeyToVirtualKey(engineKey)==VK_TAB,"named key mapping");
+ const auto keyWrites=writes,keyReloads=reloads;
+ for(auto args:{L"0 F2",L"10 F2",L"1",L"1 F13",L"1 ESC",L"1 ENTER",L"1 CTRL",L"1 NUMPAD10",L"1 F2 extra",L"1 F2\n"})check(!qedit(L"#qchatkey",args),"unsupported keys and malformed bindings cannot save");
+ check(!qedit(L"#qchatkey",std::wstring(L"1 F2\0x",6))&&!wht::ApplyQuickChatSetting131(L"#qchatkey",L"1 F2",[](const wchar_t*,const wchar_t*,const std::wstring&){return false;},reload)&&writes==keyWrites&&reloads==keyReloads,"NUL or failed key save never publishes settings");
+
+ check(config.workerCorePreference,"worker preference default matches both reference versions");
+ check(!config.externalHud,"external HUD defaults off");
+ check(run(L"#externalhud",L"1")&&config.externalHud&&wht::MenuRead(config,L"Performance",L"External HUD",L"0")==L"1","external HUD saves reference INI setting");
+ check(run(L"#externalhud",L"")&&!config.externalHud&&run(L"#externalhud",L"0")&&!config.externalHud,"external HUD toggle and disable persist");
+ const auto hudWrites=writes,hudReloads=reloads;
+ for(auto args:{L"2",L"1 extra",L"1\n"})check(!run(L"#externalhud",args),"invalid external HUD settings rejected");
+ check(!wht::ApplyViewCommand131(*wht::ViewCommandFor131(L"#externalhud"),L"1",config,[](const wchar_t*,const wchar_t*,const wchar_t*){return false;},reload)&&writes==hudWrites&&reloads==hudReloads&&!config.externalHud,"failed external HUD save never enables helper");
+ check(run(L"#workercores",L"0")&&!config.workerCorePreference&&wht::MenuRead(config,L"Performance",L"Worker Core Preference",L"1")==L"0","worker cores persists exact reference configuration key");
+ check(run(L"#workercores",L"")&&config.workerCorePreference&&run(L"#workercores",L"1")&&config.workerCorePreference,"bare and explicit worker-core enable semantics match reference");
+ const auto workerWrites=writes,workerReloads=reloads;
+ for(auto args:{L"2",L"on",L"-1",L"1 extra",L"1\n"})check(!run(L"#workercores",args),"worker-core malformed command refused");
+ check(!wht::ApplyViewCommand131(*wht::ViewCommandFor131(L"#workercores"),std::wstring(L"1\0x",3),config,save,reload),"worker cores refuses NUL");
+ check(!wht::ApplyViewCommand131(*wht::ViewCommandFor131(L"#workercores"),L"0",config,[](const wchar_t*,const wchar_t*,const wchar_t*){return false;},reload)&&writes==workerWrites&&reloads==workerReloads&&config.workerCorePreference,"failed worker preference save does not publish config");
  check(run(L"#hn",L"0")&&!config.showNotiKickBan&&run(L"#hn",L"")&&config.showNotiKickBan,"moderation notification command persists and toggles the canonical preference");
  check(run(L"#timer",L"0")&&!config.showTimer&&wht::MenuRead(config,L"Event",L"Show Timer",L"1")==L"0","timer command persisted and menu agrees");
  check(run(L"#showtimer",L"")&&config.showTimer,"timer alias shares setting and bare command toggles");

@@ -1,0 +1,317 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file WHT-1.31\analysis\focus-pan-12164-x86.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00CBBAC0: push        ebx
+  00CBBAC1: mov         ebx,esp
+  00CBBAC3: sub         esp,8
+  00CBBAC6: and         esp,0FFFFFFF8h
+  00CBBAC9: add         esp,4
+  00CBBACC: push        ebp
+  00CBBACD: mov         ebp,dword ptr [ebx+4]
+  00CBBAD0: mov         dword ptr [esp+4],ebp
+  00CBBAD4: mov         ebp,esp
+  00CBBAD6: push        0FFFFFFFFh
+  00CBBAD8: push        17D6B90h
+  00CBBADD: mov         eax,dword ptr fs:[00000000h]
+  00CBBAE3: push        eax
+  00CBBAE4: push        ebx
+  00CBBAE5: sub         esp,40h
+  00CBBAE8: push        esi
+  00CBBAE9: push        edi
+  00CBBAEA: mov         eax,dword ptr ds:[01C98574h]
+  00CBBAEF: xor         eax,ebp
+  00CBBAF1: push        eax
+  00CBBAF2: lea         eax,[ebp-0Ch]
+  00CBBAF5: mov         dword ptr fs:[00000000h],eax
+  00CBBAFB: mov         edi,ecx
+  00CBBAFD: mov         ecx,dword ptr [edi+50h]
+  00CBBB00: test        ecx,ecx
+  00CBBB02: je          00CBBB55
+  00CBBB04: call        0053ADF0
+  00CBBB09: test        al,al
+  00CBBB0B: je          00CBBB55
+  00CBBB0D: mov         ecx,dword ptr [edi+50h]
+  00CBBB10: mov         eax,dword ptr [ecx+00000168h]
+  00CBBB16: shr         eax,8
+  00CBBB19: not         al
+  00CBBB1B: test        al,1
+  00CBBB1D: je          00CBBB55
+  00CBBB1F: test        ecx,ecx
+  00CBBB21: je          00CBBB34
+  00CBBB23: add         dword ptr [ecx+4],0FFFFFFFFh
+  00CBBB27: jne         00CBBB2D
+  00CBBB29: mov         eax,dword ptr [ecx]
+  00CBBB2B: call        dword ptr [eax]
+  00CBBB2D: mov         dword ptr [edi+50h],0
+  00CBBB34: xorps       xmm1,xmm1
+  00CBBB37: mov         dword ptr [ebp-38h],0
+  00CBBB3E: mov         eax,dword ptr [ebp-38h]
+  00CBBB41: xorps       xmm0,xmm0
+  00CBBB44: unpcklps    xmm0,xmm1
+  00CBBB47: movq        mmword ptr [edi+58h],xmm0
+  00CBBB4C: mov         dword ptr [edi+60h],eax
+  00CBBB4F: mov         word ptr [edi+54h],0
+  00CBBB55: cmp         dword ptr [edi+44h],0
+  00CBBB59: je          00CBBB9E
+  00CBBB5B: mov         eax,dword ptr [edi+40h]
+  00CBBB5E: mov         dword ptr [edi+44h],0
+  00CBBB65: test        eax,eax
+  00CBBB67: je          00CBBB77
+  00CBBB69: cmp         eax,dword ptr [edi+4Ch]
+  00CBBB6C: je          00CBBB77
+  00CBBB6E: push        eax
+  00CBBB6F: call        004A4B70
+  00CBBB74: add         esp,4
+  00CBBB77: mov         eax,dword ptr [edi+4Ch]
+  00CBBB7A: mov         ecx,edi
+  00CBBB7C: mov         dword ptr [edi+40h],eax
+  00CBBB7F: call        00CBEFE0
+  00CBBB84: push        0
+  00CBBB86: push        1
+  00CBBB88: call        00CCA860
+  00CBBB8D: add         esp,8
+  00CBBB90: mov         ecx,dword ptr [eax+00000404h]
+  00CBBB96: push        dword ptr [edi+40h]
+  00CBBB99: call        00FE0520
+  00CBBB9E: movss       xmm0,dword ptr ds:[019F3A1Ch]
+  00CBBBA6: lea         eax,[ebp-40h]
+  00CBBBA9: minss       xmm0,dword ptr ds:[018F18B0h]
+  00CBBBB1: push        eax
+  00CBBBB2: lea         eax,[ebp-4Ch]
+  00CBBBB5: mov         dword ptr [ebp-38h],0
+  00CBBBBC: push        eax
+  00CBBBBD: mov         ecx,edi
+  00CBBBBF: movss       dword ptr [ebp-1Ch],xmm0
+  00CBBBC4: movss       xmm0,dword ptr [ebx+8]
+  00CBBBC9: movss       dword ptr [ebp-40h],xmm0
+  00CBBBCE: movss       xmm0,dword ptr [ebx+0Ch]
+  00CBBBD3: movss       dword ptr [ebp-3Ch],xmm0
+  00CBBBD8: call        00CB8430
+  00CBBBDD: mov         ecx,edi
+  00CBBBDF: call        00CBFDB0
+  00CBBBE4: lea         eax,[ebp-4Ch]
+  00CBBBE7: lea         esi,[edi+00000258h]
+  00CBBBED: push        eax
+  00CBBBEE: mov         ecx,esi
+  00CBBBF0: call        00F3B990
+  00CBBBF5: movss       xmm0,dword ptr [ebx+0Ch]
+  00CBBBFA: movss       xmm2,dword ptr [ebx+8]
+  00CBBBFF: subss       xmm0,dword ptr [eax+4]
+  00CBBC04: subss       xmm2,dword ptr [eax]
+  00CBBC08: movaps      xmm1,xmm0
+  00CBBC0B: movss       dword ptr [ebp-18h],xmm0
+  00CBBC10: mulss       xmm1,xmm0
+  00CBBC14: movaps      xmm0,xmm2
+  00CBBC17: mulss       xmm0,xmm2
+  00CBBC1B: movss       dword ptr [ebp-14h],xmm2
+  00CBBC20: addss       xmm1,xmm0
+  00CBBC24: cvtps2pd    xmm0,xmm1
+  00CBBC27: call        0167E240
+  00CBBC2C: xorps       xmm2,xmm2
+  00CBBC2F: cvtsd2ss    xmm2,xmm0
+  00CBBC33: movaps      xmm0,xmm2
+  00CBBC36: subss       xmm0,dword ptr ds:[018F0718h]
+  00CBBC3E: cvtps2pd    xmm0,xmm0
+  00CBBC41: andps       xmm0,xmmword ptr ds:[0192AB60h]
+  00CBBC48: cvtpd2ps    xmm1,xmm0
+  00CBBC4C: movss       xmm0,dword ptr ds:[019E3C18h]
+  00CBBC54: comiss      xmm0,xmm1
+  00CBBC57: jbe         00CBBC90
+  00CBBC59: movss       xmm0,dword ptr [ebx+0Ch]
+  00CBBC5E: mov         ecx,esi
+  00CBBC60: movss       dword ptr [ebp-1Ch],xmm0
+  00CBBC65: mov         eax,dword ptr [ebp-1Ch]
+  00CBBC68: movss       xmm0,dword ptr [ebx+8]
+  00CBBC6D: mov         dword ptr [ebp-3Ch],eax
+  00CBBC70: mov         dword ptr [ebp-18h],0
+  00CBBC77: mov         eax,dword ptr [ebp-18h]
+  00CBBC7A: mov         dword ptr [ebp-38h],eax
+  00CBBC7D: lea         eax,[ebp-40h]
+  00CBBC80: push        eax
+  00CBBC81: movss       dword ptr [ebp-40h],xmm0
+  00CBBC86: call        00F3B8A0
+  00CBBC8B: jmp         00CBBE2C
+  00CBBC90: cmp         byte ptr [ebx+14h],0
+  00CBBC94: divss       xmm2,dword ptr [ebp-1Ch]
+  00CBBC99: movss       xmm0,dword ptr ds:[018F1140h]
+  00CBBCA1: divss       xmm0,xmm2
+  00CBBCA5: movss       xmm1,dword ptr [ebp-14h]
+  00CBBCAA: movss       xmm3,dword ptr [ebp-18h]
+  00CBBCAF: mulss       xmm1,xmm0
+  00CBBCB3: mulss       xmm3,xmm0
+  00CBBCB7: movss       dword ptr [ebp-1Ch],xmm2
+  00CBBCBC: movss       dword ptr [ebp-24h],xmm0
+  00CBBCC1: movss       dword ptr [ebp-14h],xmm1
+  00CBBCC6: movss       dword ptr [ebp-18h],xmm3
+  00CBBCCB: je          00CBBDC0
+  00CBBCD1: lea         eax,[ebp-40h]
+  00CBBCD4: mov         dword ptr [ebp-40h],0
+  00CBBCDB: push        eax
+  00CBBCDC: push        0Bh
+  00CBBCDE: push        dword ptr [edi+40h]
+  00CBBCE1: mov         dword ptr [ebp-3Ch],0
+  00CBBCE8: mov         dword ptr [ebp-38h],0
+  00CBBCEF: call        010DCCA0
+  00CBBCF4: movss       xmm0,dword ptr [ebx+10h]
+  00CBBCF9: lea         eax,[ebp-20h]
+  00CBBCFC: addss       xmm0,dword ptr ds:[018F0718h]
+  00CBBD04: add         esp,0Ch
+  00CBBD07: lea         ecx,[edi+00000284h]
+  00CBBD0D: movss       dword ptr [ebx+10h],xmm0
+  00CBBD12: movss       xmm0,dword ptr [ebp-38h]
+  00CBBD17: push        eax
+  00CBBD18: movss       dword ptr [ebp-20h],xmm0
+  00CBBD1D: call        00F386D0
+  00CBBD22: movss       xmm0,dword ptr [ebx+10h]
+  00CBBD27: lea         eax,[ebp-24h]
+  00CBBD2A: subss       xmm0,dword ptr [ebp-38h]
+  00CBBD2F: movss       xmm1,dword ptr [ebp-1Ch]
+  00CBBD34: lea         ecx,[edi+00000284h]
+  00CBBD3A: push        eax
+  00CBBD3B: lea         eax,[ebp-20h]
+  00CBBD3E: push        eax
+  00CBBD3F: mulss       xmm0,dword ptr [ebp-24h]
+  00CBBD44: lea         eax,[ebp-28h]
+  00CBBD47: push        eax
+  00CBBD48: movss       dword ptr [ebp-24h],xmm1
+  00CBBD4D: movss       dword ptr [ebp-20h],xmm0
+  00CBBD52: call        00F38630
+  00CBBD57: mov         esi,eax
+  00CBBD59: mov         ecx,dword ptr [esi]
+  00CBBD5B: mov         dword ptr [ebp-4],0
+  00CBBD62: test        ecx,ecx
+  00CBBD64: je          00CBBD69
+  00CBBD66: inc         dword ptr [ecx+4]
+  00CBBD69: mov         ecx,dword ptr [edi+00000294h]
+  00CBBD6F: test        ecx,ecx
+  00CBBD71: je          00CBBD7D
+  00CBBD73: add         dword ptr [ecx+4],0FFFFFFFFh
+  00CBBD77: jne         00CBBD7D
+  00CBBD79: mov         eax,dword ptr [ecx]
+  00CBBD7B: call        dword ptr [eax]
+  00CBBD7D: mov         eax,dword ptr [esi]
+  00CBBD7F: mov         dword ptr [edi+00000294h],eax
+  00CBBD85: mov         ecx,dword ptr [ebp-28h]
+  00CBBD88: mov         dword ptr [ebp-4],1
+  00CBBD8F: test        ecx,ecx
+  00CBBD91: je          00CBBD9D
+  00CBBD93: add         dword ptr [ecx+4],0FFFFFFFFh
+  00CBBD97: jne         00CBBD9D
+  00CBBD99: mov         eax,dword ptr [ecx]
+  00CBBD9B: call        dword ptr [eax]
+  00CBBD9D: movss       xmm2,dword ptr [ebp-1Ch]
+  00CBBDA2: lea         esi,[edi+00000258h]
+  00CBBDA8: movss       xmm1,dword ptr [ebp-14h]
+  00CBBDAD: movss       xmm3,dword ptr [ebp-18h]
+  00CBBDB2: mov         dword ptr [ebp-4],0FFFFFFFFh
+  00CBBDB9: mov         byte ptr [edi+00000281h],1
+  00CBBDC0: lea         eax,[ebp-14h]
+  00CBBDC3: movss       dword ptr [ebp-14h],xmm2
+  00CBBDC8: push        eax
+  00CBBDC9: lea         eax,[ebp-2Ch]
+  00CBBDCC: movss       dword ptr [ebp-2Ch],xmm3
+  00CBBDD1: push        eax
+  00CBBDD2: lea         eax,[ebp-30h]
+  00CBBDD5: movss       dword ptr [ebp-30h],xmm1
+  00CBBDDA: push        eax
+  00CBBDDB: lea         eax,[ebp-34h]
+  00CBBDDE: mov         ecx,esi
+  00CBBDE0: push        eax
+  00CBBDE1: call        00F3E200
+  00CBBDE6: mov         esi,eax
+  00CBBDE8: mov         ecx,dword ptr [esi]
+  00CBBDEA: mov         dword ptr [ebp-4],2
+  00CBBDF1: test        ecx,ecx
+  00CBBDF3: je          00CBBDF8
+  00CBBDF5: inc         dword ptr [ecx+4]
+  00CBBDF8: mov         ecx,dword ptr [edi+00000504h]
+  00CBBDFE: test        ecx,ecx
+  00CBBE00: je          00CBBE0C
+  00CBBE02: add         dword ptr [ecx+4],0FFFFFFFFh
+  00CBBE06: jne         00CBBE0C
+  00CBBE08: mov         eax,dword ptr [ecx]
+  00CBBE0A: call        dword ptr [eax]
+  00CBBE0C: mov         eax,dword ptr [esi]
+  00CBBE0E: mov         dword ptr [edi+00000504h],eax
+  00CBBE14: mov         ecx,dword ptr [ebp-34h]
+  00CBBE17: mov         dword ptr [ebp-4],3
+  00CBBE1E: test        ecx,ecx
+  00CBBE20: je          00CBBE2C
+  00CBBE22: add         dword ptr [ecx+4],0FFFFFFFFh
+  00CBBE26: jne         00CBBE2C
+  00CBBE28: mov         eax,dword ptr [ecx]
+  00CBBE2A: call        dword ptr [eax]
+  00CBBE2C: mov         ecx,dword ptr [ebp-0Ch]
+  00CBBE2F: mov         dword ptr fs:[00000000h],ecx
+  00CBBE36: pop         ecx
+  00CBBE37: pop         edi
+  00CBBE38: pop         esi
+  00CBBE39: mov         esp,ebp
+  00CBBE3B: pop         ebp
+  00CBBE3C: mov         esp,ebx
+  00CBBE3E: pop         ebx
+  00CBBE3F: ret         10h
+  00CBBE42: int         3
+  00CBBE43: int         3
+  00CBBE44: int         3
+  00CBBE45: int         3
+  00CBBE46: int         3
+  00CBBE47: int         3
+  00CBBE48: int         3
+  00CBBE49: int         3
+  00CBBE4A: int         3
+  00CBBE4B: int         3
+  00CBBE4C: int         3
+  00CBBE4D: int         3
+  00CBBE4E: int         3
+  00CBBE4F: int         3
+  00CBBE50: push        ebx
+  00CBBE51: mov         ebx,esp
+  00CBBE53: sub         esp,8
+  00CBBE56: and         esp,0FFFFFFF8h
+  00CBBE59: add         esp,4
+  00CBBE5C: push        ebp
+  00CBBE5D: mov         ebp,dword ptr [ebx+4]
+  00CBBE60: mov         dword ptr [esp+4],ebp
+  00CBBE64: mov         ebp,esp
+  00CBBE66: push        0FFFFFFFFh
+  00CBBE68: push        17D6BC0h
+  00CBBE6D: mov         eax,dword ptr fs:[00000000h]
+  00CBBE73: push        eax
+  00CBBE74: push        ebx
+  00CBBE75: sub         esp,38h
+  00CBBE78: push        esi
+  00CBBE79: push        edi
+  00CBBE7A: mov         eax,dword ptr ds:[01C98574h]
+  00CBBE7F: xor         eax,ebp
+  00CBBE81: push        eax
+  00CBBE82: lea         eax,[ebp-0Ch]
+  00CBBE85: mov         dword ptr fs:[00000000h],eax
+  00CBBE8B: mov         edi,ecx
+  00CBBE8D: mov         ecx,dword ptr [edi+50h]
+  00CBBE90: test        ecx,ecx
+  00CBBE92: je          00CBBEA5
+  00CBBE94: add         dword ptr [ecx+4],0FFFFFFFFh
+  00CBBE98: jne         00CBBE9E
+  00CBBE9A: mov         eax,dword ptr [ecx]
+  00CBBE9C: call        dword ptr [eax]
+  00CBBE9E: mov         dword ptr [edi+50h],0
+  00CBBEA5: cmp         dword ptr [edi+44h],0
+  00CBBEA9: xorps       xmm1,xmm1
+  00CBBEAC: xorps       xmm0,xmm0
+  00CBBEAF: mov         dword ptr [ebp-3Ch],0
+  00CBBEB6: mov         eax,dword ptr [ebp-3Ch]
+  00CBBEB9: unpcklps    xmm0,xmm1
+  00CBBEBC: 66
+  00CBBEBD: 0F
+  00CBBEBE: D6
+  00CBBEBF: inc         edi
+
+  Summary
+
+        1000 .text

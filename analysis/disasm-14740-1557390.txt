@@ -1,0 +1,74 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-1557390.exe
+
+File Type: EXECUTABLE IMAGE
+
+  01727390: enter       0AAE8h,32h
+  01727394: FE
+  01727395: push        edi
+  01727397: ret         1E52h
+  0172739A: scas        byte ptr es:[edi]
+  0172739B: aas
+  0172739C: jno         017273C9
+  0172739E: mov         bl,0CEh
+  017273A1: call        0173E189
+  017273A6: sub         ch,0CCh
+  017273A9: neg         cl
+  017273AB: call        017407F5
+  017273B0: add         ecx,44h
+  017273B3: mov         bh,0AEh
+  017273B6: push        ebp
+  017273B7: mov         ch,0E6h
+  017273BA: call        01727E9B
+  017273BF: call        01729E04
+  017273C4: add         byte ptr [ebp+edi*4+1068EC36h],7Ch
+  017273CC: scas        dword ptr es:[edi]
+  017273CD: add         dword ptr [eax-4Ch],ebp
+  017273D0: loope       01727381
+  017273D2: add         dword ptr [eax-50h],ebp
+  017273D5: hlt
+  017273D6: jb          017273D9
+  017273D8: call        008B46F0
+  017273DD: mov         ecx,eax
+  017273DF: call        0170A640
+  017273E4: stc
+  017273E5: xchg        bh,bh
+  017273E7: jbe         0172741B
+  017273E9: add         ebp,13h
+  017273EC: push        eax
+  017273ED: sub         edi,4A45BF17h
+  017273F3: add         edx,0Eh
+  017273F6: add         dl,0FEh
+  017273F9: push        ebx
+  017273FA: neg         bh
+  017273FC: rdtsc
+  017273FE: push        0FFFFFF98h
+  01727400: sub         edi,75D22B4Ah
+  01727406: rdtsc
+  01727408: jge         0172AEBD
+  0172740E: jbe         0173C8FF
+  01727414: add         eax,0B1EE46E3h
+  0172741A: mov         dword ptr ds:[AF7D6C68h],eax
+  0172741F: add         dword ptr [eax-3Ch],ebp
+  01727422: loope       017273D3
+  01727424: add         dword ptr [eax-50h],ebp
+  01727427: hlt
+  01727428: jb          0172742B
+  0172742A: call        008B46F0
+  0172742F: mov         ecx,eax
+  01727431: call        0170A640
+  01727436: clc
+  01727437: mov         dl,dl
+  01727439: jae         01727486
+  0172743B: mov         edi,277ACDD7h
+  01727441: add         ebp,0A0150F84h
+  01727447: jl          01727424
+  01727449: jp          0173D812
+  0172744F: pop         edx
+
+  Summary
+
+        1000 .text

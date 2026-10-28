@@ -1,0 +1,48 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  },
+  "scope": "Both #mh create a local-player visible(4) fog modifier over GetWorldBounds with shared vision true, afterShared false; Start to enable, Stop and Destroy to disable.",
+  "rtti_tables": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "table": "0x18081fc"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "table": "0x17bd22c"
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "table": "0x1bc8708"
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "table": "0x1bf76e8"
+    }
+  ],
+  "runtime_source_changed": false,
+  "pending": "Verify native allocation/handle/reference ownership, world bounds and cleanup ABI for all four profiles before enabling #mh.",
+  "live_12164_x64": {
+    "pid": 1416,
+    "bindings": {
+      "GetWorldBounds": "0x9fa950",
+      "CreateFogModifierRect": "0x9e3680",
+      "FogModifierStart": "0x9ea800",
+      "FogModifierStop": "0x9ea820",
+      "DestroyFogModifier": "0x9e63a0"
+    },
+    "read_only": true,
+    "native_invoked": false,
+    "reference_files": [
+      "fog-modifier-live-1416.json",
+      "fog-modifier-live-name-refs.json",
+      "fog-modifier-workers.log"
+    ]
+  }
+}

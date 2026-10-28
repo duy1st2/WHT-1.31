@@ -1,0 +1,91 @@
+{
+  "runtime_enabled": false,
+  "native_backend_implemented": false,
+  "lifecycle_tests": {
+    "x86": {
+      "passed": 43,
+      "total": 43
+    },
+    "x64": {
+      "passed": 42,
+      "total": 42
+    }
+  },
+  "references_unchanged": true,
+  "program_artifacts": [
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT.mix",
+      "same": true
+    },
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT131Launcher.exe",
+      "same": true
+    },
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT.ExternalHud.exe",
+      "same": true
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "same": true
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT131Launcher.exe",
+      "same": true
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.ExternalHud.exe",
+      "same": true
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT.mix",
+      "same": true
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT131Launcher.exe",
+      "same": true
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT.ExternalHud.exe",
+      "same": true
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "same": true
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT131Launcher.exe",
+      "same": true
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT.ExternalHud.exe",
+      "same": true
+    }
+  ],
+  "live_game_calls_made": false,
+  "pending": "12164/12173 x86 bindings and validated native handle backend integration"
+}

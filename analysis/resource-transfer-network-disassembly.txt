@@ -1,0 +1,82 @@
+32 12164 constructor a80a7d length18 writeraa1b30 length49
+aa1b30 push ebp
+aa1b31 mov ebp, esp
+aa1b33 push esi
+aa1b34 mov esi, dword ptr [ebp + 0xc]
+aa1b37 push edi
+aa1b38 mov edi, dword ptr [ebp + 8]
+aa1b3b mov ecx, edi
+aa1b3d movzx eax, byte ptr [esi + 0x18]
+aa1b41 push eax
+aa1b42 call 0x2c2440
+aa1b47 push dword ptr [esi + 0x1c]
+aa1b4a mov ecx, edi
+aa1b4c call 0x2c25c0
+aa1b51 push dword ptr [esi + 0x20]
+aa1b54 mov ecx, edi
+aa1b56 call 0x2c25c0
+aa1b5b mov eax, edi
+aa1b5d pop edi
+aa1b5e pop esi
+aa1b5f pop ebp
+aa1b60 ret 
+32 12173 constructor a4120d length18 writera60af0 length49
+a60af0 push ebp
+a60af1 mov ebp, esp
+a60af3 push esi
+a60af4 mov esi, dword ptr [ebp + 0xc]
+a60af7 push edi
+a60af8 mov edi, dword ptr [ebp + 8]
+a60afb mov ecx, edi
+a60afd movzx eax, byte ptr [esi + 0x18]
+a60b01 push eax
+a60b02 call 0x2ac270
+a60b07 push dword ptr [esi + 0x1c]
+a60b0a mov ecx, edi
+a60b0c call 0x2ac3f0
+a60b11 push dword ptr [esi + 0x20]
+a60b14 mov ecx, edi
+a60b16 call 0x2ac3f0
+a60b1b mov eax, edi
+a60b1d pop edi
+a60b1e pop esi
+a60b1f pop ebp
+a60b20 ret 
+64 12164 constructor bb5380 length17 writerbd9650 length61
+bd9650 mov qword ptr [rsp + 8], rbx
+bd9655 push rdi
+bd9656 sub rsp, 0x20
+bd965a mov rbx, rdx
+bd965d mov rdi, rcx
+bd9660 movzx edx, byte ptr [rdx + 0x30]
+bd9664 call 0x318490
+bd9669 mov edx, dword ptr [rbx + 0x34]
+bd966c mov rcx, rdi
+bd966f call 0x3186d0
+bd9674 mov edx, dword ptr [rbx + 0x38]
+bd9677 mov rcx, rdi
+bd967a call 0x3186d0
+bd967f mov rbx, qword ptr [rsp + 0x30]
+bd9684 mov rax, rdi
+bd9687 add rsp, 0x20
+bd968b pop rdi
+bd968c ret 
+64 12173 constructor bfd350 length17 writerc20120 length61
+c20120 mov qword ptr [rsp + 8], rbx
+c20125 push rdi
+c20126 sub rsp, 0x20
+c2012a mov rbx, rdx
+c2012d mov rdi, rcx
+c20130 movzx edx, byte ptr [rdx + 0x30]
+c20134 call 0x385f10
+c20139 mov edx, dword ptr [rbx + 0x34]
+c2013c mov rcx, rdi
+c2013f call 0x386150
+c20144 mov edx, dword ptr [rbx + 0x38]
+c20147 mov rcx, rdi
+c2014a call 0x386150
+c2014f mov rbx, qword ptr [rsp + 0x30]
+c20154 mov rax, rdi
+c20157 add rsp, 0x20
+c2015b pop rdi
+c2015c ret 

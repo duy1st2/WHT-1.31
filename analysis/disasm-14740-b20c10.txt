@@ -1,0 +1,87 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-b20c10.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00CF0C10: push        ebp
+  00CF0C11: mov         ebp,esp
+  00CF0C13: sub         esp,2Ch
+  00CF0C16: push        dword ptr [ebp+14h]
+  00CF0C19: movss       xmm0,dword ptr [ebp+0Ch]
+  00CF0C1E: lea         eax,[ebp-2Ch]
+  00CF0C21: push        1
+  00CF0C23: push        eax
+  00CF0C24: sub         esp,8
+  00CF0C27: mov         dword ptr [ebp-28h],0
+  00CF0C2E: mov         dword ptr [ebp-24h],0
+  00CF0C35: mov         dword ptr [ebp-20h],0
+  00CF0C3C: mov         dword ptr [ebp-1Ch],0
+  00CF0C43: movss       dword ptr [esp+4],xmm0
+  00CF0C49: movss       xmm0,dword ptr [ebp+8]
+  00CF0C4E: mov         dword ptr [ebp-18h],0
+  00CF0C55: mov         dword ptr [ebp-14h],0
+  00CF0C5C: mov         dword ptr [ebp-8],0
+  00CF0C63: mov         dword ptr [ebp-4],0
+  00CF0C6A: mov         dword ptr [ebp-2Ch],2
+  00CF0C71: movss       dword ptr [esp],xmm0
+  00CF0C76: call        00CF2AC0
+  00CF0C7B: test        eax,eax
+  00CF0C7D: jne         00CF0C87
+  00CF0C7F: xor         al,al
+  00CF0C81: mov         esp,ebp
+  00CF0C83: pop         ebp
+  00CF0C84: ret         10h
+  00CF0C87: mov         ecx,dword ptr [ebp+10h]
+  00CF0C8A: movq        xmm0,mmword ptr [ebp-1Ch]
+  00CF0C8F: mov         eax,dword ptr [ebp-14h]
+  00CF0C92: movq        mmword ptr [ecx],xmm0
+  00CF0C96: mov         dword ptr [ecx+8],eax
+  00CF0C99: mov         al,1
+  00CF0C9B: mov         esp,ebp
+  00CF0C9D: pop         ebp
+  00CF0C9E: ret         10h
+  00CF0CA1: int         3
+  00CF0CA2: int         3
+  00CF0CA3: int         3
+  00CF0CA4: int         3
+  00CF0CA5: int         3
+  00CF0CA6: int         3
+  00CF0CA7: int         3
+  00CF0CA8: int         3
+  00CF0CA9: int         3
+  00CF0CAA: int         3
+  00CF0CAB: int         3
+  00CF0CAC: int         3
+  00CF0CAD: int         3
+  00CF0CAE: int         3
+  00CF0CAF: int         3
+  00CF0CB0: push        ebp
+  00CF0CB1: mov         ebp,esp
+  00CF0CB3: push        esi
+  00CF0CB4: mov         esi,dword ptr [ebp+0Ch]
+  00CF0CB7: push        1
+  00CF0CB9: push        1
+  00CF0CBB: lea         ecx,[esi+000006A4h]
+  00CF0CC1: call        00CF8550
+  00CF0CC6: mov         edx,dword ptr [esi+000006A4h]
+  00CF0CCC: mov         ecx,dword ptr [esi+000006A8h]
+  00CF0CD2: lea         eax,[edx+1]
+  00CF0CD5: mov         dword ptr [esi+000006A4h],eax
+  00CF0CDB: mov         eax,dword ptr [ebp+8]
+  00CF0CDE: mov         dword ptr [ecx+edx*4],eax
+  00CF0CE1: mov         al,1
+  00CF0CE3: pop         esi
+  00CF0CE4: pop         ebp
+  00CF0CE5: ret
+  00CF0CE6: retf
+  00CF0CE7: jecxz       00CF0D1D
+  00CF0CE9: int         3
+  00CF0CEA: cmp         eax,0D4423796h
+  00CF0CEF: pop         edi
+
+  Summary
+
+        1000 .text

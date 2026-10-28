@@ -1,0 +1,53 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-b17220.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00CE7220: push        ebp
+  00CE7221: mov         ebp,esp
+  00CE7223: push        0
+  00CE7225: push        0
+  00CE7227: call        00CCA860
+  00CE722C: add         esp,8
+  00CE722F: test        eax,eax
+  00CE7231: je          00CE7246
+  00CE7233: cmp         dword ptr [eax+00000130h],1
+  00CE723A: je          00CE7246
+  00CE723C: push        dword ptr [ebp+8]
+  00CE723F: mov         ecx,eax
+  00CE7241: call        00CD70B0
+  00CE7246: pop         ebp
+  00CE7247: ret
+  00CE7248: pop         ss
+  00CE7249: mov         edi,0EFF41B23h
+  00CE724E: in          al,0C3h
+  00CE7250: push        ebp
+  00CE7251: mov         ebp,esp
+  00CE7253: push        0
+  00CE7255: push        0
+  00CE7257: call        00CCA860
+  00CE725C: add         esp,8
+  00CE725F: test        eax,eax
+  00CE7261: je          00CE7276
+  00CE7263: cmp         dword ptr [eax+00000130h],1
+  00CE726A: je          00CE7276
+  00CE726C: push        dword ptr [ebp+8]
+  00CE726F: mov         ecx,eax
+  00CE7271: call        00CD70D0
+  00CE7276: pop         ebp
+  00CE7277: ret
+  00CE7278: in          eax,2Fh
+  00CE727A: sti
+  00CE727B: pop         edx
+  00CE727C: shr         byte ptr [ebx*2+EC8B55BAh],6Ah
+  00CE7284: add         byte ptr [edx],ch
+  00CE7287: call        00CCA860
+  00CE728C: add         esp,8
+  00CE728F: 85
+
+  Summary
+
+        1000 .text

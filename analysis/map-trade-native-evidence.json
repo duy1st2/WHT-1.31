@@ -1,0 +1,96 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  },
+  "profiles": [
+    {
+      "pid": 8740,
+      "bits": 32,
+      "build": 12164,
+      "setup_offset": 156,
+      "flags_offset": 56,
+      "setup_table": 25193324,
+      "blocks": [
+        [
+          9548810,
+          51
+        ],
+        [
+          9337814,
+          20
+        ],
+        [
+          28225164,
+          20
+        ]
+      ]
+    },
+    {
+      "pid": 32116,
+      "bits": 32,
+      "build": 12173,
+      "setup_offset": 220,
+      "flags_offset": 56,
+      "setup_table": 24886172,
+      "blocks": [
+        [
+          9341590,
+          51
+        ],
+        [
+          9134402,
+          20
+        ],
+        [
+          27930252,
+          20
+        ]
+      ]
+    },
+    {
+      "pid": 24984,
+      "bits": 64,
+      "build": 12164,
+      "setup_offset": 232,
+      "flags_offset": 96,
+      "setup_table": 29047744,
+      "blocks": [
+        [
+          10691264,
+          49
+        ],
+        [
+          10477319,
+          18
+        ],
+        [
+          34614664,
+          20
+        ]
+      ]
+    },
+    {
+      "pid": 27336,
+      "bits": 64,
+      "build": 12173,
+      "setup_offset": 208,
+      "flags_offset": 96,
+      "setup_table": 29240216,
+      "blocks": [
+        [
+          11002133,
+          49
+        ],
+        [
+          10785068,
+          18
+        ],
+        [
+          34798984,
+          20
+        ]
+      ]
+    }
+  ]
+}

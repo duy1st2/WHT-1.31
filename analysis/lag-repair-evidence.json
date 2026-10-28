@@ -1,0 +1,14 @@
+{
+  "files_before": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\stat_paint131.hpp": "53d0481cef6cc54a4ee26818d5418813530171959c04e7a6e7f4281f0b9b115c",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\ui_perf131.hpp": "5f13160cf36c842e7365c93404345f5bc6313df733ba9e49cf40dbad8d2faa97",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\version131.cpp": "791724a361f2fb9cb99e32efca3a640336c9139dd97de00085947302c8d79877",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\version64.cpp": "a465b5180b7aa5477d0e531c4a374c3442ccc8ae0508d588b95271e81ba0a19c",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\graphics_diagnostic131.hpp": "7eec81f96d20449fe1d3f3db54da2aae54d3579dee4a6959d26df9507ce784dc",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\tests\\graphics-repair131-contracts.hpp": "34425f2419218954b8caf3f0a30a78c69b4cf3982fa40f4ef4c15a95f5ae6ed1",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\README.md": "2d190b27ab2825ac96adaef8c317e4f401bab9a5ccf7de6623496226b43af1a8"
+  },
+  "backup": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\analysis\\before-lag-repair-20261028-211959",
+  "evidence_log": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log",
+  "evidence": "20:49:45-20:51:35 shows rising bar show/bind counters, but no timing of PresentBar. NotifyStatPresentation131 dispatches full presentation from all three native callbacks. Existing GetTickCount64 durations quantized to about 15/16 ms; prior timing stops after 12 reports. No game process present at inspection; actual FPS/ping cause remains unconfirmed."
+}

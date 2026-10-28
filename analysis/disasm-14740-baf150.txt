@@ -1,0 +1,45 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-baf150.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D7F150: push        ebp
+  00D7F151: mov         ebp,esp
+  00D7F153: push        esi
+  00D7F154: mov         esi,dword ptr [ebp+8]
+  00D7F157: cmp         esi,414E6275h
+  00D7F15D: jg          00D7F1A3
+  00D7F15F: je          00D7F1BD
+  00D7F161: cmp         esi,41486275h
+  00D7F167: jg          00D7F17D
+  00D7F169: je          00D7F1BD
+  00D7F16B: cmp         esi,41456275h
+  00D7F171: je          00D7F1BD
+  00D7F173: cmp         esi,41476275h
+  00D7F179: je          00D7F1BD
+  00D7F17B: jmp         00D7F1DF
+  00D7F17D: cmp         esi,41486572h
+  00D7F183: je          00D7F198
+  00D7F185: cmp         esi,41496E76h
+  00D7F18B: jne         00D7F1DF
+  00D7F18D: mov         eax,dword ptr [ecx+0000044Ch]
+  00D7F193: pop         esi
+  00D7F194: pop         ebp
+  00D7F195: ret         18h
+  00D7F198: mov         eax,dword ptr [ecx+00000450h]
+  00D7F19E: pop         esi
+  00D7F19F: pop         ebp
+  00D7F1A0: ret         18h
+  00D7F1A3: cmp         esi,4161746Bh
+  00D7F1A9: jg          00D7F1D3
+  00D7F1AB: je          00D7F1C8
+  00D7F1AD: 81
+  00D7F1AE: FE
+  00D7F1AF: 75
+
+  Summary
+
+        1000 .text

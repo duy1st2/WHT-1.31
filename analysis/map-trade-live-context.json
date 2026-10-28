@@ -1,0 +1,11 @@
+{
+  "pid": 6548,
+  "base": "0x7ff774360000",
+  "read_only": true,
+  "world": "0x26d95c71008",
+  "world_table": "0x1bb3d30",
+  "config": "0x26d94965108",
+  "config_table": "0x1bb3bc0",
+  "rtti_name": ".?AVCMapSetupWar3@@",
+  "flags": "0x300648"
+}

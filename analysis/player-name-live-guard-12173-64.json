@@ -1,0 +1,25 @@
+{
+  "pid": 36208,
+  "build": 12173,
+  "bits": 64,
+  "read_only": true,
+  "matches": 3,
+  "total": 3,
+  "blocks": [
+    {
+      "rva": "0xa7e960",
+      "size": 57,
+      "matches": true
+    },
+    {
+      "rva": "0x383bf0",
+      "size": 245,
+      "matches": true
+    },
+    {
+      "rva": "0x383fe0",
+      "size": 15,
+      "matches": true
+    }
+  ]
+}

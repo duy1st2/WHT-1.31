@@ -1,4 +1,5 @@
 #include "world_present131.hpp"
+#include "overhead_sampling131.hpp"
 #include "hp_player_color131.hpp"
 #include "hp_dimensions131.hpp"
 #include "invulnerable_bar131.hpp"
@@ -72,33 +73,43 @@ inline bool WorldChild131(void* child,uintptr_t parent,uintptr_t base,uintptr_t 
 }
 struct StateBars131 {
  struct Entry {void* host=nullptr;void* levelBackground=nullptr;std::array<void*,2> fonts{},levelFonts{};std::array<std::string,2> text{};std::string levelText;float layoutSize=0,backgroundWidth=0;std::array<float,2> fontSizes{};uint32_t backgroundColor=0xffffffff;};
+ OverheadSampling131 sampling;
  HpPlayerColor131 hpColors;HpDimensions131 hpDimensions;
  InvulnerableBars131 invulnerable;
  std::unordered_map<uintptr_t,Entry> entries;bool stateReported=false,levelReported=false;unsigned observedNative=0;
- void Reset(){ForgetStatPaint131();hpColors.Reset();hpDimensions.Reset();invulnerable.Reset();entries.clear();stateReported=levelReported=false;observedNative=0;}
+ void Reset(){sampling.Reset();ForgetStatPaint131();hpColors.Reset();hpDimensions.Reset();invulnerable.Reset();entries.clear();stateReported=levelReported=false;observedNative=0;}
  // Children are owned by each native HP parent. Never dereference a cached
  // child unless its native class and parent still match. The timer only
  // discovers/prunes roots; native paint callbacks own presentation writes.
- unsigned Update(uintptr_t base,void* root,const Profile131& p,const RegenProfile131& r,const StateBarProfile131& s,const Config& config,bool allowed,const NativeFrameApi& raw){
+ unsigned Update(uintptr_t base,void* root,const Profile131& p,const RegenProfile131& r,const StateBarProfile131& s,const Config& config,bool allowed,const NativeFrameApi& raw,uintptr_t selected=0){
+  const auto now=GetTickCount64();sampling.Configure(reinterpret_cast<uintptr_t>(root),selected,config,allowed);if(!sampling.Full(now))return observedNative;
   std::unordered_set<uintptr_t> frames;if(!root||!RegisteredFrames131(root,frames))return 0;
   for(auto it=entries.begin();it!=entries.end();)if(!frames.count(it->first))it=entries.erase(it);else ++it;
   PruneStatPaint131(frames);hpColors.Prune(frames);hpDimensions.Prune(frames);
   invulnerable.Prune(frames);
-  for(const auto bar:frames){uintptr_t unit=0;bool visible=false,hero=false;
-   if(!SampleStateBar131(bar,base,s,r,unit,visible,hero))continue;
+  unsigned count=0;for(const auto bar:frames){uintptr_t unit=0;bool visible=false,hero=false;
+   if(!SampleStateBar131(bar,base,s,r,unit,visible,hero))continue;++count;
    StatPaintRecord131 record;record.unit=unit;record.unitTable=base+r.unit;
-   const bool enabled=allowed&&(config.barWidthHp>0||config.barHeightHp>0||config.colorPlayer||config.hideInvulnerableBars||config.stateTagEnable||config.stateTagShowLevel||(config.timeBoss&&(config.mth49Enable||config.g17Enable)));
+   const bool enabled=allowed; // Reference HP custom colors also apply when player colors are off.
    if(!enabled){auto previous=statPaintRecords131.find(bar);if(previous!=statPaintRecords131.end()&&previous->second.presentation)WriteBar(bar,base,p,r,s,config,allowed,raw);}
    SetStatPaint131(base,s.bar,bar,false,record,enabled,true);
   }
-  return observedNative;
+  sampling.Load(count);return observedNative;
  }
  unsigned WriteBar(uintptr_t bar,uintptr_t base,const Profile131& p,const RegenProfile131& r,const StateBarProfile131& s,const Config& config,bool allowed,const NativeFrameApi& raw){unsigned observed=0;
 uintptr_t unit=0;bool visible=false,hero=false;
    if(!SampleStateBar131(bar,base,s,r,unit,visible,hero))return observed;
    invulnerable.Update(base,p.build,bar,unit,allowed&&config.hideInvulnerableBars,visible);
-   hpColors.Update(base,p.build,bar,unit,allowed&&config.colorPlayer,GetTickCount64());
    hpDimensions.Update(base,p.build,bar,allowed?config.barWidthHp:0.f,allowed?config.barHeightHp:0.f,raw);
+   const bool eligibleNow=OverheadEligible131(allowed,config.hideInvulnerableBars,OverheadUnitFlags131(unit));
+   auto cached=entries.find(bar);
+   if(cached!=entries.end()&&cached->second.host&&!WorldChild131(cached->second.host,bar,base,p.simpleVtable))sampling.Invalidate(unit);
+   uintptr_t bound=0;uint64_t identity=0;
+   if(StatPaintPresentationKey131(bar,base+r.unit,bound,identity)&&bound==unit&&!sampling.Unit(unit,identity,bar,hero,sampling.Now(),config,allowed)){
+    if(cached!=entries.end()&&cached->second.host){if(!eligibleNow)HideWorldHost131(cached->second.host);else if(!cached->second.text[0].empty()||!cached->second.text[1].empty()||!cached->second.levelText.empty())MaintainWorldHost131(cached->second.host,bar);}
+    return observed;
+   }
+   hpColors.Update(base,p.build,bar,unit,allowed,GetTickCount64(),config);
    const bool eligible=OverheadEligible131(allowed,config.hideInvulnerableBars,OverheadUnitFlags131(unit));
    const bool stateEnabled=eligible&&config.stateTagEnable&&(hero?config.stateTagHero:config.stateTagNonHero);
    const auto levelText=HeroLevelText131(eligible&&hero&&config.stateTagShowLevel?HeroLevel131(unit,base,r,s):0);

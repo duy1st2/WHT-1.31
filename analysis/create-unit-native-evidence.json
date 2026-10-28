@@ -1,0 +1,130 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\create_unit129.hpp": "41ca32dacc643b9f9ca4409c39b306199a5771292a8aa632c311995cddec8ab8",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\copy_unit129.hpp": "a1b3dd93d7d15f5de1fb23f5a3d63f905285f930f5a0281ee1ab306ff55298eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\version129.cpp": "844235baa04936193341581ef9eabec7541622e6d5386063a77bd5ab7b291872"
+  },
+  "profiles": [
+    {
+      "pid": 8740,
+      "build": 12164,
+      "bits": 32,
+      "entry": "0xbbeb60",
+      "end": "0xbbecaf",
+      "wrapper": "0x8d25a0",
+      "angle_scale": 0.01745329238474369,
+      "angle_rva": "0x1ab9b68",
+      "owner_getter": "0x6c5dd0",
+      "blocks": [
+        [
+          12315488,
+          335
+        ],
+        [
+          9250208,
+          138
+        ],
+        [
+          7101904,
+          5
+        ],
+        [
+          28023656,
+          4
+        ]
+      ]
+    },
+    {
+      "pid": 32116,
+      "build": 12173,
+      "bits": 32,
+      "entry": "0xb7df30",
+      "end": "0xb7e06b",
+      "wrapper": "0x8a12c0",
+      "angle_scale": 0.01745329238474369,
+      "angle_rva": "0x1a71b68",
+      "owner_getter": "0x6889a0",
+      "blocks": [
+        [
+          12050224,
+          315
+        ],
+        [
+          9048768,
+          138
+        ],
+        [
+          6850976,
+          5
+        ],
+        [
+          27728744,
+          4
+        ]
+      ]
+    },
+    {
+      "pid": 24984,
+      "build": 12164,
+      "bits": 64,
+      "entry": "0xd20630",
+      "end": "0xd207d3",
+      "wrapper": "0x9e54d0",
+      "angle_scale": 0.01745329238474369,
+      "angle_rva": "0x20c8b5c",
+      "owner_getter": "0x782560",
+      "blocks": [
+        [
+          13764144,
+          384
+        ],
+        [
+          13764528,
+          35
+        ],
+        [
+          10376400,
+          181
+        ],
+        [
+          7873888,
+          5
+        ],
+        [
+          34376540,
+          4
+        ]
+      ]
+    },
+    {
+      "pid": 27336,
+      "build": 12173,
+      "bits": 64,
+      "entry": "0xd5f160",
+      "end": "0xd5f2c8",
+      "wrapper": "0xa31400",
+      "angle_scale": 0.01745329238474369,
+      "angle_rva": "0x20f5b5c",
+      "owner_getter": "0x7dd220",
+      "blocks": [
+        [
+          14020960,
+          360
+        ],
+        [
+          10687488,
+          181
+        ],
+        [
+          8245792,
+          5
+        ],
+        [
+          34560860,
+          4
+        ]
+      ]
+    }
+  ]
+}

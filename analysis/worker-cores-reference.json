@@ -1,0 +1,33 @@
+{
+  "feature": "#workercores / Performance/Worker Core Preference",
+  "exists_in_both_references": true,
+  "worker_placement_identical_in_references": true,
+  "ported_header_sha256": "288cc03443203d26516b91a72b6db3516e184218fa80446b6f7912e6f2e96380",
+  "reference_files": [
+    {
+      "path": "WHT\\native\\worker_placement.hpp",
+      "sha256": "288cc03443203d26516b91a72b6db3516e184218fa80446b6f7912e6f2e96380"
+    },
+    {
+      "path": "WHT\\native\\common.cpp",
+      "sha256": "3cfbf4dc1f041a465ed07fac75f3c5f79021445568d928fa392ff26e17e720fb"
+    },
+    {
+      "path": "WHT\\native\\runtime.cpp",
+      "sha256": "0d04f659ecdd71b32f4f15efc802a334fe3aefea4d568e20743696a1833e4fb5"
+    },
+    {
+      "path": "WHT-1.29\\native\\worker_placement.hpp",
+      "sha256": "288cc03443203d26516b91a72b6db3516e184218fa80446b6f7912e6f2e96380"
+    },
+    {
+      "path": "WHT-1.29\\native\\common.cpp",
+      "sha256": "cab6ee95cddb35ceda5eeac5c803460fc3e38ba6d768438b762abc53e3aef03e"
+    },
+    {
+      "path": "WHT-1.29\\native\\version129.cpp",
+      "sha256": "ba5255b99ea8251f16b6f41b1530b472b7a3566e17686cad3d0a6f2373564634"
+    }
+  ],
+  "runtime_scope": "Existing authentication/session background thread only; UI processor sampled in existing owning-window update."
+}

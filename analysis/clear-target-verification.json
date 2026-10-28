@@ -1,0 +1,192 @@
+{
+  "artifacts": [
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT.mix",
+      "same": true,
+      "deferred_running_client": false,
+      "build_sha256": "77d06e59e3fa776f7bd58de32ac0584cb2cbe0fdb3cc5698e990f90b10ec6d73",
+      "installed_sha256": "77d06e59e3fa776f7bd58de32ac0584cb2cbe0fdb3cc5698e990f90b10ec6d73"
+    },
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "deferred_running_client": false,
+      "build_sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b",
+      "installed_sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b"
+    },
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "deferred_running_client": false,
+      "build_sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524",
+      "installed_sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "same": true,
+      "deferred_running_client": false,
+      "build_sha256": "e69ff88abf5dff4ce326f1f0d28fba375737bf28f97ad0d90fc52fab95ab58ea",
+      "installed_sha256": "e69ff88abf5dff4ce326f1f0d28fba375737bf28f97ad0d90fc52fab95ab58ea"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "deferred_running_client": false,
+      "build_sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8",
+      "installed_sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "deferred_running_client": false,
+      "build_sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19",
+      "installed_sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT.mix",
+      "same": true,
+      "deferred_running_client": false,
+      "build_sha256": "77d06e59e3fa776f7bd58de32ac0584cb2cbe0fdb3cc5698e990f90b10ec6d73",
+      "installed_sha256": "77d06e59e3fa776f7bd58de32ac0584cb2cbe0fdb3cc5698e990f90b10ec6d73"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "deferred_running_client": false,
+      "build_sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b",
+      "installed_sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "deferred_running_client": false,
+      "build_sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524",
+      "installed_sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "same": false,
+      "deferred_running_client": true,
+      "build_sha256": "e69ff88abf5dff4ce326f1f0d28fba375737bf28f97ad0d90fc52fab95ab58ea",
+      "installed_sha256": "0211056188a44fd27746a6b2f58198d8206ee085ef3d40a0f43a51fcb60dbb96"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "deferred_running_client": true,
+      "build_sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8",
+      "installed_sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "deferred_running_client": true,
+      "build_sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19",
+      "installed_sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    }
+  ],
+  "preserved": [
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\TS-Banned.ini",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.update.log",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\cef\\logs\\browser\\cef_debug.log",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\TS-Banned.ini",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.update.log",
+      "same": true,
+      "active_client_changed_during_work": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini",
+      "same": false,
+      "active_client_changed_during_work": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log",
+      "same": false,
+      "active_client_changed_during_work": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\cef\\logs\\browser\\cef_debug.log",
+      "same": true,
+      "active_client_changed_during_work": false
+    }
+  ],
+  "references_unchanged": true,
+  "tests": {
+    "x86": 48,
+    "x64": 47
+  },
+  "end_to_end_game_command_tested": false,
+  "ssp_enabled": false,
+  "active_client_state_not_overwritten": true
+}

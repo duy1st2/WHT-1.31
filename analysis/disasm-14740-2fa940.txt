@@ -1,0 +1,33 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-2fa940.exe
+
+File Type: EXECUTABLE IMAGE
+
+  004CA940: or          al,ch
+  004CA942: cmp         al,byte ptr [eax]
+  004CA944: add         byte ptr [eax],al
+  004CA946: pop         esi
+  004CA947: pop         ebp
+  004CA948: ret         4
+  004CA94B: cmp         eax,1
+  004CA94E: jne         004CA964
+  004CA950: call        004C07E0
+  004CA955: push        dword ptr [ebp+8]
+  004CA958: mov         ecx,esi
+  004CA95A: call        004CA980
+  004CA95F: pop         esi
+  004CA960: pop         ebp
+  004CA961: ret         4
+  004CA964: mov         ecx,dword ptr [ebp+8]
+  004CA967: lea         eax,[esi+eax*4]
+  004CA96A: mov         ecx,dword ptr [ecx]
+  004CA96C: mov         dword ptr [eax],ecx
+  004CA96E: FF
+  004CA96F: inc         esi
+
+  Summary
+
+        1000 .text

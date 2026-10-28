@@ -1,0 +1,99 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file WHT-1.31\analysis\armor-reference129.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00680070: push        ebp
+  00680071: mov         ebp,esp
+  00680073: push        ebx
+  00680074: push        esi
+  00680075: push        edi
+  00680076: mov         ebx,ecx
+  00680078: push        1
+  0068007A: push        dword ptr [ebp+8]
+  0068007D: mov         esi,dword ptr [ebx+000001E4h]
+  00680083: lea         eax,[ebx+000001E8h]
+  00680089: push        eax
+  0068008A: lea         eax,[ebp+8]
+  0068008D: push        eax
+  0068008E: call        009A01C0
+  00680093: add         esp,0Ch
+  00680096: lea         ecx,[ebx+000001E4h]
+  0068009C: push        eax
+  0068009D: call        dword ptr [esi]
+  0068009F: push        ebx
+  006800A0: call        005F6D60
+  006800A5: add         esp,4
+  006800A8: pop         edi
+  006800A9: pop         esi
+  006800AA: pop         ebx
+  006800AB: pop         ebp
+  006800AC: ret         4
+  006800AF: int         3
+  006800B0: push        ebp
+  006800B1: mov         ebp,esp
+  006800B3: sub         esp,8
+  006800B6: push        ebx
+  006800B7: push        esi
+  006800B8: mov         esi,dword ptr ds:[0113B6F4h]
+  006800BE: push        edi
+  006800BF: mov         edi,ecx
+  006800C1: mov         eax,dword ptr [edi]
+  006800C3: call        dword ptr [eax+000000ECh]
+  006800C9: push        eax
+  006800CA: mov         ecx,esi
+  006800CC: call        004777D0
+  006800D1: mov         ebx,dword ptr [ebp+8]
+  006800D4: mov         esi,eax
+  006800D6: test        bl,40h
+  006800D9: jne         00680149
+  006800DB: mov         eax,dword ptr [edi+0000016Ch]
+  006800E1: test        al,8
+  006800E3: je          006800FA
+  006800E5: push        0
+  006800E7: push        dword ptr [ebp+0Ch]
+  006800EA: mov         ecx,esi
+  006800EC: call        004B62A0
+  006800F1: and         dword ptr [edi+0000016Ch],0FFFFFFF6h
+  006800F8: jmp         0068010F
+  006800FA: test        al,10h
+  006800FC: je          0068010F
+  006800FE: push        dword ptr [ebp+0Ch]
+  00680101: mov         ecx,esi
+  00680103: call        004BE2E0
+  00680108: and         dword ptr [edi+0000016Ch],0FFFFFFEDh
+  0068010F: test        bl,1
+  00680112: je          0068012D
+  00680114: mov         eax,ebx
+  00680116: mov         ecx,esi
+  00680118: and         eax,20h
+  0068011B: push        eax
+  0068011C: push        dword ptr [ebp+10h]
+  0068011F: call        004C0F40
+  00680124: or          dword ptr [edi+0000016Ch],9
+  0068012B: jmp         00680149
+  0068012D: test        bl,2
+  00680130: je          00680149
+  00680132: mov         eax,ebx
+  00680134: mov         ecx,esi
+  00680136: and         eax,20h
+  00680139: push        eax
+  0068013A: push        dword ptr [ebp+10h]
+  0068013D: call        004B5AF0
+  00680142: or          dword ptr [edi+0000016Ch],12h
+  00680149: test        ebx,1000h
+  0068014F: jne         0068027F
+  00680155: mov         eax,dword ptr [edi+0000016Ch]
+  0068015B: xor         ecx,ecx
+  0068015D: mov         dword ptr [ebp-8],eax
+  00680160: mov         dword ptr [ebp+8],0
+  00680167: mov         dword ptr [ebp-4],ecx
+  0068016A: test        eax,800h
+  0068016F: 74
+
+  Summary
+
+        1000 .text

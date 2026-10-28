@@ -1,0 +1,46 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-42df70.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF78338DF70: push        rbx
+  00007FF78338DF72: sub         rsp,20h
+  00007FF78338DF76: cmp         dword ptr [rcx+00000000000000D0h],0
+  00007FF78338DF7D: mov         rbx,rdx
+  00007FF78338DF80: jne         00007FF78338DF99
+  00007FF78338DF82: lea         rdx,[rsp+30h]
+  00007FF78338DF87: call        00007FF78338DFE0
+  00007FF78338DF8C: mov         eax,dword ptr [rax]
+  00007FF78338DF8E: mov         dword ptr [rbx],eax
+  00007FF78338DF90: mov         rax,rbx
+  00007FF78338DF93: add         rsp,20h
+  00007FF78338DF97: pop         rbx
+  00007FF78338DF98: ret
+  00007FF78338DF99: mov         eax,dword ptr [00007FF78511BB80h]
+  00007FF78338DF9F: mov         dword ptr [rsp+30h],eax
+  00007FF78338DFA3: lea         rax,[rsp+30h]
+  00007FF78338DFA8: mov         eax,dword ptr [rax]
+  00007FF78338DFAA: mov         dword ptr [rbx],eax
+  00007FF78338DFAC: mov         rax,rbx
+  00007FF78338DFAF: add         rsp,20h
+  00007FF78338DFB3: pop         rbx
+  00007FF78338DFB4: ret
+  00007FF78338DFB5: test        al,0FEh
+  00007FF78338DFB7: cld
+  00007FF78338DFB8: C4
+  00007FF78338DFB9: fnstenv     [00007FF76F20DC62h]
+  00007FF78338DFBF: push        rsi
+  00007FF78338DFC0: mov         qword ptr [rsp+8],416D63FBh
+  00007FF78338DFC9: mov         rax,qword ptr [rsp+8]
+  00007FF78338DFCE: xor         rax,0C8Dh
+  00007FF78338DFD4: mov         qword ptr [rsp+8],rax
+  00007FF78338DFD9: mov         rax,qword ptr [rsp+8]
+  00007FF78338DFDE: ret
+  00007FF78338DFDF: int         3
+
+  Summary
+
+        1000 .text

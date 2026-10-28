@@ -1,0 +1,120 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-cff1f0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF783C5F1F0: xor         al,al
+  00007FF783C5F1F2: ret
+  00007FF783C5F1F3: mov         edi,0C678360h
+  00007FF783C5F1F8: D6
+  00007FF783C5F1F9: add         al,69h
+  00007FF783C5F1FB: FE
+  00007FF783C5F1FC: cmc
+  00007FF783C5F1FD: pop         rax
+  00007FF783C5F1FE: jno         00007FF783C5F1EC
+  00007FF783C5F200: mov         eax,dword ptr [rcx+38h]
+  00007FF783C5F203: shr         eax,4
+  00007FF783C5F206: and         al,1
+  00007FF783C5F208: ret
+  00007FF783C5F209: or          al,0BAh
+  00007FF783C5F20B: mov         dil,byte ptr [r14+21h]
+  00007FF783C5F20F: adc         dword ptr [rbx+0000000018E95849h],ecx
+  00007FF783C5F215: enter       2,0CCh
+  00007FF783C5F219: int         3
+  00007FF783C5F21A: int         3
+  00007FF783C5F21B: int         3
+  00007FF783C5F21C: int         3
+  00007FF783C5F21D: int         3
+  00007FF783C5F21E: int         3
+  00007FF783C5F21F: int         3
+  00007FF783C5F220: mov         ecx,dword ptr [rcx+58h]
+  00007FF783C5F223: jmp         00007FF783C8B9A0
+  00007FF783C5F228: int         3
+  00007FF783C5F229: int         3
+  00007FF783C5F22A: int         3
+  00007FF783C5F22B: int         3
+  00007FF783C5F22C: int         3
+  00007FF783C5F22D: int         3
+  00007FF783C5F22E: int         3
+  00007FF783C5F22F: int         3
+  00007FF783C5F230: mov         eax,dword ptr [rcx+0000000000000614h]
+  00007FF783C5F236: ret
+  00007FF783C5F237: fisubr      dword ptr [rdx]
+  00007FF783C5F239: push        rdi
+  00007FF783C5F23B: out         7Dh,eax
+  00007FF783C5F23D: cmp         ah,dh
+  00007FF783C5F23F: in          al,dx
+  00007FF783C5F240: push        rbx
+  00007FF783C5F242: sub         rsp,20h
+  00007FF783C5F246: mov         rbx,rdx
+  00007FF783C5F249: mov         edx,dword ptr [rcx+58h]
+  00007FF783C5F24C: mov         rcx,rbx
+  00007FF783C5F24F: call        00007FF783C88C70
+  00007FF783C5F254: mov         rax,rbx
+  00007FF783C5F257: add         rsp,20h
+  00007FF783C5F25B: pop         rbx
+  00007FF783C5F25C: ret
+  00007FF783C5F25D: int         3
+  00007FF783C5F25E: int         3
+  00007FF783C5F25F: int         3
+  00007FF783C5F260: push        rbx
+  00007FF783C5F262: sub         rsp,20h
+  00007FF783C5F266: mov         rbx,rdx
+  00007FF783C5F269: mov         edx,dword ptr [rcx+58h]
+  00007FF783C5F26C: mov         rcx,rbx
+  00007FF783C5F26F: call        00007FF783C8C3E0
+  00007FF783C5F274: mov         rax,rbx
+  00007FF783C5F277: add         rsp,20h
+  00007FF783C5F27B: pop         rbx
+  00007FF783C5F27C: ret
+  00007FF783C5F27D: int         3
+  00007FF783C5F27E: int         3
+  00007FF783C5F27F: int         3
+  00007FF783C5F280: mov         eax,dword ptr [rcx+0000000000000628h]
+  00007FF783C5F286: ret
+  00007FF783C5F287: sbb         byte ptr [rdx+FFFFFFFFE00881CFh],dh
+  00007FF783C5F28D: push        rdi
+  00007FF783C5F28E: xchg        eax,ebp
+  00007FF783C5F28F: fisttp      qword ptr [rcx+0000000000062891h]
+  00007FF783C5F295: add         bl,al
+  00007FF783C5F297: 1F
+  00007FF783C5F298: 8D
+  00007FF783C5F299: mul         eax,dword ptr [rbx+0000000045ABF2E3h]
+  00007FF783C5F29F: jne         00007FF783C5F2E1
+  00007FF783C5F2A1: push        rbx
+  00007FF783C5F2A2: sub         rsp,20h
+  00007FF783C5F2A6: mov         rbx,rcx
+  00007FF783C5F2A9: call        00007FF783C82C00
+  00007FF783C5F2AE: mov         edx,0FFFFFFFFh
+  00007FF783C5F2B3: mov         rcx,rbx
+  00007FF783C5F2B6: add         rsp,20h
+  00007FF783C5F2BA: pop         rbx
+  00007FF783C5F2BB: jmp         00007FF783C97690
+  00007FF783C5F2C0: movss       xmm0,dword ptr [rcx+0000000000000694h]
+  00007FF783C5F2C8: ret
+  00007FF783C5F2C9: 06
+  00007FF783C5F2CA: 3F
+  00007FF783C5F2CB: ja          00007FF783C5F33E
+  00007FF783C5F2CD: mov         dh,14h
+  00007FF783C5F2CF: 17
+  00007FF783C5F2D0: mov         eax,dword ptr [rcx+00000000000006A4h]
+  00007FF783C5F2D6: mov         dword ptr [rdx],eax
+  00007FF783C5F2D8: mov         rax,rdx
+  00007FF783C5F2DB: ret
+  00007FF783C5F2DC: int         3
+  00007FF783C5F2DD: int         3
+  00007FF783C5F2DE: int         3
+  00007FF783C5F2DF: int         3
+  00007FF783C5F2E0: mov         qword ptr [rsp+8],rbx
+  00007FF783C5F2E5: push        rdi
+  00007FF783C5F2E6: sub         rsp,20h
+  00007FF783C5F2EA: mov         ebx,edx
+  00007FF783C5F2EC: mov         rdi,rcx
+  00007FF783C5F2EF: E8
+
+  Summary
+
+        1000 .text

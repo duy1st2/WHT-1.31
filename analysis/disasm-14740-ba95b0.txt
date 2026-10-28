@@ -1,0 +1,49 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-ba95b0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D795B0: push        ebp
+  00D795B1: mov         ebp,esp
+  00D795B3: mov         ecx,dword ptr [ecx+00000454h]
+  00D795B9: test        ecx,ecx
+  00D795BB: jne         00D795CC
+  00D795BD: mov         eax,dword ptr [ebp+8]
+  00D795C0: mov         ecx,dword ptr ds:[01D4C888h]
+  00D795C6: mov         dword ptr [eax],ecx
+  00D795C8: pop         ebp
+  00D795C9: ret         4
+  00D795CC: push        dword ptr [ebp+8]
+  00D795CF: call        0058D420
+  00D795D4: mov         eax,dword ptr [ebp+8]
+  00D795D7: pop         ebp
+  00D795D8: ret         4
+  00D795DB: int         3
+  00D795DC: int         3
+  00D795DD: int         3
+  00D795DE: int         3
+  00D795DF: int         3
+  00D795E0: push        ebp
+  00D795E1: mov         ebp,esp
+  00D795E3: push        esi
+  00D795E4: push        edi
+  00D795E5: mov         edi,dword ptr [ebp+8]
+  00D795E8: test        edi,edi
+  00D795EA: je          00D79611
+  00D795EC: mov         eax,dword ptr ds:[01C81F80h]
+  00D795F1: xor         esi,esi
+  00D795F3: test        eax,eax
+  00D795F5: je          00D79611
+  00D795F7: push        edi
+  00D795F8: push        eax
+  00D795F9: call        01665A9D
+  00D795FE: add         esp,8
+  00D79601: test        eax,eax
+  00D79603: je          00D79617
+
+  Summary
+
+        1000 .text

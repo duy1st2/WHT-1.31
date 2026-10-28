@@ -1,5 +1,6 @@
 #pragma once
 #include "component_lookup131.hpp"
+#include "ui_refresh131.hpp"
 #include <unordered_map>
 namespace wht {
 inline bool StatPaintCode131(uintptr_t base,uintptr_t table){
@@ -12,16 +13,29 @@ inline bool StatPaintCode131(uintptr_t base,uintptr_t table){
 #endif
  __try{for(const auto& p:profiles)if(table==p[0])return base&&*reinterpret_cast<uintptr_t*>(base+table+27*sizeof(uintptr_t))==base+p[1]&&*reinterpret_cast<uintptr_t*>(base+table+30*sizeof(uintptr_t))==base+p[2]&&*reinterpret_cast<uintptr_t*>(base+table+31*sizeof(uintptr_t))==base+p[3]&&!memcmp(reinterpret_cast<void*>(base+p[2]),bind,sizeof(bind))&&!memcmp(reinterpret_cast<void*>(base+p[3]),update,sizeof(update));}__except(1){}return false;
 }
-struct StatPaintRecord131 {bool hide=false,color=false,presentation=false;uintptr_t unit=0,unitTable=0,texture=0,textureTable=0,tint=0,hideFn=0;uint32_t desired=0;};
+struct StatPaintRecord131 {bool hide=false,color=false,presentation=false;uintptr_t unit=0,unitTable=0,texture=0,textureTable=0,tint=0,hideFn=0;uint32_t desired=0;bool presented=false;uint64_t presentedFrame=0,presentedId=0;uintptr_t presentedUnit=0;};
 inline std::unordered_map<uintptr_t,StatPaintRecord131> statPaintRecords131;
 inline std::array<uintptr_t,34> statPaintSlots131{};
 inline uintptr_t statPaintShow131=0,statPaintBind131=0,statPaintUpdate131=0;inline DWORD statPaintThread131=0;
 inline void(*statPaintPresentation131)(uintptr_t)=nullptr;
 inline bool statPaintPresentationBusy131=false;
 inline uint64_t statPaintShows131=0,statPaintBinds131=0,statPaintUpdates131=0;
+inline uint64_t statPaintPresented131=0,statPaintCoalesced131=0;
+inline bool StatPaintPresentationKey131(uintptr_t frame,uintptr_t table,uintptr_t& unit,uint64_t& id){
+ __try{unit=*reinterpret_cast<uintptr_t*>(frame+(sizeof(void*)==8?0x210:0x154));if(!unit||*reinterpret_cast<uintptr_t*>(unit)!=table)return false;const auto offset=sizeof(void*)==8?0x18:0xc;const auto low=*reinterpret_cast<uint32_t*>(unit+offset),high=*reinterpret_cast<uint32_t*>(unit+offset+4);if(low==0xffffffff||high==0xffffffff)return false;id=uint64_t(low)|(uint64_t(high)<<32);return true;}__except(1){return false;}
+}
 inline void NotifyStatPresentation131(uintptr_t frame){
  if(GetCurrentThreadId()!=statPaintThread131||statPaintPresentationBusy131||!statPaintPresentation131)return;
  const auto found=statPaintRecords131.find(frame);if(found==statPaintRecords131.end()||!found->second.presentation)return;
+ // Show/Bind/Update often visit the same bar in one native UI update. Keep
+ // every original callback and cheap paint enforcement; coalesce only the
+ // expensive text/color discovery for an unchanged native unit identity.
+ auto& record=found->second;uintptr_t unit=0;uint64_t id=0;
+ if(uiRefreshOwner131&&uiRefreshThread131==statPaintThread131&&StatPaintPresentationKey131(frame,record.unitTable,unit,id)){
+  if(record.presented&&record.presentedFrame==uiRefreshCalls131&&record.presentedUnit==unit&&record.presentedId==id){++statPaintCoalesced131;return;}
+  record.presented=true;record.presentedFrame=uiRefreshCalls131;record.presentedUnit=unit;record.presentedId=id;
+ }else record.presented=false;
+ ++statPaintPresented131;
  statPaintPresentationBusy131=true;
  __try{statPaintPresentation131(frame);}__except(1){}
  statPaintPresentationBusy131=false;
@@ -67,7 +81,7 @@ inline bool SetStatPaint131(uintptr_t base,uintptr_t table,uintptr_t frame,bool 
   if(!statPaintOriginalTable131){if(!StatPaintCode131(base,table))return false;memcpy(statPaintSlots131.data(),reinterpret_cast<void*>(base+table-sizeof(uintptr_t)),sizeof(statPaintSlots131));statPaintOriginalTable131=base+table;statPaintShow131=statPaintSlots131[28];statPaintBind131=statPaintSlots131[31];statPaintUpdate131=statPaintSlots131[32];statPaintThread131=GetCurrentThreadId();statPaintSlots131[28]=reinterpret_cast<uintptr_t>(StatPaintShowCall131);statPaintSlots131[31]=reinterpret_cast<uintptr_t>(StatPaintBindCall131);statPaintSlots131[32]=reinterpret_cast<uintptr_t>(StatPaintUpdateCall131);statPaintProxyTable131=reinterpret_cast<uintptr_t>(statPaintSlots131.data()+1);}
   if(statPaintOriginalTable131!=base+table)return false;auto found=statPaintRecords131.find(frame);
   if(found==statPaintRecords131.end()){if(!enabled)return true;if(statPaintRecords131.size()>=4096)return false;found=statPaintRecords131.emplace(frame,StatPaintRecord131{}).first;}
-  auto& r=found->second;if(presentationMode){r.presentation=enabled;}else if(colorMode){r.color=enabled;r.texture=desired.texture;r.textureTable=desired.textureTable;r.tint=desired.tint;r.desired=desired.desired;}else{r.hide=enabled;r.hideFn=desired.hideFn;}r.unit=desired.unit;r.unitTable=desired.unitTable;
+  auto& r=found->second;if(presentationMode){r.presentation=enabled;r.presented=false;}else if(colorMode){r.color=enabled;r.texture=desired.texture;r.textureTable=desired.textureTable;r.tint=desired.tint;r.desired=desired.desired;}else{r.hide=enabled;r.hideFn=desired.hideFn;}r.unit=desired.unit;r.unitTable=desired.unitTable;
   if(r.color||r.hide||r.presentation){statPaintOwners131.insert(frame);*reinterpret_cast<uintptr_t*>(frame)=statPaintProxyTable131;}
   else{if(*reinterpret_cast<uintptr_t*>(frame)==statPaintProxyTable131)*reinterpret_cast<uintptr_t*>(frame)=statPaintOriginalTable131;statPaintRecords131.erase(found);statPaintOwners131.erase(frame);}return true;
  }__except(1){return false;}

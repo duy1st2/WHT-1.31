@@ -1,0 +1,75 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-2fab40.exe
+
+File Type: EXECUTABLE IMAGE
+
+  004CAB40: push        ebp
+  004CAB41: mov         ebp,esp
+  004CAB43: mov         edx,dword ptr [ebp+8]
+  004CAB46: movss       xmm0,dword ptr [ecx+8]
+  004CAB4B: movss       xmm1,dword ptr [edx]
+  004CAB4F: comiss      xmm0,xmm1
+  004CAB52: jbe         004CAB5E
+  004CAB54: mov         eax,dword ptr [ecx+8]
+  004CAB57: mov         dword ptr [ecx+4],eax
+  004CAB5A: pop         ebp
+  004CAB5B: ret         8
+  004CAB5E: comiss      xmm1,dword ptr [ecx+0Ch]
+  004CAB62: lea         eax,[ecx+0Ch]
+  004CAB65: cmova       edx,eax
+  004CAB68: mov         eax,dword ptr [edx]
+  004CAB6A: mov         dword ptr [ecx+4],eax
+  004CAB6D: pop         ebp
+  004CAB6E: ret         8
+  004CAB71: int         3
+  004CAB72: int         3
+  004CAB73: int         3
+  004CAB74: int         3
+  004CAB75: int         3
+  004CAB76: int         3
+  004CAB77: int         3
+  004CAB78: int         3
+  004CAB79: int         3
+  004CAB7A: int         3
+  004CAB7B: int         3
+  004CAB7C: int         3
+  004CAB7D: int         3
+  004CAB7E: int         3
+  004CAB7F: int         3
+  004CAB80: push        ebp
+  004CAB81: mov         ebp,esp
+  004CAB83: push        esi
+  004CAB84: mov         esi,ecx
+  004CAB86: mov         ecx,dword ptr [esi+58h]
+  004CAB89: test        ecx,ecx
+  004CAB8B: je          004CAB94
+  004CAB8D: push        1
+  004CAB8F: call        004C0500
+  004CAB94: cmp         dword ptr [ebp+8],0
+  004CAB98: jne         004CABA6
+  004CAB9A: mov         dword ptr [esi+58h],0
+  004CABA1: pop         esi
+  004CABA2: pop         ebp
+  004CABA3: ret         4
+  004CABA6: push        0
+  004CABA8: push        0
+  004CABAA: push        18F0378h
+  004CABAF: push        684h
+  004CABB4: call        0045C130
+  004CABB9: push        1
+  004CABBB: push        1
+  004CABBD: push        dword ptr [ebp+8]
+  004CABC0: mov         ecx,eax
+  004CABC2: call        004BEE70
+  004CABC7: mov         dword ptr [esi+58h],eax
+  004CABCA: pop         esi
+  004CABCB: pop         ebp
+  004CABCC: ret         4
+  004CABCF: int         3
+
+  Summary
+
+        1000 .text

@@ -1,0 +1,72 @@
+{
+  "artifacts": [
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.mix",
+      "sha256": "a3cc261952fdcf489c029a72dd0243bd769656829b3b2aaccdabf08865387119"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT131Launcher.exe",
+      "sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ExternalHud.exe",
+      "sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.mix",
+      "sha256": "6bf249269e2ec98ddbb6f835c33b9af6cd30840864c7e9232086bfa8c0235c8b"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT131Launcher.exe",
+      "sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ExternalHud.exe",
+      "sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.mix",
+      "sha256": "a3cc261952fdcf489c029a72dd0243bd769656829b3b2aaccdabf08865387119"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT131Launcher.exe",
+      "sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ExternalHud.exe",
+      "sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.mix",
+      "sha256": "6bf249269e2ec98ddbb6f835c33b9af6cd30840864c7e9232086bfa8c0235c8b"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT131Launcher.exe",
+      "sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8"
+    },
+    {
+      "file": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ExternalHud.exe",
+      "sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    }
+  ],
+  "preserved": {
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\TS-Banned.ini": "0ae658b6b3ca80b4c18a5c53c220e1c65055c3315ea847d2827179a688ca6742",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini": "d019be02d9b02e5b3d6e8177859f60f4ed79c959893053fe34cfdd86ea86315f",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log": "702622b91d999d694bca637b654301a36da54246845f1a77f1556ea25a13b0b6",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.update.log": "beba25844738dc8ad8225de96e0f76d91e3cebe2adc8a698ad38d1f7ddcec604",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini": "e726dd4d0956f72a3a8a81ff94e0f78e656c69c4bc12bb67542d85e1e565aecc",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log": "771efade1aca07f43843c0627a1bccc226957c0656b64bfdf0f476061fa850e2",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\TS-Banned.ini": "ec9c8c969063da42da8227bbed6466ab1d0be63257719aa7f30a733d7b29b059",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini": "930f5bd96f343df36ea865de952cde001c4f06452657493016d4b63b7f816765",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log": "de443cfb1919db0f6fc2053b65e63a50a42be1fc5b49a6c46591585dba0c3332",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.update.log": "574e73fde3f39e97d1154865ca29d531387cd092b93920aff489ba8f0d6ae11a",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini": "18ed9ea444630b2ee86d40ba28a22dc0dc8451585b650b415c330e0b337d19f3",
+    "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log": "76d7d00cdcf440628d023613ad6f5323c68f141857d783bf8e1d203554e6b397"
+  },
+  "references_unchanged": true,
+  "tests": {
+    "x86": "29/29",
+    "x64": "28/28"
+  },
+  "live_gameplay_tested": false
+}

@@ -1,5 +1,6 @@
 #pragma once
 #include "fps_text_cadence.hpp"
+#include "hud_style.hpp"
 #include <MinHook.h>
 namespace wht {
 using FpsFontText131=void(__thiscall*)(uintptr_t,const char*);
@@ -10,7 +11,7 @@ inline void FpsFontTextHook131(uintptr_t font,const char* text){
 inline void __fastcall FpsFontTextHook131(uintptr_t font,void*,const char* text){
 #endif
  if(!AllowFpsText(font,text,GetTickCount64()))return;
- char fpsInteger[64]{};originalFpsFontText131(font,IntegerFpsText(text,fpsInteger,sizeof(fpsInteger)));
+ char fpsInteger[64]{},styled[96]{};originalFpsFontText131(font,StyledFpsText(IntegerFpsText(text,fpsInteger,sizeof(fpsInteger)),styled,sizeof(styled)));
 }
 inline bool InstallFpsTextCadence131(uintptr_t address){
  const auto status=MH_Initialize();if(status!=MH_OK&&status!=MH_ERROR_ALREADY_INITIALIZED)return false;

@@ -1,0 +1,12 @@
+# #armor on 1.31: independently verified armor field
+Reference #armor command/default/range and native delta-add/readback workflow read in WHT/native/gameplay_commands.hpp and WHT-1.29/native/armor129.hpp, version129.cpp. Default50, finite signed values within +/-1000000. Sources hashed; reference projects unchanged.
+
+Critical independent evidence: native armor-panel virtual Update at vtable+70 x86/+e0 x64 reads unit base armor at +1f8 x86/+298 x64 and armor type at +1fc/+2a0, then builds armor tooltip and display. Thus old candidate +1e8 x86/+278 x64 is not armor and remains unused. Full disassembly retained in analysis/disasm-14740-b7f320.txt and disasm-6688-cd9090.txt. 12173 corresponding panels b3ef30 / d18c40 confirm identical field semantics.
+
+Verified profiles (build: x86 adder / x64 adder):
+12164 c02260 / d6efb0; 12173 bc0cc0 / dacba0.
+Native ABI void thiscall(CUnit, const float* delta), x86 RET4; x64 RCX=unit/RDX=delta. Adder sums delta with armor field, calls embedded Float virtual setter and normal unit-stat refresh. Embedded property at1f4 x86/290 x64 uses existing plain MiniFloat vtable, whose first setter is independently verified as2fab30/2df6c0 x86,354050/3bf240 x64. Entire adder/setter and exact native armor panel field-reader instructions guarded; virtual table entry ownership checked. No copied 1.29 field or executable address enabled.
+
+Implementation snapshots CUnit serial, world/local player and actual armor; revalidates before computing finite float delta. Native delta-add skips zero delta and readback must match requested armor within0.01 as in reference. No direct gameplay-field writes, new hook/timer, saved setting or game launch. Tests cover all four captured adder/setter/armor-panel reads, semantic opcode assertion for correct armor field, native vtable ownership/mutation, synthetic CUnit/Float field layouts including wrong-field sentinel, zero/negative/nonfinite armor, exact unit/signed-real-pointer ABI, defaults/range/fractions, zero-delta no-op, recycled identity, changed world, native refusal/no-op and malformed args without writes.
+
+Final validation: x86 15/15 and x64 14/14 CTests pass. Both 12164/12173 runtime-test clients installed for both architectures with backups. All 12 artifact SHA256 match built outputs; all 6 existing config/macro/ban snapshot files unchanged. Source ZIP refreshed. No user game stopped and no live armor changed.

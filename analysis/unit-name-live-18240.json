@@ -1,0 +1,16 @@
+{
+  "pid": 18240,
+  "base": "0x7ff774360000",
+  "build": 12164,
+  "architecture": "x64",
+  "read_only": true,
+  "selected": [
+    {
+      "portrait": "0x250515f9008",
+      "unit": "0x2504353b2d0",
+      "name": "|cffc0c0c0Kim Ch\u1ec9 Nam (Log Pose)|r",
+      "terminated": true,
+      "selection_still_matches": true
+    }
+  ]
+}

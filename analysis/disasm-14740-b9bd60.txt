@@ -1,0 +1,112 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-b9bd60.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D6BD60: stos        byte ptr es:[edi]
+  00D6BD61: add         byte ptr [eax],al
+  00D6BD63: sub         edx,24796217h
+  00D6BD69: add         ebp,0FFFFFFC6h
+  00D6BD6C: add         ch,7Bh
+  00D6BD6F: sub         al,9Eh
+  00D6BD72: imul        ebp,dword ptr [eax+F6809BC9h],0E8017100h
+  00D6BD7C: jno         00D6BD8B
+  00D6BD7E: add         dword ptr [eax],eax
+  00D6BD80: neg         ch
+  00D6BD82: add         edi,0FFFFFFB2h
+  00D6BD85: neg         dl
+  00D6BD87: mov         bh,83h
+  00D6BD8A: call        00D71800
+  00D6BD8F: mov         ecx,0E81696A7h
+  00D6BD95: jg          00D8A6AB
+  00D6BD9B: mov         al,57h
+  00D6BD9E: pop         eax
+  00D6BD9F: jbe         00D794E6
+  00D6BDA5: sub         cl,63h
+  00D6BDA8: rdtsc
+  00D6BDAA: call        00D6F237
+  00D6BDAF: call        00D74A24
+  00D6BDB4: pop         esi
+  00D6BDB5: neg         al
+  00D6BDB7: add         esi,0FFFFFFE5h
+  00D6BDBA: jnp         00D7A780
+  00D6BDC0: call        00D7A4D4
+  00D6BDC5: sub         al,4Fh
+  00D6BDC8: mov         al,0Fh
+  00D6BDCB: sub         cl,0AAh
+  00D6BDCE: jae         00D82CAE
+  00D6BDD4: add         ebp,199E242h
+  00D6BDDA: sub         ch,4Fh
+  00D6BDDD: ja          00D7A87D
+  00D6BDE3: neg         byte ptr [edx+esi*8+780D8B2Ch]
+  00D6BDEA: cli
+  00D6BDEB: mov         dword ptr [ecx],0CDDBF181h
+  00D6BDF1: xchg        eax,ebx
+  00D6BDF2: xor         ecx,dword ptr [edi]
+  00D6BDF4: test        byte ptr [edi+8B000002h],dl
+  00D6BDFA: jge         00D6BDF4
+  00D6BDFC: mov         edi,dword ptr [edi+00000404h]
+  00D6BE02: test        edi,edi
+  00D6BE04: je          00D6C090
+  00D6BE0A: xorps       xmm0,xmm0
+  00D6BE0D: lea         ecx,[edi+000000BCh]
+  00D6BE13: movups      xmmword ptr [ebp-28h],xmm0
+  00D6BE17: mov         eax,dword ptr [ecx]
+  00D6BE19: lea         edx,[ebp-28h]
+  00D6BE1C: push        edx
+  00D6BE1D: call        dword ptr [eax+10h]
+  00D6BE20: push        0
+  00D6BE22: lea         eax,[ebp-18h]
+  00D6BE25: mov         dword ptr [ebp-18h],0
+  00D6BE2C: push        eax
+  00D6BE2D: mov         ecx,edi
+  00D6BE2F: mov         dword ptr [ebp-14h],0
+  00D6BE36: mov         dword ptr [ebp-10h],0
+  00D6BE3D: call        00CF08C0
+  00D6BE42: test        al,al
+  00D6BE44: jne         00D6BEA0
+  00D6BE46: movups      xmm2,xmmword ptr [ebp-28h]
+  00D6BE4A: lea         eax,[ebp-18h]
+  00D6BE4D: mov         ecx,edi
+  00D6BE4F: movss       xmm3,dword ptr [ebp-20h]
+  00D6BE54: movaps      xmm4,xmm2
+  00D6BE57: subss       xmm3,xmm2
+  00D6BE5B: shufps      xmm4,xmm2,0FFh
+  00D6BE5F: movaps      xmm1,xmm2
+  00D6BE62: shufps      xmm1,xmm2,55h
+  00D6BE66: subss       xmm4,xmm1
+  00D6BE6A: push        0
+  00D6BE6C: mulss       xmm3,dword ptr ds:[018F1138h]
+  00D6BE74: push        eax
+  00D6BE75: sub         esp,8
+  00D6BE78: mulss       xmm4,dword ptr ds:[018F1138h]
+  00D6BE80: addss       xmm3,xmm2
+  00D6BE84: addss       xmm4,xmm1
+  00D6BE88: movss       dword ptr [esp+4],xmm3
+  00D6BE8E: movss       dword ptr [esp],xmm4
+  00D6BE93: call        00CF0C10
+  00D6BE98: test        al,al
+  00D6BE9A: je          00D6C097
+  00D6BEA0: mov         ebx,dword ptr [ebp-0Ch]
+  00D6BEA3: movq        xmm0,mmword ptr [ebp-18h]
+  00D6BEA8: mov         eax,dword ptr [ebp-10h]
+  00D6BEAB: push        dword ptr [ebp+10h]
+  00D6BEAE: movq        mmword ptr [ebx+0000018Ch],xmm0
+  00D6BEB6: lea         ecx,[ebx+000001A4h]
+  00D6BEBC: mov         dword ptr [ebx+00000194h],eax
+  00D6BEC2: mov         eax,dword ptr [ebp+8]
+  00D6BEC5: mov         dword ptr [ebx+00000180h],eax
+  00D6BECB: mov         eax,dword ptr [ebp+0Ch]
+  00D6BECE: mov         dword ptr [ebx+0000017Ch],eax
+  00D6BED4: call        00596980
+  00D6BED9: mov         esi,dword ptr [ebp+14h]
+  00D6BEDC: 8D
+  00D6BEDD: 8B
+  00D6BEDE: test        al,1
+
+  Summary
+
+        1000 .text

@@ -1,0 +1,22 @@
+import ctypes as c,ctypes.wintypes as w,json,struct,sys
+from pathlib import Path
+k=c.WinDLL('kernel32',use_last_error=True);k.OpenProcess.argtypes=[w.DWORD,w.BOOL,w.DWORD];k.OpenProcess.restype=w.HANDLE;k.ReadProcessMemory.argtypes=[w.HANDLE,c.c_void_p,c.c_void_p,c.c_size_t,c.POINTER(c.c_size_t)];k.VirtualQueryEx.argtypes=[w.HANDLE,c.c_void_p,c.c_void_p,c.c_size_t]
+class M(c.Structure):_fields_=[('base',c.c_void_p),('allocation',c.c_void_p),('ap',w.DWORD),('size',c.c_size_t),('state',w.DWORD),('protect',w.DWORD),('type',w.DWORD)]
+previous=json.loads(Path(f'WHT-1.31/analysis/fog-modifier-live-{sys.argv[1]}.json').read_text());results=[]
+for pid,base in [(previous['pid'],int(previous['base'],16))]:
+ names=[struct.pack('<I' if previous.get('bits',64)==32 else '<Q',int(hit['address'],16)) for hit in previous['hits'] if len(hit['name'])>=16]; h=k.OpenProcess(0x410,False,pid);a=0;total=0;hits=[]
+ while a<0x7fffffff0000:
+  m=M()
+  if not k.VirtualQueryEx(h,a,c.byref(m),c.sizeof(m)):break
+  start=m.base or 0;a=start+m.size
+  if m.state!=0x1000 or m.protect&0x101 or m.type!=0x20000:continue
+  for off in range(0,m.size,4*1024*1024):
+   n=min(m.size-off,4*1024*1024);buf=c.create_string_buffer(n);got=c.c_size_t();k.ReadProcessMemory(h,start+off,buf,n,c.byref(got));data=buf.raw[:got.value];total+=len(data)
+   for name in names:
+    pos=0
+    while True:
+     pos=data.find(name,pos)
+     if pos<0:break
+     at=start+off+pos;chunk=data[max(0,pos-64):pos+128];hits.append({'name':hex(int.from_bytes(name,'little')),'address':hex(at),'region':hex(start),'near_address':hex(start+off+max(0,pos-64)),'hex':chunk.hex()});pos+=1
+ results.append({'pid':pid,'base':hex(base),'scanned':total,'hits':hits});print(pid,total,len(hits),[(x['name'],x['address']) for x in hits][:25],flush=True)
+Path(f'WHT-1.31/analysis/fog-modifier-live-name-refs-{sys.argv[1]}.json').write_text(json.dumps(results,indent=2))

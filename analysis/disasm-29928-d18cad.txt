@@ -1,0 +1,20 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-29928-d18cad.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF627188CAD: mov         eax,dword ptr [r12+0000000000000298h]
+  00007FF627188CB5: lea         rdx,[rsp+44h]
+  00007FF627188CBA: movsxd      rdi,dword ptr [r12+00000000000002A0h]
+  00007FF627188CC2: lea         rcx,[rsp+50h]
+  00007FF627188CC7: movaps      xmm0,xmm1
+  00007FF627188CCA: movss       dword ptr [rsp+40h],xmm1
+  00007FF627188CD0: F3
+  00007FF627188CD1: 0F
+
+  Summary
+
+        1000 .text

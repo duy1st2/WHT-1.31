@@ -1,0 +1,20 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "5f5ead439f99139ec7d72bd5803e1957d026cb18911eb9bfc66b3dd857e1526c"
+  },
+  "source_lines": {
+    "2888": "if(name==L\"#res\"||name==L\"#resource\"||name==L\"#trade\"){overlayKey=L\"Show Resource\";overlayValue=c.showResource;}",
+    "2892": "else if(name==L\"#showmem\"||name==L\"#mem\"||name==L\"#memory\"||name==L\"#ram\"||name==L\"#usemem\"){overlayKey=L\"Show Mem\";overlayValue=c.showMem;}",
+    "2893": "else if(name==L\"#showregen\"||name==L\"#regen\"||name==L\"#regenhp\"){overlayKey=L\"ShowRegenHP\";overlayValue=c.showRegenHP;}"
+  },
+  "aliases": {
+    "#mem": "#showmem",
+    "#memory": "#showmem",
+    "#ram": "#showmem",
+    "#usemem": "#showmem",
+    "#trade": "#res",
+    "#showregen": "#regenhp",
+    "#regen": "#regenhp"
+  },
+  "scope": "Alternate WHT command names for already implemented features; no new native implementation."
+}

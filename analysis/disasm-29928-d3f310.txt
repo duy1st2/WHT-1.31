@@ -1,0 +1,38 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-29928-d3f310.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF6271AF310: push        rbx
+  00007FF6271AF312: sub         rsp,20h
+  00007FF6271AF316: movss       xmm0,dword ptr [rdx]
+  00007FF6271AF31A: mov         rax,rdx
+  00007FF6271AF31D: comiss      xmm0,dword ptr [00007FF628658B80h]
+  00007FF6271AF324: mov         rbx,rcx
+  00007FF6271AF327: lea         rdx,[00007FF628658B80h]
+  00007FF6271AF32E: cmova       rdx,rax
+  00007FF6271AF332: add         rcx,200h
+  00007FF6271AF339: call        00007FF6273BD530
+  00007FF6271AF33E: mov         rcx,rbx
+  00007FF6271AF341: add         rsp,20h
+  00007FF6271AF345: pop         rbx
+  00007FF6271AF346: jmp         00007FF6271EABA0
+  00007FF6271AF34B: int         3
+  00007FF6271AF34C: int         3
+  00007FF6271AF34D: int         3
+  00007FF6271AF34E: int         3
+  00007FF6271AF34F: int         3
+  00007FF6271AF350: mov         qword ptr [rsp+18h],rbx
+  00007FF6271AF355: push        rbp
+  00007FF6271AF356: push        rsi
+  00007FF6271AF357: push        rdi
+  00007FF6271AF358: sub         rsp,30h
+  00007FF6271AF35C: mov         rsi,rdx
+  00007FF6271AF35F: 48
+
+  Summary
+
+        1000 .text

@@ -1,0 +1,72 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-baef10.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D7EF10: push        ebp
+  00D7EF11: mov         ebp,esp
+  00D7EF13: mov         ecx,dword ptr [ecx+00000454h]
+  00D7EF19: test        ecx,ecx
+  00D7EF1B: je          00D7EF29
+  00D7EF1D: push        0
+  00D7EF1F: push        1
+  00D7EF21: push        dword ptr [ebp+8]
+  00D7EF24: call        004C7C30
+  00D7EF29: pop         ebp
+  00D7EF2A: ret         4
+  00D7EF2D: int         3
+  00D7EF2E: int         3
+  00D7EF2F: int         3
+  00D7EF30: push        ebp
+  00D7EF31: mov         ebp,esp
+  00D7EF33: mov         ecx,dword ptr [ecx+00000460h]
+  00D7EF39: test        ecx,ecx
+  00D7EF3B: je          00D7EF49
+  00D7EF3D: push        0
+  00D7EF3F: push        1
+  00D7EF41: push        dword ptr [ebp+8]
+  00D7EF44: call        004C82F0
+  00D7EF49: pop         ebp
+  00D7EF4A: ret         4
+  00D7EF4D: int         3
+  00D7EF4E: int         3
+  00D7EF4F: int         3
+  00D7EF50: push        ebp
+  00D7EF51: mov         ebp,esp
+  00D7EF53: mov         ecx,dword ptr [ecx+00000454h]
+  00D7EF59: test        ecx,ecx
+  00D7EF5B: je          00D7EF69
+  00D7EF5D: push        0
+  00D7EF5F: push        1
+  00D7EF61: push        dword ptr [ebp+8]
+  00D7EF64: call        004C82F0
+  00D7EF69: pop         ebp
+  00D7EF6A: ret         4
+  00D7EF6D: int         3
+  00D7EF6E: int         3
+  00D7EF6F: int         3
+  00D7EF70: push        ebp
+  00D7EF71: mov         ebp,esp
+  00D7EF73: push        0FFFFFFFFh
+  00D7EF75: push        17DFA20h
+  00D7EF7A: mov         eax,dword ptr fs:[00000000h]
+  00D7EF80: push        eax
+  00D7EF81: push        ecx
+  00D7EF82: push        esi
+  00D7EF83: push        edi
+  00D7EF84: mov         eax,dword ptr ds:[01C98574h]
+  00D7EF89: xor         eax,ebp
+  00D7EF8B: push        eax
+  00D7EF8C: lea         eax,[ebp-0Ch]
+  00D7EF8F: mov         dword ptr fs:[00000000h],eax
+  00D7EF95: mov         dword ptr [ebp-10h],0
+  00D7EF9C: xor         esi,esi
+  00D7EF9E: push        esi
+  00D7EF9F: 6A
+
+  Summary
+
+        1000 .text

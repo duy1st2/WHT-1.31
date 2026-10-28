@@ -1,0 +1,291 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-b7f320.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D4F320: push        ebp
+  00D4F321: mov         ebp,esp
+  00D4F323: sub         esp,5F8h
+  00D4F329: mov         eax,dword ptr ds:[01C98574h]
+  00D4F32E: xor         eax,ebp
+  00D4F330: mov         dword ptr [ebp-4],eax
+  00D4F333: mov         eax,dword ptr [ebp+0Ch]
+  00D4F336: push        esi
+  00D4F337: mov         esi,dword ptr [ebp+8]
+  00D4F33A: push        edi
+  00D4F33B: mov         edi,ecx
+  00D4F33D: mov         dword ptr [ebp+FFFFFA28h],eax
+  00D4F343: mov         eax,dword ptr [ebp+10h]
+  00D4F346: mov         dword ptr [ebp+FFFFFA34h],esi
+  00D4F34C: mov         dword ptr [ebp+FFFFFA2Ch],eax
+  00D4F352: cmp         byte ptr [edi+0000009Dh],0
+  00D4F359: jne         00D4F367
+  00D4F35B: mov         eax,dword ptr [edi]
+  00D4F35D: mov         byte ptr [edi+0000009Ch],1
+  00D4F364: call        dword ptr [eax+6Ch]
+  00D4F367: mov         eax,dword ptr [esi+000001FCh]
+  00D4F36D: mov         dword ptr [ebp+FFFFFA20h],eax
+  00D4F373: mov         eax,dword ptr [ebp+FFFFFA28h]
+  00D4F379: mov         byte ptr [ebp+FFFFFF3Ch],0
+  00D4F380: mov         byte ptr [ebp-44h],0
+  00D4F384: movss       xmm1,dword ptr [eax]
+  00D4F388: mov         eax,dword ptr [ebp+FFFFFA2Ch]
+  00D4F38E: movss       dword ptr [ebp+FFFFFA30h],xmm1
+  00D4F396: movss       xmm0,dword ptr [eax]
+  00D4F39A: mov         eax,dword ptr [esi+000001F8h]
+  00D4F3A0: addss       xmm0,xmm1
+  00D4F3A4: mov         dword ptr [ebp+FFFFFA38h],eax
+  00D4F3AA: lea         eax,[ebp+FFFFFA30h]
+  00D4F3B0: push        eax
+  00D4F3B1: lea         eax,[ebp+FFFFFA38h]
+  00D4F3B7: push        eax
+  00D4F3B8: lea         eax,[ebp+FFFFFA0Ch]
+  00D4F3BE: movss       dword ptr [ebp+FFFFFA18h],xmm0
+  00D4F3C6: push        eax
+  00D4F3C7: call        01115280
+  00D4F3CC: lea         eax,[ebp+FFFFFA18h]
+  00D4F3D2: push        eax
+  00D4F3D3: lea         eax,[ebp+FFFFFA0Ch]
+  00D4F3D9: push        eax
+  00D4F3DA: lea         eax,[ebp+FFFFFA24h]
+  00D4F3E0: push        eax
+  00D4F3E1: call        01115390
+  00D4F3E6: push        eax
+  00D4F3E7: lea         eax,[ebp+FFFFFA1Ch]
+  00D4F3ED: push        eax
+  00D4F3EE: call        00DD21B0
+  00D4F3F3: add         esp,20h
+  00D4F3F6: lea         eax,[ebp+FFFFFA1Ch]
+  00D4F3FC: push        1D4C7E4h
+  00D4F401: push        1D4C87Ch
+  00D4F406: push        eax
+  00D4F407: lea         eax,[ebp+FFFFFA24h]
+  00D4F40D: push        eax
+  00D4F40E: call        011154A0
+  00D4F413: add         esp,0Ch
+  00D4F416: push        eax
+  00D4F417: lea         eax,[ebp+FFFFFA30h]
+  00D4F41D: push        eax
+  00D4F41E: call        011151B0
+  00D4F423: xorps       xmm0,xmm0
+  00D4F426: add         esp,0Ch
+  00D4F429: mov         eax,dword ptr [eax]
+  00D4F42B: mov         dword ptr [ebp+FFFFFA1Ch],eax
+  00D4F431: movss       xmm1,dword ptr [ebp+FFFFFA1Ch]
+  00D4F439: comiss      xmm1,xmm0
+  00D4F43C: jbe         00D4F450
+  00D4F43E: addss       xmm1,dword ptr ds:[018F1138h]
+  00D4F446: movaps      xmm0,xmm1
+  00D4F449: call        01653390
+  00D4F44E: jmp         00D4F463
+  00D4F450: movss       xmm0,dword ptr ds:[018F1138h]
+  00D4F458: subss       xmm0,xmm1
+  00D4F45C: call        01653390
+  00D4F461: neg         eax
+  00D4F463: movss       xmm1,dword ptr [ebp+FFFFFA0Ch]
+  00D4F46B: xorps       xmm0,xmm0
+  00D4F46E: comiss      xmm1,xmm0
+  00D4F471: mov         dword ptr [ebp+FFFFFA30h],eax
+  00D4F477: jbe         00D4F48D
+  00D4F479: addss       xmm1,dword ptr ds:[018F1138h]
+  00D4F481: movaps      xmm0,xmm1
+  00D4F484: call        01653390
+  00D4F489: mov         esi,eax
+  00D4F48B: jmp         00D4F4A2
+  00D4F48D: movss       xmm0,dword ptr ds:[018F1138h]
+  00D4F495: subss       xmm0,xmm1
+  00D4F499: call        01653390
+  00D4F49E: mov         esi,eax
+  00D4F4A0: neg         esi
+  00D4F4A2: mov         eax,dword ptr [ebp+FFFFFA34h]
+  00D4F4A8: push        dword ptr [eax+34h]
+  00D4F4AB: call        00D93480
+  00D4F4B0: push        eax
+  00D4F4B1: mov         dword ptr [ebp+FFFFFA38h],eax
+  00D4F4B7: mov         eax,dword ptr [ebp+FFFFFA34h]
+  00D4F4BD: mov         dword ptr [ebp+FFFFFA10h],0
+  00D4F4C7: mov         dword ptr [ebp+FFFFFA14h],0
+  00D4F4D1: push        dword ptr [eax+34h]
+  00D4F4D4: call        00D96090
+  00D4F4D9: add         esp,0Ch
+  00D4F4DC: test        al,al
+  00D4F4DE: je          00D4F513
+  00D4F4E0: mov         ecx,dword ptr [ebp+FFFFFA34h]
+  00D4F4E6: mov         eax,dword ptr [ecx]
+  00D4F4E8: mov         eax,dword ptr [eax+000000ECh]
+  00D4F4EE: call        eax
+  00D4F4F0: push        eax
+  00D4F4F1: push        dword ptr [ebp+FFFFFA38h]
+  00D4F4F7: call        00D8BB10
+  00D4F4FC: mov         dword ptr [ebp+FFFFFA10h],eax
+  00D4F502: add         esp,8
+  00D4F505: mov         eax,dword ptr [ebp+FFFFFA38h]
+  00D4F50B: mov         dword ptr [ebp+FFFFFA14h],eax
+  00D4F511: jmp         00D4F515
+  00D4F513: xor         eax,eax
+  00D4F515: test        eax,eax
+  00D4F517: mov         eax,dword ptr [ebp+FFFFFA20h]
+  00D4F51D: je          00D4F528
+  00D4F51F: mov         eax,dword ptr [eax*4+01C81E64h]
+  00D4F526: jmp         00D4F52F
+  00D4F528: mov         eax,dword ptr [eax*4+01C81E84h]
+  00D4F52F: push        0
+  00D4F531: push        eax
+  00D4F532: call        00CE42D0
+  00D4F537: mov         ecx,dword ptr [edi+00000120h]
+  00D4F53D: add         esp,8
+  00D4F540: push        0
+  00D4F542: push        eax
+  00D4F543: call        00FCE9F0
+  00D4F548: mov         eax,dword ptr [ebp+FFFFFA34h]
+  00D4F54E: mov         eax,dword ptr [eax+20h]
+  00D4F551: shr         eax,3
+  00D4F554: test        al,1
+  00D4F556: lea         eax,[ebp-44h]
+  00D4F559: je          00D4F56D
+  00D4F55B: push        40h
+  00D4F55D: push        eax
+  00D4F55E: push        19FB6B4h
+  00D4F563: call        00FF4260
+  00D4F568: jmp         00D4F6B4
+  00D4F56D: push        esi
+  00D4F56E: push        18FDC04h
+  00D4F573: push        40h
+  00D4F575: push        eax
+  00D4F576: call        00461CE0
+  00D4F57B: mov         eax,dword ptr [ebp+FFFFFA2Ch]
+  00D4F581: add         esp,10h
+  00D4F584: xorps       xmm1,xmm1
+  00D4F587: movss       xmm0,dword ptr [eax]
+  00D4F58B: mov         eax,dword ptr [ebp+FFFFFA28h]
+  00D4F591: addss       xmm0,dword ptr [eax]
+  00D4F595: ucomiss     xmm0,xmm1
+  00D4F598: movss       dword ptr [ebp+FFFFFA24h],xmm0
+  00D4F5A0: lahf
+  00D4F5A1: test        ah,44h
+  00D4F5A4: jnp         00D4F6B7
+  00D4F5AA: comiss      xmm0,xmm1
+  00D4F5AD: mov         eax,19FB598h
+  00D4F5B2: mov         esi,19FB588h
+  00D4F5B7: push        40h
+  00D4F5B9: cmovbe      esi,eax
+  00D4F5BC: lea         eax,[ebp-44h]
+  00D4F5BF: push        eax
+  00D4F5C0: mov         dword ptr [ebp+FFFFFA38h],esi
+  00D4F5C6: call        01663AE6
+  00D4F5CB: mov         edx,eax
+  00D4F5CD: add         esp,8
+  00D4F5D0: cmp         edx,40h
+  00D4F5D3: je          00D4F614
+  00D4F5D5: mov         ecx,esi
+  00D4F5D7: lea         esi,[ecx+1]
+  00D4F5DA: nop         word ptr [eax+eax]
+  00D4F5E0: mov         al,byte ptr [ecx]
+  00D4F5E2: inc         ecx
+  00D4F5E3: test        al,al
+  00D4F5E5: jne         00D4F5E0
+  00D4F5E7: sub         ecx,esi
+  00D4F5E9: mov         esi,3Fh
+  00D4F5EE: lea         eax,[ecx+edx]
+  00D4F5F1: cmp         eax,esi
+  00D4F5F3: cmovb       esi,eax
+  00D4F5F6: mov         eax,esi
+  00D4F5F8: sub         eax,edx
+  00D4F5FA: push        eax
+  00D4F5FB: push        dword ptr [ebp+FFFFFA38h]
+  00D4F601: lea         eax,[ebp-44h]
+  00D4F604: add         eax,edx
+  00D4F606: push        eax
+  00D4F607: call        01657E40
+  00D4F60C: add         esp,0Ch
+  00D4F60F: mov         byte ptr [ebp+esi-44h],0
+  00D4F614: movss       xmm1,dword ptr [ebp+FFFFFA24h]
+  00D4F61C: cvttss2si   ecx,xmm1
+  00D4F620: movd        xmm0,ecx
+  00D4F624: cvtdq2ps    xmm0,xmm0
+  00D4F627: ucomiss     xmm1,xmm0
+  00D4F62A: lahf
+  00D4F62B: test        ah,44h
+  00D4F62E: lea         eax,[ebp+FFFFFF7Ch]
+  00D4F634: jp          00D4F649
+  00D4F636: push        ecx
+  00D4F637: push        19FB5A4h
+  00D4F63C: push        40h
+  00D4F63E: push        eax
+  00D4F63F: call        00461CE0
+  00D4F644: add         esp,10h
+  00D4F647: jmp         00D4F664
+  00D4F649: cvtps2pd    xmm0,xmm1
+  00D4F64C: sub         esp,8
+  00D4F64F: movsd       mmword ptr [esp],xmm0
+  00D4F654: push        19FB5ACh
+  00D4F659: push        40h
+  00D4F65B: push        eax
+  00D4F65C: call        00461CE0
+  00D4F661: add         esp,14h
+  00D4F664: lea         eax,[ebp-44h]
+  00D4F667: push        40h
+  00D4F669: push        eax
+  00D4F66A: call        01663AE6
+  00D4F66F: mov         edx,eax
+  00D4F671: add         esp,8
+  00D4F674: cmp         edx,40h
+  00D4F677: je          00D4F6B7
+  00D4F679: lea         ecx,[ebp+FFFFFF7Ch]
+  00D4F67F: lea         esi,[ecx+1]
+  00D4F682: mov         al,byte ptr [ecx]
+  00D4F684: inc         ecx
+  00D4F685: test        al,al
+  00D4F687: jne         00D4F682
+  00D4F689: sub         ecx,esi
+  00D4F68B: mov         esi,3Fh
+  00D4F690: lea         eax,[ecx+edx]
+  00D4F693: cmp         eax,esi
+  00D4F695: cmovb       esi,eax
+  00D4F698: mov         eax,esi
+  00D4F69A: sub         eax,edx
+  00D4F69C: push        eax
+  00D4F69D: lea         eax,[ebp+FFFFFF7Ch]
+  00D4F6A3: push        eax
+  00D4F6A4: lea         eax,[ebp-44h]
+  00D4F6A7: add         eax,edx
+  00D4F6A9: push        eax
+  00D4F6AA: call        01657E40
+  00D4F6AF: mov         byte ptr [ebp+esi-44h],0
+  00D4F6B4: add         esp,0Ch
+  00D4F6B7: lea         eax,[ebp-44h]
+  00D4F6BA: push        eax
+  00D4F6BB: push        dword ptr [edi+0000012Ch]
+  00D4F6C1: call        00D512A0
+  00D4F6C6: add         esp,8
+  00D4F6C9: cmp         dword ptr [ebp+FFFFFA14h],0
+  00D4F6D0: je          00D4F6F6
+  00D4F6D2: push        dword ptr [ebp+FFFFFA10h]
+  00D4F6D8: lea         eax,[ebp+FFFFFF3Ch]
+  00D4F6DE: push        18FDC04h
+  00D4F6E3: push        40h
+  00D4F6E5: push        eax
+  00D4F6E6: call        00461CE0
+  00D4F6EB: add         esp,10h
+  00D4F6EE: lea         eax,[ebp+FFFFFF3Ch]
+  00D4F6F4: jmp         00D4F6FB
+  00D4F6F6: mov         eax,18F0378h
+  00D4F6FB: push        eax
+  00D4F6FC: mov         eax,dword ptr [edi+00000130h]
+  00D4F702: push        eax
+  00D4F703: call        00D512A0
+  00D4F708: push        40h
+  00D4F70A: lea         eax,[ebp+FFFFFF3Ch]
+  00D4F710: mov         byte ptr [ebp+FFFFFD3Ch],0
+  00D4F717: push        eax
+  00D4F718: push        19FB6C4h
+  00D4F71D: C6
+  00D4F71E: 85
+  00D4F71F: 3C
+
+  Summary
+
+        1000 .text

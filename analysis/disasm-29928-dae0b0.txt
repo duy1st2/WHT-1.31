@@ -1,0 +1,45 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-29928-dae0b0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF62721E0B0: mov         qword ptr [rsp+10h],rbx
+  00007FF62721E0B5: mov         qword ptr [rsp+18h],rsi
+  00007FF62721E0BA: push        rdi
+  00007FF62721E0BB: sub         rsp,20h
+  00007FF62721E0BF: mov         rdi,qword ptr [rcx+0000000000000270h]
+  00007FF62721E0C6: mov         r8,rdx
+  00007FF62721E0C9: lea         rdx,[rcx+0000000000000278h]
+  00007FF62721E0D0: mov         rsi,rcx
+  00007FF62721E0D3: lea         rcx,[rsp+30h]
+  00007FF62721E0D8: call        00007FF6275D6700
+  00007FF62721E0DD: mov         rdx,rax
+  00007FF62721E0E0: lea         rcx,[rsi+0000000000000270h]
+  00007FF62721E0E7: mov         r8b,1
+  00007FF62721E0EA: call        qword ptr [rdi]
+  00007FF62721E0EC: mov         rcx,rsi
+  00007FF62721E0EF: mov         rbx,qword ptr [rsp+38h]
+  00007FF62721E0F4: mov         rsi,qword ptr [rsp+40h]
+  00007FF62721E0F9: add         rsp,20h
+  00007FF62721E0FD: pop         rdi
+  00007FF62721E0FE: jmp         00007FF62721EB70
+  00007FF62721E103: int         3
+  00007FF62721E104: int         3
+  00007FF62721E105: int         3
+  00007FF62721E106: int         3
+  00007FF62721E107: int         3
+  00007FF62721E108: int         3
+  00007FF62721E109: int         3
+  00007FF62721E10A: int         3
+  00007FF62721E10B: int         3
+  00007FF62721E10C: int         3
+  00007FF62721E10D: int         3
+  00007FF62721E10E: int         3
+  00007FF62721E10F: int         3
+
+  Summary
+
+        1000 .text

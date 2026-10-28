@@ -1,0 +1,73 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-bb1f70.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D81F70: add         dword ptr [esi+4],0FFFFFFFFh
+  00D81F74: jne         00D81F7C
+  00D81F76: mov         eax,dword ptr [esi]
+  00D81F78: mov         ecx,esi
+  00D81F7A: call        dword ptr [eax]
+  00D81F7C: mov         eax,dword ptr [esi]
+  00D81F7E: lea         ecx,[ebp-4Ch]
+  00D81F81: push        ecx
+  00D81F82: push        ebx
+  00D81F83: mov         ecx,esi
+  00D81F85: mov         byte ptr [ebp-4],0
+  00D81F89: call        dword ptr [eax+00000080h]
+  00D81F8F: push        esi
+  00D81F90: mov         ecx,ebx
+  00D81F92: call        00D7D840
+  00D81F97: lea         ecx,[ebp-4Ch]
+  00D81F9A: call        004DED00
+  00D81F9F: mov         ecx,dword ptr [ebp-0Ch]
+  00D81FA2: mov         dword ptr fs:[00000000h],ecx
+  00D81FA9: pop         ecx
+  00D81FAA: pop         edi
+  00D81FAB: pop         esi
+  00D81FAC: pop         ebx
+  00D81FAD: mov         ecx,dword ptr [ebp-10h]
+  00D81FB0: xor         ecx,ebp
+  00D81FB2: call        016532EA
+  00D81FB7: mov         esp,ebp
+  00D81FB9: pop         ebp
+  00D81FBA: ret         4
+  00D81FBD: int         3
+  00D81FBE: int         3
+  00D81FBF: int         3
+  00D81FC0: push        ebp
+  00D81FC1: mov         ebp,esp
+  00D81FC3: push        0FFFFFFFFh
+  00D81FC5: push        17DFCF0h
+  00D81FCA: mov         eax,dword ptr fs:[00000000h]
+  00D81FD0: push        eax
+  00D81FD1: sub         esp,38h
+  00D81FD4: mov         eax,dword ptr ds:[01C98574h]
+  00D81FD9: xor         eax,ebp
+  00D81FDB: mov         dword ptr [ebp-10h],eax
+  00D81FDE: push        ebx
+  00D81FDF: push        esi
+  00D81FE0: push        edi
+  00D81FE1: push        eax
+  00D81FE2: lea         eax,[ebp-0Ch]
+  00D81FE5: mov         dword ptr fs:[00000000h],eax
+  00D81FEB: mov         eax,ecx
+  00D81FED: mov         dword ptr [ebp-40h],eax
+  00D81FF0: mov         ebx,dword ptr [ebp+8]
+  00D81FF3: lea         ecx,[eax+00000408h]
+  00D81FF9: mov         eax,dword ptr [ecx+4]
+  00D81FFC: and         eax,dword ptr [ecx]
+  00D81FFE: cmp         eax,0FFFFFFFFh
+  00D82001: je          00D8203C
+  00D82003: call        00F3B5A0
+  00D82008: mov         esi,eax
+  00D8200A: test        esi,esi
+  00D8200C: je          00D8203C
+  00D8200E: nop
+
+  Summary
+
+        1000 .text

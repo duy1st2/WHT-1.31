@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <windows.h>
 #include <atomic>
 #include <cstdint>
@@ -29,6 +29,8 @@ struct Config {
     unsigned fpsLimit=0; // 0 leaves the engine setting alone; otherwise 60..1000.
     unsigned sceneLight=0; // 0 restores engine ownership; 1..255 ambient grayscale.
     bool showFps=false;
+    bool workerCorePreference=true;
+    bool externalHud=false;
     bool showPing=false;
     bool showResource=false;
     bool showHotkeyInPanel=false,showCooldown=true;

@@ -1,0 +1,51 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-c64ba0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF783BC4BA0: push        rbx
+  00007FF783BC4BA2: sub         rsp,20h
+  00007FF783BC4BA6: mov         rbx,rcx
+  00007FF783BC4BA9: xor         edx,edx
+  00007FF783BC4BAB: xor         ecx,ecx
+  00007FF783BC4BAD: call        00007FF783BA4860
+  00007FF783BC4BB2: test        rax,rax
+  00007FF783BC4BB5: je          00007FF783BC4BD0
+  00007FF783BC4BB7: cmp         dword ptr [rax+0000000000000210h],1
+  00007FF783BC4BBE: je          00007FF783BC4BD0
+  00007FF783BC4BC0: mov         rdx,rbx
+  00007FF783BC4BC3: mov         rcx,rax
+  00007FF783BC4BC6: add         rsp,20h
+  00007FF783BC4BCA: pop         rbx
+  00007FF783BC4BCB: jmp         00007FF783BB3250
+  00007FF783BC4BD0: add         rsp,20h
+  00007FF783BC4BD4: pop         rbx
+  00007FF783BC4BD5: ret
+  00007FF783BC4BD6: test        byte ptr [rax],dl
+  00007FF783BC4BD8: 2E
+  00007FF783BC4BD9: CE
+  00007FF783BC4BDA: out         dx,eax
+  00007FF783BC4BDB: jle         00007FF783BC4C31
+  00007FF783BC4BDD: jrcxz       00007FF783BC4C03
+  00007FF783BC4BDF: fild        dword ptr [rax+53h]
+  00007FF783BC4BE2: sub         rsp,20h
+  00007FF783BC4BE6: movzx       ebx,cl
+  00007FF783BC4BE9: xor         edx,edx
+  00007FF783BC4BEB: xor         ecx,ecx
+  00007FF783BC4BED: call        00007FF783BA4860
+  00007FF783BC4BF2: test        rax,rax
+  00007FF783BC4BF5: je          00007FF783BC4C10
+  00007FF783BC4BF7: cmp         dword ptr [rax+0000000000000210h],1
+  00007FF783BC4BFE: je          00007FF783BC4C10
+  00007FF783BC4C00: movzx       edx,bl
+  00007FF783BC4C03: mov         rcx,rax
+  00007FF783BC4C06: add         rsp,20h
+  00007FF783BC4C0A: pop         rbx
+  00007FF783BC4C0B: jmp         00007FF783BB3270
+
+  Summary
+
+        1000 .text

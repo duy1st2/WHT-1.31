@@ -1,0 +1,73 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-155f4b0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  0172F4B0: xor         eax,eax
+  0172F4B2: ret
+  0172F4B3: sal         ah,1
+  0172F4B5: push        esi
+  0172F4B6: out         47h,al
+  0172F4B8: cld
+  0172F4B9: DD
+  0172F4BA: cli
+  0172F4BB: sub         esi,dword ptr [ecx-31h]
+  0172F4BE: push        ebx
+  0172F4BF: xchg        eax,esp
+  0172F4C0: push        ebp
+  0172F4C1: mov         ebp,esp
+  0172F4C3: mov         edx,dword ptr [ebp+8]
+  0172F4C6: push        esi
+  0172F4C7: mov         esi,dword ptr [ebp+0Ch]
+  0172F4CA: push        edi
+  0172F4CB: mov         edi,1
+  0172F4D0: lea         eax,[esi+esi*2]
+  0172F4D3: add         eax,eax
+  0172F4D5: cmp         edx,eax
+  0172F4D7: jne         0172F4E3
+  0172F4D9: mov         eax,0AAAAAAABh
+  0172F4DE: mul         eax,edx
+  0172F4E0: shr         edx,2
+  0172F4E3: cmp         edx,1
+  0172F4E6: ja          0172F4ED
+  0172F4E8: cmp         esi,1
+  0172F4EB: jbe         0172F50C
+  0172F4ED: mov         eax,edx
+  0172F4EF: mov         ecx,esi
+  0172F4F1: shr         eax,1
+  0172F4F3: mov         edx,1
+  0172F4F8: shr         ecx,1
+  0172F4FA: inc         edi
+  0172F4FB: cmp         eax,edx
+  0172F4FD: mov         esi,1
+  0172F502: cmovae      edx,eax
+  0172F505: cmp         ecx,esi
+  0172F507: cmovae      esi,ecx
+  0172F50A: jmp         0172F4E3
+  0172F50C: mov         eax,edi
+  0172F50E: pop         edi
+  0172F50F: pop         esi
+  0172F510: pop         ebp
+  0172F511: ret
+  0172F512: int         0D5h
+  0172F514: retf        0E719h
+  0172F517: aadb        36h
+  0172F519: jb          0172F55A
+  0172F51B: das
+  0172F51C: mov         ebx,55CEE653h
+  0172F521: mov         ebp,esp
+  0172F523: push        ebx
+  0172F524: push        edi
+  0172F525: xor         ebx,ebx
+  0172F527: xor         edi,edi
+  0172F529: cmp         dword ptr [ebp+8],ebx
+  0172F52C: 0F
+  0172F52D: xchg        dl,cl
+  0172F52F: 00
+
+  Summary
+
+        1000 .text

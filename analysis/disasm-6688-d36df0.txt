@@ -1,0 +1,68 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-d36df0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF783C96DF0: jmp         00007FF783BC4BA0
+  00007FF783C96DF5: int         3
+  00007FF783C96DF6: int         3
+  00007FF783C96DF7: int         3
+  00007FF783C96DF8: int         3
+  00007FF783C96DF9: int         3
+  00007FF783C96DFA: int         3
+  00007FF783C96DFB: int         3
+  00007FF783C96DFC: int         3
+  00007FF783C96DFD: int         3
+  00007FF783C96DFE: int         3
+  00007FF783C96DFF: int         3
+  00007FF783C96E00: jmp         00007FF783BC4CB0
+  00007FF783C96E05: int         3
+  00007FF783C96E06: int         3
+  00007FF783C96E07: int         3
+  00007FF783C96E08: int         3
+  00007FF783C96E09: int         3
+  00007FF783C96E0A: int         3
+  00007FF783C96E0B: int         3
+  00007FF783C96E0C: int         3
+  00007FF783C96E0D: int         3
+  00007FF783C96E0E: int         3
+  00007FF783C96E0F: int         3
+  00007FF783C96E10: xor         edx,edx
+  00007FF783C96E12: jmp         00007FF783BC4D80
+  00007FF783C96E17: int         3
+  00007FF783C96E18: int         3
+  00007FF783C96E19: int         3
+  00007FF783C96E1A: int         3
+  00007FF783C96E1B: int         3
+  00007FF783C96E1C: int         3
+  00007FF783C96E1D: int         3
+  00007FF783C96E1E: int         3
+  00007FF783C96E1F: int         3
+  00007FF783C96E20: mov         qword ptr [rsp+8],rbx
+  00007FF783C96E25: mov         qword ptr [rsp+10h],rsi
+  00007FF783C96E2A: push        rdi
+  00007FF783C96E2B: sub         rsp,20h
+  00007FF783C96E2F: mov         esi,edx
+  00007FF783C96E31: mov         rbx,rcx
+  00007FF783C96E34: mov         rdx,rcx
+  00007FF783C96E37: mov         ecx,esi
+  00007FF783C96E39: call        00007FF783B6C2C0
+  00007FF783C96E3E: mov         edi,eax
+  00007FF783C96E40: test        eax,eax
+  00007FF783C96E42: je          00007FF783C96E9E
+  00007FF783C96E44: nop         dword ptr [rax]
+  00007FF783C96E48: nop         dword ptr [rax+rax+0000000000000000h]
+  00007FF783C96E50: dec         edi
+  00007FF783C96E52: mov         r8,rbx
+  00007FF783C96E55: mov         edx,edi
+  00007FF783C96E57: mov         ecx,esi
+  00007FF783C96E59: call        00007FF783B6C170
+  00007FF783C96E5E: 44
+  00007FF783C96E5F: 8B
+
+  Summary
+
+        1000 .text

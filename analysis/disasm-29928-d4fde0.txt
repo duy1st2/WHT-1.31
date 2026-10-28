@@ -1,0 +1,37 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-29928-d4fde0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF6271BFDE0: mov         rax,rsp
+  00007FF6271BFDE3: push        rsi
+  00007FF6271BFDE4: push        rdi
+  00007FF6271BFDE5: push        r12
+  00007FF6271BFDE7: push        r14
+  00007FF6271BFDE9: push        r15
+  00007FF6271BFDEB: sub         rsp,0B0h
+  00007FF6271BFDF2: mov         qword ptr [rsp+40h],0FFFFFFFFFFFFFFFEh
+  00007FF6271BFDFB: mov         qword ptr [rax+10h],rbx
+  00007FF6271BFDFF: mov         qword ptr [rax+18h],rbp
+  00007FF6271BFE03: mov         rax,qword ptr [00007FF628575118h]
+  00007FF6271BFE0A: xor         rax,rsp
+  00007FF6271BFE0D: mov         qword ptr [rsp+00000000000000A0h],rax
+  00007FF6271BFE15: movzx       r15d,dl
+  00007FF6271BFE19: mov         r14,rcx
+  00007FF6271BFE1C: call        00007FF626A6DAC0
+  00007FF6271BFE21: mov         ebp,eax
+  00007FF6271BFE23: xor         ebx,ebx
+  00007FF6271BFE25: mov         r12d,0FFFFFFFFh
+  00007FF6271BFE2B: cmp         eax,414E6275h
+  00007FF6271BFE30: jg          00007FF6271BFE7F
+  00007FF6271BFE32: je          00007FF6271BFF08
+  00007FF6271BFE38: cmp         eax,41456275h
+  00007FF6271BFE3D: 0F
+  00007FF6271BFE3E: test        ch,al
+
+  Summary
+
+        1000 .text

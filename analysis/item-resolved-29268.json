@@ -1,0 +1,16 @@
+{
+  "pid": 29268,
+  "bits": 32,
+  "read_only": true,
+  "bindings": {
+    "CreateItem": [
+      "0x8a0160"
+    ],
+    "GetItemTypeId": [
+      "0x8ac300"
+    ],
+    "RemoveItem": [
+      "0x8bf550"
+    ]
+  }
+}

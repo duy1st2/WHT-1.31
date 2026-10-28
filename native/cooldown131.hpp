@@ -1,6 +1,7 @@
 #pragma once
 #include "runtime131.hpp"
 #include "component_lookup131.hpp"
+#include "overhead_cadence.hpp"
 #include <cstdio>
 namespace wht {
 struct CooldownProfile131 {unsigned build;uintptr_t button,commandBar,infoBar,inventoryBar,abilityGetter,spellRemaining;};
@@ -55,12 +56,13 @@ inline std::string CooldownText131(float value){
 }
 struct CooldownOverlay131 {
  struct Entry{uintptr_t button=0;std::array<void*,2> fonts{};std::string text;};
- std::array<Entry,18> entries{};bool reported=false;
- void Reset(){entries={};reported=false;}
- template<class Menu> bool Update(uintptr_t base,uintptr_t ui,const CooldownProfile131& profile,bool enabled,Menu& menu){
+ std::array<Entry,18> entries{};ButtonUpdateCadence cadence;bool reported=false;
+ void Reset(){entries={};cadence={};reported=false;}
+ template<class Menu> bool Update(uintptr_t base,uintptr_t ui,const CooldownProfile131& profile,bool enabled,Menu& menu,uintptr_t selected=0){
+  if(!cadence.Due(GetTickCount64(),ui,selected,&profile,enabled?1u:0u))return false;
   bool observed=false;
-  for(unsigned slot=0;slot<18;++slot){auto& e=entries[slot];const auto button=CooldownButton131(ui,base,profile,slot);
-   if(!button){for(auto font:e.fonts)if(font)menu.api.setText(font,"");e.button=0;e.text.clear();continue;}
+  for(unsigned slot=0;slot<18;++slot){auto& e=entries[slot];const auto button=enabled?CooldownButton131(ui,base,profile,slot):uintptr_t(0);
+   if(!button){if(!e.text.empty())for(auto font:e.fonts)if(font)menu.api.setText(font,"");e.button=0;e.text.clear();continue;}
    const auto value=enabled?ButtonCooldown131(button,base,profile):0;const auto text=CooldownText131(value);observed|=value>0;
    for(unsigned layer=0;layer<2;++layer){bool created=false;
     if(!e.fonts[layer]&&!text.empty()){e.fonts[layer]=NativeCreateFontString(menu.api,menu.independentHost,.016f,"",4);created=e.fonts[layer]!=nullptr;

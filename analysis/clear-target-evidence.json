@@ -1,0 +1,10 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "3e4a8ab69152b94f9239bf0e74fd6a29b2ea7dfe0606e026c08ed020086ed804",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\show_unit_skills.hpp": "59812c8a8f145749df1014c0dc579f9a328bdf73cfc2385582ab585f1df1fd07",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\common.hpp": "abe6ab5f79ff388f9e997163b20f1e1b8afb0ca2d69daa3a1e68ca976f904ec4",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  },
+  "source": "WHT/native/runtime.cpp:2962-2968 clears g_setIdTargetHandle; 1.31 target cast reads pinned131/pinned64 via ReadPinned and SameSelfCastSource131. Reset the entire native pin record; no game memory write required.",
+  "ssp_status": "Not enabled; x86 enumerators mapped but selection/display gate and x64 callbacks not verified."
+}

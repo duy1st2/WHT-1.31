@@ -1,0 +1,189 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "5f5ead439f99139ec7d72bd5803e1957d026cb18911eb9bfc66b3dd857e1526c"
+  },
+  "profiles": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "pid": 8740,
+      "live_binding_pid": 35632,
+      "create": "0x8d13f0",
+      "getType": "0x8dd8b0",
+      "resolve": "0x6ff780",
+      "worker": "0xbb6940",
+      "engine_handle_conversion": "0x8eee90",
+      "blocks": [
+        [
+          9245680,
+          30
+        ],
+        [
+          9296048,
+          25
+        ],
+        [
+          7337856,
+          384
+        ],
+        [
+          7338240,
+          384
+        ],
+        [
+          7338624,
+          256
+        ],
+        [
+          12282176,
+          384
+        ],
+        [
+          12282560,
+          384
+        ],
+        [
+          12282944,
+          256
+        ]
+      ]
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "pid": 32116,
+      "live_binding_pid": 29268,
+      "create": "0x8a0160",
+      "getType": "0x8ac300",
+      "resolve": "0x6c6020",
+      "worker": "0xb75e30",
+      "engine_handle_conversion": "0x8bd0c0",
+      "blocks": [
+        [
+          9044320,
+          30
+        ],
+        [
+          9093888,
+          25
+        ],
+        [
+          7102496,
+          384
+        ],
+        [
+          7102880,
+          384
+        ],
+        [
+          7103264,
+          256
+        ],
+        [
+          12017200,
+          384
+        ],
+        [
+          12017584,
+          384
+        ],
+        [
+          12017968,
+          256
+        ]
+      ]
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "pid": 24984,
+      "live_binding_pid": 34924,
+      "create": "0x9e3fb0",
+      "getType": "0x9f2320",
+      "resolve": "0x7b8bd0",
+      "worker": "0xd16b70",
+      "engine_handle_conversion": "0xa03b70",
+      "blocks": [
+        [
+          10370992,
+          23
+        ],
+        [
+          10429216,
+          27
+        ],
+        [
+          8096720,
+          384
+        ],
+        [
+          8097104,
+          384
+        ],
+        [
+          8097488,
+          256
+        ],
+        [
+          13724528,
+          384
+        ],
+        [
+          13724912,
+          384
+        ],
+        [
+          13725296,
+          256
+        ]
+      ]
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "pid": 27336,
+      "live_binding_pid": 19468,
+      "create": "0xa2ff60",
+      "getType": "0xa3d9a0",
+      "resolve": "0x807a10",
+      "worker": "0xd55590",
+      "engine_handle_conversion": "0xa4ebe0",
+      "blocks": [
+        [
+          10682208,
+          23
+        ],
+        [
+          10738080,
+          27
+        ],
+        [
+          8419856,
+          384
+        ],
+        [
+          8420240,
+          384
+        ],
+        [
+          8420624,
+          256
+        ],
+        [
+          13981072,
+          384
+        ],
+        [
+          13981456,
+          384
+        ],
+        [
+          13981840,
+          256
+        ]
+      ]
+    }
+  ],
+  "scope": "WHT #item rawcode [1..50] and #copyitem slot1..6 [1..50], cursor position +40*x spacing, default native charges."
+}

@@ -1,0 +1,50 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-bc16e0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D916E0: push        ebp
+  00D916E1: mov         ebp,esp
+  00D916E3: mov         ecx,dword ptr [ecx+00000454h]
+  00D916E9: test        ecx,ecx
+  00D916EB: jne         00D916F3
+  00D916ED: xor         al,al
+  00D916EF: pop         ebp
+  00D916F0: ret         8
+  00D916F3: pop         ebp
+  00D916F4: jmp         0058C0F0
+  00D916F9: int         3
+  00D916FA: int         3
+  00D916FB: int         3
+  00D916FC: int         3
+  00D916FD: int         3
+  00D916FE: int         3
+  00D916FF: int         3
+  00D91700: push        esi
+  00D91701: mov         esi,ecx
+  00D91703: push        dword ptr [esi+34h]
+  00D91706: call        00D94DC0
+  00D9170B: add         esp,4
+  00D9170E: test        al,al
+  00D91710: je          00D91749
+  00D91712: mov         eax,dword ptr [esi+20h]
+  00D91715: shr         eax,1Eh
+  00D91718: test        al,1
+  00D9171A: jne         00D91749
+  00D9171C: cmp         dword ptr [esi+000003C0h],0
+  00D91723: jg          00D91749
+  00D91725: mov         ecx,dword ptr [esi+00000168h]
+  00D9172B: mov         eax,ecx
+  00D9172D: shr         eax,14h
+  00D91730: test        al,1
+  00D91732: jne         00D91749
+  00D91734: cmp         dword ptr [esi+0000015Ch],0
+  00D9173B: jg          00D91749
+  00D9173D: shr         ecx,15h
+
+  Summary
+
+        1000 .text

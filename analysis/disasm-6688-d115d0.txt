@@ -1,0 +1,61 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-d115d0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF783C715D0: and         al,80h
+  00007FF783C715D2: add         byte ptr [rax],al
+  00007FF783C715D4: add         byte ptr [rcx+0Fh],al
+  00007FF783C715D7: mov         dh,0E8h
+  00007FF783C715D9: mov         r14,rdx
+  00007FF783C715DC: mov         r15,rcx
+  00007FF783C715DF: add         rcx,510h
+  00007FF783C715E6: mov         eax,dword ptr [rcx+4]
+  00007FF783C715E9: and         eax,dword ptr [rcx]
+  00007FF783C715EB: xor         ebx,ebx
+  00007FF783C715ED: mov         r12d,0FFFFFFFFh
+  00007FF783C715F3: cmp         eax,r12d
+  00007FF783C715F6: je          00007FF783C71643
+  00007FF783C715F8: call        00007FF783E74A10
+  00007FF783C715FD: mov         rdi,rax
+  00007FF783C71600: test        rax,rax
+  00007FF783C71603: je          00007FF783C71643
+  00007FF783C71605: nop         word ptr [rax+rax+0000000000000000h]
+  00007FF783C71610: mov         rsi,rdi
+  00007FF783C71613: lea         rcx,[rdi+40h]
+  00007FF783C71617: mov         eax,dword ptr [rcx+4]
+  00007FF783C7161A: and         eax,dword ptr [rcx]
+  00007FF783C7161C: cmp         eax,r12d
+  00007FF783C7161F: jne         00007FF783C71626
+  00007FF783C71621: mov         rdi,rbx
+  00007FF783C71624: jmp         00007FF783C7162E
+  00007FF783C71626: call        00007FF783E74A10
+  00007FF783C7162B: mov         rdi,rax
+  00007FF783C7162E: mov         rax,qword ptr [rsi]
+  00007FF783C71631: mov         rcx,rsi
+  00007FF783C71634: call        qword ptr [rax+38h]
+  00007FF783C71637: cmp         eax,41727363h
+  00007FF783C7163C: je          00007FF783C7169D
+  00007FF783C7163E: test        rdi,rdi
+  00007FF783C71641: jne         00007FF783C71610
+  00007FF783C71643: test        bpl,bpl
+  00007FF783C71646: je          00007FF783C71757
+  00007FF783C7164C: mov         qword ptr [rsp+28h],rbx
+  00007FF783C71651: call        00007FF78359AAD0
+  00007FF783C71656: mov         ecx,eax
+  00007FF783C71658: call        00007FF78321C210
+  00007FF783C7165D: mov         rdi,rax
+  00007FF783C71660: call        00007FF78359AAD0
+  00007FF783C71665: mov         edx,eax
+  00007FF783C71667: mov         r8,qword ptr [rdi+00000000000000E0h]
+  00007FF783C7166E: lea         rcx,[rsp+30h]
+  00007FF783C71673: call        00007FF783E72440
+  00007FF783C71678: mov         qword ptr [rsp+70h],r12
+  00007FF783C7167D: mov         r8b,1
+
+  Summary
+
+        1000 .text

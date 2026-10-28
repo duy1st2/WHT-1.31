@@ -1,0 +1,37 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-23884-bc0cc0.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00E30CC0: push        ebp
+  00E30CC1: mov         ebp,esp
+  00E30CC3: push        ebx
+  00E30CC4: push        esi
+  00E30CC5: push        edi
+  00E30CC6: mov         ebx,ecx
+  00E30CC8: push        1
+  00E30CCA: push        dword ptr [ebp+8]
+  00E30CCD: mov         esi,dword ptr [ebx+000001F4h]
+  00E30CD3: lea         eax,[ebx+000001F8h]
+  00E30CD9: push        eax
+  00E30CDA: lea         eax,[ebp+8]
+  00E30CDD: push        eax
+  00E30CDE: call        01174360
+  00E30CE3: add         esp,0Ch
+  00E30CE6: lea         ecx,[ebx+000001F4h]
+  00E30CEC: push        eax
+  00E30CED: call        dword ptr [esi]
+  00E30CEF: mov         ecx,ebx
+  00E30CF1: call        00E00530
+  00E30CF6: pop         edi
+  00E30CF7: pop         esi
+  00E30CF8: pop         ebx
+  00E30CF9: pop         ebp
+  00E30CFA: ret         4
+
+  Summary
+
+        1000 .text

@@ -1,0 +1,151 @@
+{
+  "artifacts": [
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT.mix",
+      "same": true,
+      "sha256": "9dca73aa6bbd19d8dc65da0d6882cd15e1c051774a54d861247c16e273a63e00"
+    },
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b"
+    },
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "same": true,
+      "sha256": "10103e6e6dc99cdf31b320e21f0fa0f3ff45aed421527a1854bb5a1904dc87cd"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT.mix",
+      "same": true,
+      "sha256": "9dca73aa6bbd19d8dc65da0d6882cd15e1c051774a54d861247c16e273a63e00"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "same": true,
+      "sha256": "10103e6e6dc99cdf31b320e21f0fa0f3ff45aed421527a1854bb5a1904dc87cd"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    }
+  ],
+  "preserved": [
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\TS-Banned.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.update.log",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log",
+      "same": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\TS-Banned.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log",
+      "same": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.update.log",
+      "same": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log",
+      "same": true
+    }
+  ],
+  "references_unchanged": true,
+  "tests": {
+    "x86": 44,
+    "x64": 43
+  },
+  "runtime_enabled": true,
+  "backend_implemented": true,
+  "end_to_end_command_tested": false,
+  "ui_blocker": "Native pipe unavailable, os error 2",
+  "live_guard_reports": [
+    "fog-native-live-guard-12164-64.json",
+    "fog-native-live-guard-12173-32.json"
+  ]
+}

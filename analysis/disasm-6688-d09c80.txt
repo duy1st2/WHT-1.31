@@ -1,0 +1,28 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-d09c80.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF783C69C80: movzx       eax,byte ptr [rcx+5Bh]
+  00007FF783C69C84: sub         eax,41h
+  00007FF783C69C87: cmp         eax,19h
+  00007FF783C69C8A: ja          00007FF783C69CA5
+  00007FF783C69C8C: mov         eax,dword ptr [rcx+000000000000019Ch]
+  00007FF783C69C92: shr         eax,1Eh
+  00007FF783C69C95: test        al,1
+  00007FF783C69C97: jne         00007FF783C69CA5
+  00007FF783C69C99: mov         rcx,qword ptr [rcx+0000000000000558h]
+  00007FF783C69CA0: jmp         00007FF7833C96B0
+  00007FF783C69CA5: xor         al,al
+  00007FF783C69CA7: ret
+  00007FF783C69CA8: sub         dl,ch
+  00007FF783C69CAA: jp          00007FF783C69D17
+  00007FF783C69CAC: adc         bh,ch
+  00007FF783C69CAE: jl          00007FF783C69C80
+
+  Summary
+
+        1000 .text

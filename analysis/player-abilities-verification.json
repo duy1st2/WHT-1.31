@@ -1,0 +1,173 @@
+{
+  "artifacts": [
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT.mix",
+      "same": true,
+      "built_sha256": "9fd55694987026d880955f4ee3af97220a70463344661a7f377da59a9debfa0c",
+      "installed_sha256": "9fd55694987026d880955f4ee3af97220a70463344661a7f377da59a9debfa0c"
+    },
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "built_sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b",
+      "installed_sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b"
+    },
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "built_sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524",
+      "installed_sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "same": false,
+      "built_sha256": "182d80f88a02010cd30f6d8bb5f0f6275c44ea46b777dd6c9cf9ea49be9d7f40",
+      "installed_sha256": "6bd99a2ea5552fbc882c6bb85a72a87b510ff4da979434f5afbf11070a01f3e4"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "built_sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8",
+      "installed_sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "built_sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19",
+      "installed_sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT.mix",
+      "same": true,
+      "built_sha256": "9fd55694987026d880955f4ee3af97220a70463344661a7f377da59a9debfa0c",
+      "installed_sha256": "9fd55694987026d880955f4ee3af97220a70463344661a7f377da59a9debfa0c"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "built_sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b",
+      "installed_sha256": "c681906f14a446d442d9965441634e8ef0f7599343fa2b833e57e0b9c74a156b"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "built_sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524",
+      "installed_sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "same": true,
+      "built_sha256": "182d80f88a02010cd30f6d8bb5f0f6275c44ea46b777dd6c9cf9ea49be9d7f40",
+      "installed_sha256": "182d80f88a02010cd30f6d8bb5f0f6275c44ea46b777dd6c9cf9ea49be9d7f40"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT131Launcher.exe",
+      "same": true,
+      "built_sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8",
+      "installed_sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT.ExternalHud.exe",
+      "same": true,
+      "built_sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19",
+      "installed_sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    }
+  ],
+  "preserved": [
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\TS-Banned.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.update.log",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log",
+      "same": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\TS-Banned.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.update.log",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini",
+      "same": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log",
+      "same": true
+    }
+  ],
+  "references_unchanged": true,
+  "tests": {
+    "x86": {
+      "passed": 41,
+      "total": 41
+    },
+    "x64": {
+      "passed": 40,
+      "total": 40
+    }
+  },
+  "live_read_only_iterator_guards_confirmed": true,
+  "end_to_end_command_tested": false,
+  "pending_loaded_client": [
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "same": false,
+      "built_sha256": "182d80f88a02010cd30f6d8bb5f0f6275c44ea46b777dd6c9cf9ea49be9d7f40",
+      "installed_sha256": "6bd99a2ea5552fbc882c6bb85a72a87b510ff4da979434f5afbf11070a01f3e4"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-6688-354060.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF7832B4060: movss       xmm1,dword ptr [rdx]
+  00007FF7832B4064: movss       xmm0,dword ptr [rcx+10h]
+  00007FF7832B4069: comiss      xmm0,xmm1
+  00007FF7832B406C: jbe         00007FF7832B4075
+  00007FF7832B406E: mov         eax,dword ptr [rcx+10h]
+  00007FF7832B4071: mov         dword ptr [rcx+8],eax
+  00007FF7832B4074: ret
+  00007FF7832B4075: comiss      xmm1,dword ptr [rcx+14h]
+  00007FF7832B4079: lea         rax,[rcx+14h]
+  00007FF7832B407D: cmova       rdx,rax
+  00007FF7832B4081: mov         eax,dword ptr [rdx]
+  00007FF7832B4083: mov         dword ptr [rcx+8],eax
+  00007FF7832B4086: ret
+  00007FF7832B4087: mov         esi,0A7458B9Eh
+  00007FF7832B408C: jg          00007FF7832B4079
+  00007FF7832B408E: 60
+  00007FF7832B408F: ret         8948h
+  00007FF7832B4092: pop         rsp
+  00007FF7832B4093: and         al,8
+  00007FF7832B4095: mov         qword ptr [rsp+10h],rsi
+  00007FF7832B409A: push        rdi
+  00007FF7832B409B: sub         rsp,20h
+  00007FF7832B409F: mov         rbx,qword ptr [rcx+0000000000000080h]
+  00007FF7832B40A6: mov         rsi,rdx
+  00007FF7832B40A9: mov         rdi,rcx
+  00007FF7832B40AC: test        rbx,rbx
+  00007FF7832B40AF: je          00007FF7832B40C6
+  00007FF7832B40B1: mov         rcx,rbx
+  00007FF7832B40B4: call        00007FF7832AFE50
+  00007FF7832B40B9: mov         edx,9C0h
+  00007FF7832B40BE: mov         rcx,rbx
+  00007FF7832B40C1: call        00007FF784689484
+  00007FF7832B40C6: test        rsi,rsi
+  00007FF7832B40C9: jne         00007FF7832B40E2
+  00007FF7832B40CB: mov         qword ptr [rdi+0000000000000080h],rsi
+  00007FF7832B40D2: mov         rbx,qword ptr [rsp+30h]
+  00007FF7832B40D7: mov         rsi,qword ptr [rsp+38h]
+  00007FF7832B40DC: add         rsp,20h
+  00007FF7832B40E0: pop         rdi
+  00007FF7832B40E1: ret
+  00007FF7832B40E2: xor         r9d,r9d
+  00007FF7832B40E5: lea         rdx,[00007FF784926690h]
+  00007FF7832B40EC: xor         r8d,r8d
+  00007FF7832B40EF: B9
+
+  Summary
+
+        1000 .text

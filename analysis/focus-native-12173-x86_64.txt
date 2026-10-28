@@ -1,0 +1,108 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file WHT-1.31\analysis\focus-native-12173-x86_64.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF627CE3000: xor         eax,eax
+  00007FF627CE3002: ret
+  00007FF627CE3003: sub         cl,byte ptr [rsi+3Bh]
+  00007FF627CE3006: ret
+  00007FF627CE3007: xchg        eax,ebx
+  00007FF627CE3008: F1
+  00007FF627CE3009: cmova       esp,dword ptr [rsi+00000000083F890Fh]
+  00007FF627CE3010: mov         r8d,edx
+  00007FF627CE3013: mov         r9d,1
+  00007FF627CE3019: mov         edx,ecx
+  00007FF627CE301B: lea         eax,[r8+r8*2]
+  00007FF627CE301F: add         eax,eax
+  00007FF627CE3021: cmp         ecx,eax
+  00007FF627CE3023: jne         00007FF627CE3030
+  00007FF627CE3025: mov         eax,0AAAAAAABh
+  00007FF627CE302A: mul         eax,edx
+  00007FF627CE302C: shr         edx,2
+  00007FF627CE302F: nop
+  00007FF627CE3030: cmp         edx,1
+  00007FF627CE3033: ja          00007FF627CE303B
+  00007FF627CE3035: cmp         r8d,1
+  00007FF627CE3039: jbe         00007FF627CE3061
+  00007FF627CE303B: shr         edx,1
+  00007FF627CE303D: inc         r9d
+  00007FF627CE3040: shr         r8d,1
+  00007FF627CE3043: mov         eax,edx
+  00007FF627CE3045: mov         ecx,r8d
+  00007FF627CE3048: mov         edx,1
+  00007FF627CE304D: cmp         eax,edx
+  00007FF627CE304F: mov         r8d,1
+  00007FF627CE3055: cmovae      edx,eax
+  00007FF627CE3058: cmp         ecx,r8d
+  00007FF627CE305B: cmovae      r8d,ecx
+  00007FF627CE305F: jmp         00007FF627CE3030
+  00007FF627CE3061: mov         eax,r9d
+  00007FF627CE3064: ret
+  00007FF627CE3065: or          esp,esp
+  00007FF627CE3067: F1
+  00007FF627CE3068: or          byte ptr [rcx+rdi],cl
+  00007FF627CE306B: add         ch,ch
+  00007FF627CE306D: add         al,93h
+  00007FF627CE306F: C6
+  00007FF627CE3070: mov         qword ptr [rsp+8],rbx
+  00007FF627CE3075: mov         qword ptr [rsp+10h],rbp
+  00007FF627CE307A: mov         qword ptr [rsp+18h],rsi
+  00007FF627CE307F: mov         qword ptr [rsp+20h],rdi
+  00007FF627CE3084: push        r14
+  00007FF627CE3086: push        r15
+  00007FF627CE3088: xor         r11d,r11d
+  00007FF627CE308B: mov         edi,r8d
+  00007FF627CE308E: mov         esi,edx
+  00007FF627CE3090: mov         ebx,ecx
+  00007FF627CE3092: mov         r10d,r11d
+  00007FF627CE3095: test        ecx,ecx
+  00007FF627CE3097: je          00007FF627CE3170
+  00007FF627CE309D: lea         r14d,[r11+1]
+  00007FF627CE30A1: mov         r15d,0C83h
+  00007FF627CE30A7: lea         rbp,[00007FF626470000h]
+  00007FF627CE30AE: nop
+  00007FF627CE30B0: mov         ecx,r10d
+  00007FF627CE30B3: mov         r8d,esi
+  00007FF627CE30B6: shr         r8d,cl
+  00007FF627CE30B9: mov         eax,edi
+  00007FF627CE30BB: cmp         r8d,r14d
+  00007FF627CE30BE: cmovb       r8d,r14d
+  00007FF627CE30C2: shr         eax,cl
+  00007FF627CE30C4: cmp         eax,r14d
+  00007FF627CE30C7: cmovb       eax,r14d
+  00007FF627CE30CB: cmp         r9d,0Bh
+  00007FF627CE30CF: ja          00007FF627CE310A
+  00007FF627CE30D1: bt          r15d,r9d
+  00007FF627CE30D5: jae         00007FF627CE310A
+  00007FF627CE30D7: lea         ecx,[rax+rax*2]
+  00007FF627CE30DA: add         ecx,ecx
+  00007FF627CE30DC: cmp         r8d,ecx
+  00007FF627CE30DF: mov         ecx,4
+  00007FF627CE30E4: jne         00007FF627CE30F4
+  00007FF627CE30E6: cmp         eax,ecx
+  00007FF627CE30E8: cmova       ecx,eax
+  00007FF627CE30EB: lea         r8d,[rcx+rcx*2]
+  00007FF627CE30EF: add         r8d,r8d
+  00007FF627CE30F2: jmp         00007FF627CE3108
+  00007FF627CE30F4: cmp         r8d,ecx
+  00007FF627CE30F7: cmova       ecx,r8d
+  00007FF627CE30FB: mov         r8d,ecx
+  00007FF627CE30FE: mov         ecx,4
+  00007FF627CE3103: cmp         eax,ecx
+  00007FF627CE3105: cmova       ecx,eax
+  00007FF627CE3108: mov         eax,ecx
+  00007FF627CE310A: cmp         r9d,9
+  00007FF627CE310E: jne         00007FF627CE3127
+  00007FF627CE3110: imul        r8d,eax
+  00007FF627CE3114: mov         eax,r8d
+  00007FF627CE3117: shr         eax,2
+  00007FF627CE311A: cmp         eax,r14d
+  00007FF627CE311D: cmovb       eax,r14d
+
+  Summary
+
+        1000 .text

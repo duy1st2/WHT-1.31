@@ -1,0 +1,111 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file WHT-1.31\analysis\focus-native-12164-x86_64.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00007FF78479A550: xor         eax,eax
+  00007FF78479A552: ret
+  00007FF78479A553: clc
+  00007FF78479A554: 07
+  00007FF78479A555: sbb         dword ptr [rsi],esi
+  00007FF78479A557: sti
+  00007FF78479A558: 06
+  00007FF78479A559: EA
+  00007FF78479A55A: call        fword ptr [rbp+7Bh]
+  00007FF78479A55D: xchg        eax,ebx
+  00007FF78479A55E: mov         esp,0C28B4435h
+  00007FF78479A563: mov         r9d,1
+  00007FF78479A569: mov         edx,ecx
+  00007FF78479A56B: lea         eax,[r8+r8*2]
+  00007FF78479A56F: add         eax,eax
+  00007FF78479A571: cmp         ecx,eax
+  00007FF78479A573: jne         00007FF78479A580
+  00007FF78479A575: mov         eax,0AAAAAAABh
+  00007FF78479A57A: mul         eax,edx
+  00007FF78479A57C: shr         edx,2
+  00007FF78479A57F: nop
+  00007FF78479A580: cmp         edx,1
+  00007FF78479A583: ja          00007FF78479A58B
+  00007FF78479A585: cmp         r8d,1
+  00007FF78479A589: jbe         00007FF78479A5B1
+  00007FF78479A58B: shr         edx,1
+  00007FF78479A58D: inc         r9d
+  00007FF78479A590: shr         r8d,1
+  00007FF78479A593: mov         eax,edx
+  00007FF78479A595: mov         ecx,r8d
+  00007FF78479A598: mov         edx,1
+  00007FF78479A59D: cmp         eax,edx
+  00007FF78479A59F: mov         r8d,1
+  00007FF78479A5A5: cmovae      edx,eax
+  00007FF78479A5A8: cmp         ecx,r8d
+  00007FF78479A5AB: cmovae      r8d,ecx
+  00007FF78479A5AF: jmp         00007FF78479A580
+  00007FF78479A5B1: mov         eax,r9d
+  00007FF78479A5B4: ret
+  00007FF78479A5B5: xor         byte ptr ds:[rdi+9],dh
+  00007FF78479A5B9: C5
+  00007FF78479A5BA: sbb         ah,byte ptr [rdx]
+  00007FF78479A5BC: 2F
+  00007FF78479A5BD: ins         dword ptr [rdi],dx
+  00007FF78479A5BE: mov         dl,19h
+  00007FF78479A5C0: mov         qword ptr [rsp+8],rbx
+  00007FF78479A5C5: mov         qword ptr [rsp+10h],rbp
+  00007FF78479A5CA: mov         qword ptr [rsp+18h],rsi
+  00007FF78479A5CF: mov         qword ptr [rsp+20h],rdi
+  00007FF78479A5D4: push        r14
+  00007FF78479A5D6: push        r15
+  00007FF78479A5D8: xor         r11d,r11d
+  00007FF78479A5DB: mov         edi,r8d
+  00007FF78479A5DE: mov         esi,edx
+  00007FF78479A5E0: mov         ebx,ecx
+  00007FF78479A5E2: mov         r10d,r11d
+  00007FF78479A5E5: test        ecx,ecx
+  00007FF78479A5E7: je          00007FF78479A6C0
+  00007FF78479A5ED: lea         r14d,[r11+1]
+  00007FF78479A5F1: mov         r15d,0C83h
+  00007FF78479A5F7: lea         rbp,[00007FF782F60000h]
+  00007FF78479A5FE: nop
+  00007FF78479A600: mov         ecx,r10d
+  00007FF78479A603: mov         r8d,esi
+  00007FF78479A606: shr         r8d,cl
+  00007FF78479A609: mov         eax,edi
+  00007FF78479A60B: cmp         r8d,r14d
+  00007FF78479A60E: cmovb       r8d,r14d
+  00007FF78479A612: shr         eax,cl
+  00007FF78479A614: cmp         eax,r14d
+  00007FF78479A617: cmovb       eax,r14d
+  00007FF78479A61B: cmp         r9d,0Bh
+  00007FF78479A61F: ja          00007FF78479A65A
+  00007FF78479A621: bt          r15d,r9d
+  00007FF78479A625: jae         00007FF78479A65A
+  00007FF78479A627: lea         ecx,[rax+rax*2]
+  00007FF78479A62A: add         ecx,ecx
+  00007FF78479A62C: cmp         r8d,ecx
+  00007FF78479A62F: mov         ecx,4
+  00007FF78479A634: jne         00007FF78479A644
+  00007FF78479A636: cmp         eax,ecx
+  00007FF78479A638: cmova       ecx,eax
+  00007FF78479A63B: lea         r8d,[rcx+rcx*2]
+  00007FF78479A63F: add         r8d,r8d
+  00007FF78479A642: jmp         00007FF78479A658
+  00007FF78479A644: cmp         r8d,ecx
+  00007FF78479A647: cmova       ecx,r8d
+  00007FF78479A64B: mov         r8d,ecx
+  00007FF78479A64E: mov         ecx,4
+  00007FF78479A653: cmp         eax,ecx
+  00007FF78479A655: cmova       ecx,eax
+  00007FF78479A658: mov         eax,ecx
+  00007FF78479A65A: cmp         r9d,9
+  00007FF78479A65E: jne         00007FF78479A677
+  00007FF78479A660: imul        r8d,eax
+  00007FF78479A664: mov         eax,r8d
+  00007FF78479A667: shr         eax,2
+  00007FF78479A66A: cmp         eax,r14d
+  00007FF78479A66D: cmovb       eax,r14d
+
+  Summary
+
+        1000 .text

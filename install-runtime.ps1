@@ -1,4 +1,4 @@
-param([ValidateSet("x86","x64")][string]$Architecture="x86",[string]$BuildDir=(Join-Path $PSScriptRoot 'build-wht'),[string[]]$Targets=@((Join-Path $PSScriptRoot 'runtime-test\Warcraft3-1.31.1.12164'),(Join-Path $PSScriptRoot 'runtime-test\Warcraft3-1.31.1.12173')))
+﻿param([ValidateSet("x86","x64")][string]$Architecture="x86",[string]$BuildDir=(Join-Path $PSScriptRoot 'build-wht'),[string[]]$Targets=@((Join-Path $PSScriptRoot 'runtime-test\Warcraft3-1.31.1.12164'),(Join-Path $PSScriptRoot 'runtime-test\Warcraft3-1.31.1.12173')))
 $ErrorActionPreference='Stop'
 $clientArch=if($Architecture -eq 'x64'){'x86_64'}else{'x86'}
 if($Architecture -eq 'x64' -and $BuildDir -eq (Join-Path $PSScriptRoot 'build-wht')){$BuildDir=Join-Path $PSScriptRoot 'build-wht-x64'}
@@ -12,7 +12,7 @@ $release=Join-Path $BuildDir 'Release';$stamp=Get-Date -Format 'yyyyMMdd-HHmmss'
 $assets=Join-Path $PSScriptRoot 'dist\client-assets'
 if(!(Test-Path -LiteralPath (Join-Path $assets 'fonts_VN.ttf'))){throw 'Missing extracted assets; run build.ps1 first'}
 # Validate every destination and artifact before writing any files.
-foreach($name in @('WHT.mix','WHT131Launcher.exe')){if(!(Test-Path -LiteralPath (Join-Path $release $name))){throw "Missing build artifact: $name"}}
+foreach($name in @('WHT.mix','WHT131Launcher.exe','WHT.ExternalHud.exe')){if(!(Test-Path -LiteralPath (Join-Path $release $name))){throw "Missing build artifact: $name"}}
 foreach($target in $Targets){
  $full=[IO.Path]::GetFullPath($target).TrimEnd('\')
  if(!$full.StartsWith($allowedRoot,[StringComparison]::OrdinalIgnoreCase)){throw "Installation outside runtime-test refused: $full"}
@@ -22,7 +22,7 @@ foreach($target in $Targets){
  if($version.FileMajorPart -ne 1 -or $version.FileMinorPart -ne 31 -or $version.FileBuildPart -ne 1 -or !$hashes.ContainsKey([string]$version.FilePrivatePart)){throw "Unsupported version: $exe"}
  if((Get-FileHash -LiteralPath $exe).Hash -ne $hashes[[string]$version.FilePrivatePart]){throw "Executable hash mismatch: $exe"}
  $arch=Get-Item -LiteralPath (Join-Path $full $clientArch);if($arch.Attributes -band [IO.FileAttributes]::ReparsePoint){throw 'x86 reparse point refused'}
- foreach($name in @('WHT.mix','WHT131Launcher.exe','WHT.ini')){$existing=Join-Path $arch.FullName $name;if((Test-Path -LiteralPath $existing) -and ((Get-Item -LiteralPath $existing).Attributes -band [IO.FileAttributes]::ReparsePoint)){throw "Reparse-point file refused: $existing"}}
+ foreach($name in @('WHT.mix','WHT131Launcher.exe','WHT.ExternalHud.exe','WHT.ini')){$existing=Join-Path $arch.FullName $name;if((Test-Path -LiteralPath $existing) -and ((Get-Item -LiteralPath $existing).Attributes -band [IO.FileAttributes]::ReparsePoint)){throw "Reparse-point file refused: $existing"}}
  foreach($base in @($full,$arch.FullName)){
   $assetDest=Join-Path $base 'WHT-assets'
   if(Test-Path -LiteralPath $assetDest){foreach($entry in @((Get-Item -LiteralPath $assetDest)) + @(Get-ChildItem -LiteralPath $assetDest -Recurse -Force)){if($entry.Attributes -band [IO.FileAttributes]::ReparsePoint){throw "Asset reparse point refused: $($entry.FullName)"}}}
@@ -38,7 +38,7 @@ foreach($target in $Targets){
  if(@($running|Where-Object {$_.ExecutablePath -and $_.ExecutablePath.Equals((Join-Path $arch 'Warcraft III.exe'),[StringComparison]::OrdinalIgnoreCase)}).Count){Write-Warning "Running client; installation pending: $full ($clientArch)";continue}
  $ini=Join-Path $arch 'WHT.ini';$iniHash=if(Test-Path -LiteralPath $ini){(Get-FileHash -LiteralPath $ini).Hash}else{''}
  $backup=Join-Path $arch ('backup-WHT131-'+$stamp);New-Item -ItemType Directory -Path $backup | Out-Null
- foreach($name in @('WHT.mix','WHT131Launcher.exe')){
+ foreach($name in @('WHT.mix','WHT131Launcher.exe','WHT.ExternalHud.exe')){
   $source=Join-Path $release $name;$dest=Join-Path $arch $name
   if(Test-Path -LiteralPath $dest){Copy-Item -LiteralPath $dest -Destination $backup}
   Copy-Item -LiteralPath $source -Destination $dest -Force

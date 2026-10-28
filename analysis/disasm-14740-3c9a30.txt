@@ -1,0 +1,42 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-3c9a30.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00599A30: push        ebp
+  00599A31: mov         ebp,esp
+  00599A33: mov         eax,dword ptr [ebp+0Ch]
+  00599A36: mov         edx,dword ptr [ebp+8]
+  00599A39: test        al,1
+  00599A3B: je          00599A43
+  00599A3D: add         dword ptr [ecx+000000A4h],edx
+  00599A43: test        al,2
+  00599A45: je          00599A4D
+  00599A47: add         dword ptr [ecx+000000A8h],edx
+  00599A4D: mov         eax,dword ptr [ecx+30h]
+  00599A50: test        eax,eax
+  00599A52: jne         00599A59
+  00599A54: call        00F39150
+  00599A59: mov         ecx,eax
+  00599A5B: call        00DA0A10
+  00599A60: pop         ebp
+  00599A61: ret         8
+  00599A64: int         3
+  00599A65: int         3
+  00599A66: int         3
+  00599A67: int         3
+  00599A68: int         3
+  00599A69: int         3
+  00599A6A: int         3
+  00599A6B: int         3
+  00599A6C: int         3
+  00599A6D: int         3
+  00599A6E: int         3
+  00599A6F: int         3
+
+  Summary
+
+        1000 .text

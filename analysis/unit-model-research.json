@@ -1,0 +1,26 @@
+{
+  "references": {
+    "WHT/native/gameplay_commands.hpp": "24ef6eb659f2879887e6de5d171f1c9efb5b2d6706bcecbb583d398980f824eb",
+    "WHT-1.29/native/gameplay_commands.hpp": "db437816e5e301208a46b6ff3d3960e1b6bf6b1acaf4be83effcc4d9d93af37b"
+  },
+  "status": "native model filename reader not verified; no command enabled",
+  "verified_model_pointer": {
+    "12164_x86": {
+      "getter": "0xbc0f20",
+      "member": "0x28"
+    },
+    "12173_x86": {
+      "getter": "0xb80210",
+      "member": "0x28"
+    },
+    "12164_x64": {
+      "getter": "0xd22f70",
+      "member": "0x48"
+    },
+    "12173_x64": {
+      "getter": "0xd618c0",
+      "member": "0x48"
+    }
+  },
+  "live_processes_found": 0
+}

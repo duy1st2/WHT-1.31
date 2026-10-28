@@ -1,0 +1,33 @@
+{
+  "pid": 15028,
+  "build": 12173,
+  "bits": 64,
+  "read_only": true,
+  "mutations": false,
+  "samples": [
+    {
+      "sample": 0,
+      "fps_text": " FPS: 44.7"
+    },
+    {
+      "sample": 1,
+      "fps_text": " FPS: 45.9"
+    },
+    {
+      "sample": 2,
+      "fps_text": " FPS: 38.9"
+    },
+    {
+      "sample": 3,
+      "fps_text": " FPS: 41.4"
+    },
+    {
+      "sample": 4,
+      "fps_text": " FPS: 33.7"
+    },
+    {
+      "sample": 5,
+      "fps_text": " FPS: 39.5"
+    }
+  ]
+}

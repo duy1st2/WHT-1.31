@@ -1,0 +1,69 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-23884-1521530.exe
+
+File Type: EXECUTABLE IMAGE
+
+  01791530: xor         eax,eax
+  01791532: ret
+  01791533: test        al,95h
+  01791535: int         3
+  01791536: xor         edi,dword ptr [esi-4Bh]
+  01791539: or          eax,0DC461558h
+  0179153E: push        ecx
+  0179153F: stc
+  01791540: push        ebp
+  01791541: mov         ebp,esp
+  01791543: mov         edx,dword ptr [ebp+8]
+  01791546: push        esi
+  01791547: mov         esi,dword ptr [ebp+0Ch]
+  0179154A: push        edi
+  0179154B: mov         edi,1
+  01791550: lea         eax,[esi+esi*2]
+  01791553: add         eax,eax
+  01791555: cmp         edx,eax
+  01791557: jne         01791563
+  01791559: mov         eax,0AAAAAAABh
+  0179155E: mul         eax,edx
+  01791560: shr         edx,2
+  01791563: cmp         edx,1
+  01791566: ja          0179156D
+  01791568: cmp         esi,1
+  0179156B: jbe         0179158C
+  0179156D: mov         eax,edx
+  0179156F: mov         ecx,esi
+  01791571: shr         eax,1
+  01791573: mov         edx,1
+  01791578: shr         ecx,1
+  0179157A: inc         edi
+  0179157B: cmp         eax,edx
+  0179157D: mov         esi,1
+  01791582: cmovae      edx,eax
+  01791585: cmp         ecx,esi
+  01791587: cmovae      esi,ecx
+  0179158A: jmp         01791563
+  0179158C: mov         eax,edi
+  0179158E: pop         edi
+  0179158F: pop         esi
+  01791590: pop         ebp
+  01791591: ret
+  01791592: and         ebx,dword ptr [esi]
+  01791594: pop         ebx
+  01791595: xchg        eax,ebx
+  01791596: sub         eax,1E9D6C5Dh
+  0179159B: mov         dl,46h
+  0179159D: jae         01791543
+  0179159F: adc         eax,53EC8B55h
+  017915A4: push        edi
+  017915A5: xor         ebx,ebx
+  017915A7: xor         edi,edi
+  017915A9: cmp         dword ptr [ebp+8],ebx
+  017915AC: 0F
+  017915AD: xchg        dl,cl
+  017915AF: 00
+
+  Summary
+
+        1000 .text

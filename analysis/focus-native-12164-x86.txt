@@ -1,0 +1,128 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file WHT-1.31\analysis\focus-native-12164-x86.exe
+
+File Type: EXECUTABLE IMAGE
+
+  0172F4B0: xor         eax,eax
+  0172F4B2: ret
+  0172F4B3: sal         ah,1
+  0172F4B5: push        esi
+  0172F4B6: out         47h,al
+  0172F4B8: cld
+  0172F4B9: DD
+  0172F4BA: cli
+  0172F4BB: sub         esi,dword ptr [ecx-31h]
+  0172F4BE: push        ebx
+  0172F4BF: xchg        eax,esp
+  0172F4C0: push        ebp
+  0172F4C1: mov         ebp,esp
+  0172F4C3: mov         edx,dword ptr [ebp+8]
+  0172F4C6: push        esi
+  0172F4C7: mov         esi,dword ptr [ebp+0Ch]
+  0172F4CA: push        edi
+  0172F4CB: mov         edi,1
+  0172F4D0: lea         eax,[esi+esi*2]
+  0172F4D3: add         eax,eax
+  0172F4D5: cmp         edx,eax
+  0172F4D7: jne         0172F4E3
+  0172F4D9: mov         eax,0AAAAAAABh
+  0172F4DE: mul         eax,edx
+  0172F4E0: shr         edx,2
+  0172F4E3: cmp         edx,1
+  0172F4E6: ja          0172F4ED
+  0172F4E8: cmp         esi,1
+  0172F4EB: jbe         0172F50C
+  0172F4ED: mov         eax,edx
+  0172F4EF: mov         ecx,esi
+  0172F4F1: shr         eax,1
+  0172F4F3: mov         edx,1
+  0172F4F8: shr         ecx,1
+  0172F4FA: inc         edi
+  0172F4FB: cmp         eax,edx
+  0172F4FD: mov         esi,1
+  0172F502: cmovae      edx,eax
+  0172F505: cmp         ecx,esi
+  0172F507: cmovae      esi,ecx
+  0172F50A: jmp         0172F4E3
+  0172F50C: mov         eax,edi
+  0172F50E: pop         edi
+  0172F50F: pop         esi
+  0172F510: pop         ebp
+  0172F511: ret
+  0172F512: int         0D5h
+  0172F514: retf        0E719h
+  0172F517: aadb        36h
+  0172F519: jb          0172F55A
+  0172F51B: das
+  0172F51C: mov         ebx,55CEE653h
+  0172F521: mov         ebp,esp
+  0172F523: push        ebx
+  0172F524: push        edi
+  0172F525: xor         ebx,ebx
+  0172F527: xor         edi,edi
+  0172F529: cmp         dword ptr [ebp+8],ebx
+  0172F52C: jbe         0172F603
+  0172F532: push        esi
+  0172F533: mov         esi,dword ptr [ebp+14h]
+  0172F536: lea         eax,[ebx+1]
+  0172F539: nop         dword ptr [eax+00000000h]
+  0172F540: mov         edx,dword ptr [ebp+0Ch]
+  0172F543: mov         ecx,edi
+  0172F545: shr         edx,cl
+  0172F547: cmp         edx,1
+  0172F54A: cmovb       edx,eax
+  0172F54D: mov         eax,dword ptr [ebp+10h]
+  0172F550: shr         eax,cl
+  0172F552: mov         ecx,1
+  0172F557: cmp         eax,1
+  0172F55A: cmovb       eax,ecx
+  0172F55D: test        esi,esi
+  0172F55F: je          0172F574
+  0172F561: cmp         esi,ecx
+  0172F563: je          0172F574
+  0172F565: cmp         esi,7
+  0172F568: je          0172F574
+  0172F56A: cmp         esi,0Ah
+  0172F56D: je          0172F574
+  0172F56F: cmp         esi,0Bh
+  0172F572: jne         0172F5A8
+  0172F574: lea         ecx,[eax+eax*2]
+  0172F577: add         ecx,ecx
+  0172F579: cmp         edx,ecx
+  0172F57B: mov         ecx,4
+  0172F580: jne         0172F590
+  0172F582: cmp         eax,ecx
+  0172F584: cmova       ecx,eax
+  0172F587: mov         eax,ecx
+  0172F589: lea         edx,[eax+eax*2]
+  0172F58C: add         edx,edx
+  0172F58E: jmp         0172F5A3
+  0172F590: cmp         edx,ecx
+  0172F592: cmova       ecx,edx
+  0172F595: mov         edx,ecx
+  0172F597: mov         ecx,4
+  0172F59C: cmp         eax,ecx
+  0172F59E: cmova       ecx,eax
+  0172F5A1: mov         eax,ecx
+  0172F5A3: mov         ecx,1
+  0172F5A8: cmp         esi,9
+  0172F5AB: jne         0172F5C0
+  0172F5AD: imul        edx,eax
+  0172F5B0: mov         eax,edx
+  0172F5B2: shr         eax,2
+  0172F5B5: cmp         eax,1
+  0172F5B8: cmovb       eax,ecx
+  0172F5BB: lea         ecx,[eax+edx*2]
+  0172F5BE: jmp         0172F5F1
+  0172F5C0: jmp         dword ptr [esi*4+0172F60Ch]
+  0172F5C7: mov         ecx,4
+  0172F5CC: jmp         0172F5E8
+  0172F5CE: B9
+  0172F5CF: or          byte ptr [eax],al
+
+  Summary
+
+        1000 .text

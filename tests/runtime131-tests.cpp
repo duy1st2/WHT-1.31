@@ -1,4 +1,4 @@
-﻿#include "native-ping-contracts.hpp"
+#include "native-ping-contracts.hpp"
 #include <winsock2.h>
 #include "resource_board131.hpp"
 #include "tool_help131.hpp"
@@ -100,7 +100,11 @@ void __fastcall PriorityTestPoint(void* RESOURCE_TEST_EDX,int,float,float,int){}
 #include "unit-info131-contracts.hpp"
 #include "button-animation131-contracts.hpp"
 #include "host-moderation131-contracts.hpp"
+#include "hud-style-contracts.hpp"
+#include "macro-toggle-contracts.hpp"
 int main(){try{
+ TestMacroToggle(check);
+ TestHudStyle(check);
  TestNativePingReading(check);
  CheckHostModeration131();
  CheckButtonAnimation131();

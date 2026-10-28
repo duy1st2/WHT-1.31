@@ -1,0 +1,74 @@
+[
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\TS-Banned.ini",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.update.log",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\TS-Banned.ini",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.update.log",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  },
+  {
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log",
+    "unchanged": true,
+    "append_only": true,
+    "backup_matches_original_hash": true
+  }
+]

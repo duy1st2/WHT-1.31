@@ -1,0 +1,74 @@
+Microsoft (R) COFF/PE Dumper Version 14.51.36260.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file E:\GPlay\Game\New folder\Warcraft3-124\WHT-1.31\analysis\disasm-14740-baaf50.exe
+
+File Type: EXECUTABLE IMAGE
+
+  00D7AF50: mov         eax,dword ptr [ebp+8]
+  00D7AF53: push        esi
+  00D7AF54: lea         esi,[ebx-1]
+  00D7AF57: mov         eax,dword ptr [eax+34h]
+  00D7AF5A: mov         dword ptr [ebp-4],eax
+  00D7AF5D: test        ebx,ebx
+  00D7AF5F: je          00D7AF9C
+  00D7AF61: mov         ecx,dword ptr [edi+4]
+  00D7AF64: dec         ebx
+  00D7AF65: mov         eax,dword ptr [ecx+ebx*8]
+  00D7AF68: test        eax,eax
+  00D7AF6A: je          00D7AF98
+  00D7AF6C: cmp         dword ptr [ebp-4],eax
+  00D7AF6F: jne         00D7AF98
+  00D7AF71: mov         eax,dword ptr [ecx+esi*8]
+  00D7AF74: mov         dword ptr [ecx+ebx*8],eax
+  00D7AF77: mov         eax,dword ptr [ecx+esi*8+4]
+  00D7AF7B: mov         dword ptr [ecx+ebx*8+4],eax
+  00D7AF7F: mov         ecx,dword ptr [edi]
+  00D7AF81: cmp         esi,ecx
+  00D7AF83: jbe         00D7AF93
+  00D7AF85: mov         eax,esi
+  00D7AF87: sub         eax,ecx
+  00D7AF89: mov         ecx,edi
+  00D7AF8B: push        1
+  00D7AF8D: push        eax
+  00D7AF8E: call        00D7B0B0
+  00D7AF93: mov         dword ptr [edi],esi
+  00D7AF95: mov         dl,1
+  00D7AF97: dec         esi
+  00D7AF98: test        ebx,ebx
+  00D7AF9A: jne         00D7AF61
+  00D7AF9C: mov         ebx,dword ptr [ebp+8]
+  00D7AF9F: pop         esi
+  00D7AFA0: pop         edi
+  00D7AFA1: test        dl,dl
+  00D7AFA3: jne         00D7AFBB
+  00D7AFA5: mov         eax,dword ptr [ebx+30h]
+  00D7AFA8: test        eax,eax
+  00D7AFAA: jne         00D7AFB3
+  00D7AFAC: mov         ecx,ebx
+  00D7AFAE: call        00F39150
+  00D7AFB3: push        ebx
+  00D7AFB4: mov         ecx,eax
+  00D7AFB6: call        00D815F0
+  00D7AFBB: mov         al,1
+  00D7AFBD: pop         ebx
+  00D7AFBE: mov         esp,ebp
+  00D7AFC0: pop         ebp
+  00D7AFC1: ret
+  00D7AFC2: cmp         bh,byte ptr [ecx]
+  00D7AFC4: pop         edx
+  00D7AFC5: or          eax,2BDE398Eh
+  00D7AFCA: lods        dword ptr [esi]
+  00D7AFCB: je          00D7AF57
+  00D7AFCD: jl          00D7AF62
+  00D7AFCF: xor         eax,0EC5366D2h
+  00D7AFD4: lods        byte ptr [esi]
+  00D7AFD5: mov         esi,90E5B3AFh
+  00D7AFDA: sub         dword ptr [eax+ebp*8],edi
+  00D7AFDD: retf
+  00D7AFDE: js          00D7AF8B
+
+  Summary
+
+        1000 .text
