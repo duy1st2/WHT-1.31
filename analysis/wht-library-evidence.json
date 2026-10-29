@@ -1,0 +1,14 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "2644f3e2b534f7034a3db85b880a05fee6b2f005d238cae716fafea69b12e607",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\common.cpp": "cab6ee95cddb35ceda5eeac5c803460fc3e38ba6d768438b762abc53e3aef03e",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\dll_loader131.hpp": "1625c77e276d4647ef4479b0b84cdbdd57118534cf6dff54e41b08e8711d3b33",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\mpq_loader131.hpp": "3a153d0d165c29cad81e84728a5dd8fbc1da810e7ba170fc972dc8de5371eed7"
+  },
+  "source": "WHT runtime.cpp ProcessLoadDllAndMpq WHT_Lib scanning and root FastJass.dll, #fastjass/#fj command; 1.29 only reads config and has no library consumer",
+  "backup": "WHT-1.31\\analysis\\before-wht-library-20261029-101557",
+  "scope": "Real optional library loading, not a built-in JASS engine optimization. Use existing matching-architecture DLL validation and verified 1.31 MPQ mount. No old game native offsets.",
+  "modified_reference_helpers": [
+    "native/mpq_loader131.hpp: optional archive priority parameter; existing manual default10 retained; library starts30 and increments"
+  ]
+}

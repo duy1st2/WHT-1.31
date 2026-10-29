@@ -22,7 +22,7 @@ inline std::wstring HealItemList(const std::vector<uint32_t>& items,uint32_t ext
  std::wstring result;auto append=[&](uint32_t code){if(!code)return;if(!result.empty())result+=L',';for(int i=3;i>=0;--i)result+=wchar_t((code>>(i*8))&255);};
  for(auto code:items)append(code);if(extra&&std::find(items.begin(),items.end(),extra)==items.end()&&items.size()<32)append(extra);return result;
 }
-struct AutoPotionSample {uint64_t identity=0;float value=0,maximum=0;std::array<uint32_t,6> items{};bool alive=true;};
+struct AutoPotionSample {uint64_t identity=0;float value=0,maximum=0;std::array<uint32_t,6> items{};bool alive=true;unsigned detectedMask=0,unavailableMask=0;};
 using AutoHealSample=AutoPotionSample;
 using AutoManaSample=AutoPotionSample;
 struct AutoPotionState {
@@ -32,7 +32,7 @@ struct AutoPotionState {
   if(!allowed)return false;
   AutoPotionSample sample;if(!read(sample)||!sample.identity||!sample.alive||!std::isfinite(sample.value)||!std::isfinite(sample.maximum)||sample.maximum<=0||(mana?sample.value<0:sample.value<=.405f)||!std::isfinite(percent)||percent<1||percent>99||double(sample.value)*100>=double(sample.maximum)*percent)return false;
   for(unsigned n=0;n<6;++n){const auto slot=(cursor+n)%6,code=sample.items[slot];
-   if(!code||std::find(items.begin(),items.end(),code)==items.end())continue;
+   if(!code||(sample.unavailableMask&(1u<<slot))||(!(sample.detectedMask&(1u<<slot))&&std::find(items.begin(),items.end(),code)==items.end()))continue;
    // A failed/cooling-down item must not be clicked every frame, nor consume
    // several potions before the synchronized game state reflects the heal.
    cursor=(slot+1)%6;retry=now+1500;

@@ -1,0 +1,162 @@
+{
+  "artifacts": [
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT.mix",
+      "matches_build": true,
+      "sha256": "d825b0f792c65e2d09133bd18df807b154c65d3b3ca45694b9d98c5e340ca484"
+    },
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT131Launcher.exe",
+      "matches_build": true,
+      "sha256": "68bfc277edd09361c9b0a166fdd0a8d3ce1d988ad59cec5ca8ff4e465a84890c"
+    },
+    {
+      "build": 12164,
+      "arch": "x86",
+      "file": "WHT.ExternalHud.exe",
+      "matches_build": true,
+      "sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "matches_build": true,
+      "sha256": "d35acf1f765206d2003d0526aba99099bcf45c56e727ae62e495f44eb23feb79"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT131Launcher.exe",
+      "matches_build": true,
+      "sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8"
+    },
+    {
+      "build": 12164,
+      "arch": "x86_64",
+      "file": "WHT.ExternalHud.exe",
+      "matches_build": true,
+      "sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT.mix",
+      "matches_build": true,
+      "sha256": "d825b0f792c65e2d09133bd18df807b154c65d3b3ca45694b9d98c5e340ca484"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT131Launcher.exe",
+      "matches_build": true,
+      "sha256": "68bfc277edd09361c9b0a166fdd0a8d3ce1d988ad59cec5ca8ff4e465a84890c"
+    },
+    {
+      "build": 12173,
+      "arch": "x86",
+      "file": "WHT.ExternalHud.exe",
+      "matches_build": true,
+      "sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT.mix",
+      "matches_build": true,
+      "sha256": "d35acf1f765206d2003d0526aba99099bcf45c56e727ae62e495f44eb23feb79"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT131Launcher.exe",
+      "matches_build": true,
+      "sha256": "253e9297447e824e3e7b7c6d2de65a42699d5c186887874f2bd748c0fba0d4b8"
+    },
+    {
+      "build": 12173,
+      "arch": "x86_64",
+      "file": "WHT.ExternalHud.exe",
+      "matches_build": true,
+      "sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    }
+  ],
+  "preserved": [
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\TS-Banned.ini",
+      "unchanged": true,
+      "append_only_log": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini",
+      "unchanged": true,
+      "append_only_log": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log",
+      "unchanged": true,
+      "append_only_log": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.update.log",
+      "unchanged": true,
+      "append_only_log": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini",
+      "unchanged": true,
+      "append_only_log": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log",
+      "unchanged": true,
+      "append_only_log": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\TS-Banned.ini",
+      "unchanged": true,
+      "append_only_log": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini",
+      "unchanged": true,
+      "append_only_log": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log",
+      "unchanged": true,
+      "append_only_log": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.update.log",
+      "unchanged": true,
+      "append_only_log": true
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini",
+      "unchanged": true,
+      "append_only_log": false
+    },
+    {
+      "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log",
+      "unchanged": true,
+      "append_only_log": true
+    }
+  ],
+  "references_unchanged": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": true,
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\common.cpp": true
+  },
+  "tests": {
+    "x86": 54,
+    "x64": 53
+  },
+  "live_guard_spans_verified": 16,
+  "actual_in_match_repaint_tested": false,
+  "fps_gain_or_live_budget_measured": false,
+  "all_four_installed": true
+}

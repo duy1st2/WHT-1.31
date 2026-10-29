@@ -1,0 +1,157 @@
+{
+  "referenceHashes": {
+    "WHT/native/adaptive_effects.hpp": "11953fdc323d3f898d08de0bcb076f3e5b667c0bdb4a6a5e5a1567cc51004978",
+    "WHT/native/adaptive_effects_native.hpp": "6fda884f6c3220f9c60294dc1ccf80ec7ce3c5ea7963c8987f2948ab4400a84a",
+    "WHT/native/runtime.cpp": "2644f3e2b534f7034a3db85b880a05fee6b2f005d238cae716fafea69b12e607"
+  },
+  "profiles": [
+    {
+      "pid": 8740,
+      "build": 12164,
+      "bits": 32,
+      "setter": "0xf1b690",
+      "getter": "0xf1b420",
+      "scale": "0x1ab98dc",
+      "renderer": "0x1b4fc1c",
+      "particleTable": "0x18619c4",
+      "particleMethod": "0xf1ede0",
+      "spans": [
+        [
+          15840912,
+          41
+        ],
+        [
+          15840288,
+          7
+        ],
+        [
+          13867232,
+          36
+        ],
+        [
+          13877600,
+          14
+        ],
+        [
+          15855188,
+          28
+        ],
+        [
+          12107098,
+          42
+        ]
+      ]
+    },
+    {
+      "pid": 32116,
+      "build": 12173,
+      "bits": 32,
+      "setter": "0xeda660",
+      "getter": "0xeda3f0",
+      "scale": "0x1a718dc",
+      "renderer": "0x1b07c14",
+      "particleTable": "0x18168e4",
+      "particleMethod": "0xedddb0",
+      "spans": [
+        [
+          15574624,
+          41
+        ],
+        [
+          15574000,
+          7
+        ],
+        [
+          13584608,
+          36
+        ],
+        [
+          13594976,
+          14
+        ],
+        [
+          15588900,
+          28
+        ],
+        [
+          11843618,
+          42
+        ]
+      ]
+    },
+    {
+      "pid": 24984,
+      "build": 12164,
+      "bits": 64,
+      "setter": "0x10fc920",
+      "getter": "0x10fc5d0",
+      "scale": "0x20c86f0",
+      "renderer": "0x217b130",
+      "particleTable": "0x1c73878",
+      "particleMethod": "0x1100610",
+      "spans": [
+        [
+          17811744,
+          31
+        ],
+        [
+          17810896,
+          9
+        ],
+        [
+          15567856,
+          44
+        ],
+        [
+          15578656,
+          8
+        ],
+        [
+          17827498,
+          28
+        ],
+        [
+          13529558,
+          28
+        ]
+      ]
+    },
+    {
+      "pid": 27336,
+      "build": 12173,
+      "bits": 64,
+      "setter": "0x1139380",
+      "getter": "0x1139030",
+      "scale": "0x20f56f0",
+      "renderer": "0x21a8130",
+      "particleTable": "0x1ca2788",
+      "particleMethod": "0x113d070",
+      "spans": [
+        [
+          18060160,
+          31
+        ],
+        [
+          18059312,
+          9
+        ],
+        [
+          15813088,
+          44
+        ],
+        [
+          15823888,
+          8
+        ],
+        [
+          18075914,
+          28
+        ],
+        [
+          13789403,
+          28
+        ]
+      ]
+    }
+  ]
+}

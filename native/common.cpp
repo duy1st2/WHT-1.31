@@ -1,4 +1,4 @@
-﻿#include "common.hpp"
+#include "common.hpp"
 #include "auto_heal.hpp"
 #include <bcrypt.h>
 #include <fstream>
@@ -145,6 +145,7 @@ Config LoadConfig(const std::wstring& ini) {
     if(Read(ini,L"Runtime",L"Enabled",L"1")!=L"1")c.mode=RunMode::Disabled;
     c.camera=Number(Read(ini,L"Event",L"Camera",L"2800"),2800,500,10000);
     c.fogZ=Number(Read(ini,L"Event",L"FogZ",L"20000"),20000,1,50000);
+    c.autoEffects=Read(ini,L"Graphics",L"Auto Reduce Effects",L"0")==L"1";
     c.startDelay=Number(Read(ini,L"Event",L"Delay Start Game",L"6"),6,0,60);
     ParseFpsLimit(Read(ini,L"Graphics",L"Fps Limit",L"0"),c.fpsLimit);
     ParseSceneLight(Read(ini,L"Event",L"Light",L"0"),c.sceneLight);
@@ -200,6 +201,8 @@ Config LoadConfig(const std::wstring& ini) {
     c.localDelay=static_cast<int>(Number(Read(ini,L"Event",L"Local Game Delay Reducer",L"100"),100,1,1000));
     c.lanDelay=static_cast<int>(Number(Read(ini,L"Event",L"Lan Game Delay Reducer",L"100"),100,1,1000));
     c.netDelay=static_cast<int>(Number(Read(ini,L"Event",L"Net Game Delay Reducer",L"250"),250,1,1000));
+    const auto delayScopes=Read(ini,L"Event",L"Delay Reducer Scopes",L"0");
+    c.delayReducerScopes=delayScopes==L"1"?1u:delayScopes==L"2"?2u:delayScopes==L"3"?3u:0u;
     c.wide=Read(ini,L"Event",L"WideScreen",L"0")==L"1";
     c.borderless=Read(ini,L"Window",L"Borderless",L"0")==L"1";
     c.lockCursor=Read(ini,L"Window",L"Lock Cursor",L"0")==L"1";

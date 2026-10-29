@@ -1,0 +1,29 @@
+[
+  {
+    "path": "WHT\\native\\runtime.cpp",
+    "sha256": "2644f3e2b534f7034a3db85b880a05fee6b2f005d238cae716fafea69b12e607",
+    "source": [
+      {
+        "line": 3313,
+        "text": "    else if(name==L\"#fogz\"){key=L\"FogZ\";feature=Camera;lo=1;hi=50000;}\n    else if(name==L\"#dr\"){key=L\"Local Game Delay Reducer\";feature=Graphics;lo=1;hi=1000;}\n    else if(name==L\"#drn\"){key=L\"Net Game Delay Reducer\";feature=Graphics;lo=1;hi=1000;}\n    else if(name==L\"#ssp\"||name==L\"#showunitskills\"){key=L\"Show Unit Skills\";feature=Graphics;lo=0;hi=1;}"
+      },
+      {
+        "line": 3314,
+        "text": "    else if(name==L\"#dr\"){key=L\"Local Game Delay Reducer\";feature=Graphics;lo=1;hi=1000;}\n    else if(name==L\"#drn\"){key=L\"Net Game Delay Reducer\";feature=Graphics;lo=1;hi=1000;}\n    else if(name==L\"#ssp\"||name==L\"#showunitskills\"){key=L\"Show Unit Skills\";feature=Graphics;lo=0;hi=1;}\n    else if(name==L\"#cd\"){key=L\"Delay Start Game\";feature=Graphics;lo=0;hi=60;}"
+      },
+      {
+        "line": 3762,
+        "text": "    }\n    const bool integral=name==L\"#dr\"||name==L\"#drn\"||name==L\"#kscroll\"||name==L\"#mscroll\"||name==L\"#mc\"||name==L\"#modecast\"||hi==1;\n    if(integral&&v!=std::floor(v)){\n        Status(L\"Argument must be an integer\");"
+      },
+      {
+        "line": 3772,
+        "text": "       !SaveSetting(c.ini,L\"StateTag\",L\"Enable\",L\"1\")){Status(L\"Could not enable HP/mana values\");return false;}\n    if(name==L\"#dr\"&&!SaveSetting(c.ini,L\"Event\",L\"Lan Game Delay Reducer\",value)){Status(L\"Could not write LAN delay\");return false;}\n    {std::lock_guard<std::mutex> lock(configMutex);config=LoadConfig(c.ini);PublishConfigLocked();}\n    std::wstring feedback = SettingFeedback(key,hi==1?(v==1?L\"ON\":L\"OFF\"):value);"
+      }
+    ]
+  },
+  {
+    "path": "WHT-1.29\\native\\parity_commands129.inl",
+    "sha256": "170b826c6e7bc4a353749a502b7afe44d96667bd0eb5f61108ee80d3a5919d98",
+    "source": []
+  }
+]

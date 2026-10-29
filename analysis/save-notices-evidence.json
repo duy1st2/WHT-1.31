@@ -1,0 +1,133 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "2644f3e2b534f7034a3db85b880a05fee6b2f005d238cae716fafea69b12e607",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\common.hpp": "abe6ab5f79ff388f9e997163b20f1e1b8afb0ca2d69daa3a1e68ca976f904ec4",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\menu_fog_vertex131.hpp": "ea7c44dc5863c3485955812877f944ebdc53fbfb6fbc57114b9893b054c7e8ce",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\menu_fog_vertex_profile131.hpp": "4dc720ce15ff2fd89efc1ea9f58c05baaf86fd43c6a2d33089db063c9add8fe4"
+  },
+  "WHT_reference": "runtime.cpp DetourSaveGameHandler, #csave, saveGameHandler installation; WHT-1.29 lacks this runtime feature",
+  "method": "Additive native event 6 observer through independently verified 1.31 registry, as FogClick event 0x16; no native handler replacement",
+  "backup": "WHT-1.31\\analysis\\before-save-notices-20261029-100641",
+  "profiles": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "capture": 8740,
+      "rva": 10255488,
+      "bytes": "558bec6aff68aba55f0164a1000000005081ec30010000a17485ac0133c58945f0535657508d45f464a3000000008b5d08899de0feffff8a4315ff73108885e7feffffffb5e7feffffe842f80c0083c40884c00f841a0300008a4315ff73108885e7feffffffb5e7feffffe820120d0083c40884c075246a006a00e8602b1300",
+      "relocs": [
+        6,
+        24
+      ],
+      "purpose": "argument reads slot0x15/0x29 and sequence0x10/0x20"
+    },
+    {
+      "build": 12164,
+      "bits": 32,
+      "capture": 8740,
+      "rva": 10273287,
+      "bytes": "6a0068807c9c006a06e8fbe00c006a0068607c9c006a",
+      "relocs": [
+        3,
+        17
+      ],
+      "purpose": "register event6 with existing native handler"
+    },
+    {
+      "build": 12164,
+      "bits": 32,
+      "capture": 8740,
+      "rva": 10256371,
+      "bytes": "b0018b4df464890d00000000595f5e5b8b4df033cde8ddb2ab008be55dc3",
+      "relocs": [],
+      "purpose": "bool return and calling convention"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "capture": 32116,
+      "rva": 9996976,
+      "bytes": "558bec6aff685bc35b0164a1000000005081ec30010000a17405a80133c58945f0535657508d45f464a3000000008b5d08899de0feffff8a4315ff73108885e7feffffffb5e7feffffe892d90c0083c40884c00f84f20200008a4315ff73108885e7feffffffb5e7feffffe810f40c0083c40884c075246a006a00e8e00d1300",
+      "relocs": [
+        6,
+        24
+      ],
+      "purpose": "argument reads slot0x15/0x29 and sequence0x10/0x20"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "capture": 32116,
+      "rva": 10014039,
+      "bytes": "6a0068b08a98006a06e8ebc40c006a0068908a98006a",
+      "relocs": [
+        3,
+        17
+      ],
+      "purpose": "register event6 with existing native handler"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "capture": 32116,
+      "rva": 9997819,
+      "bytes": "b0018b4df464890d00000000595f5e5b8b4df033cde865a1ab008be55dc3",
+      "relocs": [],
+      "purpose": "bool return and calling convention"
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "capture": 24984,
+      "rva": 11442816,
+      "bytes": "488bc4574881ec9001000048c7442468feffffff488958104889681848897020488b0571e65e014833c44889842480010000488bd98b51200fb64929e8cf3f0e0084c00f84f90200008b53200fb64b29e8fb610e0084c0752d33d233c9e87ead15004885c0741fc644242800c64424200041b10141b8ff000000410fb6d1488b",
+      "relocs": [],
+      "purpose": "argument reads slot0x15/0x29 and sequence0x10/0x20"
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "capture": 24984,
+      "rva": 11461548,
+      "bytes": "4533c9488d15cab6ffff4533c0b106e840140e00",
+      "relocs": [],
+      "purpose": "register event6 with existing native handler"
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "capture": 24984,
+      "rva": 11443650,
+      "bytes": "b001488b8c24800100004833cce88cf6c3004c8d9c2490010000498b5b18498b6b20498b7328498be35fc3",
+      "relocs": [],
+      "purpose": "bool return and calling convention"
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "capture": 27336,
+      "rva": 11741904,
+      "bytes": "488bc4574881ec9001000048c7442468feffffff488958104889681848897020488b0521265d014833c44889842480010000488bd98b51200fb64929e8ff1a0e0084c00f848e0200008b53200fb64b29e84b3c0e0084c0752d33d233c9e82e7f15004885c0741fc644242800c64424200041b10141b8ff000000410fb6d1488b",
+      "relocs": [],
+      "purpose": "argument reads slot0x15/0x29 and sequence0x10/0x20"
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "capture": 27336,
+      "rva": 11759164,
+      "bytes": "4533c9488d158abcffff4533c0b106e8d0f40d00",
+      "relocs": [],
+      "purpose": "register event6 with existing native handler"
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "capture": 27336,
+      "rva": 11742631,
+      "bytes": "b001488b8c24800100004833cce88722c3004c8d9c2490010000498b5b18498b6b20498b7328498be35fc3",
+      "relocs": [],
+      "purpose": "bool return and calling convention"
+    }
+  ]
+}

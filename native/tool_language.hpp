@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 inline std::string ToolTabName(size_t page){
  static const char* en[]={"General","Quick Chat","Hotkeys","Other Hotkeys","Graphics","MTH","Automation","Language"};
@@ -19,6 +19,9 @@ inline std::string EnglishTabHelp(size_t page){
 }
 inline std::string EnglishControlLabel(const ToolMenuControl& d){
  std::wstring key=d.key,section=d.section;
+ if(key==L"Local Game Delay Reducer")return "Local/LAN delay (ms)";
+ if(key==L"Net Game Delay Reducer")return "Battle.net delay (ms)";
+ if(key==L"Auto Reduce Effects")return "Auto reduce particles during match";
  if(section==L"AutoHeal"||section==L"AutoMana")return key==L"Enabled"?(section==L"AutoHeal"?"Auto Heal":"Auto Mana"):(section==L"AutoHeal"?"HP threshold (%)":"Mana threshold (%)");
 
  if(key==L"Keyboard Scroll Speed")return "Keyboard camera scroll (%)";
@@ -66,6 +69,7 @@ inline std::string EnglishControlLabel(const ToolMenuControl& d){
  return d.label;
 }
 inline std::string EnglishControlHelp(const ToolMenuControl& d){
+ if(!wcscmp(d.key,L"Auto Reduce Effects"))return "Adaptive particles\nBelow 50 FPS for 2 seconds: reduce emission in steps (50%, 25%). Below 15 FPS for 500 ms: stop new particles. Above 58 FPS for 8 seconds: recover one step. Global particles only; existing effects fade naturally.";
  if(!wcscmp(d.key,L"Keyboard Scroll Speed")||!wcscmp(d.key,L"Mouse Scroll Speed"))return "Camera scroll speed\n0..700%; default 100%. Enter a value and press Enter to save.";
  if(!wcscmp(d.key,L"Borderless"))return "Borderless window\nFill the screen without a window border. Disable to restore the previous window.";
  if(!wcscmp(d.key,L"Lock Cursor"))return "Lock cursor in game\nKeep the cursor inside the active game window. Release it when the game loses focus.";
@@ -75,7 +79,9 @@ inline std::string EnglishControlHelp(const ToolMenuControl& d){
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"ShowHpValue"))return "Overhead HP value\nShow or hide HP numbers independently of mana. Enable HP/Mana values in General first.";
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"FontSize"))return "Overhead HP/Mana font size\nRange 1 to 20; default 4. Changes existing labels and line spacing immediately.";
  if(!wcscmp(d.key,L"ModeCast"))return "Casting mode\nNormal: keep native targeting. Quick Cast: cast original hotkeys at cursor on press. Slot-specific remap and self/target cast keep priority.";
- std::wstring key=d.key,section=d.section;auto title=EnglishControlLabel(d);std::string help;
+ std::wstring key=d.key,section=d.section;
+ if(key==L"Local Game Delay Reducer")return "Local/LAN delay (ms)";
+ if(key==L"Net Game Delay Reducer")return "Battle.net delay (ms)";auto title=EnglishControlLabel(d);std::string help;
  auto starts=[&](const wchar_t* p){return key.rfind(p,0)==0;};
  auto digit=key.find_first_of(L"0123456789");auto slot=digit==std::wstring::npos?1:1+int(wcstol(key.c_str()+digit,nullptr,10));
  if(section==L"MacroRecorder"){return EnglishControlLabel(d)+"\n"+(key==L"Enabled"?"Enable recording, playback and macro hotkeys.":key==L"ShowButton"?"Show the Macro icon and action buttons.":"Assign a key for this macro action. Backspace clears it; Escape cancels.");}

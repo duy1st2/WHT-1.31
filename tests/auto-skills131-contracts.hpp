@@ -1,3 +1,4 @@
+#include "potion-capability-contracts.hpp"
 #include "auto_heal131.hpp"
 #pragma once
 #include "auto_skills_native131.hpp"
@@ -19,6 +20,7 @@ struct AutoSkillMock131 {
  bool Activate(const wht::SelfCastSource131& owner,const wht::SelfCastSource131& destination,unsigned slot,const wht::SkillButton131& requested,float range){check(wht::SameSelfCastSource131(owner,source)&&wht::SameSelfCastSource131(destination,target)&&wht::SameAutoSkill131(buttons[slot],requested)&&range==1024,"activation preserves exact owner target binding and range");++casts;castSlot=slot;return false;}
 };
 inline void CheckAutoSkills131(){
+ TestPotionCapability([](bool ok,const char* message){check(ok,message);});
  {unsigned count=0;for(const auto& d:wht::kToolMenuControls)if(std::wstring(d.section)==L"AutoHeal"||std::wstring(d.section)==L"AutoMana"){
   ++count;check(d.page==6&&wht::ControlAvailable131(d),"potion controls enabled on automation page");
   if(std::wstring(d.key)==L"Percent"){check(wht::ValidMenuValue(d,L"1")&&wht::ValidMenuValue(d,L"99")&&!wht::ValidMenuValue(d,L"35.5")&&!wht::ValidMenuValue(d,L"0")&&!wht::ValidMenuValue(d,L"100"),"potion menu uses same integer percent policy as commands");check(std::wstring(d.dependency)==std::wstring(d.section)+L"|Enabled","threshold depends on its own master");}

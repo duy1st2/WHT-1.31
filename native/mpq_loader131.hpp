@@ -23,19 +23,19 @@ using MpqOpenFn131=uintptr_t(*)(MpqSpan131,unsigned,unsigned,unsigned,uintptr_t,
 #else
 using MpqOpenFn131=uintptr_t(__cdecl*)(const char*,size_t,unsigned,unsigned,unsigned,uintptr_t,int);
 #endif
-inline uintptr_t InvokeCustomMpq131(MpqOpenFn131 open,const char* path,size_t length){
+inline uintptr_t InvokeCustomMpq131(MpqOpenFn131 open,const char* path,size_t length,unsigned priority=customMpqPriority131){
  if(!open||!path||!length)return 0;
  __try{
 #ifdef _WIN64
-  return open({path,length},2,0,customMpqPriority131,0,false);
+  return open({path,length},2,0,priority,0,false);
 #else
-  return open(path,length,2,0,customMpqPriority131,0,0);
+  return open(path,length,2,0,priority,0,0);
 #endif
  }__except(1){return 0;}
 }
-inline uintptr_t OpenCustomMpq131(uintptr_t base,unsigned build,const std::wstring& path){
+inline uintptr_t OpenCustomMpq131(uintptr_t base,unsigned build,const std::wstring& path,unsigned priority=customMpqPriority131){
  const auto* p=MpqOpenProfileFor131(build);if(!p||!MpqOpenCode131(base,*p))return 0;
- const auto encoded=Utf8(path);return InvokeCustomMpq131(reinterpret_cast<MpqOpenFn131>(base+p->open),encoded.c_str(),encoded.size());
+ const auto encoded=Utf8(path);return InvokeCustomMpq131(reinterpret_cast<MpqOpenFn131>(base+p->open),encoded.c_str(),encoded.size(),priority);
 }
 struct MpqLoader131 {
  // Native archive providers stay mounted until process exit, like 1.29.

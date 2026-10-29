@@ -1450,9 +1450,9 @@ struct GameplayCommandState {
                 in >> slot >> lumber >> gold;
             }
 
-            if (slot < 0 || slot > 15 || gold < 0 || lumber < 0 || (gold == 0 && lumber == 0)) {
-                statusMsg = (name == L"#ggl") ? L"Usage: #ggl [slot] [gold] [lumber]"
-                                              : L"Usage: #gll [slot] [lumber] [gold]";
+            if (in.fail() || slot < 1 || slot > 24 || gold < 0 || lumber < 0 || (gold == 0 && lumber == 0)) {
+                statusMsg = (name == L"#ggl") ? L"Usage: #ggl [player 1-24] [gold] [lumber]"
+                                              : L"Usage: #gll [player 1-24] [lumber] [gold]";
                 return false;
             }
 
@@ -1460,7 +1460,7 @@ struct GameplayCommandState {
             auto fnSetState = reinterpret_cast<void(__cdecl*)(uint32_t, int, int)>(jassLookup("SetPlayerState"));
             auto fnLocal = reinterpret_cast<uint32_t(__cdecl*)()>(jassLookup("GetLocalPlayer"));
             uint32_t lp = (fnLocal && detail::SafeIsExecutable(reinterpret_cast<uintptr_t>(fnLocal))) ? fnLocal() : 0;
-            uint32_t targetPlayer = detail::SafePlayer(jassLookup, slot);
+            uint32_t targetPlayer = detail::SafePlayer(jassLookup, slot - 1);
 
             if (fnGetState && fnSetState && targetPlayer &&
                 detail::SafeIsExecutable(reinterpret_cast<uintptr_t>(fnGetState)) &&

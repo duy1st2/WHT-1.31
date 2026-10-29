@@ -1,0 +1,90 @@
+{
+  "read_only": true,
+  "checks": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "provider": ".?AVNetProviderLOOP@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12164,
+      "bits": 32,
+      "provider": ".?AVNetProviderLTCP@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12164,
+      "bits": 32,
+      "provider": ".?AVNetProviderBNET@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "provider": ".?AVNetProviderLOOP@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "provider": ".?AVNetProviderLTCP@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "provider": ".?AVNetProviderBNET@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "provider": ".?AVNetProviderLOOP@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "provider": ".?AVNetProviderLTCP@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "provider": ".?AVNetProviderBNET@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "provider": ".?AVNetProviderLOOP@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "provider": ".?AVNetProviderLTCP@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "provider": ".?AVNetProviderBNET@Net@@",
+      "native_default": 100,
+      "slot10_and_rtti_match": true
+    }
+  ],
+  "no_provider_modified": true
+}

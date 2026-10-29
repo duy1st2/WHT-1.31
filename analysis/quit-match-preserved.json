@@ -1,0 +1,50 @@
+{
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\TS-Banned.ini": {
+    "sha256": "0ae658b6b3ca80b4c18a5c53c220e1c65055c3315ea847d2827179a688ca6742",
+    "size": 33
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ini": {
+    "sha256": "d019be02d9b02e5b3d6e8177859f60f4ed79c959893053fe34cfdd86ea86315f",
+    "size": 10157
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.log": {
+    "sha256": "09fbf3799d0ec49d880cf9983aef167375148f8ff1d76cd2c1ad66d7bea79935",
+    "size": 492691
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.update.log": {
+    "sha256": "d0816a7df05f3cf38ea4763c1d91ac838f467db09ef665cf3f82a3b683b9cae0",
+    "size": 6367
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ini": {
+    "sha256": "a29ac7afae8cdb60b559c005f0365801cf28398f535a2671973985100eda7507",
+    "size": 9315
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.log": {
+    "sha256": "3ac0b61fb7932836775bdb1a5b3c39e7b62fe88d1f46697e0733799b0288ceb3",
+    "size": 370897
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\TS-Banned.ini": {
+    "sha256": "ec9c8c969063da42da8227bbed6466ab1d0be63257719aa7f30a733d7b29b059",
+    "size": 15
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ini": {
+    "sha256": "930f5bd96f343df36ea865de952cde001c4f06452657493016d4b63b7f816765",
+    "size": 9494
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.log": {
+    "sha256": "c13a20a05694275d2f482c027ec103af6890cda61d18035e6c02cfe4405e521d",
+    "size": 486898
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.update.log": {
+    "sha256": "1ede662e4c26392a3ab51fb7e76e79abd675b6559bca379641e78c0018412bc1",
+    "size": 4672
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ini": {
+    "sha256": "a53b0c46541c419d6c1e2c91818220489fff16c81fff58428c1f5bcd24336566",
+    "size": 9807
+  },
+  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.log": {
+    "sha256": "2641854ae735c1043b03769de1f9b67a01dac390139ecf2dcc31760da79064f5",
+    "size": 570446
+  }
+}

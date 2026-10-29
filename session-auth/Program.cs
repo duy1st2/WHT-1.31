@@ -112,9 +112,9 @@ internal static class Program
             settings.ConnectTimeout = TimeSpan.FromSeconds(3);
             settings.SocketTimeout = TimeSpan.FromSeconds(3);
             using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-            var users = new MongoClient(settings).GetDatabase(configuration.RootElement.GetProperty("database").GetString()!).GetCollection<BsonDocument>("users");
+            var sessions = new MongoClient(settings).GetDatabase(configuration.RootElement.GetProperty("database").GetString()!).GetCollection<BsonDocument>("sessions");
             stage = "mongo-query";
-            var matches = await users.Find(Builders<BsonDocument>.Filter.Eq("sessionId",session)).Project(Builders<BsonDocument>.Projection.Include("username").Exclude("_id")).Limit(2).ToListAsync(timeout.Token);
+            var matches = await sessions.Find(Builders<BsonDocument>.Filter.Eq("sessionId",session)).Project(Builders<BsonDocument>.Projection.Include("username").Exclude("_id")).Limit(2).ToListAsync(timeout.Token);
             if (matches.Count != 1 || !matches[0].TryGetValue("username",out var value) || !value.IsString) return Deny("session-user-not-found-or-ambiguous", 3);
             string username = value.AsString;
             if (string.IsNullOrWhiteSpace(username) || username.Contains('\n') || username.Contains('\r')) return Deny("invalid-username");

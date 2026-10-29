@@ -1,3 +1,15 @@
+#include "adaptive_effects131.hpp"
+namespace { wht::EffectsController131 effects64; }
+#include "delay_reducer131.hpp"
+namespace { wht::DelayReducer131 delayReducer64; }
+#include "terrain131.hpp"
+namespace { wht::TerrainFeature131 terrain64; }
+#include "wht_library131.hpp"
+namespace { wht::WhtLibrary131 whtLibrary64; }
+#include "save_notices131.hpp"
+namespace { wht::SaveNoticeService131 saveNotices64; }
+#include "quit_match131.hpp"
+namespace { wht::QuitMatchState131 quitMatch64; }
 #include "hero_skill_points131.hpp"
 #include "mouse_world131.hpp"
 #include "cursor_flags131.hpp"
@@ -278,16 +290,27 @@ bool SellHovered64(){POINT point{};RECT client{};if(!GetCursorPos(&point)||!Scre
  const int slot=wht::InventorySlotHit131(point,client.right,client.bottom,[&](unsigned slot){return wht::Button64(ui64,base64,*profile64,slot+12);});
  if(slot<0)return false;BeginSell64(slot);return true;
 }
+bool DelaySetting64(bool net,const std::wstring& args){if(!profile64)return false;std::string report;const bool ok=wht::DelayReducerCommand131(net,args,config64,[&](unsigned scope){return Allowed64()&&settings64&&delayReducer64.Ready(base64,profile64->build,scope);},[&](){std::string reason;return delayReducer64.Update(base64,profile64->build,Allowed64()&&settings64,config64,reason);},[&](const wchar_t* key,const std::wstring& value){return wht::SaveSetting(ini64,L"Event",key,value);},[&](){Reload64();},report);wht::Log(folder64,report);wht::ShowNotification131(base64,profile64->build,ui64,report);return ok;}
+bool EffectsSetting64(const std::wstring& args){if(!profile64)return false;std::string report;const bool ok=wht::EffectsCommand131(args,config64,[&](){const auto* p=wht::EffectsProfileFor131(profile64->build);return p&&wht::EffectsCode131(base64,*p);},[&](bool value){return wht::SaveSetting(ini64,L"Graphics",L"Auto Reduce Effects",value?L"1":L"0");},[&](){Reload64();},report);if(ok&&!config64.autoEffects&&!effects64.Reset(base64,profile64->build)){report+="; native restoration pending";}wht::Log(folder64,report);wht::ShowNotification131(base64,profile64->build,ui64,report);return ok;}
 bool CommandImpl64(const std::wstring& text){std::wistringstream in(text);std::wstring cmd;if(!(in>>cmd))return false;cmd=wht::CanonicalCommand131(cmd);
  if(wht::ModerationCommandName131(cmd)){if(!authorized64||config64.mode!=wht::RunMode::Local)return false;std::wstring args;std::getline(in,args);const auto result=wht::ExecuteModeration131(window64,folder64,cmd,args);wht::Log(folder64,result);if(ui64)wht::ShowNotification131(base64,profile64->build,ui64,result);return true;}
  if(cmd==L"#tools"||cmd==L"#tool"||cmd==L"#menu"){std::wstring args;std::getline(in,args);return wht::ToolMenuCommand131(cmd,args,[&](){menu64.Toggle();});}
  if(cmd==L"#toolui"){size_t index;std::wstring op,value;if(!(in>>index>>op)||index>=wht::kToolMenuControls.size())return false;const auto& c=wht::kToolMenuControls[index];if(!Control64(c))return false;
   if(op==L"toggle")value=wht::ToolMenuOverlay::ReadValue(config64,index)==L"1"?L"0":L"1";else if(op==L"set"){std::getline(in,value);if(!value.empty()&&value[0]==L' ')value.erase(0,1);}else return false;
   if(!wht::ValidMenuValue(c,value))return false;
+  if(const auto scope=wht::DelayReducerMenuScope131(c.section,c.key))return DelaySetting64(scope==2,value);
+  if(!wcscmp(c.section,L"Graphics")&&!wcscmp(c.key,L"Auto Reduce Effects"))return EffectsSetting64(value);
   if(const auto* mode=wht::MthModeControl131(c.section,c.key))return wht::ApplyMthMode131(mode,value,config64,[&](const wchar_t* section,const wchar_t* key,const wchar_t* saved){return wht::SaveSetting(ini64,section,key,saved);},[&](){Reload64();});
   if(std::wstring(c.section)==L"Language"){const bool english=std::wstring(c.key)==L"English"?value==L"1":value!=L"1";wht::SaveSetting(ini64,L"Language",L"English",english?L"1":L"0");wht::SaveSetting(ini64,L"Language",L"Vietnamese",english?L"0":L"1");}
   else if(!wht::SaveSetting(ini64,c.section,c.key,value))return false;Reload64();return true;}
  if(!authorized64||config64.mode!=wht::RunMode::Local||!ui64)return false;
+ if(cmd==L"#autoeffects"){std::wstring args;std::getline(in,args);return EffectsSetting64(args);}
+ if(cmd==L"#dr"||cmd==L"#drn"){std::wstring args;std::getline(in,args);return DelaySetting64(cmd==L"#drn",args);}
+ if(cmd==L"#codenen"||cmd==L"#code_nen"||cmd==L"#nen"){std::wstring args;std::getline(in,args);std::string report;const bool ok=wht::TerrainCommand131(base64,profile64->build,args,Allowed64()&&settings64,config64,terrain64,[&](const std::wstring& value){return wht::SaveSetting(ini64,L"Event",L"code_nen",value);},[&](){Reload64();},report);wht::Log(folder64,report);wht::ShowNotification131(base64,profile64->build,ui64,report);return ok;}
+ if(cmd==L"#fastjass"||cmd==L"#fj"){std::wstring args;std::getline(in,args);std::string report;const bool ok=whtLibrary64.Command(folder64,args,config64,dllLoader64,mpqLoader64,[&](const std::wstring& path,unsigned priority){return wht::OpenCustomMpq131(base64,profile64->build,path,priority);},[&](const wchar_t* value){return wht::SaveSetting(ini64,L"Event",L"Fast Jass",value);},[&](){Reload64();},[&](const std::string& text){wht::Log(folder64,text);},report);wht::Log(folder64,report);wht::ShowNotification131(base64,profile64->build,ui64,report);return ok;}
+ if(cmd==L"#csave"){std::wstring args;std::getline(in,args);std::string report;bool ok=false;if(!config64.notiLogSaveGame&&!saveNotices64.Ensure(base64,profile64->build))report="Check Players Save Game: native profile mismatch";else ok=wht::SaveNoticeCommand131(args,config64,[&](const wchar_t* value){return wht::SaveSetting(ini64,L"Event",L"Noti/Log Info Players Save Game",value);},[&](){Reload64();},report);wht::Log(folder64,report);wht::ShowNotification131(base64,profile64->build,ui64,report);return ok;}
+ if(cmd==L"#q"){std::wstring extra;if(in>>extra){wht::ShowNotification131(base64,profile64->build,ui64,"Usage: #q (no arguments)");return false;}const bool ok=quitMatch64.Request(ui64,wht::QuitMatchWorld131(base64,profile64->build),wht::QuitMatchNative131(base64,profile64->build)!=nullptr);wht::ShowNotification131(base64,profile64->build,ui64,ok?"Returning to Warcraft menu":"#q: active match and verified native required (or request already pending)");return ok;}
+ if(cmd==L"#oldname"){std::wstring args;std::getline(in,args);std::string report;const bool ok=wht::OldPlayerNameCommand131(args,config64,SaveName64,Reload64,report);wht::Log(folder64,report);wht::ShowNotification131(base64,profile64->build,ui64,report);return ok;}
  if(cmd==L"#n"||cmd==L"#name"){std::wstring args;std::getline(in,args);std::string report;const bool ok=wht::PlayerNameCommand131(cmd,args,config64,ReadName64,ApplyName64,SaveName64,Reload64,report);playerName64.Reset();wht::Log(folder64,report);wht::ShowNotification131(base64,profile64->build,ui64,report);return ok;}
  if(cmd==L"#cs"){std::wstring extra;if(in>>extra)return false;pinned64={};return true;}
  if(cmd==L"#mth49"||cmd==L"#g17"){std::wstring args;std::getline(in,args);return wht::ApplyMthMode131(cmd,args,config64,[&](const wchar_t* section,const wchar_t* key,const wchar_t* value){return wht::SaveSetting(ini64,section,key,value);},[&](){Reload64();});}
@@ -408,7 +431,7 @@ bool Command64(const std::wstring& text){
  if(Allowed64()){auto feedback=wht::CommandFeedback131(name,args,ok,config64,menu64.open,settings64,config64.borderless,config64.lockCursor,autoPickEnabled64,autoClick64.left,autoClick64.right);if(ok&&name==L"#wsize")feedback=wht::WindowSizeText131(window64);if(!feedback.empty())wht::ShowNotification131(base64,profile64->build,ui64,feedback);}return ok;
 }
 
-void Destroy64(){wht::ResetWideScreen131();externalHud64.Hide();
+void Destroy64(){if(profile64)effects64.Reset(base64,profile64->build);terrain64.Reset();saveNotices64.Reset();quitMatch64.Reset();wht::ResetWideScreen131();externalHud64.Hide();
  optionMenu64.Reset();
 
  menuFogVertex64.ResetMatch();presentation64.Restore();windowServices64.Restore();
@@ -433,16 +456,23 @@ void PresentBar64(uintptr_t bar){
 void Update64(){
  wht::ObserveGameProcessor();
  perf64.Report(folder64,Allowed64());wht::UiPerfScope131 updateTiming(perf64,0);
-const auto ui=CurrentUi64();if(ui!=ui64){Destroy64();ui64=ui;}{std::string fogReport;if(!fogModifier64.Update(base64,profile64->build,ui64,Allowed64()&&settings64,fogReport)&&!fogReport.empty())wht::Log(folder64,fogReport);} wht::UpdateWideScreen131(base64,profile64->build,window64,Allowed64()&&settings64,config64.wide);
+const auto ui=CurrentUi64();if(ui!=ui64){Destroy64();ui64=ui;} if(quitMatch64.pending){quitMatch64.Process(ui64,wht::QuitMatchWorld131(base64,profile64->build),Allowed64()&&settings64,[&](){const bool ok=wht::InvokeQuitMatch131(wht::QuitMatchNative131(base64,profile64->build));if(!ok)wht::Log(folder64,"#q: native return-to-menu failed");return ok;});return;}
+{std::string fogReport;if(!fogModifier64.Update(base64,profile64->build,ui64,Allowed64()&&settings64,fogReport)&&!fogReport.empty())wht::Log(folder64,fogReport);} wht::UpdateWideScreen131(base64,profile64->build,window64,Allowed64()&&settings64,config64.wide);
+ {std::string report;terrain64.Update(base64,profile64->build,ui64,Allowed64()&&settings64,config64,[](){return CurrentUi64();},report);if(!report.empty()){wht::Log(folder64,report);wht::ShowNotification131(base64,profile64->build,ui64,report);}}
+ saveNotices64.Update(base64,profile64->build,ui64,Allowed64()&&settings64&&config64.notiLogSaveGame,folder64,[&](const std::string& text){wht::ShowNotification131(base64,profile64->build,ui64,text);});
  {std::string report;playerName64.Update(GetTickCount64(),Allowed64()&&settings64,config64,ReadName64,ApplyName64,SaveName64,Reload64,report);if(!report.empty())wht::Log(folder64,report);}
 if(!Allowed64()||!settings64){repeatMessage64.Reset();allianceSpam64.Reset();allianceSpamAll64.Reset();noCooldown64.Reset();wht::repeatChat131.Reset();wht::mutedChat131.Reset();}if(!Allowed64()||!settings64||!config64.timeBoss||!(config64.mth49Enable||config64.g17Enable))timeBoss64.active=false;if(!Allowed64())wht::ResetSpeed131(); manualClear64.Update(base64,profile64->build,ui64,Allowed64()&&settings64,!typed64&&!menu64.open&&GetForegroundWindow()==window64,GetTickCount64());
 
  wht::UpdateModeration131(base64,profile64->build,ui,authorized64.load()&&settings64&&config64.mode==wht::RunMode::Local,config64,folder64);
 menuFogVertex64.Update(base64,profile64->build,Allowed64(),authorized64.load()&&settings64&&config64.mode==wht::RunMode::Local,ui,config64,folder64,[&](const std::string& text){wht::ShowNotification131(base64,profile64->build,ui,text);});
+ gameplay64.sampling.frameLoad.Poll(ui64,Allowed64()&&settings64,GetForegroundWindow()==window64,GetTickCount64(),[&](float& fps){float scale=0;return wht::EffectsRead131(base64,profile64->build,fps,scale);});
+ {std::string report;effects64.Update(base64,profile64->build,GetTickCount64(),config64.autoEffects&&Allowed64()?wht::QuitMatchWorld131(base64,profile64->build):0,Allowed64()&&settings64&&config64.autoEffects,GetForegroundWindow()==window64,report);if(!report.empty())wht::Log(folder64,report);}
+ {std::string report;delayReducer64.Update(base64,profile64->build,authorized64.load()&&settings64&&config64.mode==wht::RunMode::Local,config64,report);if(!report.empty())wht::Log(folder64,report);}
 presentation64.Update(base64,profile64->build,Allowed64()&&settings64&&ui!=0,config64.vsync,config64.unlockFps,folder64);
 windowServices64.Apply(window64,Allowed64()&&config64.borderless,Allowed64()&&config64.lockCursor,menu64.open);
  const DWORD externalActive=wht::UpdateExternalHud131(externalHud64,base64,profile64->build,window64,ui64,config64,Allowed64()&&settings64,menu64.open);
  if(authorized64&&settings64&&config64.mode==wht::RunMode::Local)dllLoader64.Start(folder64,config64.loadDll,[&](const std::string& report){wht::Log(folder64,report);});
+ if(authorized64&&settings64&&config64.mode==wht::RunMode::Local)whtLibrary64.StartDlls(folder64,config64.fastJass,dllLoader64,mpqLoader64,[&](const std::string& report){wht::Log(folder64,report);});
 if(!ui)return; wht::InstallUiRefresh131(base64,profile64->build,ui,PresentGraphics64);graphicsDiagnostic64.Update(base64,profile64->build,ui,config64,Allowed64(),folder64,consoleUi64,mouseTooltip64,[&](uintptr_t table){return wht::Component64(ui,base64,table);}); wht::UpdateMatchStart131(matchStart64,base64,profile64->build,ui,Allowed64()&&settings64&&config64.soundStartGame,module64,folder64); if(auto p=wht::RevealProfileFor131(profile64->build)){
   if(reveal64.Update(base64,profile64->build,wht::Component64(ui64,base64,p->worldTable),Allowed64()&&settings64&&config64.revealInvisible)&&!reveal64.reported){reveal64.reported=true;wht::Log(folder64,"WHT: native invisible-unit display enabled.");}
  }
@@ -456,6 +486,7 @@ if(config64.lifeManaCommas||config64.lifeManaNoHide||config64.statsCommas||wht::
  wht::UpdateAutoClick131(autoClick64,config64,window64,Allowed64()&&settings64&&!typed64&&!menu64.open&&!macro64.playing&&!macro64.recording&&!allSkills64.active&&!craft64.active&&!delivery64.active&&!sellAll64.active&&!dropAllNetwork64.active);
 Camera64();if(!Assets64())return;
  if(authorized64&&settings64&&config64.mode==wht::RunMode::Local)mpqLoader64.Start(folder64,config64.loadMpq,[&](const std::wstring& path){return wht::OpenCustomMpq131(base64,profile64->build,path);},[&](const std::string& report){wht::Log(folder64,report);});
+ if(authorized64&&settings64&&config64.mode==wht::RunMode::Local)whtLibrary64.Start(folder64,config64.fastJass,dllLoader64,mpqLoader64,[&](const std::wstring& path,unsigned priority){return wht::OpenCustomMpq131(base64,profile64->build,path,priority);},[&](const std::string& report){wht::Log(folder64,report);});
 
  const auto cleared=messageTimers64.Update(base64,ui,profile64->build,config64,Allowed64()&&!typed64,GetTickCount64());
  const auto freshClear=cleared&~messageTimers64.reported;

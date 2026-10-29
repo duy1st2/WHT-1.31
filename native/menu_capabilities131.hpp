@@ -7,8 +7,9 @@
 namespace wht {
 inline bool ControlAvailable131(const ToolMenuControl& d){
  const std::wstring section=d.section,key=d.key;
+ if(DelayReducerMenuScope131(d.section,d.key))return true;
  if(MenuFogVertexControl131(section,key)||PresentationControl131(section,key))return true;
- if(section==L"Graphics"&&(key==L"timeOfDayUI"||key==L"ConsoleUI"||key==L"BlackBarUI"||key==L"MouseTooltipUI"||key==L"BarInvul"||key==L"Color Player"||key==L"Text Life/Mana Commas"||key==L"Text Life/Mana No Hide"||key==L"Text Stats Commas"||key==L"Detailed Stats Tooltip"))return true;
+ if(section==L"Graphics"&&(key==L"Auto Reduce Effects"||key==L"timeOfDayUI"||key==L"ConsoleUI"||key==L"BlackBarUI"||key==L"MouseTooltipUI"||key==L"BarInvul"||key==L"Color Player"||key==L"Text Life/Mana Commas"||key==L"Text Life/Mana No Hide"||key==L"Text Stats Commas"||key==L"Detailed Stats Tooltip"))return true;
  if(section==L"MTHKEY"&&(key==L"Shield"||key==L"Ice"||key==L"Wild"||key==L"Frozen"||key==L"Phoenix"||key==L"ShieldDraw"||key==L"IceDraw"||key==L"WildDraw"||key==L"FrozenDraw"||key==L"PhoenixDraw"||key==L"Noti"||key==L"AutoGaDraw1"||key==L"AutoGaDraw2"||key==L"AutoGaDraw3"||key==L"AutoSoiDraw1"||key==L"AutoSoiDraw2"||key==L"AutoSoiDraw3"||key==L"ChayGa1"||key==L"ChayGa2"||key==L"ChayGa3"||key==L"ChaySoi1"||key==L"ChaySoi2"||key==L"ChaySoi3"||key==L"ChayGa1_count"||key==L"ChayGa2_count"||key==L"ChayGa3_count"||key==L"ChaySoi1_count"||key==L"ChaySoi2_count"||key==L"ChaySoi3_count"||key==L"PickGoku"||key==L"PickGokuDraw"||key==L"TimeBoss"||key==L"MTH49Enable"||key==L"G17Enable"))return true;
  if(section==L"AutoHeal"||section==L"AutoMana")return key==L"Enabled"||key==L"Percent";
  if(section==L"AutoSkills")return key==L"AutoSkills_Enable"||key==L"AutoSkills_Delay"||key==L"AutoSkills_Range"||key==L"AutoSkills_Active";

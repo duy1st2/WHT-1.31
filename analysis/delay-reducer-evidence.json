@@ -1,0 +1,134 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "2644f3e2b534f7034a3db85b880a05fee6b2f005d238cae716fafea69b12e607",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\common.hpp": "abe6ab5f79ff388f9e997163b20f1e1b8afb0ca2d69daa3a1e68ca976f904ec4",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\native\\menu_fog_vertex131.hpp": "ea7c44dc5863c3485955812877f944ebdc53fbfb6fbc57114b9893b054c7e8ce"
+  },
+  "backup": "WHT-1.31\\analysis\\before-delay-reducer-20261029-105800",
+  "reference": "WHT #dr/#drn and Patch localDelay/lanDelay/netDelay; old function RTTI NetProviderLOOP/LTCP/BNET@Net virtualslot10",
+  "old_defaults": {
+    "LOOP": 100,
+    "LTCP": 100,
+    "BNET": 250
+  },
+  "native_131_defaults": {
+    "LOOP": 100,
+    "LTCP": 100,
+    "BNET": 100
+  },
+  "activation": "Explicit persisted scope mask default0; avoids applying legacy 250ms BNET default on 1.31",
+  "profiles": [
+    {
+      "bits": 64,
+      "build": 12164,
+      "capture_pid": 24984,
+      "entries": [
+        {
+          "table": 29805080,
+          "getter": 17392640,
+          "locator": 31680744,
+          "type": 34749224,
+          "name": ".?AVNetProviderLOOP@Net@@"
+        },
+        {
+          "table": 29812856,
+          "getter": 17470288,
+          "locator": 31688816,
+          "type": 34754160,
+          "name": ".?AVNetProviderLTCP@Net@@"
+        },
+        {
+          "table": 29809456,
+          "getter": 17427648,
+          "locator": 31682120,
+          "type": 34750776,
+          "name": ".?AVNetProviderBNET@Net@@"
+        }
+      ]
+    },
+    {
+      "bits": 64,
+      "build": 12173,
+      "capture_pid": 27336,
+      "entries": [
+        {
+          "table": 29997352,
+          "getter": 17641008,
+          "locator": 31868680,
+          "type": 34933544,
+          "name": ".?AVNetProviderLOOP@Net@@"
+        },
+        {
+          "table": 30005128,
+          "getter": 17718656,
+          "locator": 31876752,
+          "type": 34938480,
+          "name": ".?AVNetProviderLTCP@Net@@"
+        },
+        {
+          "table": 30001728,
+          "getter": 17676016,
+          "locator": 31870056,
+          "type": 34935096,
+          "name": ".?AVNetProviderBNET@Net@@"
+        }
+      ]
+    },
+    {
+      "bits": 32,
+      "build": 12164,
+      "capture_pid": 8740,
+      "entries": [
+        {
+          "table": 25559140,
+          "getter": 15463280,
+          "locator": 26906392,
+          "type": 28335236,
+          "name": ".?AVNetProviderLOOP@Net@@"
+        },
+        {
+          "table": 25561336,
+          "getter": 15533872,
+          "locator": 26911408,
+          "type": 28339508,
+          "name": ".?AVNetProviderLTCP@Net@@"
+        },
+        {
+          "table": 25559852,
+          "getter": 15493264,
+          "locator": 26907212,
+          "type": 28336548,
+          "name": ".?AVNetProviderBNET@Net@@"
+        }
+      ]
+    },
+    {
+      "bits": 32,
+      "build": 12173,
+      "capture_pid": 32116,
+      "entries": [
+        {
+          "table": 25251716,
+          "getter": 15196688,
+          "locator": 26610984,
+          "type": 28040324,
+          "name": ".?AVNetProviderLOOP@Net@@"
+        },
+        {
+          "table": 25253912,
+          "getter": 15267280,
+          "locator": 26616000,
+          "type": 28044596,
+          "name": ".?AVNetProviderLTCP@Net@@"
+        },
+        {
+          "table": 25252428,
+          "getter": 15226672,
+          "locator": 26611804,
+          "type": 28041636,
+          "name": ".?AVNetProviderBNET@Net@@"
+        }
+      ]
+    }
+  ]
+}

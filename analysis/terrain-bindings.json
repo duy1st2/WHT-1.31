@@ -1,0 +1,70 @@
+[
+  {
+    "build": 12164,
+    "pid": 11468,
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\Warcraft III.exe",
+    "start": "2026-10-29T03:30:49.1208485Z",
+    "bits": 32,
+    "owned": true,
+    "base": 15007744,
+    "bindings": {
+      "SetTerrainType": [
+        9564704
+      ],
+      "GetTerrainType": [
+        9312640
+      ]
+    }
+  },
+  {
+    "build": 12173,
+    "pid": 26868,
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\Warcraft III.exe",
+    "start": "2026-10-29T03:30:49.1679488Z",
+    "bits": 32,
+    "owned": true,
+    "base": 6291456,
+    "bindings": {
+      "SetTerrainType": [
+        9357360
+      ],
+      "GetTerrainType": [
+        9109984
+      ]
+    }
+  },
+  {
+    "build": 12164,
+    "pid": 20852,
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\Warcraft III.exe",
+    "start": "2026-10-29T03:30:49.1944026Z",
+    "bits": 64,
+    "owned": true,
+    "base": 140696589500416,
+    "bindings": {
+      "SetTerrainType": [
+        10703904
+      ],
+      "GetTerrainType": [
+        10448256
+      ]
+    }
+  },
+  {
+    "build": 12173,
+    "pid": 19624,
+    "path": "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\Warcraft III.exe",
+    "start": "2026-10-29T03:30:49.2186463Z",
+    "bits": 64,
+    "owned": true,
+    "base": 140695883874304,
+    "bindings": {
+      "SetTerrainType": [
+        11014304
+      ],
+      "GetTerrainType": [
+        10758000
+      ]
+    }
+  }
+]

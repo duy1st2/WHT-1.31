@@ -1,0 +1,24 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "2644f3e2b534f7034a3db85b880a05fee6b2f005d238cae716fafea69b12e607",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\quit_match.hpp": "f6fee6ac0e5556f46fa12567b3f559cd276ce21390d71ee439616d6bea187476"
+  },
+  "feature": "#q returns to menu via queued native EndGame(false), consumed only if root/world still match",
+  "captures": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "pid_of_saved_capture": 8740,
+      "registration_function_rva": "0x155f4b0",
+      "registration_function_body": "xor eax,eax; ret"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "pid_of_saved_capture": 32116,
+      "registration_function_rva": "0x1521530",
+      "registration_function_body": "xor eax,eax; ret"
+    }
+  ],
+  "conclusion": "Static native registration targets are inert stubs. They do not establish actual runtime EndGame binding or ABI. Live native binding and body verification required. No command enabled or runtime files changed."
+}

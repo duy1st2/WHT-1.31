@@ -1,0 +1,102 @@
+{
+  "read_only": true,
+  "checks": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "rva": 9564704,
+      "matches": true
+    },
+    {
+      "build": 12164,
+      "bits": 32,
+      "rva": 9312640,
+      "matches": true
+    },
+    {
+      "build": 12164,
+      "bits": 32,
+      "rva": 13062320,
+      "matches": true
+    },
+    {
+      "build": 12164,
+      "bits": 32,
+      "rva": 13478928,
+      "matches": true
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "rva": 9357360,
+      "matches": true
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "rva": 9109984,
+      "matches": true
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "rva": 12779824,
+      "matches": true
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "rva": 13196704,
+      "matches": true
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "rva": 10703904,
+      "matches": true
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "rva": 10448256,
+      "matches": true
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "rva": 14601824,
+      "matches": true
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "rva": 15117712,
+      "matches": true
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "rva": 11014304,
+      "matches": true
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "rva": 10758000,
+      "matches": true
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "rva": 14847152,
+      "matches": true
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "rva": 15362704,
+      "matches": true
+    }
+  ],
+  "terrain_setter_not_invoked": true
+}

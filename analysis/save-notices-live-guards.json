@@ -1,0 +1,102 @@
+{
+  "checks": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "pid": 22716,
+      "rva": 10255488,
+      "live_match": true,
+      "purpose": "argument reads slot0x15/0x29 and sequence0x10/0x20"
+    },
+    {
+      "build": 12164,
+      "bits": 32,
+      "pid": 22716,
+      "rva": 10273287,
+      "live_match": true,
+      "purpose": "register event6 with existing native handler"
+    },
+    {
+      "build": 12164,
+      "bits": 32,
+      "pid": 22716,
+      "rva": 10256371,
+      "live_match": true,
+      "purpose": "bool return and calling convention"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "pid": 26596,
+      "rva": 9996976,
+      "live_match": true,
+      "purpose": "argument reads slot0x15/0x29 and sequence0x10/0x20"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "pid": 26596,
+      "rva": 10014039,
+      "live_match": true,
+      "purpose": "register event6 with existing native handler"
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "pid": 26596,
+      "rva": 9997819,
+      "live_match": true,
+      "purpose": "bool return and calling convention"
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "pid": 17432,
+      "rva": 11442816,
+      "live_match": true,
+      "purpose": "argument reads slot0x15/0x29 and sequence0x10/0x20"
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "pid": 17432,
+      "rva": 11461548,
+      "live_match": true,
+      "purpose": "register event6 with existing native handler"
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "pid": 17432,
+      "rva": 11443650,
+      "live_match": true,
+      "purpose": "bool return and calling convention"
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "pid": 13748,
+      "rva": 11741904,
+      "live_match": true,
+      "purpose": "argument reads slot0x15/0x29 and sequence0x10/0x20"
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "pid": 13748,
+      "rva": 11759164,
+      "live_match": true,
+      "purpose": "register event6 with existing native handler"
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "pid": 13748,
+      "rva": 11742631,
+      "live_match": true,
+      "purpose": "bool return and calling convention"
+    }
+  ],
+  "read_only": true,
+  "save_not_invoked": true
+}

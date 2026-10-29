@@ -8,6 +8,17 @@ inline bool PlayerNameCode131(uintptr_t base,const PlayerNameProfile131& p){retu
 inline bool PlayerNameText131(const std::wstring& text,std::string& utf8){utf8.clear();if(text.empty()||text.size()>63)return false;for(wchar_t ch:text)if(ch<32||ch==127)return false;const int n=WideCharToMultiByte(CP_UTF8,WC_ERR_INVALID_CHARS,text.data(),int(text.size()),nullptr,0,nullptr,nullptr);if(n<1||n>63)return false;utf8.resize(n);return WideCharToMultiByte(CP_UTF8,WC_ERR_INVALID_CHARS,text.data(),int(text.size()),utf8.data(),n,nullptr,nullptr)==n;}
 struct PlayerNameRequest131 {bool query=false,restore=false;std::wstring text;std::string utf8;};
 inline bool ParsePlayerName131(const std::wstring& args,PlayerNameRequest131& out){out={};if(args.find(L'\0')!=args.npos||args.find_first_of(L"\r\n")!=args.npos)return false;const auto first=args.find_first_not_of(L" \t");if(first==args.npos){out.query=true;return true;}out.text=args.substr(first,args.find_last_not_of(L" \t")-first+1);out.restore=out.text==L"restore"||out.text==L"default"||out.text==L"reset"||out.text==L"off";return out.restore||PlayerNameText131(out.text,out.utf8);}
+// WHT #oldname controls the original name consumed by #n restore.
+template<class Save,class Reload>
+bool OldPlayerNameCommand131(const std::wstring& args,Config& config,Save save,Reload reload,std::string& report){
+ const auto first=args.find_first_not_of(L" \t");
+ if(first==args.npos){report="|cfffcd211Old Name:|r "+(config.oldNames.empty()?std::string("(none)"):Utf8(config.oldNames));return true;}
+ const auto text=args.substr(first,args.find_last_not_of(L" \t\r\n")-first+1);std::string utf8;
+ if(!PlayerNameText131(text,utf8)){report="Usage: #oldname [name (1..63 UTF-8 bytes)]";return false;}
+ const bool primary=save(L"OLDNames",text),extended=save(L"OLDNames_Ex",text);reload();
+ if(!primary||!extended||config.oldNames!=text||config.oldNamesEx!=text){report="Old Name: settings not fully saved; check #oldname before restoring";return false;}
+ report="|cfffcd211Old Name:|r "+utf8;return true;
+}
 struct PlayerNameSource131 {uintptr_t world=0,player=0;unsigned local=24;char name[64]{};};
 inline bool SamePlayerNameContext131(const PlayerNameSource131& a,const PlayerNameSource131& b){return a.world&&a.player&&a.local<24&&a.world==b.world&&a.player==b.player&&a.local==b.local;}
 inline bool ReadPlayerNameRaw131(uintptr_t base,const ResourceProfile131& p,PlayerNameSource131& out){

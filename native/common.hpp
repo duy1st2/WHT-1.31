@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <windows.h>
 #include <atomic>
 #include <cstdint>
@@ -19,12 +19,14 @@ struct ChatBinding { unsigned vk=0; std::string text; };
 inline std::atomic<bool> toolEnglish{false};
 struct Config {
     bool english=false;
+    bool autoEffects=false; // Rendering-only adaptive particle emission, opt-in.
     using Profile = std::map<std::wstring,std::map<std::wstring,std::wstring>>;
     std::shared_ptr<const Profile> profile;
     std::wstring ini, server, key;
     RunMode mode=RunMode::Local;
     float camera=2800, fogZ=20000, startDelay=6;
     int localDelay=100, lanDelay=100, netDelay=250;
+    unsigned delayReducerScopes=0; // Explicit opt-in: bit1 Local/LAN, bit2 BNET.
     int keyboardScroll=100, mouseScroll=100;
     unsigned fpsLimit=0; // 0 leaves the engine setting alone; otherwise 60..1000.
     unsigned sceneLight=0; // 0 restores engine ownership; 1..255 ambient grayscale.

@@ -10,7 +10,7 @@ inline std::string CommandFeedback131(const std::wstring& inputName,const std::w
  const auto name=CanonicalCommand131(inputName);
  // These handlers already publish their own result; never announce a second success.
  if(name==L"#sellall"||name==L"#sellslot"||name==L"#islot"||name==L"#goku"||name==L"#autopickgoku"||name==L"#setga"||name==L"#gabase"||name==L"#backga"||name==L"#backsoi"||name.rfind(L"#chicken",0)==0||name.rfind(L"#wolf",0)==0)return {};
- for(const auto* handled:{L"#n",L"#name",L"#item",L"#copyitem",L"#create",L"#copy",L"#find",L"#hotkeycheck",L"#ping",L"#kick",L"#ban",L"#openbl",L"#upos",L"#cname",L"#repeat",L"#shield",L"#ice",L"#wild",L"#frozen",L"#phoenix",L"#whp",L"#hhp",L"#autoheal",L"#healhp",L"#healitem",L"#automana",L"#healmp",L"#manaitem",L"#autoskilldelay",L"#autoskillrange",L"#autoskillswap",L"#autoskilllist",L"#autoskillclear",L"#autoskills",L"#ga",L"#soi",L"#courier",L"#chuyendo"})if(name==handled)return {};
+ for(const auto* handled:{L"#autoeffects",L"#dr",L"#drn",L"#codenen",L"#code_nen",L"#nen",L"#fastjass",L"#fj",L"#csave",L"#n",L"#name",L"#item",L"#copyitem",L"#create",L"#copy",L"#find",L"#hotkeycheck",L"#ping",L"#kick",L"#ban",L"#openbl",L"#upos",L"#cname",L"#repeat",L"#shield",L"#ice",L"#wild",L"#frozen",L"#phoenix",L"#whp",L"#hhp",L"#autoheal",L"#healhp",L"#healitem",L"#automana",L"#healmp",L"#manaitem",L"#autoskilldelay",L"#autoskillrange",L"#autoskillswap",L"#autoskilllist",L"#autoskillclear",L"#autoskills",L"#ga",L"#soi",L"#courier",L"#chuyendo"})if(name==handled)return {};
  if(name==L"#stopga"||name==L"#stopmth")return {};
  if(!success)return {};
  if(name==L"#cs")return "|cFFff527dClear Set Id Target|r";

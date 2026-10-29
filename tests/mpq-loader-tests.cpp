@@ -4,18 +4,19 @@
 #include <stdexcept>
 #include <cstdio>
 void Check(bool ok,const char* text){if(!ok)throw std::runtime_error(text);}
-unsigned calls=0;
+unsigned calls=0,expectedPriority=10;
 #ifdef _WIN64
 uintptr_t FakeOpen(wht::MpqSpan131 span,unsigned type,unsigned flags,unsigned priority,uintptr_t parent,bool unknown){const auto path=span.path;const auto length=span.length;
 #else
 uintptr_t __cdecl FakeOpen(const char* path,size_t length,unsigned type,unsigned flags,unsigned priority,uintptr_t parent,int unknown){
 #endif
- Check(std::string(path,length)=="test.mpq"&&type==2&&!flags&&priority==10&&!parent&&!unknown,"native MPQ ABI and reference priority");++calls;return 0x1234;
+ Check(std::string(path,length)=="test.mpq"&&type==2&&!flags&&priority==expectedPriority&&!parent&&!unknown,"native MPQ ABI and reference priority");++calls;return 0x1234;
 }
 int wmain(int argc,wchar_t** argv){try{
  Check(argc==2,"archive fixture argument");const auto file=std::filesystem::absolute(argv[1]);const auto folder=file.parent_path().wstring();const auto path=file.wstring();
  Check(wht::InvokeCustomMpq131(FakeOpen,"test.mpq",8)==0x1234&&calls==1,"typed native ABI returns opaque provider");
  Check(!wht::InvokeCustomMpq131(nullptr,"test.mpq",8)&&!wht::InvokeCustomMpq131(FakeOpen,"",0)&&calls==1,"invalid native call never dispatched");
+ expectedPriority=30;Check(wht::InvokeCustomMpq131(FakeOpen,"test.mpq",8,30)==0x1234&&calls==2,"library priority uses identical verified native ABI");expectedPriority=10;
  Check(!wht::MpqOpenProfileFor131(129),"unverified build refused");
  for(const auto& profile:wht::mpqOpenProfiles131){
 #ifdef _WIN64

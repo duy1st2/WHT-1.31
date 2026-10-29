@@ -1,3 +1,4 @@
+#include "overhead_sweep131.hpp"
 #include "world_present131.hpp"
 #include "overhead_sampling131.hpp"
 #include "hp_player_color131.hpp"
@@ -73,28 +74,32 @@ inline bool WorldChild131(void* child,uintptr_t parent,uintptr_t base,uintptr_t 
 }
 struct StateBars131 {
  struct Entry {void* host=nullptr;void* levelBackground=nullptr;std::array<void*,2> fonts{},levelFonts{};std::array<std::string,2> text{};std::string levelText;float layoutSize=0,backgroundWidth=0;std::array<float,2> fontSizes{};uint32_t backgroundColor=0xffffffff;};
- OverheadSampling131 sampling;
+ OverheadSampling131 sampling;OverheadSweep131 sweep;
  HpPlayerColor131 hpColors;HpDimensions131 hpDimensions;
  InvulnerableBars131 invulnerable;
  std::unordered_map<uintptr_t,Entry> entries;bool stateReported=false,levelReported=false;unsigned observedNative=0;
- void Reset(){sampling.Reset();ForgetStatPaint131();hpColors.Reset();hpDimensions.Reset();invulnerable.Reset();entries.clear();stateReported=levelReported=false;observedNative=0;}
+ void Reset(){sweep.Reset();sampling.Reset();ForgetStatPaint131();hpColors.Reset();hpDimensions.Reset();invulnerable.Reset();entries.clear();stateReported=levelReported=false;observedNative=0;}
  // Children are owned by each native HP parent. Never dereference a cached
  // child unless its native class and parent still match. The timer only
  // discovers/prunes roots; native paint callbacks own presentation writes.
  unsigned Update(uintptr_t base,void* root,const Profile131& p,const RegenProfile131& r,const StateBarProfile131& s,const Config& config,bool allowed,const NativeFrameApi& raw,uintptr_t selected=0){
-  const auto now=GetTickCount64();sampling.Configure(reinterpret_cast<uintptr_t>(root),selected,config,allowed);if(!sampling.Full(now))return observedNative;
-  std::unordered_set<uintptr_t> frames;if(!root||!RegisteredFrames131(root,frames))return 0;
-  for(auto it=entries.begin();it!=entries.end();)if(!frames.count(it->first))it=entries.erase(it);else ++it;
-  PruneStatPaint131(frames);hpColors.Prune(frames);hpDimensions.Prune(frames);
-  invulnerable.Prune(frames);
-  unsigned count=0;for(const auto bar:frames){uintptr_t unit=0;bool visible=false,hero=false;
-   if(!SampleStateBar131(bar,base,s,r,unit,visible,hero))continue;++count;
-   StatPaintRecord131 record;record.unit=unit;record.unitTable=base+r.unit;
-   const bool enabled=allowed; // Reference HP custom colors also apply when player colors are off.
-   if(!enabled){auto previous=statPaintRecords131.find(bar);if(previous!=statPaintRecords131.end()&&previous->second.presentation)WriteBar(bar,base,p,r,s,config,allowed,raw);}
-   SetStatPaint131(base,s.bar,bar,false,record,enabled,true);
+  const auto now=GetTickCount64();sweep.Configure(reinterpret_cast<uintptr_t>(root),allowed,config);sampling.Configure(reinterpret_cast<uintptr_t>(root),selected,config,allowed);
+  if(!sweep.active){
+   if(!allowed&&!sweep.immediate)return observedNative;
+   const bool due=sampling.Full(now);if(!sweep.immediate&&!due)return observedNative;
+   std::unordered_set<uintptr_t> frames;if(!root||!RegisteredFrames131(root,frames))return 0;
+   for(auto it=entries.begin();it!=entries.end();)if(!frames.count(it->first))it=entries.erase(it);else ++it;
+   PruneStatPaint131(frames);hpColors.Prune(frames);hpDimensions.Prune(frames);invulnerable.Prune(frames);
+   if(!sweep.Begin(frames))return observedNative;
   }
-  sampling.Load(count);return observedNative;
+  const bool complete=sweep.Pump(sampling.frameLoad.policy.BudgetDivisor(),[&](uintptr_t bar){uintptr_t unit=0;bool visible=false,hero=false;
+   // Resolve the current binding now, never a unit pointer cached by a previous chunk.
+   if(!SampleStateBar131(bar,base,s,r,unit,visible,hero))return false;
+   StatPaintRecord131 record;record.unit=unit;record.unitTable=base+r.unit;
+   if(!allowed){auto previous=statPaintRecords131.find(bar);if(previous!=statPaintRecords131.end()&&previous->second.presentation)WriteBar(bar,base,p,r,s,config,allowed,raw);}
+   SetStatPaint131(base,s.bar,bar,false,record,allowed,true);return true;
+  });
+  if(complete)sampling.Load(sweep.found);return observedNative;
  }
  unsigned WriteBar(uintptr_t bar,uintptr_t base,const Profile131& p,const RegenProfile131& r,const StateBarProfile131& s,const Config& config,bool allowed,const NativeFrameApi& raw){unsigned observed=0;
 uintptr_t unit=0;bool visible=false,hero=false;

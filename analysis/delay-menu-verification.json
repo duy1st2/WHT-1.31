@@ -1,0 +1,57 @@
+{
+  "artifacts": [
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.mix",
+      "sha256": "0ec3946291b0033249bb463f0fec094ea3025e087b5dd3f6ec86d280b0421e12"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT131Launcher.exe",
+      "sha256": "64233c4f88f9bab87163e025bc795714f99cf2436699d0ece2e7dd3d76412813"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\WHT.ExternalHud.exe",
+      "sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.mix",
+      "sha256": "feff49f1eb9a3a38ce4ba77136259c4cc315449fd545f1cf88b5692f90fe18ae"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT131Launcher.exe",
+      "sha256": "7af7cd89321a3f2f1348be90d0b5338bdf36bdb1b671d4273892b6b302f02925"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\WHT.ExternalHud.exe",
+      "sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.mix",
+      "sha256": "0ec3946291b0033249bb463f0fec094ea3025e087b5dd3f6ec86d280b0421e12"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT131Launcher.exe",
+      "sha256": "64233c4f88f9bab87163e025bc795714f99cf2436699d0ece2e7dd3d76412813"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\WHT.ExternalHud.exe",
+      "sha256": "70bc7596de193e168ec81d9502ddfc3a8341a4a31cc520fac24fcd4cfa6bb524"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.mix",
+      "sha256": "feff49f1eb9a3a38ce4ba77136259c4cc315449fd545f1cf88b5692f90fe18ae"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT131Launcher.exe",
+      "sha256": "7af7cd89321a3f2f1348be90d0b5338bdf36bdb1b671d4273892b6b302f02925"
+    },
+    {
+      "target": "WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\WHT.ExternalHud.exe",
+      "sha256": "e8151c48340d9e8af0a5837fa2e6c8734795cc0f22c33f3a57d0912fcdbb5e19"
+    }
+  ],
+  "preservedFiles": 12,
+  "tests": {
+    "x86": 57,
+    "x64": 56
+  }
+}

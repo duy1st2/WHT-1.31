@@ -1,0 +1,38 @@
+[
+    {
+        "build":  12164,
+        "pid":  14372,
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86\\Warcraft III.exe",
+        "start":  "2026-10-29T03:58:01.0106541Z",
+        "bits":  32,
+        "owned":  true,
+        "base":  15007744
+    },
+    {
+        "build":  12173,
+        "pid":  9752,
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86\\Warcraft III.exe",
+        "start":  "2026-10-29T03:58:01.1061414Z",
+        "bits":  32,
+        "owned":  true,
+        "base":  6291456
+    },
+    {
+        "build":  12164,
+        "pid":  3168,
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12164\\x86_64\\Warcraft III.exe",
+        "start":  "2026-10-29T03:58:01.1407861Z",
+        "bits":  64,
+        "owned":  true,
+        "base":  140696589500416
+    },
+    {
+        "build":  12173,
+        "pid":  15340,
+        "path":  "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.31\\runtime-test\\Warcraft3-1.31.1.12173\\x86_64\\Warcraft III.exe",
+        "start":  "2026-10-29T03:58:01.1700002Z",
+        "bits":  64,
+        "owned":  true,
+        "base":  140695883874304
+    }
+]

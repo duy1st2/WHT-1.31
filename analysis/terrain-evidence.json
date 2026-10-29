@@ -1,0 +1,126 @@
+{
+  "references": {
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT\\native\\runtime.cpp": "2644f3e2b534f7034a3db85b880a05fee6b2f005d238cae716fafea69b12e607",
+    "E:\\GPlay\\Game\\New folder\\Warcraft3-124\\WHT-1.29\\native\\common.cpp": "cab6ee95cddb35ceda5eeac5c803460fc3e38ba6d768438b762abc53e3aef03e"
+  },
+  "backup": "WHT-1.31\\analysis\\before-terrain-20261029-103529",
+  "source": "WHT ApplyCodeNen plus #codenen/#code_nen/#nen; 1.29 has stored config only. Grid -15000..15000 step256, variation -1,size7,shape1.",
+  "profiles": [
+    {
+      "build": 12164,
+      "bits": 32,
+      "set": 9564704,
+      "get": 9312640,
+      "getter_worker": 13062320,
+      "safe_getter_method": 13478928,
+      "spans": [
+        [
+          9564704,
+          101
+        ],
+        [
+          9312640,
+          55
+        ],
+        [
+          13062320,
+          20
+        ],
+        [
+          13478928,
+          112
+        ]
+      ],
+      "capture_pid": 8740,
+      "live_pid": 11468,
+      "full_public_functions_and_safe_getter_verified": true
+    },
+    {
+      "build": 12173,
+      "bits": 32,
+      "set": 9357360,
+      "get": 9109984,
+      "getter_worker": 12779824,
+      "safe_getter_method": 13196704,
+      "spans": [
+        [
+          9357360,
+          101
+        ],
+        [
+          9109984,
+          55
+        ],
+        [
+          12779824,
+          20
+        ],
+        [
+          13196704,
+          112
+        ]
+      ],
+      "capture_pid": 32116,
+      "live_pid": 26868,
+      "full_public_functions_and_safe_getter_verified": true
+    },
+    {
+      "build": 12164,
+      "bits": 64,
+      "set": 10703904,
+      "get": 10448256,
+      "getter_worker": 14601824,
+      "safe_getter_method": 15117712,
+      "spans": [
+        [
+          10703904,
+          76
+        ],
+        [
+          10448256,
+          50
+        ],
+        [
+          14601824,
+          47
+        ],
+        [
+          15117712,
+          109
+        ]
+      ],
+      "capture_pid": 24984,
+      "live_pid": 20852,
+      "full_public_functions_and_safe_getter_verified": true
+    },
+    {
+      "build": 12173,
+      "bits": 64,
+      "set": 11014304,
+      "get": 10758000,
+      "getter_worker": 14847152,
+      "safe_getter_method": 15362704,
+      "spans": [
+        [
+          11014304,
+          76
+        ],
+        [
+          10758000,
+          50
+        ],
+        [
+          14847152,
+          47
+        ],
+        [
+          15362704,
+          109
+        ]
+      ],
+      "capture_pid": 27336,
+      "live_pid": 19624,
+      "full_public_functions_and_safe_getter_verified": true
+    }
+  ]
+}

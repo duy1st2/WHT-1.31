@@ -1,5 +1,6 @@
 #pragma once
 #include "tool_version.hpp"
+#include "delay_reducer_settings131.hpp"
 #ifdef _WIN64
 #include "overlay_frames.hpp"
 #else
@@ -24,6 +25,8 @@ struct ToolMenuControl{MenuControlKind kind;int page;const char* label;const wch
 inline std::wstring MenuRead(const std::wstring& ini,const wchar_t* section,const wchar_t* key,const wchar_t* fallback){
  wchar_t value[1024]{};GetPrivateProfileStringW(section,key,fallback,value,1024,ini.c_str());return value;}
 inline std::wstring MenuRead(const Config& c,const wchar_t* section,const wchar_t* key,const wchar_t* fallback){
+ if(const auto scope=DelayReducerMenuScope131(section,key))return DelayReducerMenuValue131(c,scope);
+ if(!wcscmp(section,L"Graphics")&&!wcscmp(key,L"Auto Reduce Effects"))return c.autoEffects?L"1":L"0";
  if(!wcscmp(section,L"Event")&&!wcscmp(key,L"Reveal Invisibles"))return c.revealInvisible?L"1":L"0";
  if(!c.profile)return fallback;
  auto lower=[](std::wstring s){for(auto& ch:s)ch=towlower(ch);return s;};
@@ -34,6 +37,7 @@ inline std::string MenuKeyName(const std::wstring& code){auto vk=EngineKeyToVirt
  wchar_t name[64]{};auto scan=MapVirtualKeyW(vk,MAPVK_VK_TO_VSC);if(vk>=VK_PRIOR&&vk<=VK_DELETE)scan|=0x100;
  return GetKeyNameTextW(LONG(scan<<16),name,64)?Utf8(name):std::to_string(vk);}
 inline bool ValidMenuValue(const ToolMenuControl& d,const std::wstring& value){
+ if(DelayReducerMenuScope131(d.section,d.key)){unsigned parsed=0;return ParseDelayReducer131(value,parsed);}
  if((!wcscmp(d.section,L"AutoHeal")||!wcscmp(d.section,L"AutoMana"))&&!wcscmp(d.key,L"Percent")){wchar_t* end=nullptr;const double number=wcstod(value.c_str(),&end);if(end==value.c_str()||*end||!std::isfinite(number)||number!=std::floor(number))return false;}
 
  if(d.kind==MenuControlKind::Text||d.kind==MenuControlKind::Clear)return value.empty()||!QuickChatText(value).empty();

@@ -1,0 +1,38 @@
+[
+  {
+    "pid": 13768,
+    "build": 12164,
+    "bits": 32,
+    "rva": 9259376,
+    "bytes": "558bec535657f7c506919bc6735be82aae01005681ee7ade2d8481eb9dbda957e8d848010080c2385981c5f2cc18e281",
+    "matches_capture": true,
+    "read_only": true
+  },
+  {
+    "pid": 13216,
+    "build": 12173,
+    "bits": 32,
+    "rva": 9057744,
+    "bytes": "558bec53565780e3ff735783c30954f6dac6c3bd0f317eb481edb4d0a6ff80c5c981ea3fee0e5080c61680e9560f8c05",
+    "matches_capture": true,
+    "read_only": true
+  },
+  {
+    "pid": 26752,
+    "build": 12164,
+    "bits": 64,
+    "rva": 10389024,
+    "bytes": "4883ec280fb6d1660f1f840000000000a82a7369682efd8fd781eeeb23e16ec6c5e1c6c14281c2c75d9229c6c2dee855",
+    "matches_capture": true,
+    "read_only": true
+  },
+  {
+    "pid": 15220,
+    "build": 12173,
+    "bits": 64,
+    "rva": 10699568,
+    "bytes": "4883ec280fb6d1660f1f840000000000f9765383c6ed741283c00180c3f680eafd83c51281c7a6539e59e87b16010076",
+    "matches_capture": true,
+    "read_only": true
+  }
+]
