@@ -57,9 +57,12 @@ struct SaveNoticeService131 {
   if(!out)Log(folder,"#csave: TS-SaveGame.log append failed");
  }
 };
-template<class Save,class Reload> bool SaveNoticeCommand131(const std::wstring& args,Config& config,Save save,Reload reload,std::string& report){
- if(args.find_first_not_of(L" \t\r\n")!=args.npos){report="Usage: #csave (no arguments; toggles save notifications/log)";return false;}const bool enabled=!config.notiLogSaveGame;
+template<class Save,class Reload> bool SetSaveNotice131(bool enabled,Config& config,Save save,Reload reload,std::string& report){
  const bool saved=save(enabled?L"1":L"0");reload();if(!saved||config.notiLogSaveGame!=enabled){report="Check Players Save Game: setting could not be saved";return false;}
  report=enabled?"|CFFFCD211Check Players Save Game|r: |cff44ff3dOn":"|CFFFCD211Check Players Save Game|r: |cffff5c5cOff";return true;
+}
+template<class Save,class Reload> bool SaveNoticeCommand131(const std::wstring& args,Config& config,Save save,Reload reload,std::string& report){
+ if(args.find_first_not_of(L" \t\r\n")!=args.npos){report="Usage: #csave (no arguments; toggles save notifications/log)";return false;}
+ return SetSaveNotice131(!config.notiLogSaveGame,config,save,reload,report);
 }
 }

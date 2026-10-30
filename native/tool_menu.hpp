@@ -25,6 +25,8 @@ struct ToolMenuControl{MenuControlKind kind;int page;const char* label;const wch
 inline std::wstring MenuRead(const std::wstring& ini,const wchar_t* section,const wchar_t* key,const wchar_t* fallback){
  wchar_t value[1024]{};GetPrivateProfileStringW(section,key,fallback,value,1024,ini.c_str());return value;}
 inline std::wstring MenuRead(const Config& c,const wchar_t* section,const wchar_t* key,const wchar_t* fallback){
+ if(!wcscmp(section,L"Event")&&!wcscmp(key,L"Noti/Log Info Players Save Game"))return c.notiLogSaveGame?L"1":L"0";
+ if(!wcscmp(section,L"Event")&&!wcscmp(key,L"Fast Jass"))return c.fastJass?L"1":L"0";
  if(const auto scope=DelayReducerMenuScope131(section,key))return DelayReducerMenuValue131(c,scope);
  if(!wcscmp(section,L"Graphics")&&!wcscmp(key,L"Auto Reduce Effects"))return c.autoEffects?L"1":L"0";
  if(!wcscmp(section,L"Event")&&!wcscmp(key,L"Reveal Invisibles"))return c.revealInvisible?L"1":L"0";

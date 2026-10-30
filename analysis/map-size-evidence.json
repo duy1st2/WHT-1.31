@@ -1,0 +1,49 @@
+{
+  "profiles": [
+    {
+      "pid": 8740,
+      "build": 12164,
+      "bits": 32,
+      "compareSites": [
+        "0xeb76e1",
+        "0xee0051",
+        "0xeee564"
+      ],
+      "scope": "guarded generic file-load / archive size checks, not network lobby map transfer negotiation"
+    },
+    {
+      "pid": 32116,
+      "build": 12173,
+      "bits": 32,
+      "compareSites": [
+        "0xe76571",
+        "0xe9eef1",
+        "0xead404"
+      ],
+      "scope": "guarded generic file-load / archive size checks, not network lobby map transfer negotiation"
+    },
+    {
+      "pid": 24984,
+      "build": 12164,
+      "bits": 64,
+      "compareSites": [
+        "0x108e23a"
+      ],
+      "scope": "guarded generic file-load / archive size checks, not network lobby map transfer negotiation"
+    },
+    {
+      "pid": 27336,
+      "build": 12173,
+      "bits": 64,
+      "compareSites": [
+        "0x10cac6a"
+      ],
+      "scope": "guarded generic file-load / archive size checks, not network lobby map transfer negotiation"
+    }
+  ],
+  "references": {
+    "WHT\\native\\runtime.cpp": "124004dcc4fe38cf1e98e64455c26dd9640999f67097c5e3ea1a1aa0a0e8bf3d",
+    "WHT-1.29\\native\\parity_hooks129.inl": "3122d71a85e1dfdcb73645b3363cc91e42618b7902a1ca7ecca94d058509fc59",
+    "WHT-1.29\\native\\parity_commands129.inl": "170b826c6e7bc4a353749a502b7afe44d96667bd0eb5f61108ee80d3a5919d98"
+  }
+}

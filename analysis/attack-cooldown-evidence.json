@@ -1,0 +1,45 @@
+{
+  "profiles": [
+    {
+      "capture": 8740,
+      "build": 12164,
+      "bits": 32,
+      "get": "0x3cb550",
+      "set": "0x3cdfd0",
+      "propertySet": "0x2fab30",
+      "mini": "0x1730f78"
+    },
+    {
+      "capture": 32116,
+      "build": 12173,
+      "bits": 32,
+      "get": "0x3a92b0",
+      "set": "0x3abcd0",
+      "propertySet": "0x2df6c0",
+      "mini": "0x16e5fd0"
+    },
+    {
+      "capture": 24984,
+      "build": 12164,
+      "bits": 64,
+      "get": "0x43d090",
+      "set": "0x43fd50",
+      "propertySet": "0x354050",
+      "mini": "0x19dc530"
+    },
+    {
+      "capture": 27336,
+      "build": 12173,
+      "bits": 64,
+      "get": "0x4a4630",
+      "set": "0x4a71f0",
+      "propertySet": "0x3bf240",
+      "mini": "0x1a0b548"
+    }
+  ],
+  "referenceHashes": {
+    "WHT-1.29\\native\\attack_cooldown129.hpp": "ece101ab904d5f820fe073dd7d6b2fd9446578f1cb8e02e4c43be22a482744f3",
+    "WHT-1.29\\native\\version129.cpp": "7ee6d0f503a42e51bb4882f6e3198633a5d9714c51cb6a86f032b1847b4de8d5",
+    "WHT-1.31\\native\\detailed_tooltip131.hpp": "35ac5998f154923e0f1285ed5c2d5b4838b8c497ca072066c237da78d369b071"
+  }
+}

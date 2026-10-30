@@ -19,6 +19,8 @@ inline std::string EnglishTabHelp(size_t page){
 }
 inline std::string EnglishControlLabel(const ToolMenuControl& d){
  std::wstring key=d.key,section=d.section;
+ if(key==L"Noti/Log Info Players Save Game")return "Save game notifications / log";
+ if(key==L"Fast Jass")return "Fast Jass";
  if(key==L"Local Game Delay Reducer")return "Local/LAN delay (ms)";
  if(key==L"Net Game Delay Reducer")return "Battle.net delay (ms)";
  if(key==L"Auto Reduce Effects")return "Auto reduce particles during match";
@@ -80,6 +82,8 @@ inline std::string EnglishControlHelp(const ToolMenuControl& d){
  if(!wcscmp(d.section,L"StateTag")&&!wcscmp(d.key,L"FontSize"))return "Overhead HP/Mana font size\nRange 1 to 20; default 4. Changes existing labels and line spacing immediately.";
  if(!wcscmp(d.key,L"ModeCast"))return "Casting mode\nNormal: keep native targeting. Quick Cast: cast original hotkeys at cursor on press. Slot-specific remap and self/target cast keep priority.";
  std::wstring key=d.key,section=d.section;
+ if(key==L"Noti/Log Info Players Save Game")return "Save game notifications / log";
+ if(key==L"Fast Jass")return "Fast Jass";
  if(key==L"Local Game Delay Reducer")return "Local/LAN delay (ms)";
  if(key==L"Net Game Delay Reducer")return "Battle.net delay (ms)";auto title=EnglishControlLabel(d);std::string help;
  auto starts=[&](const wchar_t* p){return key.rfind(p,0)==0;};

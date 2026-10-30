@@ -23,6 +23,10 @@ inline void CheckClockFps131(){
   check(wht::TimerText131(seconds)=="|cfffcd21102|cffffffff:|cfffcd21117|cffffffff:|cfffcd21137|r","timer hours minutes seconds");
   check(wht::SimulationSeconds131(base,p,seconds)&&seconds==8257,"paused clock stays unchanged without wall time");
   *reinterpret_cast<float*>(time+value)=66.25f;check(wht::SimulationSeconds131(base,p,seconds)&&seconds==8258,"simulation advancement follows native value");
+  *reinterpret_cast<float*>(time+value)=4095.75f;check(wht::SimulationSeconds131(base,p,seconds)&&seconds==12287,"last second before scheduler rollover");
+  *reinterpret_cast<unsigned*>(time+value+4)=3;*reinterpret_cast<float*>(time+value)=0;
+  check(wht::SimulationSeconds131(base,p,seconds)&&seconds==12288,"new cycle continues match time without reset");
+  *reinterpret_cast<float*>(time+value)=30;check(wht::SimulationSeconds131(base,p,seconds)&&seconds==12318,"speed advancement follows simulation directly");
   *reinterpret_cast<float*>(time+value)=std::numeric_limits<float>::quiet_NaN();check(!wht::SimulationSeconds131(base,p,seconds),"invalid clock hidden");
   *reinterpret_cast<float*>(time+value)=1;*reinterpret_cast<unsigned*>(time+value+4)=~0u;check(!wht::SimulationSeconds131(base,p,seconds),"clock overflow rejected");
   *reinterpret_cast<unsigned*>(time+value+4)=0;

@@ -1,0 +1,9 @@
+# Attack cooldown port
+
+Reference: actual WHT-1.29/native/attack_cooldown129.hpp, dispatcher in version129.cpp. Integer weapon1/2 maps once to native0/1, default1; finite real0.01..3600 seconds. Source hashes and independent four-profile RVAs in attack-cooldown-evidence.json. WHT reference is not needed because the actual1.29 implementation exists. No reference project modified.
+
+Existing detailed-tooltip profiles independently identify AUnitAttack, the unbounded real property vtable, per-weapon period layout158+8*i (x86) /1d8+16*i (x64), and reading period after the vtable pointer. New full-function guards cover native getter, setter and first-slot real-property setter. These are independent mappings for12164/12173, not enabled inherited offsets. New setters call this guarded property vtable. x86 setter takes seconds by value (RET8); x64 setter takes const float* in RDX with weapon in R8D. Getter(this,float*,weapon) returns the same output pointer. Existing #as selected identity/world/local guards are reused for stable CUnit/AUnitAttack binding. No direct gameplay field write or new hook/timer.
+
+Two pre-write reads must agree on unit identity, attack component, world, local player and weapon. After native setter, a third read must confirm the same identity and requested seconds. Invalid input performs no game access. Readback failure after invocation is reported honestly, with no attempted rollback into a possibly replaced unit. Session-only changes, no INI.
+
+Automated tests use existing captured images to verify all complete guarded functions, owned relocated image memory for tampering, typed fake native functions for both ABIs and pure command callbacks for weapon isolation, recycled identities, absent selection, setter no-op and post-write replacement. Actual live gameplay/animation timing remains unverified.

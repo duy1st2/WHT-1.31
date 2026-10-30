@@ -1,0 +1,9 @@
+# Save notices and Fast Jass F8 controls
+
+Actual references: WHT/native/runtime.cpp (#csave, #fastjass/#fj), WHT-1.29/native/parity_commands129.inl and parity_hooks129.inl (native save notification and library integration). SHA256 recorded in utility-menu-evidence.json. Both features already have independent1.31 native implementations and tests. This change exposes them in F8/General using free row561. All243 old control IDs/rectangles are unchanged; new IDs243/244 append to the catalog. Canonical Config fields supply checkbox state; defaults remainOFF.
+
+Menu and chat share FastJassPreference and SaveNoticePreference per architecture, preserving authorized Local active-match gates. #csave retains its no-argument toggle syntax; the menu uses an explicit idempotent boolean setter, never a stale toggle. Turning on save observation validates the native profile before saving; disabling remains possible without a native probe. Checked save/reload confirmation retained. Fast Jass uses the existing architecture-checked loader, deduplication, reentry guard and checked settings persistence. No new DLL is bundled or auto-enabled. Loaded DLLs require a Warcraft restart to unload; tooltip explains this and avoids a performance guarantee. Save notices report a native event, not completed-file confirmation.
+
+Vietnamese/English labels and tooltips added. Existing controller tests expanded for explicit boolean persistence/idempotence/reload mismatch. Full build/test suites exercise native event profiles and library-loader contracts. No new offsets, native hooks or frame-level changes. Live F8 appearance and actual external FastJass DLL behavior have not been tested.
+
+Read-only #ssp research did not establish a complete safe callback mapping for all profiles. It remains disabled/unported; no inherited offset, gate bypass or partial hook was enabled.

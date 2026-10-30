@@ -839,3 +839,27 @@ Adaptive overhead sampling (2026-10-29): connected the existing WHT FrameLoadCad
 Bounded overhead discovery (2026-10-29): ported WHT's incremental sweep scheduling to the actual x86 StateBars131 and x64 Gameplay64 discovery loops. Ordinary passes process at most128 registered-frame handles per UI tick, with a cooperative QPC budget of1/0.5/0.33 ms according to the existing FPS LOD level. At least one item advances; QPC failure retains the128-item cap. Queues contain only handles, and the current native HP-frame/unit binding is validated when processed, not captured across ticks. Native paint callbacks remain immediate and keep their existing hero/selected-unit sampling priority. Completion publishes the valid HP-frame count to the crowd policy. UI/permission/settings changes cancel old queues; disabling or changing display settings applies the existing full pass immediately. After disable, no repeated discovery is started. Native registry snapshot collection and cache pruning still occur synchronously once per new pass; they are outside the processing budget. This port does not claim a hard bound on total UI-tick time. It adds no engine addresses, hooks, menu controls or commands. Actual large-battle FPS benefit remains unmeasured.
 
 Adaptive particles in F8 (2026-10-29): added the actual WHT Graphics checkbox at the reference row420, with Vietnamese/English labels and threshold tooltips. The 1.31 default remains OFF. The checkbox and #autoeffects share the same native-profile validation, checked save/reload and immediate owned-setting restoration on OFF. Menu state reads the canonical config value, so command changes and menu clicks stay in sync. The new catalog entry is appended to preserve existing control indices. No new engine hook or offset is added. Live in-game appearance has not been visually verified.
+
+
+### Attack cooldown (#attackcd)
+
+`#attackcd <seconds> [1|2]` changes the base attack cooldown of the selected unit for the specified weapon (default1). Accepts finite0.01..3600 seconds, matching the WHT-1.29 command. Example: `#attackcd 0.5` or `#attackcd 1.25 2`. This is a per-unit, per-match change and is not saved to INI. Requires an authorized Local session, an active match and Command Settings. It changes the base period, independently of the #as attack-speed multiplier; buffs and map limits can still affect observed attack timing.
+
+The port uses independently guarded native attack cooldown getters/setters for both builds and architectures. It verifies unit identity, selected attack component, world/local context, property vtable and first-slot setter, then reads back the requested weapon period. Changed selection or missing/readback-failed native data reports failure. No 1.29 engine address or instruction patch is enabled. Actual in-game attack animation/timing has not been verified.
+
+
+### Save notices / Fast Jass in F8
+
+F8 / General now includes Save game notifications / log and Fast Jass checkboxes, sharing their existing #csave and #fastjass/#fj handlers. Saved state and menu state remain synchronized. Save notices append TS-SaveGame.log on the observed native event; they do not confirm completed save-file writes. Fast Jass requires a compatible external DLL in the tool folder or WHT_Lib, and turning it off does not unload an already loaded DLL until Warcraft restarts. Both options defaultOFF. No compatible FastJass DLL is bundled, and no performance result is promised.
+
+
+### Large file/map size checks (#mapsize)
+
+`#mapsize [0|1]` toggles or explicitly enables/disables the independently guarded file/archive size comparisons corresponding to WHT/WHT-1.29's Map Size feature. DefaultON at each game launch. The original comparisons use0x10000000 (256MiB); ON compares against0x7FFE0000 (2GiB minus128KiB), matching the reference cap. Three checks are mapped on each x86 build; one generic file-loader check is mapped on each x64 build. This does not remove server/network transfer restrictions or guarantee that every large archive/map is supported. Reopen the map after changing this setting.
+
+The option persists under Event/Unlock Map Size. It requires an authorized Local session and Command Settings, and applies before entering a match as well as during one; it remains active across returning to the menu. OFF, authorization loss or Command Settings OFF restores the owned native comparisons on the next UI update/poll. All mapped sites are preflighted before activation; partial activation attempts rollback. Foreign modifications are refused rather than overwritten. Application/restoration failures are logged and retried. Native comparisons are detoured through register/stack-neutral CMP/JMP stubs using MinHook's thread-aware enable/disable. No1.29 address is used in1.31. Captured-profile guards and owned executable boundary/ownership tests pass; an actual large map load has not been tested.
+
+
+### Map Size launch default
+
+Map Size starts ON each time the tool loads into a new Warcraft process, including when an older INI contains `Unlock Map Size=0`. `#mapsize 0` may turn it off for the current process; reloads keep that explicit state. Starting Warcraft again resets it to ON. This launch default does not bypass session authorization, Command Settings or native-profile verification. Existing INI/log/macro files are preserved.

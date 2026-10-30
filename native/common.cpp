@@ -9,6 +9,8 @@
 #include <limits>
 
 namespace wht {
+// Start each game process with Map Size ON; retain explicit changes across reloads.
+static std::atomic<bool> sessionUnlockMap{true};
 std::wstring Directory(HMODULE m) {
     std::vector<wchar_t> b(32768);
     DWORD n=GetModuleFileNameW(m,b.data(),static_cast<DWORD>(b.size()));
@@ -206,7 +208,7 @@ Config LoadConfig(const std::wstring& ini) {
     c.wide=Read(ini,L"Event",L"WideScreen",L"0")==L"1";
     c.borderless=Read(ini,L"Window",L"Borderless",L"0")==L"1";
     c.lockCursor=Read(ini,L"Window",L"Lock Cursor",L"0")==L"1";
-    c.unlockMap=Read(ini,L"Event",L"Unlock Map Size",L"0")==L"1";
+    c.unlockMap=sessionUnlockMap.load();
     c.quickDropItem=Read(ini,L"Event",L"Quick Drop Item",L"0")==L"1";
     c.autoPickItem=Read(ini,L"Event",L"Auto Pick Item",L"0")==L"1";
     c.showAutoPick=Read(ini,L"Event",L"Show Auto Pick",L"1")==L"1";
@@ -323,7 +325,9 @@ Config LoadConfig(const std::wstring& ini) {
     return c;
 }
 bool SaveSetting(const std::wstring& ini,const wchar_t* section,const wchar_t* key,const std::wstring& value) {
-    return WritePrivateProfileStringW(section,key,value.c_str(),ini.c_str())!=FALSE;
+    const bool saved=WritePrivateProfileStringW(section,key,value.c_str(),ini.c_str())!=FALSE;
+    if(saved&&!_wcsicmp(section,L"Event")&&!_wcsicmp(key,L"Unlock Map Size"))sessionUnlockMap.store(value==L"1");
+    return saved;
 }
 bool MenuHotkeyMatches(unsigned vk,unsigned binding,bool allowed,bool chat,bool foreground,bool modifiers){
     return binding!=0&&binding!=VK_ESCAPE&&vk==binding&&allowed&&!chat&&foreground&&!modifiers;

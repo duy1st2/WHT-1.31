@@ -59,7 +59,9 @@ struct ClockOverlay131 {
  void Reset(){*this={};last=~0u;}
  bool Update(uintptr_t base,unsigned build,bool enabled,ToolMenuOverlay& menu,bool hideTime=false){
   const auto* p=ClockFpsProfile(build);uint32_t seconds=0;
-  if(!enabled||!p||!SimulationSeconds131(base,*p,seconds)){if(frame)NativeFrameHide(frame);return false;}
+  if(!enabled){if(frame)NativeFrameHide(frame);return false;}
+  // Preserve the last simulation time on a transient read failure. No wall-time fallback.
+  if(!p||!SimulationSeconds131(base,*p,seconds))return false;
   if(!menu.initialized)return false;
   if(!frame){const ToolMenuRect rect{HudStyle::Center(hideTime)+.06f,HudStyle::timerY-.0125f,.12f,.025f};frame=menu.Frame(base,menu.independentHost,rect);if(frame){font=menu.TextIn(frame,rect,"",true,HudStyle::timerSize);if(font)menu.api.setRelPoint(font,0,frame,0,0,0,1);lastHide=hideTime;}}
   if(!frame||!font)return false;

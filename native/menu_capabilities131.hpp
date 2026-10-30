@@ -17,7 +17,7 @@ inline bool ControlAvailable131(const ToolMenuControl& d){
  if(section==L"Quick Chat")return true;
  if(section==L"DelayClear"||section==L"Language"||section==L"MacroRecorder")return true;
  if(section==L"StateTag")return true;
- if(section==L"Event")return key==L"ModeCast"||key==L"Hide Option Menu"||key==L"Keyboard Scroll Speed"||key==L"Mouse Scroll Speed"||key==L"Camera"||key==L"FogZ"||key==L"Show Mem"||key==L"ShowCooldown"||key==L"ShowRegenHP"||key==L"ShowRegenMana"||key==L"Show Hotkey In Panel"||key==L"Show Resource"||key==L"Show Timer"||key==L"Show Ping"||key==L"Show FPS"||key==L"Sound Start Game"||key==L"Quick Drop Item"||key==L"Reveal Invisibles"||key==L"Show Sell All"||key==L"Show Auto Pick"||key==L"Show Drop All"||key==L"Show Ins All Skills";
+ if(section==L"Event")return key==L"Noti/Log Info Players Save Game"||key==L"Fast Jass"||key==L"ModeCast"||key==L"Hide Option Menu"||key==L"Keyboard Scroll Speed"||key==L"Mouse Scroll Speed"||key==L"Camera"||key==L"FogZ"||key==L"Show Mem"||key==L"ShowCooldown"||key==L"ShowRegenHP"||key==L"ShowRegenMana"||key==L"Show Hotkey In Panel"||key==L"Show Resource"||key==L"Show Timer"||key==L"Show Ping"||key==L"Show FPS"||key==L"Sound Start Game"||key==L"Quick Drop Item"||key==L"Reveal Invisibles"||key==L"Show Sell All"||key==L"Show Auto Pick"||key==L"Show Drop All"||key==L"Show Ins All Skills";
  if(section==L"HotKeyHero"&&(key==L"SetIdTarget"||key==L"SellFast"||key==L"AutoClickLeft"||key==L"AutoClickRight"||key.rfind(L"HeroF",0)==0))return true;
  if(RemapControl131(section,key))return true;
  if(section==L"HotKeyOther")return key==L"hko_menu"||key==L"hko_command"||key==L"hko_MinimizeMultiboard";
